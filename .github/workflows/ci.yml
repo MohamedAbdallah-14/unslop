@@ -35,7 +35,7 @@ jobs:
         run: ruff check unslop/scripts benchmarks
 
       - name: Type check (mypy, strict)
-        run: mypy unslop/scripts
+        run: mypy --config-file unslop/pyproject.toml unslop/scripts
 
       - name: Unit + integration tests
         run: python -m pytest tests/ -v --tb=short --cov=unslop/scripts --cov-report=xml --cov-report=term
