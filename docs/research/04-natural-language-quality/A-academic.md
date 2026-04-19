@@ -1,6 +1,6 @@
 # Natural Language Quality — Academic & Scholarly
 
-> Research angle: **A — Academic & Scholarly** grounding for the Humazier project
+> Research angle: **A — Academic & Scholarly** grounding for the Unslop project
 > (humanizing AI output). Focus: decoding strategies, fluency / coherence / diversity,
 > burstiness, perplexity, repetition penalties, human-likeness metrics (MAUVE,
 > BERTScore, HLB), and adversarial humanization. Venues prioritized: arXiv, ACL,
@@ -42,7 +42,7 @@ Five threads matter for a humanization product:
 5. **Adversarial humanization is an emergent research subfield.** Cheng et
    al.'s *Adversarial Paraphrasing* (2025) formalizes detector-guided rewriting
    and shows >85 % reduction in true-positive rates across detectors — setting
-   both the state of the art and the ethical stakes for Humazier.
+   both the state of the art and the ethical stakes for Unslop.
 
 ## Sources
 
@@ -433,7 +433,7 @@ Five threads matter for a humanization product:
   transferability audits across DetectGPT, Ghostbuster, OpenAI-RoBERTa, RADAR.
 - **Takeaways for humanization:**
   - Current state-of-the-art for adversarial humanization; a reference
-    baseline for Humazier's evaluation harness.
+    baseline for Unslop's evaluation harness.
   - Demonstrates that humanization is fundamentally a detector-guided
     optimization problem, not a "style transfer" problem.
 - **Summary:** Cheng et al. formalize humanization as adversarial paraphrase
@@ -460,7 +460,7 @@ Five threads matter for a humanization product:
   - Useful map for product engineers who need to pick a decoder per task and
     per model family.
   - Documents that optimal settings differ across models and tasks — a
-    Humazier benchmark must cover this grid.
+    Unslop benchmark must cover this grid.
 
 ---
 
@@ -475,7 +475,7 @@ Five threads matter for a humanization product:
 | **Contrastive Decoding (expert − amateur)** | Decoding (Li 2023) | Cancels small-model pathologies from a big model's output; no extra training. |
 | **η-sampling / ε-sampling** | Decoding (Hewitt 2022) | Entropy-aware truncation; cleaner than top-p in high-entropy contexts. |
 | **Min-p sampling** | Decoding (Nguyen 2024/25) | Enables high-temp creative writing without incoherence; deployment-ready. |
-| **Mirostat** | Decoding (Basu 2021) | Explicit perplexity-target feedback loop — lets Humazier dial "human-range" perplexity. |
+| **Mirostat** | Decoding (Basu 2021) | Explicit perplexity-target feedback loop — lets Unslop dial "human-range" perplexity. |
 | **Repetition penalty / no-repeat-n-gram** | Decoding (folklore, popularized post-Holtzman) | Coarse but cheap band-aid; still used in production. |
 | **MAUVE divergence** | Evaluation (Pillutla 2021) | Captures both Type-I (degenerate) and Type-II (too-narrow) failures. |
 | **BERTScore** | Evaluation (Zhang 2020) | Paraphrase-robust semantic preservation floor. |
@@ -519,7 +519,7 @@ Five threads matter for a humanization product:
 1. **From static truncation to adaptive sampling.** The progression from top-k
    → top-p → typical → η → min-p → entropy-aware (entropix) is unmistakably
    toward samplers that react to the *local* shape of the distribution.
-   Humazier should default to adaptive, not fixed-threshold, samplers.
+   Unslop should default to adaptive, not fixed-threshold, samplers.
 2. **Representation-geometry explanations of degeneration.** SimCTG's
    anisotropy story, contrastive decoding's small-vs-large geometry, and
    follow-up corrections (Su & Collier 2023) all point to a shared idea: the
@@ -535,7 +535,7 @@ Five threads matter for a humanization product:
 5. **Humanization becoming a first-class research topic.** Cheng et al. (2025)
    is emblematic: the community is starting to publish explicit humanization
    attacks at top venues with transfer studies, evaluation suites, and
-   ethical discussion. Humazier is arriving as the subfield forms.
+   ethical discussion. Unslop is arriving as the subfield forms.
 6. **Training-free wins keep coming.** Contrastive decoding, contrastive
    search, min-p, η-sampling, adversarial paraphrasing — all *inference-time*
    methods that require zero retraining. Strong signal that decoding /
@@ -563,7 +563,7 @@ Five threads matter for a humanization product:
   *while* matching a target author/persona are a clear gap.
 - **Ethical framing.** Very little academic work engages with the downstream
   implications of successful humanization (disinformation, ghost-authored
-  academic work, assignment fraud). Humazier should expect this to become a
+  academic work, assignment fraud). Unslop should expect this to become a
   required section in top-venue submissions within 1–2 years.
 - **Interaction with watermarking.** Kirchenbauer-style watermarks and
   humanization are natural adversaries; the trade-off curve between

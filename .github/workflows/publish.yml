@@ -2,11 +2,11 @@ name: Publish to PyPI
 
 on:
   push:
-    tags: ["humanizer-humanize-v*"]
+    tags: ["unslop-v*"]
   workflow_dispatch:
     inputs:
       tag:
-        description: "Tag to publish (e.g. humanizer-humanize-v0.4.0)"
+        description: "Tag to publish (e.g. unslop-v0.4.0)"
         required: true
 
 permissions:
@@ -14,11 +14,11 @@ permissions:
 
 jobs:
   build-and-publish:
-    name: Build + publish humanizer-humanize to PyPI
+    name: Build + publish unslop to PyPI
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/project/humanizer-humanize/
+      url: https://pypi.org/project/unslop/
     # Trusted Publishing to PyPI: https://docs.pypi.org/trusted-publishers/
     permissions:
       id-token: write
@@ -39,14 +39,14 @@ jobs:
           pip install build twine
 
       - name: Verify package version matches tag
-        working-directory: humanizer-humanize
+        working-directory: unslop
         env:
           DISPATCH_TAG: ${{ github.event.inputs.tag }}
         run: |
           set -euo pipefail
           VERSION=$(python -c "from scripts import __version__; print(__version__)")
           TAG="${GITHUB_REF_NAME:-$DISPATCH_TAG}"
-          EXPECTED="humanizer-humanize-v${VERSION}"
+          EXPECTED="unslop-v${VERSION}"
           echo "Tag: ${TAG}"
           echo "Expected: ${EXPECTED}"
           if [ "${TAG}" != "${EXPECTED}" ]; then
@@ -55,14 +55,14 @@ jobs:
           fi
 
       - name: Build sdist + wheel
-        working-directory: humanizer-humanize
+        working-directory: unslop
         run: python -m build
 
       - name: Validate built artifacts
-        working-directory: humanizer-humanize
+        working-directory: unslop
         run: twine check dist/*
 
       - name: Publish to PyPI (trusted publisher)
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: humanizer-humanize/dist/
+          packages-dir: unslop/dist/

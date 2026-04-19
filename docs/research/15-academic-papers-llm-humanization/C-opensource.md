@@ -185,7 +185,7 @@
 - Late (2024–2025): RL-trained humanizers (AuthorMist), detector-guided paraphrasers (Adversarial Paraphrasing), and benchmarks that explicitly measure the *three-way* trade-off between evasion, fluency, and compute (TH-Bench).
 - The "AI-polished" framing (APT-Eval, 2025) is the newest and arguably most product-relevant: users don't want full machine-generated text rewritten — they want their *own* draft lightly edited without being flagged.
 
-### Gaps (opportunity surface for the Humazier project)
+### Gaps (opportunity surface for the Unslop project)
 1. **No strong "think like a human" work** — every open-source artifact targets *surface text*. No paper-with-code tackles humanizing the underlying *reasoning trace* or chain-of-thought. This is a genuine whitespace.
 2. **Metrics still measure distributional match, not perceived humanness.** MAUVE and HUSE both operate at distribution/classification level. No widely-adopted open metric measures *subjective humanness* from a lay reader (vs. expert annotators in `human_detectors`).
 3. **No released code for AuthorMist itself** (only the HF model). An open RL-humanizer with detector-API rewards would immediately become a reference implementation.

@@ -1,6 +1,6 @@
 # Chain-of-Thought & Reasoning — Angle D: Commercial Products
 
-**Research value: high** — Mature and rapidly moving product category with named patterns ("thinking budgets", "private CoT", "visible extended thinking"), concrete pricing signals, and directly relevant humanization tensions for the Humazier project.
+**Research value: high** — Mature and rapidly moving product category with named patterns ("thinking budgets", "private CoT", "visible extended thinking"), concrete pricing signals, and directly relevant humanization tensions for the Unslop project.
 
 **Scope:** Commercial products that sell reasoning or chain-of-thought as a first-class feature. Three tiers are treated together because they buy/build against the same underlying CoT primitives:
 1. **Reasoning-native APIs** (model layer): OpenAI o1/o3, Anthropic Extended Thinking, Google Gemini Deep Think, DeepSeek Reasoner, xAI Grok Reasoning.
@@ -213,7 +213,7 @@ Notice the linguistic split: API vendors sell *reasoning as a capability* ("exte
 
 **G6. Reasoning localization / register.** CoT output is overwhelmingly English, terse, and technical — even on consumer products. No major vendor re-registers the thinking stream to match user literacy, domain, or emotional context. Humanizing reasoning for a non-expert audience is open ground.
 
-**G7. Non-code agent reasoning is thin.** The strongest agent-reasoning products (Devin, Reflection AI) are in code. Lindy and Relevance are workflow-centric. There is room for a reasoning agent specialized in *humanized writing and argumentation* — which aligns directly with the Humazier brief.
+**G7. Non-code agent reasoning is thin.** The strongest agent-reasoning products (Devin, Reflection AI) are in code. Lindy and Relevance are workflow-centric. There is room for a reasoning agent specialized in *humanized writing and argumentation* — which aligns directly with the Unslop brief.
 
 **G8. The transparency ↔ safety tradeoff is under-explored in product.** OpenAI uses safety to justify opacity; Anthropic uses safety to argue *for* visibility. No product currently lets end-users configure this tradeoff per task ("show me everything on this math problem; summarize on this medical question"). A per-task transparency dial is a plausible humanization primitive.
 

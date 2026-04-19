@@ -4,7 +4,7 @@
 
 This category covers **how AI systems are structured to think** — the architectural scaffolding around (or instead of) a raw LLM call. It spans four decades of classical symbolic architectures (Soar, ACT-R, CLARION, Sigma, OpenCog, LIDA), the LLM-era cluster of language agents (ReAct, Reflexion, Voyager, Generative Agents, MemGPT/Letta), the canonical bridge between them (Princeton's **CoALA**), and commercial instantiations from reasoning-first agent labs, emotion-first companion platforms, game/NPC character engines, and enterprise neuro-symbolic middleware. It also pulls in post-transformer substrate bets (Symbolica, Extropic, AMI Labs/JEPA, Sakana) and practitioner discourse from Reddit, Hacker News, LessWrong, and YouTube.
 
-For the Humazier project, "cognitive architectures" is the *structural* counterpart to stylistic humanization: it answers **"what must be around the LLM for its thinking and output to feel human across long horizons?"** — memory, reflection, planning, dual-process arbitration, affect, persona persistence — rather than "how should each sentence read?"
+For the Unslop project, "cognitive architectures" is the *structural* counterpart to stylistic humanization: it answers **"what must be around the LLM for its thinking and output to feel human across long horizons?"** — memory, reflection, planning, dual-process arbitration, affect, persona persistence — rather than "how should each sentence read?"
 
 ## Executive Summary
 
@@ -24,7 +24,7 @@ Across all angles, a single strategic implication stands out: a humanization sta
 
 ## Cross-Angle Themes
 
-**T1 — CoALA as lingua franca.** All five angles back-reference CoALA. Academic (A) cites it as the canonical bridge; industry blogs (B) operationalize it (LangChain's Agent Builder memory is openly CoALA-based); open source (C) tags repos against it via `awesome-language-agents`; commercial (D) uses its vocabulary even when not citing it; practitioners (E) treat it as the adult organization of agents. **If Humazier picks any vocabulary, picking CoALA's is a free compatibility win.**
+**T1 — CoALA as lingua franca.** All five angles back-reference CoALA. Academic (A) cites it as the canonical bridge; industry blogs (B) operationalize it (LangChain's Agent Builder memory is openly CoALA-based); open source (C) tags repos against it via `awesome-language-agents`; commercial (D) uses its vocabulary even when not citing it; practitioners (E) treat it as the adult organization of agents. **If Unslop picks any vocabulary, picking CoALA's is a free compatibility win.**
 
 **T2 — Memory typology convergence.** Working + episodic + semantic + procedural is independently named by ACT-R (1990s), Soar (2008+), CoALA (2023), MemGPT (2023), Mnemo/DeltaMemory (2025), Adam Lucek's brain-like memory video (E), and LangChain's production memory system. Divergence is only in *which* long-term store each emphasizes.
 
@@ -46,7 +46,7 @@ Across all angles, a single strategic implication stands out: a humanization sta
 
 **T11 — Interview-grounded agents > persona-prompted agents.** Stanford's *Generative Agent Simulations of 1,000 People* (arXiv:2411.10109) replicates real-person GSS responses at 85% of test–retest reliability and reduces demographic-stereotype bias vs persona prompts. *Supply data, not adjectives.*
 
-**T12 — Architectural humanization and output-surface humanization are separate problems.** The cognitive-architecture literature (A/B/C/D) barely touches burstiness, hedging, or voice; the writing-craft literature (the r/OpenAI / r/SEO "AI tells" canon in E) barely touches memory or metacognition. Humazier sits precisely in this bridge.
+**T12 — Architectural humanization and output-surface humanization are separate problems.** The cognitive-architecture literature (A/B/C/D) barely touches burstiness, hedging, or voice; the writing-craft literature (the r/OpenAI / r/SEO "AI tells" canon in E) barely touches memory or metacognition. Unslop sits precisely in this bridge.
 
 ## Top Sources (Curated)
 
@@ -164,7 +164,7 @@ The **scaling camp** (Altman; implicit in frontier-lab practice) bets that more 
 Anthropic's visible extended thinking and OpenAI's o-series bet that showing the reasoning trace is a product surface; practitioners (E, Post 9) argue the user should see *considered output, not the scratchpad*, and that leaked scratchpad language ("I need to consider…") is precisely what makes AI output feel AI-ish. Open question: should metacognition be *exposed* (Anthropic) or *hidden* (practitioner preference)? [B, D, E]
 
 **C3 — Affective vs cognitive trust (which to lead with).**
-Voicebot/Kinsella's thesis — Alexa failed because it led with affective trust; ChatGPT succeeded because it led with cognitive trust — cuts directly against emotion-first platforms (Hume, Replika, Inflection Pi). Reasoning-first labs treat affect as an afterthought. Humazier must decide which to lead with. [B, D]
+Voicebot/Kinsella's thesis — Alexa failed because it led with affective trust; ChatGPT succeeded because it led with cognitive trust — cuts directly against emotion-first platforms (Hume, Replika, Inflection Pi). Reasoning-first labs treat affect as an afterthought. Unslop must decide which to lead with. [B, D]
 
 **C4 — RAG vs agent-authored memory.**
 Letta's *RAG is not Agent Memory* (Feb 2025) and the r/LocalLLaMA / HN consensus reject passive vector retrieval as a memory substitute. Mem0, Zep, and most production RAG stacks still operate in the passive paradigm. Convergence is underway but not settled. [B, E]
@@ -205,7 +205,7 @@ ACPO, Dualformer, and Reasoning on a Spectrum explicitly name *over-reasoning* a
 
 ## Open Questions / Research Gaps
 
-1. **No standard benchmark for "human-likeness" at the cognitive-architecture level.** Generative Agents uses believability Turing tests; Voyager uses Minecraft; Agent-S uses OSWorld; Park 2024 uses GSS replication. None measure voice/memory/personality stability over long horizons. **Humazier likely needs its own eval.** [A, C, E]
+1. **No standard benchmark for "human-likeness" at the cognitive-architecture level.** Generative Agents uses believability Turing tests; Voyager uses Minecraft; Agent-S uses OSWorld; Park 2024 uses GSS replication. None measure voice/memory/personality stability over long horizons. **Unslop likely needs its own eval.** [A, C, E]
 
 2. **Bridge between architectural humanization and output-surface humanization is empty.** Cognitive-architecture work stops at the output boundary; writing-craft work starts there. No one has published how metacognitive structure should (or should not) leak into user-facing voice. [A, B, C, E]
 
@@ -247,7 +247,7 @@ Three specific load-bearing roles:
 
 1. **Provides the vocabulary.** CoALA's memory typology (working/episodic/semantic/procedural) and action taxonomy (internal reasoning/retrieval/learning vs external grounding) give the project a shared language with the broader research and practitioner ecosystems. Using it buys free compatibility.
 
-2. **Explains why prompt-only humanization fails.** The critic camp (Marcus, Hawkins, LeCun, Laird) supplies rigorous arguments for why a stylistic layer on a stateless LLM will always produce the uncanny "perfect recall, wrong selection," contradictory-persona, amnesiac-friend feel that users register as AI-ish. Humazier's differentiation story rests on this structural argument.
+2. **Explains why prompt-only humanization fails.** The critic camp (Marcus, Hawkins, LeCun, Laird) supplies rigorous arguments for why a stylistic layer on a stateless LLM will always produce the uncanny "perfect recall, wrong selection," contradictory-persona, amnesiac-friend feel that users register as AI-ish. Unslop's differentiation story rests on this structural argument.
 
 3. **Marks the white-space.** The market bifurcation (reasoning-first labs ship flat output; emotion-first platforms don't reason; game NPCs have the right architecture but ship in games) is the clearest positioning opportunity in the entire landscape. A product that makes a *persona* reason well — with adaptive System-1/2, typed memory, sleep-time consolidation, interview-grounded persona, and a metacognitive layer that *feels* human without leaking scratchpad — would collapse the bifurcation.
 
@@ -257,7 +257,7 @@ Interfaces to other categories:
 - **→ Persona / identity categories:** interview-grounded persona (Park 2024) is the empirically-strongest base; classical architectures supply the stability invariants (goals, impasse, chunking).
 - **→ Memory / continuity categories:** the memory typology and context-engineering discipline live here; any continuity feature plugs into CoALA's slots.
 - **→ Trust / reliability / safety categories:** dual-process arbitration, symbolic governance (SCL), and visible-vs-hidden thinking debates are shared with trust framings.
-- **→ Evaluation categories:** the open gap on human-likeness benchmarks is a Humazier-owned opportunity.
+- **→ Evaluation categories:** the open gap on human-likeness benchmarks is a Unslop-owned opportunity.
 
 ## Recommended Reading Order
 

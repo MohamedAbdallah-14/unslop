@@ -227,7 +227,7 @@ Posts are grouped by theme (memory, dual-process, metacognition, agent loops, hu
 - **Community:** Philosophy of mind
 - **Summary:** Positions LLMs as *cognitive amplifiers* for humans — iterative reflection, knowledge accumulation, cross-domain reinforcement — rather than autonomous minds. Emphasizes reducing "cognitive drift."
 - **Pattern:** Reframe from "AI pretends to be human" to "AI augments human thinking, and therefore needs to think in compatible patterns."
-- **Relevance:** Strong product-positioning frame for "Humazier." A humanized AI isn't impersonating a person — it's thinking in a way a human can co-think with.
+- **Relevance:** Strong product-positioning frame for "Unslop." A humanized AI isn't impersonating a person — it's thinking in a way a human can co-think with.
 
 ---
 
@@ -274,7 +274,7 @@ Posts are grouped by theme (memory, dual-process, metacognition, agent loops, hu
 
 6. **Preserve contradictions, don't overwrite.** Mnemo (HN) and Reddit threads on long-running memory agree: humanlike belief update is *Bayesian and contradiction-preserving,* not replace-on-write. This is a structural contrast with naïve RAG.
 
-7. **Output-surface humanization and architectural humanization are separate problems.** Reddit writing threads (burstiness, voice, controlled imperfection) and cognitive-architecture threads (memory, metacognition) rarely overlap, but both are necessary. Humazier's advantage is in *bridging* them.
+7. **Output-surface humanization and architectural humanization are separate problems.** Reddit writing threads (burstiness, voice, controlled imperfection) and cognitive-architecture threads (memory, metacognition) rarely overlap, but both are necessary. Unslop's advantage is in *bridging* them.
 
 8. **Simulators frame (janus) is the deepest lens.** The LLM doesn't "become" human — it *simulates* a specified human-shaped process. This changes the design goal from "train a human" to "specify, scaffold, and condition a simulation of human-like thinking."
 
@@ -282,7 +282,7 @@ Posts are grouped by theme (memory, dual-process, metacognition, agent loops, hu
 
 ## Gaps — where practitioner discourse is thin
 
-- **Voice/persona consistency across episodic memory.** Lots of work on *storing* episodic memory, very little on *retrieving it in a stylistically consistent way.* If a user's past exchanges informed "Humazier's voice," how does the architecture keep voice stable under retrieval? Open.
+- **Voice/persona consistency across episodic memory.** Lots of work on *storing* episodic memory, very little on *retrieving it in a stylistically consistent way.* If a user's past exchanges informed "Unslop's voice," how does the architecture keep voice stable under retrieval? Open.
 
 - **Deliberate imperfection as an architectural feature.** The writing community knows imperfection humanizes output; the cognitive-architecture community never treats it as a design variable. No posts found that *architecturally* model hedging, self-contradiction, or tangents as emergent properties.
 
@@ -292,7 +292,7 @@ Posts are grouped by theme (memory, dual-process, metacognition, agent loops, hu
 
 - **Time-aware identity.** Temporal reasoning (DeltaMemory) exists for facts, not for *self.* There's no practitioner pattern for "the agent's beliefs/style have evolved over our relationship" — a real human trait.
 
-- **Evaluation for humanness.** No standard benchmark for "humanized thinking." LoCoMo and similar test recall, not voice, not metacognitive trust. Humazier will likely need its own eval.
+- **Evaluation for humanness.** No standard benchmark for "humanized thinking." LoCoMo and similar test recall, not voice, not metacognitive trust. Unslop will likely need its own eval.
 
 ---
 

@@ -144,7 +144,7 @@ The strongest cross-repo finding: **stated ToM performance collapses the moment 
 
 8. **Social simulation → ToM metric conversion.** Generative Agents, Sotopia, AgentSims all *rely on* ToM but don't *score* it. Extracting a ToM-specific metric from agent transcripts (did the agent act consistent with the other's known beliefs?) would unify the QA and simulation camps, but no public tooling does this.
 
-9. **Evaluation of ToM in the humanizer use case itself.** None of these benchmarks measures whether a *humanizer* (in the sense of a system rewriting AI output to sound human) preserves the user's beliefs, model of the audience, or pragmatic intent. This is the direct overlap with the Humazier project and is completely open.
+9. **Evaluation of ToM in the humanizer use case itself.** None of these benchmarks measures whether a *humanizer* (in the sense of a system rewriting AI output to sound human) preserves the user's beliefs, model of the audience, or pragmatic intent. This is the direct overlap with the Unslop project and is completely open.
 
 10. **MindDial and MindDial-like belief-module work is under-reproduced.** The three-level belief module (self / model-of-other / gap) is an architecturally elegant idea that hasn't been picked up in open code anywhere. Someone implementing it as a drop-in agent wrapper would meaningfully move the field.
 

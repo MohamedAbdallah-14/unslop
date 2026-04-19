@@ -2,7 +2,7 @@
 
 **Angle C — Open-Source & GitHub**
 
-**Project:** Humazier (humanizing AI output and thinking)
+**Project:** Unslop (humanizing AI output and thinking)
 **Research date:** 2026-04-19
 **Scope:** The open-source stack for persistent LLM memory, user personalization, and lightweight fine-tuning that enables an assistant to "remember who I am, how I talk, and what I care about" across sessions — MemGPT/Letta, mem0, Zep/Graphiti, LangMem, LlamaIndex memory blocks, A-MEM, MemoryBank, MemoRAG, EM-LLM, Cognee, MemoryScope/ReMe, Motorhead, gptme, ChromaDB memory recipes, plus personalized fine-tuning tooling (Axolotl, Unsloth, PersonaMem-v2).
 

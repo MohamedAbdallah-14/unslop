@@ -150,7 +150,7 @@ The practitioner critique (Peggy Kang, `blader/humanizer` issue #82, `@voidborne
 
 This category is the **implementation substrate** of the humanization research program. Other categories (detection, prompt engineering, RL fine-tuning, watermarking, stylometry) produce techniques; this category tracks which of those techniques have running code, where adoption lives, and what the cost/quality/effort trade-offs look like in practice.
 
-Three positioning implications for Humazier:
+Three positioning implications for Unslop:
 
 - **The research tier is the technique source; the skill tier is the UX reference.** Lean on DIPPER + SICO + StealthRL + StyleRemix for the mechanism stack; lean on `blader/humanizer` and the 4-pass skill pipeline for what users actually expect to see in an interface.
 - **The empty niche is the bridge between them.** Nobody has shipped a production-grade OSS humanizer that (a) uses research-tier mechanisms, (b) runs TH-Bench / MGTBench-2.0 as a standing eval, (c) offers StyleRemix-style interpretable knobs in the UX, and (d) preserves authorial voice while destroying AI signals. That bridge is the unique position.

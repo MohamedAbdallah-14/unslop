@@ -1,4 +1,4 @@
-# Humanizer Benchmarks
+# Unslop Benchmarks
 
 Offline, deterministic benchmark harness. No API calls. Run locally or in CI
 to confirm the regex pass is doing measurable work on a fixed corpus of
@@ -23,7 +23,7 @@ For every fixture under `benchmarks/fixtures/*.md`:
 |---|---|
 | `ai_isms_before` | Count of AI-ism regex matches in the original |
 | `ai_isms_after` | Count after `humanize_deterministic` |
-| `delta` | `before - after`. Higher = humanizer found more to strip |
+| `delta` | `before - after`. Higher = unslop found more to strip |
 | `words_before` / `words_after` | Word count before/after (expect a small drop) |
 | `sentence_count_before` / `sentence_count_after` | Prose sentence count used for burstiness checks |
 | `burstiness_before` / `burstiness_after` | Sentence-length stddev (higher = more human rhythm) |
@@ -34,8 +34,8 @@ For every fixture under `benchmarks/fixtures/*.md`:
 
 `run.py --strict` fails with exit 2 if:
 
-- any fixture has `delta < 0` (humanizer made AI-isms *worse*)
-- any fixture has `structural_ok == False` (humanizer broke preservation)
+- any fixture has `delta < 0` (unslop made AI-isms *worse*)
+- any fixture has `structural_ok == False` (unslop broke preservation)
 - any fixture with baseline human-like rhythm (`burstiness_before >= 4`, `sentence_count_after >= 8`) is flattened below the burstiness floor (`burstiness_after < 4`)
 
 These are the same gates applied in `evals/measure.py`, but offline.

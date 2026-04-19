@@ -2,7 +2,7 @@
 
 **Research value: high** — A mature ecosystem of open tools exists for measuring anthropomorphism, humanness, trust, and perceived agency in AI. Microsoft HAX, Google PAIR, validated HRI scales (Godspeed, RoSAS, Jian TiA), and a second wave of LLM-era benchmarks (AnthroScore, AnthroBench, HumT/DumT, HumanAgencyBench, Jones & Bergen Turing test) are directly portable to a "humanize AI output" project.
 
-Scope: project "Humazier" is about humanizing AI output and thinking. This digest inventories the open instruments that can be reused to *measure* whether humanization works — perceived humanness, anthropomorphism, trust, agency, social attributes — plus frameworks that govern *how* humanization should be designed (HAX, PAIR).
+Scope: project "Unslop" is about humanizing AI output and thinking. This digest inventories the open instruments that can be reused to *measure* whether humanization works — perceived humanness, anthropomorphism, trust, agency, social attributes — plus frameworks that govern *how* humanization should be designed (HAX, PAIR).
 
 ---
 
@@ -14,7 +14,7 @@ Scope: project "Humazier" is about humanizing AI output and thinking. This diges
 - **Stars / language / license:** ~58★ · TypeScript (75%) · MIT
 - **What it is:** Interactive scenario generator for stress-testing user-facing AI systems against the 18 Guidelines for Human-AI Interaction. Content (scenarios, surveys) is defined in JSON so teams can fork and customize.
 - **README quote:** "The HAX Playbook is an interactive tool for generating interaction scenarios to test when designing user-facing AI systems."
-- **Relevance to Humazier:** The Playbook's failure-scenario framing (especially for NLP) is the cleanest checklist for "when does humanized output go wrong?" — false intimacy, over-promising, mismatched register.
+- **Relevance to Unslop:** The Playbook's failure-scenario framing (especially for NLP) is the cleanest checklist for "when does humanized output go wrong?" — false intimacy, over-promising, mismatched register.
 
 ### 2. Microsoft HAX Toolkit (website resources)
 
@@ -42,7 +42,7 @@ Scope: project "Humazier" is about humanizing AI output and thinking. This diges
 - **Stars / language / license:** ~18★ · Python · BSD-2-Clause
 - **What it is:** Masked-LM-based metric that quantifies how a non-human entity is implicitly framed as human by surrounding context. Lexicon-free, applies to any text. Install via `pip install anthroscore-eacl`.
 - **README quote:** "Code to compute AnthroScore, a computational linguistic measure of anthropomorphism in text."
-- **Relevance:** First-choice automatic metric for the Humazier project. Can be applied to (a) input prompts, (b) model outputs, (c) user follow-ups to track whether humanization pushes the conversation toward anthropomorphic framing. Paper shows NLP / LLM papers have the highest anthropomorphism of any CS subfield over 15 years.
+- **Relevance:** First-choice automatic metric for the Unslop project. Can be applied to (a) input prompts, (b) model outputs, (c) user follow-ups to track whether humanization pushes the conversation toward anthropomorphic framing. Paper shows NLP / LLM papers have the highest anthropomorphism of any CS subfield over 15 years.
 
 ### 6. HumT / DumT / SocioT (Stanford)
 
@@ -85,7 +85,7 @@ Scope: project "Humazier" is about humanizing AI output and thinking. This diges
 - **Repo:** [`microsoft/turing-experiments`](https://github.com/microsoft/turing-experiments) (ICML 2023)
 - **Language:** Jupyter + Python
 - **What it is:** Reframes "the" Turing test from impersonation of one individual to simulation of *distributions* of human behavior. Replicates canonical psychology/econ experiments (Ultimatum, Milgram, Garden-path sentences, Wisdom of Crowds) with LLMs.
-- **Relevance:** For Humazier, this is the right evaluation posture: does the humanized model produce outputs whose *distributional* behavior matches humans, not just whose surface style does?
+- **Relevance:** For Unslop, this is the right evaluation posture: does the humanized model produce outputs whose *distributional* behavior matches humans, not just whose surface style does?
 
 ### 12. Adversarial Turing Test
 
@@ -157,7 +157,7 @@ Scope: project "Humazier" is about humanizing AI output and thinking. This diges
 
 - **Repos:** [`RintaroMatsumoto/human-persona`](https://github.com/RintaroMatsumoto/human-persona) · [`ksanyok/TextHumanize`](https://github.com/ksanyok/TextHumanize) · [`Mohit1053/Humanizer`](https://github.com/Mohit1053/Humanizer)
 - **What they are:** Open-source humanization *systems* (not benchmarks) — timing control, style variation, burstiness, contractions, filler words, emotion tracking. Vary widely in rigor; marketing claims ("reduce AI detection 60–90%") should be discounted.
-- **Relevance:** Prior-art for the implementation side of Humazier. Worth inspecting for feature coverage (timing, paralinguistics) but not for scientific evaluation methodology.
+- **Relevance:** Prior-art for the implementation side of Unslop. Worth inspecting for feature coverage (timing, paralinguistics) but not for scientific evaluation methodology.
 
 ---
 
@@ -178,7 +178,7 @@ Scope: project "Humazier" is about humanizing AI output and thinking. This diges
 - **Pre-registered randomized controlled Turing tests.** Jones & Bergen 2024/2025 established a methodological bar; future claims will need similar rigor.
 - **Increasing attention to *anti-humanization* as a feature.** HumT/DumT, HAX Guideline 15 ("learn from user behavior"), PAIR's trust-calibration chapter, and HumanAgencyBench's "Avoid Value Manipulation" all point toward deliberately suppressing humanization where it misleads.
 
-### Gaps (opportunities for Humazier)
+### Gaps (opportunities for Unslop)
 
 1. **No canonical "humanization success" benchmark.** AnthroBench measures *unwanted* anthropomorphism; HumT measures tone; Chatbot Arena measures preference; none directly measure "did this style edit make the output more human-like *without* sliding into deception or value manipulation?" A humanization-specific harness that combines AnthroScore + HumT + HumanAgencyBench + adversarial detectors into one scorecard would be net-new.
 2. **Godspeed / RoSAS lack a maintained Python package.** The only open implementations are a LaTeX template, an R package, and ad-hoc Google Forms adaptations. A pip-installable, Likert-scored Godspeed/RoSAS harness with a prompt-based administration mode is a small but high-leverage contribution.

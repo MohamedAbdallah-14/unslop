@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Humanizer — make AI output sound human</title>
+  <title>Unslop — make AI output sound human</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="Humanizer is a plugin + CLI that strips AI-isms from chat replies and markdown files. Works with Claude Code, Cursor, Windsurf, Gemini, Codex, and Copilot." />
-  <meta property="og:title" content="Humanizer — make AI output sound human" />
+  <meta name="description" content="Unslop is a plugin + CLI that strips AI-isms from chat replies and markdown files. Works with Claude Code, Cursor, Windsurf, Gemini, Codex, and Copilot." />
+  <meta property="og:title" content="Unslop — make AI output sound human" />
   <meta property="og:description" content="Strip sycophancy, stock vocab, hedging stacks, and performative balance. Preserve code, URLs, headings, and technical content." />
   <style>
     :root {
@@ -68,24 +68,24 @@
 </head>
 <body>
   <main>
-    <h1>Humanizer</h1>
+    <h1>Unslop</h1>
     <p class="tag">Strip AI-isms from chat replies and markdown files. Keep code, URLs, headings, and technical content exactly as written.</p>
 
-    <p>Humanizer runs as a plugin (Claude Code, Cursor, Windsurf, Gemini CLI, Codex, Copilot) and as a standalone Python CLI for rewriting files on disk.</p>
+    <p>Unslop runs as a plugin (Claude Code, Cursor, Windsurf, Gemini CLI, Codex, Copilot) and as a standalone Python CLI for rewriting files on disk.</p>
 
     <h2>Install</h2>
 
     <h3>Claude Code plugin</h3>
-<pre><code>/plugin install humanizer</code></pre>
+<pre><code>/plugin install unslop</code></pre>
 
     <h3>Standalone hooks (any shell)</h3>
-<pre><code>git clone https://github.com/juliusbrussee/humanizer
-cd humanizer
+<pre><code>git clone https://github.com/juliusbrussee/unslop
+cd unslop
 bash hooks/install.sh
 </code></pre>
 
-    <h3>File humanizer (Python)</h3>
-<pre><code>pipx install humanizer-humanize
+    <h3>File unslop (Python)</h3>
+<pre><code>pipx install unslop
 humanize --deterministic README.md
 </code></pre>
 
@@ -119,13 +119,13 @@ humanize --deterministic README.md
 
     <h2>Links</h2>
     <ul>
-      <li><a href="https://github.com/juliusbrussee/humanizer">Source on GitHub</a></li>
-      <li><a href="https://github.com/juliusbrussee/humanizer#readme">README</a></li>
-      <li><a href="https://github.com/juliusbrussee/humanizer/blob/main/CLAUDE.md">Maintainer guide</a></li>
+      <li><a href="https://github.com/juliusbrussee/unslop">Source on GitHub</a></li>
+      <li><a href="https://github.com/juliusbrussee/unslop#readme">README</a></li>
+      <li><a href="https://github.com/juliusbrussee/unslop/blob/main/CLAUDE.md">Maintainer guide</a></li>
     </ul>
 
     <footer>
-      MIT licensed. Built by the Humazier maintainers.
+      MIT licensed. Built by the Unslop maintainers.
     </footer>
   </main>
 </body>

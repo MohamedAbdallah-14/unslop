@@ -1,6 +1,6 @@
 # Category 10 — Style Transfer & Voice
 
-> **Project:** Humazier — Humanizing AI output and thinking
+> **Project:** Unslop — Humanizing AI output and thinking
 > **Angles compiled:** A (Academic) · B (Industry Blogs) · C (Open Source) · D (Commercial) · E (Practical / Forums)
 > **Compiled:** April 2026
 > **Research value:** **High** across all five angles — the field has mature academic benchmarks, a converged commercial playbook, a visible open-source frontier (authorship embeddings + small specialized models), and a dense practitioner canon. Every angle points at the same gap: there is no production-ready system that makes AI output sound like a *specific individual* (not a brand) with honest evaluation and user-controllable authenticity knobs.
@@ -9,7 +9,7 @@
 
 ## Scope
 
-What counts as "style transfer & voice" for Humazier:
+What counts as "style transfer & voice" for Unslop:
 
 - **Style transfer** — converting text from one style attribute to another (formal↔informal, polite↔blunt, generic↔sensory, Shakespeare↔modern) while preserving content.
 - **Voice / authorship conditioning** — making a generator produce text that matches a specific author's idiolect (lexicon, rhythm, tics, rejection list) from a small corpus.
@@ -30,14 +30,14 @@ Style and voice research has passed through four eras, each leaving a durable co
 3. **LLM-era prompt & paraphrase methods (2022–2024).** Reif et al.'s augmented zero-shot prompting opened open-vocabulary style transfer; Prompt-and-Rerank showed small models + verification match frontier models at 100× less compute; STRAP established paraphrase-then-inverse-paraphrase as the unsupervised pivot.
 4. **Author-embedding + small-expert era (2023–2026).** STAR, CAV, TinyStyler (EMNLP 2024), STEER, and Patel 2024 reframe style as a continuous per-author embedding that plugs into contrastive classifiers, prompt prefixes, or reward models. TinyStyler (~800M params) beating GPT-4 on authorship transfer is the defining data point.
 
-The **commercial landscape** has silently converged on the same architecture in product form: Writer.com's *extract-LLM + generate-LLM*, Jasper's *Memory + Tone & Style*, Hypotenuse's bespoke brand models, Sudowrite's Muse + *My Voice*, Grammarly's personal voice profile. Every vendor now says *examples beat descriptions* and is moving from prompt craft to persistent voice-profile artifacts with minimum-corpus defaults (Writer ≥300 words, Sudowrite ≥1,000, Typeface ≥15,000). But the entire commercial segment optimizes for **brand conformity**, not individual authenticity — which is exactly Humazier's opening.
+The **commercial landscape** has silently converged on the same architecture in product form: Writer.com's *extract-LLM + generate-LLM*, Jasper's *Memory + Tone & Style*, Hypotenuse's bespoke brand models, Sudowrite's Muse + *My Voice*, Grammarly's personal voice profile. Every vendor now says *examples beat descriptions* and is moving from prompt craft to persistent voice-profile artifacts with minimum-corpus defaults (Writer ≥300 words, Sudowrite ≥1,000, Typeface ≥15,000). But the entire commercial segment optimizes for **brand conformity**, not individual authenticity — which is exactly Unslop's opening.
 
 The **practitioner canon** on Reddit/HN/Substack has independently rediscovered the same recipe (collect 5–10 samples → extract style guide → Custom Instructions / Custom GPT → few-shot → iterate → refresh every 2–3 months), plus three non-obvious insights:
 - **Rejection profiles beat preference profiles** ("words I'd never use" > "words I like").
 - **Positive-shape instructions beat anti-pattern bans** (bans prime the pattern — "Streisand effect for prompts").
 - **Amplify-then-temper** — lsusr's hyperbolic trick: push the author vector 10× past where you want, because models regress to the corpus mean.
 
-**Bottom line for Humazier:** Borrow the academic evaluation scaffolding (Mir three-axis + authorship verifiers as oracles), the DExperts/STEER decoding-time architecture, the commercial two-stage *extract → apply* separation, the practitioner *voice `.md`* portable artifact, and the author-embedding substrate from TinyStyler/STAR. The whitespace is a product that treats an individual's roughness as a feature to preserve rather than smooth, with honest voice-fidelity metrics the incumbents refuse to publish.
+**Bottom line for Unslop:** Borrow the academic evaluation scaffolding (Mir three-axis + authorship verifiers as oracles), the DExperts/STEER decoding-time architecture, the commercial two-stage *extract → apply* separation, the practitioner *voice `.md`* portable artifact, and the author-embedding substrate from TinyStyler/STAR. The whitespace is a product that treats an individual's roughness as a feature to preserve rather than smooth, with honest voice-fidelity metrics the incumbents refuse to publish.
 
 ---
 
@@ -48,7 +48,7 @@ These themes show up in at least three of the five angles and should be treated 
 1. **Examples > descriptions, universally.** Academic (Patel 2024 shows author embeddings beat few-shot prompting when samples are scarce), commercial (Writer, Hypotenuse, Sudowrite Muse all explicitly attack descriptor-only profiles), open-source (StyIns, TinyStyler, StyleLLM condition on exemplars/corpora), practitioner (every voice-`.md` guide says "paste your actual writing").
 2. **Two-stage architecture: understand the voice, then apply it.** Writer's extract-LLM + generate-LLM, Jasper's Memory + Tone&Style, HubSpot's Express-then-Amplify, the Tag-and-Generate repo, Anonymouth's detect-then-rewrite, practitioner editor-agent pattern, academic paraphrase-pivot (STRAP) — the same shape recurs.
 3. **Style is heavily lexicalized — cheap lexical layers go a long way.** Delete-Retrieve-Generate and Tag-and-Generate beat heavier disentanglement methods (academic); community LLM-ism lists and practitioner rewrite heuristics target specific words and parallel structures; HubSpot, LiGo, and every humanizer-blog enumerate the same 20–30 phrases.
-4. **Three-axis evaluation consensus, but no agreed humanness axis.** Transfer × content × fluency is the academic standard; Mir 2019's metric battery is directly reusable. But no public benchmark defines "human-like" as a first-class style attribute with labeled training data, an accepted classifier, *and* a held-out test set distinguishing "sounds human to a reader" from "fools a RoBERTa detector." This is Humazier's single largest evaluation opportunity.
+4. **Three-axis evaluation consensus, but no agreed humanness axis.** Transfer × content × fluency is the academic standard; Mir 2019's metric battery is directly reusable. But no public benchmark defines "human-like" as a first-class style attribute with labeled training data, an accepted classifier, *and* a held-out test set distinguishing "sounds human to a reader" from "fools a RoBERTa detector." This is Unslop's single largest evaluation opportunity.
 5. **Decoding-time steering is coming back.** Academic (PPLM → GeDi → FUDGE → DExperts → STEER), open-source (all five repos maintained through 2024/2025), practitioner (multi-agent editor-scorer loops are the forum version of decoding-time reranking). Frozen-base + small-expert is the dominant production pattern.
 6. **Authorship embeddings are the new substrate.** STAR, CAV, TinyStyler, Patel 2024 (academic); `ngpepin/stylometric-transfer` and TinyStyler (OSS); GHOSTYPE's "Virtual Personality Engine" and LiGo's voice vectors (practitioner); Typeface/Delphi per-author profiles (commercial) — a continuous vector that clusters same-author text is the common denominator.
 7. **Voice decays under optimization pressure.** Performance-optimized tools (Persado, Anyword, Lavender) and long-running custom instructions (r/ChatGPT decay thread) both drift toward sameness. Academic parallel: models regress to the corpus mean, which is why the hyperbolic trick works.
@@ -99,7 +99,7 @@ These themes show up in at least three of the five angles and should be treated 
 8. **`psal/anonymouth`** — `https://github.com/psal/anonymouth` · detect-distinctive-features → suggest-rewrites UX loop; dual-use inspiration for "de-AI" text.
 9. **`luofuli/DualRL`** — `https://github.com/luofuli/DualRL` · dual-reward RL (style accuracy + content preservation). Swap style-classifier reward for humanness reward and you have an RL humanizer.
 10. **`cauchy221/StyleTunedLM`** — `https://github.com/cauchy221/StyleTunedLM` · rare LoRA-style repo that publishes evaluation metrics, not just training scripts.
-11. **`shandley/claude-style-guide`** — `https://github.com/shandley/claude-style-guide` · end-to-end "analyze writing → detect LLM patterns → emit actionable styleguide" pipeline. Same thesis as Humazier, smaller scope.
+11. **`shandley/claude-style-guide`** — `https://github.com/shandley/claude-style-guide` · end-to-end "analyze writing → detect LLM patterns → emit actionable styleguide" pipeline. Same thesis as Unslop, smaller scope.
 12. **`stylellm/stylellm_models`** — `https://github.com/stylellm/stylellm_models` · Yi-6B fine-tunes + quantization — proof that "one LoRA per user voice" is deployable.
 13. **`zhijing-jin/Text_Style_Transfer_Survey`** — `https://github.com/zhijing-jin/Text_Style_Transfer_Survey` · canonical entry point before re-inventing any mechanism.
 
@@ -164,9 +164,9 @@ These themes show up in at least three of the five angles and should be treated 
 - **Disentanglement vs. entangled attribute-conditioning.** The ICML/NIPS 2017 disentanglement line was empirically overtaken by Lample 2019's entangled seq2seq with explicit attribute embeddings; some LLM-era work (especially activation-steering) is quietly bringing disentanglement back.
 - **Fine-tune vs. prompt for voice.** Writer.com and Hypotenuse insist generic LLM + prompt is insufficient for enterprise voice; the practitioner canon says Custom GPT + voice `.md` hits ~80–90% for individuals. TinyStyler's result suggests the truth is somewhere in between — small specialized models + embeddings beat both.
 - **Brand voice vs. individual voice.** Every commercial product defaults to brand voice framing even for individuals. Practitioners and academics increasingly treat this as a failure mode — brand voice tools actively *smooth* idiosyncrasy, the opposite of humanization.
-- **Metric-correlated optimization erodes voice.** Persado, Anyword, Lavender measure output by click-through/reply rate and pull copy toward proven clichés. Whether Humazier's optimization signal should include *any* performance proxy is an open design question.
+- **Metric-correlated optimization erodes voice.** Persado, Anyword, Lavender measure output by click-through/reply rate and pull copy toward proven clichés. Whether Unslop's optimization signal should include *any* performance proxy is an open design question.
 - **Is "sounding human" a first-class style attribute at all?** No public benchmark treats humanness as a labeled style axis with classifiers, training data, and a held-out test set. Some argue this is because "human" isn't a style — it's every style. Others argue it's a measurable absence of LLM-ism signatures.
-- **Control codes vs. few-shot vs. fine-tune vs. embedding.** The field has not settled on the right abstraction; each wave claimed to obsolete the prior one, each persists in production. Humazier likely needs several in a stack.
+- **Control codes vs. few-shot vs. fine-tune vs. embedding.** The field has not settled on the right abstraction; each wave claimed to obsolete the prior one, each persists in production. Unslop likely needs several in a stack.
 - **The "fit once" assumption.** Every voice-clone project assumes a static voice profile; no tool handles ongoing drift, style evolution, or cross-register shifts as a first-class operation.
 - **Custom instructions decay.** r/ChatGPT and r/OpenAI heavy users report tone rules stop biting after ~10 messages; sycophancy overrides; model upgrades reset personality. The vendors largely deny this; the community does not believe them.
 
@@ -204,7 +204,7 @@ These themes show up in at least three of the five angles and should be treated 
 9. **The "amplify-then-temper" pipeline is a folk technique.** lsusr's hyperbolic trick implies a two-stage amplify-author-vector → trim-back-toward-realism workflow; no open tool exposes it.
 10. **Positive-shape instruction library.** The LLM-ism trope lists are exhaustive; the equivalent "good-writing shape" positive prompts barely exist.
 11. **Author-embeddings on permissive licenses.** TinyStyler's embeddings are paper-tied; there is no sentence-transformers-style drop-in for authorship. Open niche.
-12. **Humanizing AI *thinking*, not just output.** Every commercial blog post and most academic papers address produced text. None address humanizing reasoning traces / chain-of-thought — which is explicit in Humazier's framing.
+12. **Humanizing AI *thinking*, not just output.** Every commercial blog post and most academic papers address produced text. None address humanizing reasoning traces / chain-of-thought — which is explicit in Unslop's framing.
 13. **Ethics of individual (non-brand) mimicry at scale.** Brand-voice ethics are well-covered (disclosure, attribution). Ghostwriting-as-a-service at the individual level is discussed only in passing.
 14. **Voice registry / management infrastructure.** Lots of one-off "how I fine-tuned on my blog" repos; no tooling for N-users × M-tasks LoRAs, hot-swap, or merging voice profiles.
 15. **Ongoing drift / update-my-voice as a first-class operation.** All voice-clone projects assume fit-once.
@@ -216,23 +216,23 @@ These themes show up in at least three of the five angles and should be treated 
 
 ## How This Category Fits in the Bigger Picture
 
-Style transfer and voice is the **output-shaping layer** of the Humazier stack — the stage that converts a reasoned, grounded answer into prose that sounds like the user instead of the model. It sits between several adjacent categories and inherits from each:
+Style transfer and voice is the **output-shaping layer** of the Unslop stack — the stage that converts a reasoned, grounded answer into prose that sounds like the user instead of the model. It sits between several adjacent categories and inherits from each:
 
 - **Category 01 (Prompt Engineering / Humanization)** provides the immediate-term lever: system-prompt personas, voice `.md` injection, few-shot exemplars. This category extends it with everything you can do beyond prompting — decoding-time steering, LoRAs, author embeddings, stylometric oracles.
 - **Category 03 (Persona & Character Design)** focuses on *who speaks*; this category focuses on *how that speaker's prose looks on the page*. They are complementary: a persona defines motivations and register choices; the voice layer enforces lexical and structural consistency.
 - **Category 04 (Natural Language Quality)** defines what "good prose" means in the abstract; voice transfer is how you specialize "good prose" to a particular individual.
-- **Category 05 (AI Text Detection & Evasion)** supplies the *oracle* — detectors and authorship verifiers — that this category uses as an evaluation signal and occasionally as a reward. The two are deeply intertwined: a humanizer that fools detectors but produces generic prose fails the voice test, and vice versa. Resolving that trade-off is a core Humazier design choice.
+- **Category 05 (AI Text Detection & Evasion)** supplies the *oracle* — detectors and authorship verifiers — that this category uses as an evaluation signal and occasionally as a reward. The two are deeply intertwined: a humanizer that fools detectors but produces generic prose fails the voice test, and vice versa. Resolving that trade-off is a core Unslop design choice.
 - **Category 07 (Emotional Intelligence / Empathy)** provides tone and affect that this category renders in the author's specific register.
 - **Category 14 (Creative Writing / Storytelling)** is the hardest stress test for voice — long-form consistency, POV, narrative rhythm — and validates whether the voice layer survives beyond a paragraph.
 - **Category 15 (Academic Papers on LLM Humanization)** overlaps heavily with Angle A here; treat the two jointly, with Category 15 as the literature hub and this category as the style-specific focus.
 - **Category 16 (GitHub Tools & Libraries)** and **Category 18 (Commercial Humanizer Tools)** overlap with Angles C and D; the categorical boundary is that this category specifically covers tools whose core mechanism is style transfer or voice capture, versus general-purpose humanization suites.
 - **Category 17 (Industry Blogs & Case Studies)** overlaps with Angle B; the same scope rule applies.
-- **Category 19 (Agentic / Autonomous Thinking)** surfaces the *thinking trace* problem: voice layers today operate on final output, not on reasoning. Humazier's "humanizing AI thinking" framing is genuinely under-explored in this category and needs cross-pollination from 19.
+- **Category 19 (Agentic / Autonomous Thinking)** surfaces the *thinking trace* problem: voice layers today operate on final output, not on reasoning. Unslop's "humanizing AI thinking" framing is genuinely under-explored in this category and needs cross-pollination from 19.
 - **Category 20 (Memory & Personalization)** provides the substrate that makes voice profiles persistent and per-user. A voice `.md` is useless without somewhere to live and a retrieval policy; Category 20 addresses that.
 
 **Dependency graph.** Voice transfer depends on: (a) a way to *capture* (prompting — 01, persona — 03, memory — 20); (b) a way to *apply* (decoding, fine-tuning, reranking — this category); (c) a way to *evaluate* (stylometry and detectors — 05, natural language quality — 04). It is called by: (a) any user-facing generator (conversation — 08, creative writing — 14, agentic output — 19); (b) the humanization product surface directly (18).
 
-**Strategic position.** If Humazier builds a single differentiating technical capability, it should be in this category: an honest, measurable, per-individual voice layer that treats idiosyncrasy as signal, with evaluation that distinguishes detector evasion from human judgment. Every other category either feeds this one or consumes from it.
+**Strategic position.** If Unslop builds a single differentiating technical capability, it should be in this category: an honest, measurable, per-individual voice layer that treats idiosyncrasy as signal, with evaluation that distinguishes detector evasion from human judgment. Every other category either feeds this one or consumes from it.
 
 ---
 

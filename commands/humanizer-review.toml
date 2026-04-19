@@ -1,8 +1,0 @@
-description = "Generate or rewrite PR review comments in human voice. Direct, specific, no corporate-AI throat-clearing."
-prompt = """Read `skills/humanizer-review/SKILL.md` and apply it to the diff or comment(s) the user provided.
-
-Format: file:Lline: <severity?> <observation>. <fix>.
-Severities: bug, risk, nit, q
-
-Output paste-ready comments. Do not commit. Do not push. Do not approve.
-"""

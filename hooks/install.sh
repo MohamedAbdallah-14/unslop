@@ -1,5 +1,5 @@
 #!/bin/bash
-# humanizer — one-command hook installer for Claude Code
+# unslop — one-command hook installer for Claude Code
 # Installs: SessionStart hook (auto-load rules) + UserPromptSubmit hook (mode tracking)
 # Usage: bash hooks/install.sh
 #   or:  bash hooks/install.sh --force   (re-install over existing hooks)
@@ -23,7 +23,7 @@ case "$OSTYPE" in
 esac
 
 if ! command -v node >/dev/null 2>&1; then
-  echo "ERROR: 'node' is required to install the humanizer hooks (used to merge"
+  echo "ERROR: 'node' is required to install the unslop hooks (used to merge"
   echo "       the hook config into ~/.claude/settings.json safely)."
   echo "       Install Node.js from https://nodejs.org and re-run this script."
   exit 1
@@ -32,9 +32,9 @@ fi
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 SETTINGS="$CLAUDE_DIR/settings.json"
-REPO_URL="https://raw.githubusercontent.com/MohamedAbdallah-Hu/humanizer/main/hooks"
+REPO_URL="https://raw.githubusercontent.com/MohamedAbdallah-Hu/unslop/main/hooks"
 
-HOOK_FILES=("package.json" "humanizer-config.js" "humanizer-activate.js" "humanizer-mode-tracker.js" "humanizer-statusline.sh")
+HOOK_FILES=("package.json" "unslop-config.js" "unslop-activate.js" "unslop-mode-tracker.js" "unslop-statusline.sh")
 
 SCRIPT_DIR=""
 if [ -n "${BASH_SOURCE[0]:-}" ] && [ -f "${BASH_SOURCE[0]}" ]; then
@@ -55,17 +55,17 @@ if [ "$FORCE" -eq 0 ]; then
   HOOKS_WIRED=0
   HAS_STATUSLINE=0
   if [ "$ALL_FILES_PRESENT" -eq 1 ] && [ -f "$SETTINGS" ]; then
-    if HUMANIZER_SETTINGS="$SETTINGS" node -e "
+    if UNSLOP_SETTINGS="$SETTINGS" node -e "
       const fs = require('fs');
-      const settings = JSON.parse(fs.readFileSync(process.env.HUMANIZER_SETTINGS, 'utf8'));
-      const hasHumanizerHook = (event) =>
+      const settings = JSON.parse(fs.readFileSync(process.env.UNSLOP_SETTINGS, 'utf8'));
+      const hasUnslopHook = (event) =>
         Array.isArray(settings.hooks?.[event]) &&
         settings.hooks[event].some(e =>
-          e.hooks && e.hooks.some(h => h.command && h.command.includes('humanizer'))
+          e.hooks && e.hooks.some(h => h.command && h.command.includes('unslop'))
         );
       process.exit(
-        hasHumanizerHook('SessionStart') &&
-        hasHumanizerHook('UserPromptSubmit') &&
+        hasUnslopHook('SessionStart') &&
+        hasUnslopHook('UserPromptSubmit') &&
         !!settings.statusLine
           ? 0
           : 1
@@ -78,7 +78,7 @@ if [ "$FORCE" -eq 0 ]; then
 
   if [ "$ALL_FILES_PRESENT" -eq 1 ] && [ "$HOOKS_WIRED" -eq 1 ] && [ "$HAS_STATUSLINE" -eq 1 ]; then
     ALREADY_INSTALLED=1
-    echo "Humanizer hooks already installed in $HOOKS_DIR"
+    echo "Unslop hooks already installed in $HOOKS_DIR"
     echo "  Re-run with --force to overwrite: bash hooks/install.sh --force"
     echo ""
   fi
@@ -89,10 +89,10 @@ if [ "$ALREADY_INSTALLED" -eq 1 ] && [ "$FORCE" -eq 0 ]; then
   exit 0
 fi
 
-if [ "$FORCE" -eq 1 ] && [ -f "$HOOKS_DIR/humanizer-activate.js" ]; then
-  echo "Reinstalling humanizer hooks (--force)..."
+if [ "$FORCE" -eq 1 ] && [ -f "$HOOKS_DIR/unslop-activate.js" ]; then
+  echo "Reinstalling unslop hooks (--force)..."
 else
-  echo "Installing humanizer hooks..."
+  echo "Installing unslop hooks..."
 fi
 
 mkdir -p "$HOOKS_DIR"
@@ -106,7 +106,7 @@ for hook in "${HOOK_FILES[@]}"; do
   echo "  Installed: $HOOKS_DIR/$hook"
 done
 
-chmod +x "$HOOKS_DIR/humanizer-statusline.sh"
+chmod +x "$HOOKS_DIR/unslop-statusline.sh"
 
 if [ ! -f "$SETTINGS" ]; then
   echo '{}' > "$SETTINGS"
@@ -115,40 +115,40 @@ fi
 # Back up existing settings.json before touching it
 cp "$SETTINGS" "$SETTINGS.bak"
 
-HUMANIZER_SETTINGS="$SETTINGS" HUMANIZER_HOOKS_DIR="$HOOKS_DIR" node -e "
+UNSLOP_SETTINGS="$SETTINGS" UNSLOP_HOOKS_DIR="$HOOKS_DIR" node -e "
   const fs = require('fs');
-  const settingsPath = process.env.HUMANIZER_SETTINGS;
-  const hooksDir = process.env.HUMANIZER_HOOKS_DIR;
-  const managedStatusLinePath = hooksDir + '/humanizer-statusline.sh';
+  const settingsPath = process.env.UNSLOP_SETTINGS;
+  const hooksDir = process.env.UNSLOP_HOOKS_DIR;
+  const managedStatusLinePath = hooksDir + '/unslop-statusline.sh';
   const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
   if (!settings.hooks) settings.hooks = {};
 
   if (!settings.hooks.SessionStart) settings.hooks.SessionStart = [];
   const hasStart = settings.hooks.SessionStart.some(e =>
-    e.hooks && e.hooks.some(h => h.command && h.command.includes('humanizer'))
+    e.hooks && e.hooks.some(h => h.command && h.command.includes('unslop'))
   );
   if (!hasStart) {
     settings.hooks.SessionStart.push({
       hooks: [{
         type: 'command',
-        command: 'node \"' + hooksDir + '/humanizer-activate.js\"',
+        command: 'node \"' + hooksDir + '/unslop-activate.js\"',
         timeout: 5,
-        statusMessage: 'Loading humanizer mode...'
+        statusMessage: 'Loading unslop mode...'
       }]
     });
   }
 
   if (!settings.hooks.UserPromptSubmit) settings.hooks.UserPromptSubmit = [];
   const hasPrompt = settings.hooks.UserPromptSubmit.some(e =>
-    e.hooks && e.hooks.some(h => h.command && h.command.includes('humanizer'))
+    e.hooks && e.hooks.some(h => h.command && h.command.includes('unslop'))
   );
   if (!hasPrompt) {
     settings.hooks.UserPromptSubmit.push({
       hooks: [{
         type: 'command',
-        command: 'node \"' + hooksDir + '/humanizer-mode-tracker.js\"',
+        command: 'node \"' + hooksDir + '/unslop-mode-tracker.js\"',
         timeout: 5,
-        statusMessage: 'Tracking humanizer mode...'
+        statusMessage: 'Tracking unslop mode...'
       }]
     });
   }
@@ -166,7 +166,7 @@ HUMANIZER_SETTINGS="$SETTINGS" HUMANIZER_HOOKS_DIR="$HOOKS_DIR" node -e "
     if (cmd.includes(managedStatusLinePath)) {
       console.log('  Statusline badge already configured.');
     } else {
-      console.log('  NOTE: Existing statusline detected — humanizer badge NOT added.');
+      console.log('  NOTE: Existing statusline detected — unslop badge NOT added.');
       console.log('        See hooks/README.md to add the badge to your existing statusline.');
     }
   }
@@ -179,7 +179,7 @@ echo ""
 echo "Done! Restart Claude Code to activate."
 echo ""
 echo "What's installed:"
-echo "  - SessionStart hook: auto-loads humanizer rules every session"
+echo "  - SessionStart hook: auto-loads unslop rules every session"
 echo "  - Mode tracker hook: updates statusline badge when you switch modes"
-echo "    (/humanizer subtle, /humanizer full, /humanizer-commit, etc.)"
-echo "  - Statusline badge: shows [humanizer] or [humanizer:FULL] etc."
+echo "    (/unslop subtle, /unslop full, /unslop-commit, etc.)"
+echo "  - Statusline badge: shows [unslop] or [unslop:FULL] etc."

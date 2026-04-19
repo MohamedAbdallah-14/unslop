@@ -1,6 +1,6 @@
 # Category 11 — Theory of Mind in AI
 
-**Project:** Humazier — Humanizing AI output and thinking
+**Project:** Unslop — Humanizing AI output and thinking
 **Sources synthesized:** A-academic.md · B-industry.md · C-opensource.md · D-commercial.md · E-practical.md
 **Overall research value:** **high** — a rapidly maturing literature with named anchor papers, a live public debate, a well-organized open-source benchmark stack, 20+ shipping commercial products, and a clear practitioner vocabulary. Directly load-bearing for any product whose job is to make AI output feel human.
 
@@ -38,7 +38,7 @@ Across all five angles the picture is sharper than the headlines suggest.
 
 7. **Practitioners treat ToM as promptable, not trained.** LessWrong's TOMI replication (CoT + explicit world-rules lifted accuracy from ~70% to ~87%), the "Humanize AI" how-to cluster (contractions, em-dashes, delete "tapestry/delve/crucial," hedging, Frankenstein prompting), and most Medium recipes all assume latent ToM capacity and work on surfacing it. Fine-tuning-on-ToM-data approaches (ExploreToM +27 on ToMi; Sotopia-RL; `bigai-ai/ToM-RL`) exist but are frontier, not default.
 
-The net for Humazier: there is real capability to build on, a real gap between *textual* humanization (tone, pacing, hedges) and *cognitive* humanization (actually tracking the user's mind) that the market has not yet articulated, and a real cluster of risks (persona drift, sycophancy, applied-ToM failure, vulnerable-user harm) that any humanization layer has to price in.
+The net for Unslop: there is real capability to build on, a real gap between *textual* humanization (tone, pacing, hedges) and *cognitive* humanization (actually tracking the user's mind) that the market has not yet articulated, and a real cluster of risks (persona drift, sycophancy, applied-ToM failure, vulnerable-user harm) that any humanization layer has to price in.
 
 ---
 
@@ -189,7 +189,7 @@ The net for Humazier: there is real capability to build on, a real gap between *
 - **Voice-native is the new default.** Hume EVI, Slingshot Ash, Pi, and all CX incumbents are investing heavily in tonality. Text-only ToM is being reframed as the low-rent tier.
 - **Digital twins eating early-stage research.** Synthetic Users, Synthetic Respondents, Ask Rally/GenPop, FishDog, Twin Persona — four+ well-funded players in under 24 months.
 - **Foundation models for specific mental domains.** Slingshot's "foundation model for psychology" (CBT/DBT/ACT/psychodynamic/MI), BetterUp's 17M coaching data-points, Synthetic Users' OCEAN-grounded participant model — the first explicit vertical foundation models for mental-state domains.
-- **Public vocabulary stabilizing.** "Persona drift," "character training," "applied ToM," "emotional journey" have all entered usage across labs, forums, and vendors since mid-2024. Useful for Humazier's own positioning.
+- **Public vocabulary stabilizing.** "Persona drift," "character training," "applied ToM," "emotional journey" have all entered usage across labs, forums, and vendors since mid-2024. Useful for Unslop's own positioning.
 
 ---
 
@@ -209,7 +209,7 @@ The net for Humazier: there is real capability to build on, a real gap between *
 7. **Non-English ToM.** ToMBench is bilingual (EN/ZH); almost everything else is English-only. Cross-linguistic pragmatic inference (irony, indirect speech, politeness) is a large gap.
 8. **Multi-party ToM.** Most systems still treat conversations as dyadic. Buying committees, family car rides, therapy triads, negotiation tables are multi-party by nature. FANToM and MuMA-ToM are the exceptions, not the rule.
 9. **Sarcasm / hidden feelings** is claimed but rarely validated. Uniphore's "It's fine" example is compelling but the industry lacks published benchmarks for sarcasm, irony, and masked affect.
-10. **Production-style output effects.** No work rigorously connects measured ToM capability to downstream *human-judgment* outcomes like perceived warmth, tact, or naturalness — this is the white-space for Humazier.
+10. **Production-style output effects.** No work rigorously connects measured ToM capability to downstream *human-judgment* outcomes like perceived warmth, tact, or naturalness — this is the white-space for Unslop.
 
 ### Engineering
 
@@ -228,7 +228,7 @@ The net for Humazier: there is real capability to build on, a real gap between *
 
 ## How This Category Fits in the Bigger Picture
 
-ToM is the **cognitive substrate** of the Humazier project. Most of the surface tactics in other categories — hedging, pacing, turn-taking, voice/tone, microstylistics, memory recall — are downstream of some form of user-mental-state tracking, even if shallow. This category provides the vocabulary and the evidence base for three project-level choices:
+ToM is the **cognitive substrate** of the Unslop project. Most of the surface tactics in other categories — hedging, pacing, turn-taking, voice/tone, microstylistics, memory recall — are downstream of some form of user-mental-state tracking, even if shallow. This category provides the vocabulary and the evidence base for three project-level choices:
 
 - **What *kind* of humanization are we building?** This category surfaces a distinction that the market does not yet articulate: **textual** humanization (tone, pacing, hedges, self-reference) vs. **cognitive** humanization (actually modeling the user's beliefs, desires, access). Surface categories (voice, microstylistics, tone) serve the first; this category is where the second is defined, measured, and debated.
 - **How will we evaluate "it works"?** The benchmark stack here (FANToM, SimpleToM, ToMBench, ExploreToM, MMToM-QA, SocialIQA) is the closest thing to a public evaluation toolkit for "does this system track minds." The `All*` strict-consistency, explicit-vs-applied gap, and ATOMS per-ability breakdowns are directly importable into product evals.

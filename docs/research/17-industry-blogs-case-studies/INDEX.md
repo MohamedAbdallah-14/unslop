@@ -293,7 +293,7 @@ Spotify is the only deep case study. Given voice-cloning ethical concerns (deepf
 
 ## Open Questions / Research Gaps
 
-1. **Is "feels human" a reproducible blind-preference metric?** No published rater study directly scores naturalness/warmth/perceived-agency on deployed systems. Humazier has an opening.
+1. **Is "feels human" a reproducible blind-preference metric?** No published rater study directly scores naturalness/warmth/perceived-agency on deployed systems. Unslop has an opening.
 2. **Durability over 12–24 months.** Academic RCTs ≤90 days; UW Health and Dutch hospital data suggest declining adoption over months; no long-horizon data.
 3. **Cross-cultural humanization.** Klarna's 35 languages and Fin's 45 languages are unstudied for tone transfer. All practitioner posts and OSS repos are English.
 4. **"Humanization" isolated as a causal variable.** Most case studies bundle model + UI + policy + training; only Crolic and Adam isolate anthropomorphic cues cleanly.
@@ -314,14 +314,14 @@ Spotify is the only deep case study. Given voice-cloning ethical concerns (deepf
 
 ## How This Category Fits in the Bigger Picture
 
-Category 17 is **the grounding layer** for Humazier's research program — it's where every thesis derived from categories on techniques, detection, and evaluation gets stress-tested against published outcomes.
+Category 17 is **the grounding layer** for Unslop's research program — it's where every thesis derived from categories on techniques, detection, and evaluation gets stress-tested against published outcomes.
 
 - **Vs. technique/architecture categories** — A, B, and C document *which* techniques (persona-versioning, grounding, staged rewrites, sub-500ms streaming, empathy pipelines, paragraph-scoped paraphrase) have actually been shipped at scale, and *which work in practice* vs. which remain elegant but unshipped.
-- **Vs. detection/eval categories** — C and E are the closest practitioner-side bridge: detector-score → conversion-delta → revenue is the instrumented chain Humazier will need to replicate.
+- **Vs. detection/eval categories** — C and E are the closest practitioner-side bridge: detector-score → conversion-delta → revenue is the instrumented chain Unslop will need to replicate.
 - **Vs. ethics / policy categories** — the HN backlash (§#4), r/copywriting thread (§#16), Klarna walk-back, and Anthropic anti-sycophancy ground abstract ethics discussions in observable behavior.
-- **Vs. voice / multimodal categories** — Category 17 makes clear that voice is the biggest publish gap; Humazier entering voice with rigor would have the least competition and the most upside.
+- **Vs. voice / multimodal categories** — Category 17 makes clear that voice is the biggest publish gap; Unslop entering voice with rigor would have the least competition and the most upside.
 - **Vs. academic foundation categories (Turing test, anthropomorphism literature)** — Angle A lifts those foundations into measurable 2022–2025 RCT/NBER/JAMA outcomes, converting theoretical claims into effect sizes (+14%, +34%, +21.8%, 9.8× empathy, etc.).
-- **Vs. product / positioning categories** — the post-Klarna narrative shift and the emergent 10-pattern engineering-blog playbook are reusable *directly* as Humazier's product positioning scaffold.
+- **Vs. product / positioning categories** — the post-Klarna narrative shift and the emergent 10-pattern engineering-blog playbook are reusable *directly* as Unslop's product positioning scaffold.
 
 If the rest of the research program is about *what humanization is and how it works*, Category 17 is about *what has actually happened when people tried it, at measurable scale, in public*. It's the reality check.
 
@@ -356,7 +356,7 @@ If the rest of the research program is about *what humanization is and how it wo
 3. Controversies & Debates (this doc)
 4. Angle B — patterns + trends (2023–2026 arc)
 5. Angle D — "Human-like" claim audit (Patterns 1–3, Gaps 1–4)
-6. Angle E — Implications for Humazier section
+6. Angle E — Implications for Unslop section
 
 **Path 5 — "I want to stress-test claims before citing them":**
 1. Angle A — Gaps (what academic literature doesn't say)
@@ -373,4 +373,4 @@ If the rest of the research program is about *what humanization is and how it wo
 - **[B-industry.md](./B-industry.md)** — Company engineering-blog case studies (24 products: Intercom Fin, Klarna, Shopify Sidekick, Duolingo Max, Khanmigo, Stripe, Notion, Linear, GitHub Copilot, Zendesk, Ada, Cresta, ASAPP, Figma, Character.AI, Anthropic, Slack, Airbnb, Decagon, Replit, Sierra, HubSpot, Spotify, VOXI). 10 cross-case patterns, 7 gaps, 2023→2026 trend arc, 30 linked sources.
 - **[C-opensource.md](./C-opensource.md)** — OSS repos & cookbooks (14 core: Anthropic cookbook, OpenAI cookbook × 2, LangSmith, LangChain Chat Loaders, humanize-writing-skill, humanizer-x, avoid-ai-writing, stylometric-transfer, written-voice-replication, llm-stylometry, TinyStyler, DIPPER, TempParaphraser; + ~15 supporting assets). 8 patterns, 7 gaps, 3 cross-domain analogies.
 - **[D-commercial.md](./D-commercial.md)** — Vendor-published commercial case studies (39 cases across Salesforce/Agentforce, Intercom Fin, Zendesk, Ada, HubSpot Breeze, Drift, Microsoft Copilot, Google Cloud Gemini). 10 patterns, 8 gaps — crucial audit of the "human-like" claim vs. the metrics that actually back it.
-- **[E-practical.md](./E-practical.md)** — Practitioner forum deployment stories (17 posts: Reddit SaaSMarketing, HN ×3, Indie Hackers ×6, SaaStr/Lemkin, LinkedIn ×2, Medium/Ali Abdaal, Reddit copywriting, Devpost hackathon). Revenue and detection deltas; 10 patterns; 7 gaps; Humazier implications section.
+- **[E-practical.md](./E-practical.md)** — Practitioner forum deployment stories (17 posts: Reddit SaaSMarketing, HN ×3, Indie Hackers ×6, SaaStr/Lemkin, LinkedIn ×2, Medium/Ali Abdaal, Reddit copywriting, Devpost hackathon). Revenue and detection deltas; 10 patterns; 7 gaps; Unslop implications section.

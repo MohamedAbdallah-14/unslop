@@ -1,5 +1,0 @@
-description = "Show humanizer modes, sub-skills, and slash commands. One-shot reference card."
-prompt = """Read `skills/humanizer-help/SKILL.md` and render the reference card.
-
-This is one-shot documentation. Do not toggle a mode. Do not write any flag file.
-"""

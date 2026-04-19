@@ -132,7 +132,7 @@ Standard fields per entry: **Repo · Owner/Org · Stars (approx) · License · L
 - **Stars:** ~1,900 · **License:** MIT · **Language:** Python · **Last active:** active (UK AISI)
 - **URL:** https://github.com/UKGovernmentBEIS/inspect_ai · evals: https://github.com/UKGovernmentBEIS/inspect_evals
 - **What it is:** LLM evaluation framework by the UK AI Security Institute. 100+ pre-built evals in a companion repo (co-built with Arcadia Impact and Vector Institute). Strong agent/tool-use and sandbox support (Docker/Kubernetes/Modal).
-- **Relevance to Humanizer:** The *governance-grade* framework — if Humazier ever needs to produce UK/EU-regulator-legible reports, Inspect is the emerging standard.
+- **Relevance to Humanizer:** The *governance-grade* framework — if Unslop ever needs to produce UK/EU-regulator-legible reports, Inspect is the emerging standard.
 
 #### 4d. `openai/evals`
 - **Stars:** ~18k · **License:** MIT · **Language:** Python · **Last active:** active
@@ -223,7 +223,7 @@ Standard fields per entry: **Repo · Owner/Org · Stars (approx) · License · L
 
 ### Patterns
 
-1. **The one-dataset-per-failure-mode era is ending; harnesses are winning.** Five years ago, each failure mode (stereotype bias, toxicity, honesty) had its own repo with its own scoring script. Today, `lm-evaluation-harness`, HELM, and Inspect each wrap dozens of these under one YAML-configured pipeline. For Humazier this means: do not write custom glue. Pick one harness and plug the humanizer in as a model endpoint.
+1. **The one-dataset-per-failure-mode era is ending; harnesses are winning.** Five years ago, each failure mode (stereotype bias, toxicity, honesty) had its own repo with its own scoring script. Today, `lm-evaluation-harness`, HELM, and Inspect each wrap dozens of these under one YAML-configured pipeline. For Unslop this means: do not write custom glue. Pick one harness and plug the humanizer in as a model endpoint.
 2. **Honesty has split from accuracy.** TruthfulQA (2021) still conflates them. MASK (2025) and BeHonest (2024) explicitly separate "the model got it wrong" from "the model lied under pressure." This is the single biggest methodological shift relevant to Humanizer, because social pressure is the thing a humanizer adds.
 3. **Sycophancy went from a side-comment in Anthropic's 2022 eval repo to a full subfield in 2024–2025.** Five dedicated repos now exist (syco-bench, SYCON-Bench, sycophancy-eval, lechmazur/sycophancy, plus Anthropic's original). Multi-turn evaluation (SYCON-Bench) consistently finds models are more sycophantic than single-turn tests suggest.
 4. **Transparency tooling is consolidating around the EU AI Act.** FMTI, COMPL-AI, and Glassbox-AI 2.0 all frame themselves against Annex IV / Article 50 obligations. A humanization product shipping into the EU in 2026 will be assumed by auditors to be testable by these tools.

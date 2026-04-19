@@ -174,7 +174,7 @@ Field key: **ID** · **Type** · **URL** · **Date** · **Audience** · **Core c
 - **Steganography vs. watermarking**: OpenAI and others are working on provenance watermarks. Humanizers function as de-watermarking — same math, opposite side. Relevant for the ~2-year horizon when watermarks ship.
 - **Voice de-identification in audio**: removing speaker-identifying prosody while preserving content is the audio analog; similar tension between "sounds human" and "sounds like nobody in particular."
 
-## Gaps / Openings for Humazier
+## Gaps / Openings for Unslop
 1. **No public, dated, reproducible benchmark** across detectors × prompts × models. Community leaderboards are vendor-run or anecdotal. A transparent rolling benchmark would be trust-building content.
 2. **Stability over peak score**: users report score drift across reruns; nobody advertises variance bounds.
 3. **Style-clone humanizers** (train on user's own writing) are talked about ("Frankenstein method") but under-productized vs. generic "readability mode" presets.

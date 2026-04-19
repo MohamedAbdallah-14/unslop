@@ -140,7 +140,7 @@ The strongest shared insight across repos: human-feeling output comes not from p
 
 8. **Licensing fragmentation.** MIT (Voyager, Letta, genagents), Apache-2 (Agent-S, ChatDev, MetaGPT), GPL-3 (pyactr), BSD (Soar), CC-BY-4.0 (AutoGen), and custom/research licenses for classical ACT-R. Composing a humanization stack across these is non-trivial.
 
-9. **Evaluation bias toward task completion.** OSWorld/WebArena/SWE-bench measure doing-the-job; there is no equivalent benchmark for "did this agent's reasoning, tone, memory, and personality stay coherent and humanlike over hours of use." A project called *Humazier* could plausibly invent this.
+9. **Evaluation bias toward task completion.** OSWorld/WebArena/SWE-bench measure doing-the-job; there is no equivalent benchmark for "did this agent's reasoning, tone, memory, and personality stay coherent and humanlike over hours of use." A project called *Unslop* could plausibly invent this.
 
 ## References
 

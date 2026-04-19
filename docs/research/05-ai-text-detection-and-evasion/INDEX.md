@@ -2,7 +2,7 @@
 
 ## Scope
 
-Research synthesis across five angles — academic literature, industry/press commentary, open-source code, commercial products, and practitioner how-tos/forums — covering the systems built to distinguish AI-generated text from human writing, the watermarking schemes designed to make generation self-identifying, and the humanization/evasion techniques that defeat both. The category defines the adversarial surface the Humazier product operates on: every detector is a target to measure against, every watermark is a constraint to respect or bypass, and every documented evasion technique is either prior art to absorb or a failure mode to avoid repeating.
+Research synthesis across five angles — academic literature, industry/press commentary, open-source code, commercial products, and practitioner how-tos/forums — covering the systems built to distinguish AI-generated text from human writing, the watermarking schemes designed to make generation self-identifying, and the humanization/evasion techniques that defeat both. The category defines the adversarial surface the Unslop product operates on: every detector is a target to measure against, every watermark is a constraint to respect or bypass, and every documented evasion technique is either prior art to absorb or a failure mode to avoid repeating.
 
 ## Executive Summary
 
@@ -217,14 +217,14 @@ Research synthesis across five angles — academic literature, industry/press co
 
 ## How This Category Fits in the Bigger Picture
 
-Category 05 defines the adversarial envelope the Humazier product operates inside. Every other research category in the project depends on assumptions that are either confirmed or bounded here:
+Category 05 defines the adversarial envelope the Unslop product operates inside. Every other research category in the project depends on assumptions that are either confirmed or bounded here:
 
-- The **"AI tells"** taxonomy that drives rewriting-pass design (em-dashes, tricolons, *delve/tapestry*, rule-of-three, extended metaphors, LOTR multi-endings) is most precisely enumerated in the practitioner threads (r/ApplyingToCollege, Cristina Cabal) and codified in open-source prompt lists (humanizer-x, Mohit1053). Humazier's rewriting rules should inherit this taxonomy.
+- The **"AI tells"** taxonomy that drives rewriting-pass design (em-dashes, tricolons, *delve/tapestry*, rule-of-three, extended metaphors, LOTR multi-endings) is most precisely enumerated in the practitioner threads (r/ApplyingToCollege, Cristina Cabal) and codified in open-source prompt lists (humanizer-x, Mohit1053). Unslop's rewriting rules should inherit this taxonomy.
 - The **target signals** (perplexity, burstiness, stylometric fingerprint) define what a humanizer must measurably move. Any humanization pass that does not move all three is category-weak.
 - The **detector landscape** specifies the evaluation harness: Fast-DetectGPT (white-box-ish, Llama3-8B scoring), Binoculars (zero-shot black-box), Ghostbuster (weak-model probes), RAID (attack-inclusive benchmark), plus commercial GPTZero/Originality/Turnitin/Copyleaks/Winston for market credibility.
 - The **ethical and positioning wedge** — ESL-bias protection, "gray-band" Turnitin suppression (1–19%), auditability as the positive counter-narrative — is the defensible framing that Category 05 uniquely supplies. Without it, the product is a cheating tool; with it, the product is protection from a demonstrably biased system.
-- The **retraining cadence** (monthly on the detector side) sets a hard architectural constraint: Humazier cannot ship-and-forget; it needs continuous detector-panel evaluation and strategy refresh. This is a product-lifecycle requirement the other categories don't impose.
-- The **watermark horizon** (SynthID in production, OpenAI's shelved 99.9% scheme, Christ–Gunn–Zamir's cryptographic possibility) defines a 12–24 month horizon where provenance, not detection, becomes the dominant enforcement mechanism. Humazier's long-term roadmap should assume watermark-resistance, not just classifier-evasion.
+- The **retraining cadence** (monthly on the detector side) sets a hard architectural constraint: Unslop cannot ship-and-forget; it needs continuous detector-panel evaluation and strategy refresh. This is a product-lifecycle requirement the other categories don't impose.
+- The **watermark horizon** (SynthID in production, OpenAI's shelved 99.9% scheme, Christ–Gunn–Zamir's cryptographic possibility) defines a 12–24 month horizon where provenance, not detection, becomes the dominant enforcement mechanism. Unslop's long-term roadmap should assume watermark-resistance, not just classifier-evasion.
 
 ## Recommended Reading Order
 

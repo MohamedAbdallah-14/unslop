@@ -26,7 +26,7 @@
   - "Sudowrite may well be a salvation." — Stephen Marche, *The New York Times*
   - "…convinced journalism legend Gay Talese it could imitate him." — Steven Zeitchik
   - "AI is a phenomenal collaborator, not a destroyer of worlds."
-- **Signal for Humazier:** Best-in-class example of *training data provenance as marketing* ("trained on published fiction to remove clichés"). Style Examples is the clearest commercial pattern for single-author voice cloning.
+- **Signal for Unslop:** Best-in-class example of *training data provenance as marketing* ("trained on published fiction to remove clichés"). Style Examples is the clearest commercial pattern for single-author voice cloning.
 
 ### 2. NovelCrafter
 
@@ -42,7 +42,7 @@
   - "Built by writers, for writers. No venture funding, no corporate agenda — just writers helping writers."
   - "The Chat is similar to brainstorming with a writer buddy, only difference is this writer buddy is available 24/7 and remembers everything." — Lia Mack
   - "The AI pulls details from the codex!" — Bianca
-- **Signal for Humazier:** Proof that serious creatives demand *model choice + local inference* for humanization workflows; a single hosted model isn't enough.
+- **Signal for Unslop:** Proof that serious creatives demand *model choice + local inference* for humanization workflows; a single hosted model isn't enough.
 
 ### 3. NovelAI (Anlatan)
 
@@ -56,7 +56,7 @@
 - **Pricing:** **$10 / $15 / $25** per month (Tablet / Scroll / Opus).
 - **Marketing quotes:**
   - "Unleash the power of AI… to easily bring your imagination to life without limits."
-- **Signal for Humazier:** Demonstrates the market appetite for *exposed sampling controls* as a humanization lever — something RLHF'd chat models hide.
+- **Signal for Unslop:** Demonstrates the market appetite for *exposed sampling controls* as a humanization lever — something RLHF'd chat models hide.
 
 ### 4. AI Dungeon (Latitude)
 
@@ -66,7 +66,7 @@
 - **Voice-preservation mechanics:** Author's Note (persistent style steering injected every turn) is the canonical "persistent voice directive" pattern later copied by most tools.
 - **Pricing:** Free (Wanderer) → **$9.99 / $14.99 / $29.99 / $49.99** per month (Adventure → Mythic). Credit-based generation with escalating context windows (2k → 32k).
 - **Marketing quotes:** Positioned around "unlimited imagination" and player agency; tooling for branching choose-your-own-adventure play.
-- **Signal for Humazier:** "Author's Note" = mini-system-prompt for style. Persistent style injection is cheap and effective; Humazier should adopt a similar lightweight mechanism.
+- **Signal for Unslop:** "Author's Note" = mini-system-prompt for style. Persistent style injection is cheap and effective; Unslop should adopt a similar lightweight mechanism.
 
 ### 5. Campfire Writing
 
@@ -75,7 +75,7 @@
 - **Core tech:** Traditional (non-generative) planning software; AI integration is minimal/ambient; positioned as a **bible-first** tool that other AI writers can plug into.
 - **Pricing:** Modular, from **$2/mo per module**; free tier.
 - **Marketing quotes:** "Where Stories Come to Life." Publishing royalties advertised at 80%.
-- **Signal for Humazier:** Shows that "structure first, generation second" is a viable stance — users distrust pure-generation tools for long work.
+- **Signal for Unslop:** Shows that "structure first, generation second" is a viable stance — users distrust pure-generation tools for long work.
 
 ### 6. Squibler
 
@@ -87,7 +87,7 @@
   - "Turn Your Idea into a Story… Say goodbye to writer's block."
   - "Squibler knew where my story was going even when I didn't." — Tim Boyle
   - "I finished my first draft in just a few days!" — Isla Ravenswood
-- **Signal for Humazier:** Aggressive full-book automation is selling; signal that many buyers *don't* care about voice at all, which sharpens the differentiation opportunity for voice-first humanization.
+- **Signal for Unslop:** Aggressive full-book automation is selling; signal that many buyers *don't* care about voice at all, which sharpens the differentiation opportunity for voice-first humanization.
 
 ### 7. Plottr (+ AI)
 
@@ -99,7 +99,7 @@
   - "AI in Plottr Gives You Control."
   - "We're not transforming into an AI company."
   - "No prompt engineering, model selection, or hyperparameter tweaking" required.
-- **Signal for Humazier:** The explicit *opt-in sparkle button* UX is a strong pattern for humanization tools — positions AI as a seasoning, not a replacement, which aligns with voice-preservation value props.
+- **Signal for Unslop:** The explicit *opt-in sparkle button* UX is a strong pattern for humanization tools — positions AI as a seasoning, not a replacement, which aligns with voice-preservation value props.
 
 ### 8. AutoCrit
 
@@ -108,7 +108,7 @@
 - **Core tech:** 20+ reports (pacing, dialogue, repetition, passive voice, adverbs, clichés, filler, POV); **Voice Reader** (TTS for prose audit); **100+ bestselling-author genre comparisons** (Stephen King, Danielle Steel, Lee Child…).
 - **Pricing:** Free tier + **$30/mo** Pro.
 - **Marketing quotes:** Frames itself around "data-backed feedback" and writing "comparable to bestsellers."
-- **Signal for Humazier:** The "compare to 100 bestselling authors" hook is an implicit *humanness benchmark* — humanization could be marketed the same way ("sound like a published author, not an AI").
+- **Signal for Unslop:** The "compare to 100 bestselling authors" hook is an implicit *humanness benchmark* — humanization could be marketed the same way ("sound like a published author, not an AI").
 
 ### 9. Laika (Write with LAIKA)
 
@@ -116,7 +116,7 @@
 - **Positioning (historical):** Custom-trained-on-your-writing fiction co-writer; "approximately 10–20% AI and 80–90% your own work."
 - **Core tech (historical):** Personalized model fine-tuning on user samples; 100+ author style profiles.
 - **Status:** Team moved on to game development. Domain has been repurposed for an unrelated generic AI writer.
-- **Signal for Humazier:** A **cautionary data point**: a pure, serious voice-preservation fiction tool failed to sustain commercially despite strong product reviews. Likely causes are cost of fine-tuning, API price compression, and generic tools catching up. Humanization-as-feature may beat humanization-as-product.
+- **Signal for Unslop:** A **cautionary data point**: a pure, serious voice-preservation fiction tool failed to sustain commercially despite strong product reviews. Likely causes are cost of fine-tuning, API price compression, and generic tools catching up. Humanization-as-feature may beat humanization-as-product.
 
 ### 10. Reedsy Studio
 
@@ -125,7 +125,7 @@
 - **Core tech:** Clean editor, boards, collaboration, EPUB/PDF export. AI role is explicitly **minimal** (Reedsy's blog editorializes about AI writing tools rather than ships its own flagship).
 - **Pricing:** Free; **$4.99/mo** Studio Essential.
 - **Marketing quotes:** "All-in-one writing platform." Leans on trust in human editors.
-- **Signal for Humazier:** The "human-editor marketplace" adjacency is how Reedsy hedges against AI slop; a humanization service could partner with editorial marketplaces rather than compete.
+- **Signal for Unslop:** The "human-editor marketplace" adjacency is how Reedsy hedges against AI slop; a humanization service could partner with editorial marketplaces rather than compete.
 
 ### 11. Scrivener (Literature & Latte)
 
@@ -134,14 +134,14 @@
 - **Core tech:** Data stays local; AI prompts users see on macOS 15+ are Apple Intelligence, *not Scrivener*; no integration plans surfaced.
 - **Pricing:** ~$60 one-time.
 - **Marketing quotes / framing:** "Scrivener does not send your text to external servers or participate in data scraping."
-- **Signal for Humazier:** Large, loyal pro segment that explicitly opts out of cloud AI — a target persona for an **on-device** humanizer.
+- **Signal for Unslop:** Large, loyal pro segment that explicitly opts out of cloud AI — a target persona for an **on-device** humanizer.
 
 ### 12. ShortlyAI (now Jasper)
 
 - **Vendor / URL:** Acquired by Jasper — shortlyai.com → jasper.ai
 - **Positioning (historical):** Minimalist long-form creative writer; "/instruct" and "/expand" commands.
 - **Status:** Folded into Jasper; accessed through Jasper's Boss Mode / Creator plan ($59+/mo).
-- **Signal for Humazier:** Indicative of consolidation — standalone "creative-mode" tools get absorbed into horizontal marketing-first platforms.
+- **Signal for Unslop:** Indicative of consolidation — standalone "creative-mode" tools get absorbed into horizontal marketing-first platforms.
 
 ### 13. Rytr
 
@@ -150,7 +150,7 @@
 - **Voice features:** **Tone matching** (20+ presets + custom tone, "ensures generated content sounds like your unique voice"), 30+ languages.
 - **Pricing:** Free → **$9/mo** Unlimited → **$29/mo** Premium.
 - **Marketing quotes:** "AI Story Generator… captivating story plots and engaging narratives."
-- **Signal for Humazier:** "Tone matching" as a consumer-grade humanization primitive — proves price sensitivity at <$10/mo for simple voice work.
+- **Signal for Unslop:** "Tone matching" as a consumer-grade humanization primitive — proves price sensitivity at <$10/mo for simple voice work.
 
 ### 14. Jasper (creative modes)
 
@@ -158,7 +158,7 @@
 - **Positioning:** Enterprise marketing AI; creative/story modes are a side surface.
 - **Core tech:** Proprietary "writing algorithm" layered over frontier models; AI Story Generator tool; houses ShortlyAI's legacy features.
 - **Pricing:** From **$39/mo** Creator to Enterprise.
-- **Signal for Humazier:** Enterprise brand-voice cloning (Jasper's core business) is structurally the same problem as fiction author-voice cloning — the B2B humanization story is proven.
+- **Signal for Unslop:** Enterprise brand-voice cloning (Jasper's core business) is structurally the same problem as fiction author-voice cloning — the B2B humanization story is proven.
 
 ### 15. DoppelWriter
 
@@ -171,21 +171,21 @@
   - "Keeps every character's voice distinct — across chapters, drafts, and 80,000 words."
   - One user testimonial: "actually sounded like her — sharp, clipped, cynical. Not generic AI fluff."
   - On process: captures "rhythm, dynamics, the spaces between notes."
-- **Signal for Humazier:** **The single most aligned product** with Humazier's thesis. Their voice-profile feature set (sentence length + vocab + punctuation + tone signatures) is a workable feature spec for any humanizer.
+- **Signal for Unslop:** **The single most aligned product** with Unslop's thesis. Their voice-profile feature set (sentence length + vocab + punctuation + tone signatures) is a workable feature spec for any humanizer.
 
 ### 16. LivingWriter
 
 - **Vendor / URL:** livingwriter.com
 - **Positioning:** Scrivener-style manuscript app + optional AI (AI Outlines, Element Generation, Rewrite, Chat, Analysis, Summarize, Screenplays, Book Covers).
 - **Voice-preservation framing:** "Data is never stored or used to train AI; all AI features are optional."
-- **Signal for Humazier:** Privacy-first framing is a mainstream selling point, not a fringe one.
+- **Signal for Unslop:** Privacy-first framing is a mainstream selling point, not a fringe one.
 
 ### 17. StoryWeaver / Dreamweaver.ink
 
 - **Vendor / URL:** dreamweaver.ink
 - **Positioning:** Interactive / branching-fiction platform with reader analytics.
 - **AI role:** Continuity checking and dead-end detection rather than prose generation — a **defensive** AI role vs. offensive generation.
-- **Signal for Humazier:** Example of AI used to *audit* human writing for inconsistencies rather than generate; a complementary mode to humanization.
+- **Signal for Unslop:** Example of AI used to *audit* human writing for inconsistencies rather than generate; a complementary mode to humanization.
 
 ### Honorable mentions (adjacent, worth tracking)
 
@@ -210,7 +210,7 @@
 9. **Consolidation and failure are shaping the map.** ShortlyAI → Jasper. Laika shut down. Pure-play voice tools face compression from (a) horizontal platforms (Jasper), (b) frontier model price drops making fine-tuning less defensible, and (c) the incumbent authoring apps (Scrivener, Plottr, Reedsy) gradually adding AI as a feature, not a product.
 10. **Character-voice differentiation is the *next* frontier.** DoppelWriter, StorySmith, and Cordecho are competing on *multi-voice* fidelity — "your villain shouldn't sound like your narrator." This is a harder technical problem than single-voice humanization and remains open.
 
-## Gaps & Opportunities for Humazier
+## Gaps & Opportunities for Unslop
 
 1. **Long-horizon consistency is broadly unsolved.** Every major review (Novarrium 25-chapter test, sidekickwriter comparisons, Inkfluence AI) concludes that all current tools drift beyond ~chapter 10. Even 128k–1M context windows don't fix it. This is an open engineering problem with a willing, paying audience.
 2. **No serious tool ships on-device / air-gapped by default.** Scrivener users are an obvious underserved persona — professional writers who refuse cloud AI. An on-device humanizer (local LLM + voice profile) has essentially zero direct competition.
@@ -218,7 +218,7 @@
 4. **The B2B brand-voice story is thin outside Jasper.** Most fiction tools explicitly disclaim non-fiction. A humanizer that treats author-voice and brand-voice as the same technical problem has a cleaner B2B story than any fiction-only player.
 5. **Transparency about *how* voice is preserved is marketing, not product.** Vendors describe "analyzes rhythm, punctuation, sentence length" but don't expose the model to the user. A humanization tool that shows the voice profile (so the user can edit / lock / version it) would be structurally novel.
 6. **Cliché-removal is undertreated.** Sudowrite's Muse claims "trained on published fiction to remove clichés," but no tool offers a *cliché and AI-ism detector* as a first-class feature. Given that detector-dodging is a known adjacent use case (Manuscripts.ai, WriteHuman), a detector-inverted tool ("find your AI tells") has market fit.
-7. **Failed-products pattern suggests humanization-as-feature > humanization-as-product.** Laika's shutdown argues that Humazier may be better positioned as an **SDK/API and platform integration** (Scrivener plugin, NovelCrafter prompt pack, Plottr add-on, Jasper custom brand-voice module) than as a standalone consumer app.
+7. **Failed-products pattern suggests humanization-as-feature > humanization-as-product.** Laika's shutdown argues that Unslop may be better positioned as an **SDK/API and platform integration** (Scrivener plugin, NovelCrafter prompt pack, Plottr add-on, Jasper custom brand-voice module) than as a standalone consumer app.
 
 ---
 

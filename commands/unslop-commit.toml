@@ -1,0 +1,5 @@
+description = "Generate or rewrite a commit message in human voice. Conventional Commits, no AI/marketing slop."
+prompt = """Read `skills/unslop-commit/SKILL.md` and apply it to the current staged diff (or the diff/draft the user has provided).
+
+Output exactly one paste-ready commit message in a fenced block. Do not run git commands. Do not stage. Do not amend.
+"""

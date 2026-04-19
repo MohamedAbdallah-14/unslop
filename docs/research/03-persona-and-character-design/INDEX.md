@@ -2,7 +2,7 @@
 
 ## Scope
 
-How an AI's *identity* — its character, voice, values, personality traits, and in-character knowledge boundary — is deliberately designed, trained, served, and evaluated. Covers five angles: peer-reviewed literature (A), frontier-lab and practitioner engineering blogs (B), open-source ecosystems and academic repos (C), commercial companion and enterprise products (D), and community how-to's from Reddit / rentry / YouTube (E). The through-line for the Humazier project: *persona is the primary surface through which AI output reads as humanlike — and also the primary surface through which it fails.*
+How an AI's *identity* — its character, voice, values, personality traits, and in-character knowledge boundary — is deliberately designed, trained, served, and evaluated. Covers five angles: peer-reviewed literature (A), frontier-lab and practitioner engineering blogs (B), open-source ecosystems and academic repos (C), commercial companion and enterprise products (D), and community how-to's from Reddit / rentry / YouTube (E). The through-line for the Unslop project: *persona is the primary surface through which AI output reads as humanlike — and also the primary surface through which it fails.*
 
 ---
 
@@ -162,7 +162,7 @@ How an AI's *identity* — its character, voice, values, personality traits, and
 - **Character ≠ companion.** Pi and ChatGPT are humanized assistants; Replika and Kindroid are companions. Anthropic's "warm but not lasting feelings" is the closest explicit line in the corpus; no one has cleanly theorized when a humanized assistant has crossed the line.
 - **Scale vs fidelity.** *PersonaGym* (GPT-4.1 = LLaMA-3-8B on persona) and *CharacterEval* (small Chinese models beat GPT-4 on in-culture roleplay) both undermine the "bigger = more human" intuition. Inference-time differentiation at the chat layer is eroding; persona is now its own capability axis.
 - **Founder voice as persona.** xAI's Grok is the public case study of persona-as-founder-projection. After the July 2025 "Grok searches Musk's posts" incident, xAI edited the system prompt to enforce *"independent analysis"*. Persona tethered to a living founder is brittle and reputationally coupled.
-- **Unfiltered-as-feature vs safety.** Replika's 2023 ERP removal spawned an entire "unfiltered companion" segment (Crushon, Candy, partial Kindroid/Nomi). The market is bifurcating, not converging. For Humazier: content policy will determine which segment a humanization layer can serve.
+- **Unfiltered-as-feature vs safety.** Replika's 2023 ERP removal spawned an entire "unfiltered companion" segment (Crushon, Candy, partial Kindroid/Nomi). The market is bifurcating, not converging. For Unslop: content policy will determine which segment a humanization layer can serve.
 - **GPT-4-as-judge vs trained persona reward models.** CharacterEval's CharacterRM, PersonaGym's PersonaScore, and Ditto's WikiRoleEval all argue for purpose-built persona evaluators — but evaluator contamination (LLM judges sharing the models' blind spots) is an open worry.
 
 ---
@@ -213,10 +213,10 @@ How an AI's *identity* — its character, voice, values, personality traits, and
 
 Persona is the *glue*: it specifies *whose* style, *whose* memories, *whose* emotions, *whose* reasoning pattern — and it is what fails first when the glue is weak. Every other humanization layer is an instantiation of choices the persona layer makes explicit. This category is the natural anchor for:
 
-- Humazier's *voice policy* (what does "humanlike" mean here — warm assistant? peer? character? companion?).
-- Humazier's *memory architecture* (who does the system remember being, across turns and sessions?).
-- Humazier's *safety stance* (how much does persona matter when it collides with honesty, factuality, policy?).
-- Humazier's *evaluation harness* (psychometric interviews, behavioral scoring, reward-model judges).
+- Unslop's *voice policy* (what does "humanlike" mean here — warm assistant? peer? character? companion?).
+- Unslop's *memory architecture* (who does the system remember being, across turns and sessions?).
+- Unslop's *safety stance* (how much does persona matter when it collides with honesty, factuality, policy?).
+- Unslop's *evaluation harness* (psychometric interviews, behavioral scoring, reward-model judges).
 
 The strongest design claim the evidence supports: **do not treat humanization as style transfer. Treat it as virtue / trait installation with an explicit persona spec, a memory architecture, a drift-mitigation strategy, a knowledge boundary, and a reward model — all five layers, specified independently, co-designed.** Every serious source — Anthropic, OpenAI, Character.AI, Kindroid, RoleLLM, BIG5-CHAT, PersonaGym — makes some version of this case.
 

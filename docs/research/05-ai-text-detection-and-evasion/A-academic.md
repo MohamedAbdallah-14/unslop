@@ -1,6 +1,6 @@
 # 05 · AI Text Detection & Evasion — Angle A: Academic & Scholarly
 
-Research digest for the Humazier project. Focus: peer-reviewed and preprint literature on detecting LLM-generated text, watermarking schemes, and the red-team / evasion work that defeats them. Sources limited to arXiv, ACL/EMNLP/NAACL/EACL, ICLR, ICML, NeurIPS, COLT, USENIX Security, and Nature.
+Research digest for the Unslop project. Focus: peer-reviewed and preprint literature on detecting LLM-generated text, watermarking schemes, and the red-team / evasion work that defeats them. Sources limited to arXiv, ACL/EMNLP/NAACL/EACL, ICLR, ICML, NeurIPS, COLT, USENIX Security, and Nature.
 
 **Research value: high** — The topic has a dense, recent, and highly contested academic literature, with named canonical papers, formal impossibility and possibility results, and a well-developed adversarial sub-field.
 

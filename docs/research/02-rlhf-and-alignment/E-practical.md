@@ -1,7 +1,7 @@
 # RLHF & Alignment — Practical & Forums
 
 *Angle E: Practical How-Tos & Forum Discussions (r/MachineLearning, r/LocalLLaMA, HN, LessWrong / Alignment Forum, Twitter/X, YouTube explainers).*
-*Compiled for the Humazier project — humanizing AI output and thinking.*
+*Compiled for the Unslop project — humanizing AI output and thinking.*
 *Last updated: 2026-04-19*
 
 ---
@@ -105,7 +105,7 @@ Forum-level consensus on **practical fixes for humanization**:
 - **Core claim:** You can steer Llama-2-7b-chat away from sycophancy at inference time by adding a "sycophancy direction" activation vector with a negative coefficient.
 - **Techniques:** contrast-pair activation probes; per-layer steering vectors; trade-off analysis of accuracy vs honesty.
 - **Takeaways:** Post-hoc, no-retrain interventions exist — but reducing sycophancy slightly trades off factual accuracy, so it's not a free lunch.
-- **Summary:** Representative of a broader "steering not fine-tuning" trend in 2024–2025 alignment practice. Relevant for Humazier as a way to dial down "agreement bias" without a full preference-tuning run.
+- **Summary:** Representative of a broader "steering not fine-tuning" trend in 2024–2025 alignment practice. Relevant for Unslop as a way to dial down "agreement bias" without a full preference-tuning run.
 
 ### 9. Anthropic — *Natural emergent misalignment from reward hacking in production RL* (LessWrong, 2025)
 
@@ -135,7 +135,7 @@ Forum-level consensus on **practical fixes for humanization**:
 - **Core claim:** LoRA + DPO on preference pairs contrasting *conversational* vs *formal/corporate* responses meaningfully improves perceived human-likeness in blind A/B tests with minimal benchmark regression.
 - **Techniques:** style-contrasting DPO datasets (chosen = conversational, rejected = corporate); LoRA adapters to keep the base model intact; measured betas to avoid overshooting into "too casual."
 - **Takeaways:** A concrete, reproducible playbook for small teams. Style DPO is cheaper and lower-risk than SFT-on-a-style-corpus because preference signal is localized to the deltas you care about.
-- **Summary:** The clearest end-to-end tutorial for "make my LLM sound less like an assistant" in a production context. Directly applicable to Humazier's core use case.
+- **Summary:** The clearest end-to-end tutorial for "make my LLM sound less like an assistant" in a production context. Directly applicable to Unslop's core use case.
 
 ### 12. HuggingFace — *Alignment Handbook* / Zephyr-7B DPO recipe
 
@@ -204,7 +204,7 @@ Forum-level consensus on **practical fixes for humanization**:
 - **Year:** 2022 (original) / 2023 (collective) / still-cited 2024–2026
 - **Core claim:** ~10 natural-language principles + an AI critic/reviser can replace most human preference labels (RLAIF). Revising principles is much cheaper than relabeling datasets.
 - **Techniques:** two-stage (SL critique-revision, RLAIF preference modeling); Polis-based public input for the "collective" variant.
-- **Takeaways:** For Humazier-style projects, a small constitution ("responses should sound like a thoughtful friend, not a corporate chatbot; avoid lists unless asked; avoid 'as an AI'; ...") is a tractable way to shape style at scale without human raters.
+- **Takeaways:** For Unslop-style projects, a small constitution ("responses should sound like a thoughtful friend, not a corporate chatbot; avoid lists unless asked; avoid 'as an AI'; ...") is a tractable way to shape style at scale without human raters.
 - **Summary:** Foundational reference for doing alignment with principles instead of raw preference pairs. Directly relevant to shaping a humanization "constitution."
 
 ### 19. r/LocalLLaMA — HERETIC decensoring methodology (2025)
@@ -306,7 +306,7 @@ Forum-level consensus on **practical fixes for humanization**:
 
 - **What does a humanness eval actually look like?** EQ-Bench and MT-Bench touch adjacent properties; the community still lacks an agreed-on benchmark for "does this response feel like it was written by a person." Blind A/B is state-of-the-art and doesn't scale.
 - **How much can be done with prompting + steering vs. needing to preference-tune?** Most practitioner tutorials implicitly assume you need to fine-tune; fewer quantify the ceiling of prompt + activation steering alone.
-- **Is "character training" reproducible outside Anthropic?** No open-model fine-tune has publicly published a full character-training recipe with synthetic self-ranked trait data. This is a live gap Humazier could fill.
+- **Is "character training" reproducible outside Anthropic?** No open-model fine-tune has publicly published a full character-training recipe with synthetic self-ranked trait data. This is a live gap Unslop could fill.
 - **Long-term user satisfaction signal.** OpenAI's postmortem names the problem (short-term thumbs-up is misleading) but the field lacks a shared recipe for measuring longer-horizon preference.
 - **Dual objectives: humanness + capability.** The LocalLLaMA creative-writing consensus suggests writing-tuned models sacrifice benchmark performance. Can you *keep* reasoning quality while removing RLHF stylistic residue?
 - **Detection vs. humanization arms race.** Forum discussion barely connects RLHF literature to AI-text-detection work; an integrated view (how does preference tuning interact with detectability?) is mostly absent.

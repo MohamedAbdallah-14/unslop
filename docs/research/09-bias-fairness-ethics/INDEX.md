@@ -172,7 +172,7 @@ The filter throughout is *humanization-specific*: sources that make or support a
 4. **Fine-grained linguistic humanization cues are under-benchmarked.** DarkBench captures high-level anthropomorphism; hedging, empathic acknowledgments, first-person affect claims are theorized (Mirages) but not measured.
 5. **"De-anthropomorphization" interventions are under-studied.** Does "GPT-4 was designed so that it…" preserve usability while cutting trust inflation? CHI/FAccT paper waiting to happen.
 6. **Transparency beyond "I am an AI" is empirically absent.** Continuous/contextual disclosure (status lines, confidence indicators, explicit "simulated character" framings) is almost unstudied despite wide agreement that one-shot disclosure gets discounted.
-7. **Humanization ethics for *tools* (not companions).** Forums and research concentrate on companion bots or detection-evasion. Humanizing a coding assistant, customer-service bot, or writing tool — the Humazier problem space — has different harms (review sycophancy, fabricated certainty, inappropriate intimacy in professional contexts) and is not well-catalogued.
+7. **Humanization ethics for *tools* (not companions).** Forums and research concentrate on companion bots or detection-evasion. Humanizing a coding assistant, customer-service bot, or writing tool — the Unslop problem space — has different harms (review sycophancy, fabricated certainty, inappropriate intimacy in professional contexts) and is not well-catalogued.
 8. **Legitimate vs. illegitimate humanization rubric.** Reddit users intuit the difference (anecdotes OK, identity laundering not OK); no forum or research community has produced a crisp rubric. Product-shaped gap.
 9. **Non-English, non-Western perspectives.** Nearly all empirical work and the entire commercial stack are US/UK/EU. Cultural variation in pronouns, honorifics, and social framing is flagged (Abercrombie-Pronouns) but mostly unstudied; detector tools penalize non-native English at ~61% FP.
 10. **First-person affect in analytical contexts.** When a coding assistant says "I think…" or "I'm worried about…", is that helpful framing, benign pretense, or deception? Essentially unexamined.
@@ -184,7 +184,7 @@ The filter throughout is *humanization-specific*: sources that make or support a
 
 ## How This Category Fits in the Bigger Picture
 
-This category is the **ethical spine** of the Humazier project. Every other category in the research corpus either exerts pressure on it or is constrained by it:
+This category is the **ethical spine** of the Unslop project. Every other category in the research corpus either exerts pressure on it or is constrained by it:
 
 - **05 — AI Text Detection & Evasion** is the adjacent technical arms-race. Category 09 provides the ethical framing (legitimate stylistic humanization vs. identity laundering; non-native-English false-positive burden; why detection is losing to watermarking + disclosure).
 - **Categories on persona / tone / style / memory** inherit Category 09's dark-pattern burden of proof. DarkBench's "anthropomorphism" axis becomes the baseline external audit for those decisions.
@@ -193,7 +193,7 @@ This category is the **ethical spine** of the Humazier project. Every other cate
 - **Regulation / compliance categories** pivot on EU AI Act Art. 50 (2 Aug 2026), CA SB 1001, CA SB 243, NY companion-chatbot law, and the live Character.AI / Replika litigation. The commercial stack (D) is a ready-made compliance architecture.
 - **Product / UX categories** must adopt the role-play frame (Shanahan, Hicks, Edwards), design against the personhood illusion while still producing human-feeling output, and face the duty-of-care that vendor personality changes accrue (Replika, GPT-5 meltdowns).
 
-A defensible Humazier ship posture, derived from this category alone: *role-play framed* humanization, continuous (not one-shot) disclosure, explicit sycophancy / MASK / BeHonest evals run against the humanized model vs. base, machine-readable marking of generated text (SynthID/C2PA), a public model card that reports warmth↔honesty tradeoffs, and no companion-adjacent features without the Nowaczyk-Basińska/Hollanek + Laestadius guardrails.
+A defensible Unslop ship posture, derived from this category alone: *role-play framed* humanization, continuous (not one-shot) disclosure, explicit sycophancy / MASK / BeHonest evals run against the humanized model vs. base, machine-readable marking of generated text (SynthID/C2PA), a public model card that reports warmth↔honesty tradeoffs, and no companion-adjacent features without the Nowaczyk-Basińska/Hollanek + Laestadius guardrails.
 
 ## Recommended Reading Order
 

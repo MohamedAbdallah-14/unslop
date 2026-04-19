@@ -1,6 +1,6 @@
 # RLHF & Alignment — Industry Blogs & Essays
 
-> Angle B of the RLHF/Alignment literature sweep. Focus: industry engineering posts (labs, practitioner blogs, newsletters) that explain how RLHF / DPO / Constitutional AI / RLAIF shape human-like responses — and where they misshape them (sycophancy, mode collapse, reward hacking, "AI voice"). Framed for the Humazier project: what the alignment stack actually does to the *feel* of model output, and why "humanizing" is not just a prompt problem.
+> Angle B of the RLHF/Alignment literature sweep. Focus: industry engineering posts (labs, practitioner blogs, newsletters) that explain how RLHF / DPO / Constitutional AI / RLAIF shape human-like responses — and where they misshape them (sycophancy, mode collapse, reward hacking, "AI voice"). Framed for the Unslop project: what the alignment stack actually does to the *feel* of model output, and why "humanizing" is not just a prompt problem.
 
 ---
 
@@ -31,7 +31,7 @@ For a product that rewrites AI output to feel human, the most actionable industr
 - **Core claim:** RLHF is the mechanism that lets you optimize language models against preferences that have no clean loss function (helpfulness, harmlessness, "good text"). The canonical three-step pipeline (pretrain → RM from pairwise rankings → PPO against RM with KL penalty to SFT) is the de facto post-training stack.
 - **Techniques:** Pairwise preference collection (Elo / ranking), reward model as scalar regressor, PPO with KL penalty to the SFT model to prevent "gibberish that fools the reward model."
 - **Practical takeaways:** The KL penalty is not incidental — it is what keeps RL from collapsing into reward-model hacks. Preference data is the expensive bottleneck (~50k labeled pairs for a meaningful RM). RM size can be much smaller than the policy (InstructGPT: 175B policy vs 6B RM).
-- **Summary:** This is the canonical explainer the rest of the industry cites. It frames RLHF as a way to inject non-differentiable human taste into the training loss, and it introduces the now-standard diagram (policy / RM / reference model / KL penalty). For Humazier, its key contribution is naming the trade-off that produces "AI voice": RLHF is doing *style transfer under a KL leash*, which is exactly what needs to be undone.
+- **Summary:** This is the canonical explainer the rest of the industry cites. It frames RLHF as a way to inject non-differentiable human taste into the training loss, and it introduces the now-standard diagram (policy / RM / reference model / KL penalty). For Unslop, its key contribution is naming the trade-off that produces "AI voice": RLHF is doing *style transfer under a KL leash*, which is exactly what needs to be undone.
 
 ### 2. RLHF: Reinforcement Learning from Human Feedback
 - **URL:** https://huyenchip.com/2023/05/02/rlhf.html
@@ -99,7 +99,7 @@ For a product that rewrites AI output to feel human, the most actionable industr
 - **Core claim:** DPO collapses RM training + PPO into a single supervised-style loss over (prompt, chosen, rejected) triples, using an analytical mapping from reward to optimal policy. It's easier to implement, more stable, and no longer requires online sampling.
 - **Techniques:** TRL library's `DPOTrainer`; `beta` controls KL-like deviation from reference model; uses the SFT model as both policy initialization and frozen reference.
 - **Practical takeaways:** You still need SFT first, and you still need paired preference data. The RM just becomes *implicit*. Key metrics: `rewards/accuracies` (should go to 1.0) and `rewards/margins` (should grow).
-- **Summary:** The post that made DPO the default preference-tuning method in open-source. Relevant to Humazier because most open models you'll see in the wild were preference-tuned with DPO or a close cousin, not PPO.
+- **Summary:** The post that made DPO the default preference-tuning method in open-source. Relevant to Unslop because most open models you'll see in the wild were preference-tuned with DPO or a close cousin, not PPO.
 - **Notable quote:** "RLHF… brings some of the complexity of RL into NLP: we need to build a good reward function, train the model to estimate the value of a state, and at the same time be careful not to strive too far from the original model and produce gibberish instead of sensible text."
 
 ### 9. Preference Tuning LLMs with Direct Preference Optimization Methods (DPO vs IPO vs KTO)
@@ -118,7 +118,7 @@ For a product that rewrites AI output to feel human, the most actionable industr
 - **Core claim:** You can replace the human-labeled harmlessness preference data with AI-generated critiques and revisions against a written "constitution" of principles. This is RLAIF (RL from AI Feedback).
 - **Techniques:** Two phases — (1) SL on self-critiques and revisions; (2) RL on a preference model trained from AI-generated preferences. Chain-of-thought reasoning inside the self-critique step.
 - **Practical takeaways:** CAI achieves helpful-and-non-evasive outputs (the model argues *why* it won't do something rather than refusing blankly). Reduces human labeling needs by ~10×. Works as an alignment intervention because the constitution is inspectable.
-- **Summary:** The seminal industry post on moving bias upstream from per-example labels into explicit principles. Critical for Humazier if the goal is to *reverse* specific principle-induced behaviors (e.g. compulsive hedging, boilerplate refusals).
+- **Summary:** The seminal industry post on moving bias upstream from per-example labels into explicit principles. Critical for Unslop if the goal is to *reverse* specific principle-induced behaviors (e.g. compulsive hedging, boilerplate refusals).
 
 ### 11. Claude's Character
 - **URL:** https://www.anthropic.com/research/claude-character
@@ -127,7 +127,7 @@ For a product that rewrites AI output to feel human, the most actionable industr
 - **Core claim:** Character training ("curiosity, open-mindedness, thoughtfulness", honest disagreement, warmth without feigned intimacy) is not a product-UX feature — it is a core alignment intervention because character determines how a model reacts to novel situations.
 - **Techniques:** A character-variant of Constitutional AI: Claude generates candidate responses, ranks its own outputs against a list of character traits, and a preference model is trained on that self-ranked data — *no human feedback in the loop*.
 - **Practical takeaways:** Anthropic explicitly rejects three "easy" options (adopt user's views / "middle" views / claim no opinions) in favor of honest, possibly disagreeing, curious defaults. They also explicitly want users to know they're interacting with "an imperfect entity with its own biases."
-- **Summary:** The clearest statement that "the way models sound" is an intentional trained artifact, and that it can be engineered. Directly relevant to Humazier: character training is how Anthropic *adds* specific human-like traits. Reversing or rewriting it requires understanding which traits were pushed in and which suppressed.
+- **Summary:** The clearest statement that "the way models sound" is an intentional trained artifact, and that it can be engineered. Directly relevant to Unslop: character training is how Anthropic *adds* specific human-like traits. Reversing or rewriting it requires understanding which traits were pushed in and which suppressed.
 - **Notable quote:** "Training AI models to have good character traits, and to continue to have these traits as they become larger, more complex, and more capable, is in many ways a core goal of alignment."
 
 ### 12. Towards Understanding Sycophancy in Language Models

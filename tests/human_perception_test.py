@@ -1,4 +1,4 @@
-"""Human-perception naturalness test for the Humazier deterministic mode.
+"""Human-perception naturalness test for the Unslop deterministic mode.
 
 Tests across three real-world domains: resume bullets, Slack messages,
 and professional emails. Measures quantitative metrics (burstiness,
@@ -13,7 +13,7 @@ import statistics
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "humanizer-humanize"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "unslop"))
 from scripts.humanize import humanize_deterministic
 
 # --------------- Test Samples ---------------

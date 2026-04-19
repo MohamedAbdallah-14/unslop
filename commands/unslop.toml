@@ -1,0 +1,10 @@
+description = "Activate unslop mode (default: balanced). Strips AI-isms and engineers burstiness in responses."
+prompt = """Activate unslop mode for this and every following response in this session.
+
+Argument (optional): subtle | balanced | full | voice-match | anti-detector
+Default: balanced
+
+Read `skills/unslop/SKILL.md` for the full ruleset and apply it now. Persist until "stop unslop" or "normal mode".
+
+If a level argument was provided, use it. Otherwise default to balanced.
+"""

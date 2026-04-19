@@ -282,7 +282,7 @@
 ## Gaps worth noting
 
 - **Very little industry writing on "thinking humanness."**
-  Almost every post is about *output* humanness (tone, prosody, specificity, warmth). The internal *reasoning* humanness (hesitation, self-correction, uncertainty hedging, non-monotonic thought) is only implicitly handled — Moshi's "Inner Monologue" and Anthropic's character training are the closest analogs. This is a real white space for the Humazier project.
+  Almost every post is about *output* humanness (tone, prosody, specificity, warmth). The internal *reasoning* humanness (hesitation, self-correction, uncertainty hedging, non-monotonic thought) is only implicitly handled — Moshi's "Inner Monologue" and Anthropic's character training are the closest analogs. This is a real white space for the Unslop project.
 - **No public, agreed-on metric for "character consistency" over long sessions.**
   LaMDA gave us SSI for single turns. Nothing equivalent exists publicly for persona drift, memory-grounded continuity, or relationship stance across weeks of use — yet every product from Pi to Character.AI to Claude implicitly relies on it.
 - **Sycophancy is named, not solved.**

@@ -209,9 +209,9 @@
 - **No widely-cited blog on *joint* decoding + prompting optimization.** Posts either cover samplers (HF, Thoughtworks) or prompt-level anti-slop (dev.to, AI Fire). The interaction — e.g., "negative-constraint prompt + min-p 0.05 + T=1.2" — is under-documented.
 - **Sparse industry writing on long-form coherence.** GPT-5 creative-writing page gestures at it ("sustain unrhymed iambic pentameter"), but no Anthropic/OpenAI engineering post explains what scaffolding, if any, produces long-form prose that sounds human past ~2000 tokens.
 - **No serious industry defense of the "AI voice."** Every post examined treats the default style as a problem. There's no counter-essay arguing that the hedge-bullet-emoji style is, in fact, a pro-social adaptation. This asymmetry is itself worth noting in a humanization project that might otherwise treat the target as uncontested.
-- **Cohere and Mistral are essentially absent** from the humanization-specific industry discourse. Cohere's public writing is dominated by rerankers and generation *parameters* (docs-level), not voice. Mistral's public writing is dominated by instruction-tuning and efficiency. This is a gap more than a signal — Humazier shouldn't assume parallel coverage exists.
+- **Cohere and Mistral are essentially absent** from the humanization-specific industry discourse. Cohere's public writing is dominated by rerankers and generation *parameters* (docs-level), not voice. Mistral's public writing is dominated by instruction-tuning and efficiency. This is a gap more than a signal — Unslop shouldn't assume parallel coverage exists.
 
-### 2.4 Implications for Humazier
+### 2.4 Implications for Unslop
 
 1. The cheapest, highest-leverage humanization intervention is still the **negative-constraint system prompt** (dev.to, AI Fire). Any product should start here and justify additional complexity.
 2. The cheapest decoding-level upgrade in 2026 is **switching from top-p to min-p** at T ≥ 1.0 (Thoughtworks). This is a one-line config change in vLLM.

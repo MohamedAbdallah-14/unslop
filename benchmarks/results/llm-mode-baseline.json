@@ -19,7 +19,7 @@
     "note": "LLM mode strips 2 more AI-isms AND restructures paragraphs; deterministic mode only touches rule-matched spans."
   },
   "notes": [
-    "Opt-in via HUMANIZER_RUN_LLM_TESTS=1 pytest or direct CLI invocation.",
+    "Opt-in via UNSLOP_RUN_LLM_TESTS=1 pytest or direct CLI invocation.",
     "Works without ANTHROPIC_API_KEY by falling back to the claude --print CLI.",
     "Use --mode full for more aggressive rewrites; --mode subtle for conservative."
   ]

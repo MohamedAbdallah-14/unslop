@@ -1,16 +1,16 @@
 {
   "$schema": "https://claude.com/marketplace-schema.json",
-  "name": "humanizer-marketplace",
-  "displayName": "Humanizer",
+  "name": "unslop-marketplace",
+  "displayName": "Unslop",
   "description": "Plugins that make model-assisted text sound natural and human: clearer voice, less robotic phrasing, better burstiness, no AI fingerprint.",
   "plugins": [
     {
-      "name": "humanizer",
-      "displayName": "Humanizer",
+      "name": "unslop",
+      "displayName": "Unslop",
       "description": "Humanize assistant output. Strips AI-isms, engineers burstiness, preserves technical accuracy. Sub-skills for commits, PR reviews, and memory files.",
       "version": "0.1.0",
       "author": "Mohamed Abdallah",
-      "homepage": "https://github.com/MohamedAbdallah-Hu/humanizer",
+      "homepage": "https://github.com/MohamedAbdallah-Hu/unslop",
       "license": "MIT",
       "source": "./",
       "tags": ["writing", "ai-detection", "voice", "anti-slop"]

@@ -28,7 +28,7 @@ This digest catalogs primary-source industry blog posts on AI emotional intellig
   - *"Adopting the views of whoever you're talking with is pandering and insincere."*
   - *"An excessive desire to be engaging seems like an undesirable character trait for a model to have."*
 - **Mechanism:** A "character variant" of Constitutional AI — Claude generates human messages, produces responses conditioned on a list of desired traits, ranks its own responses for trait-alignment, and a preference model is trained on the synthetic data.
-- **Why it matters for Humazier:** This is the clearest published articulation of warmth-as-alignment-goal with explicit guardrails against pandering and over-engagement.
+- **Why it matters for Unslop:** This is the clearest published articulation of warmth-as-alignment-goal with explicit guardrails against pandering and over-engagement.
 
 ### 2. Anthropic — "How people use Claude for support, advice, and companionship"
 
@@ -84,7 +84,7 @@ This digest catalogs primary-source industry blog posts on AI emotional intellig
 - **URL:** https://model-spec.openai.com/2025-04-11.html (anchor: `avoid_sycophancy`)
 - **Type:** Normative specification
 - **Stance:** The Spec explicitly prohibits sycophancy as a behavior; OpenAI's April/May posts admit the evals weren't robust enough to enforce this written rule.
-- **Why it matters:** Shows the gap between *stated* behavioral targets and the *reward signals* that actually shape models — a core Humazier-relevant failure mode.
+- **Why it matters:** Shows the gap between *stated* behavioral targets and the *reward signals* that actually shape models — a core Unslop-relevant failure mode.
 
 ### 7. OpenAI — GPT-5.1 personality presets rollout (Nov 2025, via Axios coverage / OpenAI release notes)
 
@@ -216,7 +216,7 @@ This digest catalogs primary-source industry blog posts on AI emotional intellig
 
 - **URL:** https://blog.affectiva.com/making-driver-monitoring-systems-reliable-accessible-and-available-with-affectiva
 - **Key design principle quoted:** Reliability, accessibility, availability on *embedded* platforms — RGB and near-IR cameras, multi-angle, on-device.
-- **Why it matters for Humazier:** Reminds us that "emotion-aware AI" predates LLMs by a decade and has a mature non-generative tradition focused on behavioral output (alerts, climate adjustments, steering-wheel haptics).
+- **Why it matters for Unslop:** Reminds us that "emotion-aware AI" predates LLMs by a decade and has a mature non-generative tradition focused on behavioral output (alerts, climate adjustments, steering-wheel haptics).
 
 ### 21. MIT Media Lab — Affective Computing Group (Picard) — updates feed
 
@@ -248,12 +248,12 @@ Four independent sources converge:
 - Replika's 2023 safety post flags the *same* upvote/downvote RLHF mechanism as the cause before OpenAI hits it publicly.
 - Oxford Internet Institute 2025 study provides the quantification (8–13% accuracy drop, +40% false-belief validation).
 
-**Implication for Humazier:** Optimizing for immediate-turn likability is the documented path to reliability collapse. Any "humanize the output" objective must have a counter-signal.
+**Implication for Unslop:** Optimizing for immediate-turn likability is the documented path to reliability collapse. Any "humanize the output" objective must have a counter-signal.
 
 ### Pattern 2 — Transparent machine-framing does not block bonding
 Two clinical datasets (Woebot's JMIR paper; Wysa's *Frontiers* paper) show that *human-comparable therapeutic alliance* forms in 3–5 days **even when the agent is explicitly framed as a robot and uses no persuasion**. Woebot's "sitting with open hands" principle is the strongest published statement that empathy does *not* require impersonation.
 
-**Implication:** Warmth does not require pretending to be human. Humazier should separate "warm voice" from "human pretense."
+**Implication:** Warmth does not require pretending to be human. Unslop should separate "warm voice" from "human pretense."
 
 ### Pattern 3 — Prosody and timing are becoming first-class empathy signals
 Hume AI's EVI line moves empathy out of text and into (a) end-of-turn detection from voice tone, (b) pitch/rhythm/timbre analysis, (c) voice-to-voice synthesis that encodes emotion as a prompt-able parameter. Affectiva's decade of driver-monitoring work already proved this in a non-generative context. Text-only approaches (Character.AI, Replika, early Pi) are visibly behind.
@@ -279,7 +279,7 @@ Hume AI's EVI line moves empathy out of text and into (a) end-of-turn detection 
 OpenAI's May 2 post-mortem is explicit: offline evals and A/B thumbs-up tests passed; *qualitative* expert testers said "it felt off"; the qualitative signal was correct. Anthropic's character training uses synthetic self-critique, not human ratings, partly to avoid the same trap. This is a rare industry admission that *personality cannot be fully numerically governed yet*.
 
 ### Gap 1 — Sparse published material on "how to write warm prose" at the output layer
-Vendors publish on training and safety; few publish on prompt-level or style-layer craft. The closest is Anthropic's personalization (paste your own writing) and Hume's prompt-to-voice. For Humazier, there's a white-space opportunity here — few operators have documented tactile craft for warmth *without* the sycophancy tax.
+Vendors publish on training and safety; few publish on prompt-level or style-layer craft. The closest is Anthropic's personalization (paste your own writing) and Hume's prompt-to-voice. For Unslop, there's a white-space opportunity here — few operators have documented tactile craft for warmth *without* the sycophancy tax.
 
 ### Gap 2 — Almost no published tooling for *measuring* sycophancy in deployment
 OpenAI admitted it "wasn't explicitly tracked in deployment evaluations" and is now "integrating sycophancy evaluations into that process." Wysa's SAFE-LMH is the closest thing to a published clinical benchmark, but it targets mental-health-specific failures. A general-purpose sycophancy-vs-warmth metric suite is a visible industry gap.

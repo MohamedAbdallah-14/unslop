@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Offline benchmark runner for the deterministic humanizer.
+"""Offline benchmark runner for the deterministic unslop.
 
 Usage:
   python3 benchmarks/run.py [--fixtures benchmarks/fixtures]
@@ -7,7 +7,7 @@ Usage:
                             [--strict]
 
 Writes a JSON report per run and updates `latest.json` for CI diffing.
-`--strict` exits non-zero if the humanizer made any fixture worse or broke
+`--strict` exits non-zero if the unslop made any fixture worse or broke
 preservation.
 """
 
@@ -21,7 +21,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "humanizer-humanize"))
+sys.path.insert(0, str(ROOT / "unslop"))
 
 from scripts.humanize import VALID_INTENSITIES, humanize_deterministic  # noqa: E402
 from scripts.validate import AI_ISM_PATTERNS, _sentence_lengths, validate  # noqa: E402
@@ -78,7 +78,7 @@ def run(fixtures_dir: Path, intensity: str = "balanced") -> dict:
 
 
 def print_report(report: dict) -> None:
-    print("Humanizer benchmark\n===================\n")
+    print("Unslop benchmark\n===================\n")
     if "intensity" in report:
         print(f"Intensity:           {report['intensity']}")
     print(f"Fixtures:            {report['fixture_count']}")
@@ -127,7 +127,7 @@ def main() -> int:
     if args.all_intensities:
         # Monotonicity check: each intensity must strip >= previous.
         reports = {lvl: run(fixtures, intensity=lvl) for lvl in VALID_INTENSITIES}
-        print("Humanizer benchmark — all intensities\n")
+        print("Unslop benchmark — all intensities\n")
         print(f"{'intensity':<12}{'before':>10}{'after':>8}{'delta':>8}{'% reduction':>14}")
         for lvl in VALID_INTENSITIES:
             r = reports[lvl]

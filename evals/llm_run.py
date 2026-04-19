@@ -26,7 +26,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "humanizer-humanize"))
+sys.path.insert(0, str(ROOT / "unslop"))
 
 from scripts.humanize import humanize_deterministic, humanize_llm  # noqa: E402
 
@@ -113,7 +113,7 @@ def main() -> int:
     p.add_argument("--out", default=str(ROOT / "evals/snapshots"))
     p.add_argument(
         "--model",
-        default=os.environ.get("HUMANIZER_MODEL", "claude-sonnet-4-5"),
+        default=os.environ.get("UNSLOP_MODEL", "claude-sonnet-4-5"),
     )
     p.add_argument("--max-prompts", type=int, default=0, help="0 = all")
     args = p.parse_args()

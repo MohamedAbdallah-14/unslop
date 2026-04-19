@@ -212,7 +212,7 @@ The category is on a collision course with regulation (EU AI Act transparency ob
 
 **11. Enterprise / compliance procurement under-served.** SOC 2, signed DPAs appear in QuillBot and Undetectable enterprise pricing but nowhere else. No "best for regulated industries" roundup.
 
-**12. Thinking / reasoning-trace humanization is absent.** Every tool targets finished prose. No OSS project or commercial product attempts to humanize the *reasoning process* or chain-of-thought — directly relevant to the Humazier project's framing ("humanizing AI output **and thinking**").
+**12. Thinking / reasoning-trace humanization is absent.** Every tool targets finished prose. No OSS project or commercial product attempts to humanize the *reasoning process* or chain-of-thought — directly relevant to the Unslop project's framing ("humanizing AI output **and thinking**").
 
 **13. No canonical shared dataset of "AI tells."** Each OSS repo curates its own 29/30/500-term list; heavy duplication, no shared corpus.
 
@@ -224,7 +224,7 @@ The category is on a collision course with regulation (EU AI Act transparency ob
 
 ## How This Category Fits in the Bigger Picture
 
-This category sits at the adversarial interface of the Humazier project's two halves. On one side: the humanization-of-AI-output research (categories on paraphrase attacks, style transfer, fluency modeling, evaluation metrics) — commercial humanizers are the productized form of that research, lagging the frontier by 1–2 generations. On the other side: detector / watermarking / provenance categories — commercial humanizers are the adversary those categories try to defend against, and empirically win the current round.
+This category sits at the adversarial interface of the Unslop project's two halves. On one side: the humanization-of-AI-output research (categories on paraphrase attacks, style transfer, fluency modeling, evaluation metrics) — commercial humanizers are the productized form of that research, lagging the frontier by 1–2 generations. On the other side: detector / watermarking / provenance categories — commercial humanizers are the adversary those categories try to defend against, and empirically win the current round.
 
 Three specific ways this category connects:
 
@@ -232,7 +232,7 @@ Three specific ways this category connects:
 - **It operationalizes the academic-integrity + ESL-fairness conversation.** Perkins/Roe, Weber-Wulff, Liang et al., Fleckenstein — the education-journal literature — meet ground truth here, where 150 products and 34M monthly visits create the actual social outcomes researchers worry about.
 - **It frames the "humanizing thinking" gap.** Every commercial tool targets output. None humanize reasoning, chain-of-thought, or the structure of argument. The project's emphasis on *thinking* as well as *output* is unaddressed by the current product category and represents the clearest greenfield.
 
-For Humazier specifically, this category suggests: (a) don't ship synonym-replacement (always last in every audit); (b) publish reproducible benchmarks (no competitor does); (c) semantic-preservation curves (AuthorMist's >0.94 is the bar); (d) design for Tier-3 detector-in-the-loop rather than generation-1 paraphrase; (e) treat watermark robustness as a silent feature; (f) build an ESL / defensive-user story with honest framing; (g) expect peer-reviewed auditing to arrive by 2027 — be audit-ready.
+For Unslop specifically, this category suggests: (a) don't ship synonym-replacement (always last in every audit); (b) publish reproducible benchmarks (no competitor does); (c) semantic-preservation curves (AuthorMist's >0.94 is the bar); (d) design for Tier-3 detector-in-the-loop rather than generation-1 paraphrase; (e) treat watermark robustness as a silent feature; (f) build an ESL / defensive-user story with honest framing; (g) expect peer-reviewed auditing to arrive by 2027 — be audit-ready.
 
 ## Recommended Reading Order
 
@@ -265,7 +265,7 @@ For Humazier specifically, this category suggests: (a) don't ship synonym-replac
 **Day 5 — Gaps and positioning.**
 
 15. `A-academic.md` §Gaps + `B-industry.md` §4 Gaps + `D-commercial.md` §Gaps + `C-opensource.md` §Gaps — read sequentially to see the same gaps argued from four angles.
-16. This INDEX §Open Questions and §How This Category Fits — for Humazier-specific synthesis.
+16. This INDEX §Open Questions and §How This Category Fits — for Unslop-specific synthesis.
 
 ## File Index
 

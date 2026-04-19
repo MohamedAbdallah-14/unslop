@@ -26,7 +26,7 @@ Five findings dominate across all five angles:
 4. **Warmth has a measurable reliability cost, and sycophancy inverts warmth into manipulation.** Ibrahim/Hafner/Rocher 2025 (warmth training → 10–30% error rate), Colombatto/Birch/Fleming 2025 (emotion attribution → lower advice acceptance), and the April 2025 GPT-4o rollback all point the same way. Humanization of *style* (rhythm, vocabulary, voice-matching) is safer than humanization of *stance* (warmth, affirmation, emotional agreement).
 5. **Humanization is high-stakes persistence design, not cosmetic polish.** The Replika February 2023 event and the August 2025 ChatGPT tone update are the field's two canonical natural experiments: identical model weights + a tone/persona diff produced user-described **bereavement**. "Patch-breakup" is now a shared community term.
 
-The strategic implication for a humanization product like Humazier: **the unclaimed market position is "authored-sounding, not person-claiming"** — text that reads like a thoughtful human *wrote it*, without the system itself adopting first-person authority or a companion frame. This is the gap between the "safety / legibility" camp (NN/g, Stanford HAI, Microsoft HAX, Bora, Burkert) and the "character / relationship" camp (Anthropic, Dan Saffer, Soul Machines), and no major voice has cleanly named it.
+The strategic implication for a humanization product like Unslop: **the unclaimed market position is "authored-sounding, not person-claiming"** — text that reads like a thoughtful human *wrote it*, without the system itself adopting first-person authority or a companion frame. This is the gap between the "safety / legibility" camp (NN/g, Stanford HAI, Microsoft HAX, Bora, Burkert) and the "character / relationship" camp (Anthropic, Dan Saffer, Soul Machines), and no major voice has cleanly named it.
 
 ## Cross-Angle Themes
 
@@ -139,7 +139,7 @@ The strategic implication for a humanization product like Humazier: **the unclai
 - **Atin Studio** — *AI Persona Playbook*; behavioural identity / Behavioural North Star.
 
 **Text humanizers (parallel category — pitched as detector evasion):**
-- Undetectable AI, Humbot, StealthGPT, BypassGPT, UndetectedGPT. Vendor-stated 82–96% detector bypass; overlap in rhetoric with Humazier but different end goal.
+- Undetectable AI, Humbot, StealthGPT, BypassGPT, UndetectedGPT. Vendor-stated 82–96% detector bypass; overlap in rhetoric with Unslop but different end goal.
 
 ### Notable community threads
 
@@ -240,7 +240,7 @@ The text-humanizer SaaS category (Undetectable AI, Humbot, StealthGPT) pitches o
 - Is a humanizer that optimizes for detectors **solving the right problem**?
 - Most community/academic voices argue no — the goal should be *reader experience and authorship identity*, not *hiding AI provenance*.
 
-Status: A commercial–academic gap the Humazier positioning can exploit.
+Status: A commercial–academic gap the Unslop positioning can exploit.
 
 ## Emerging Trends
 
@@ -281,7 +281,7 @@ Status: A commercial–academic gap the Humazier positioning can exploit.
 
 ## How This Category Fits in the Bigger Picture
 
-Category 13 is the **"why does this matter?" and "how do we measure it?"** foundation for everything in the Humazier research stack. It connects to sibling categories as follows:
+Category 13 is the **"why does this matter?" and "how do we measure it?"** foundation for everything in the Unslop research stack. It connects to sibling categories as follows:
 
 - **Categories on AI detection / evasion (05).** Detection benchmarks are the adversaries of humanization outputs, but detector-only evaluation is a known trap (CUDRT, MGTBench: detectors generalize poorly). This category argues the goal should be *reader-experience humanness*, not *classifier-invisible humanness*; human perception is the ground truth, detectors are a proxy.
 - **Prompt engineering / style control (06).** The Jones & Bergen persona recipe, style-by-example, and NN/g tone findings are direct inputs to the prompt layer. This category tells us *what to aim for*; the prompt-engineering category tells us *how*.
@@ -292,7 +292,7 @@ Category 13 is the **"why does this matter?" and "how do we measure it?"** found
 - **Evaluation / benchmarks (own category).** AnthroScore, HumT, AnthroBench, HumanAgencyBench, Jones & Bergen, HELM, GAICo, Godspeed / RoSAS / UEQ — the evaluation stack for humanization lives here and feeds the project's measurement layer.
 - **Commercial positioning.** The polarized camps (safety/legibility vs. character/relationship), the unclaimed middle ("authored-sounding, not person-claiming"), and the voice-vs-face capital-market split are the strategic inputs for product positioning.
 
-In short: this category supplies the *theory, measurement, ethical vocabulary, and commercial landscape* that the rest of the Humazier project plugs technique into.
+In short: this category supplies the *theory, measurement, ethical vocabulary, and commercial landscape* that the rest of the Unslop project plugs technique into.
 
 ## Recommended Reading Order
 

@@ -1,6 +1,6 @@
 # Category 20 — Memory & Personalization
 
-**Project:** Humazier — Humanizing AI output and thinking
+**Project:** Unslop — Humanizing AI output and thinking
 **Compiled:** 2026-04-19
 **Angles:** A (Academic) · B (Industry) · C (Open-Source) · D (Commercial) · E (Practical/Forums)
 
@@ -37,13 +37,13 @@ Memory and personalization have become **the** architectural frontier of the age
 
 **Benchmarks have caught up with ambition.** LongMemEval, LoCoMo, PersonalLLM, LongLaMP and ALOE give the field measurable ground truth for long-horizon recall, temporal reasoning, preference heterogeneity, and implicit-preference inference. Current leaderboard shape: Zep ~63.8% LongMemEval / 94.8% DMR, Mem0 ~49% LongMemEval but far cheaper/faster, Letta strong on architecture but "not production-ready."
 
-**Commercially, memory is now its own category.** Mem0 ($24M, YC), Zep, Letta ($10M), Supermemory ($3M), Cognee ($7.5M), Personize, Fastino, and GetProfile all ship "drop-in memory layer" APIs — and are starting to be commoditized by foundation-model vendors shipping native memory (ChatGPT, Claude, Gemini). Writing-voice products (Lex, Jenova) are the closest commercial analogs to the Humazier thesis and explicitly sell "your signature tone, metaphors, terminology, narrative voice."
+**Commercially, memory is now its own category.** Mem0 ($24M, YC), Zep, Letta ($10M), Supermemory ($3M), Cognee ($7.5M), Personize, Fastino, and GetProfile all ship "drop-in memory layer" APIs — and are starting to be commoditized by foundation-model vendors shipping native memory (ChatGPT, Claude, Gemini). Writing-voice products (Lex, Jenova) are the closest commercial analogs to the Unslop thesis and explicitly sell "your signature tone, metaphors, terminology, narrative voice."
 
 **Users are split.** Half want "relationship-driven" memory that makes the assistant feel like a colleague; the other half disable memory as "context pollution" or a "memory dossier." The dominant usability complaint — across r/ChatGPT, HN, and r/LangChain — is that memory is *account-global* when it should be *project-scoped*, and *invisible* when it should be editable. Anthropic's project-scoped approach is held up as the model to beat.
 
 **Security and UX gaps are real.** Rehberger's indirect-prompt-injection-to-memory attack is now the canonical threat model; no one has a clean defense. Memory editing UX is underdeveloped; forgetting is treated as a bug, not a feature; portability across vendors barely exists; and — most pointedly for this project — no benchmark measures whether memory makes an assistant *feel more like a person who knows you*.
 
-That last gap is the core Humazier opportunity: to treat memory not just as retrieval infrastructure, but as a humanization mechanism whose quality metric is *"does this reply sound like it came from someone who remembers me?"*
+That last gap is the core Unslop opportunity: to treat memory not just as retrieval infrastructure, but as a humanization mechanism whose quality metric is *"does this reply sound like it came from someone who remembers me?"*
 
 ---
 
@@ -128,7 +128,7 @@ That last gap is the core Humazier opportunity: to treat memory not just as retr
 3. **Letta** (letta.com) — Memory-first agents, cross-provider portable memory, persona as first-class object. https://www.letta.com
 4. **Supermemory** (supermemory.ai) — "One memory across all your AI tools" + consumer app. https://supermemory.ai
 5. **Cognee** (cognee.ai) — KG + vector + ontology; graph features free at all tiers. https://www.cognee.ai
-6. **Lex** (lex.page) — **Closest commercial analog to Humazier.** Style Guides trained on your writing samples: "teaching Lex to match your signature tone, metaphors, terminology, narrative voice." https://lex.page
+6. **Lex** (lex.page) — **Closest commercial analog to Unslop.** Style Guides trained on your writing samples: "teaching Lex to match your signature tone, metaphors, terminology, narrative voice." https://lex.page
 7. **Salesforce Einstein + Agentic Memory** — Enterprise-scale published architecture for profile-graph-linked memory. https://engineering.salesforce.com
 8. **Gong Mission Andromeda** (Feb 2026) — Revenue Graph + conversational AI Assistant over captured customer interactions. https://www.gong.io
 9. **Personize** (personize.ai) — Unified customer memory as a governance layer over CRM / email / docs. https://personize.ai
@@ -191,7 +191,7 @@ That last gap is the core Humazier opportunity: to treat memory not just as retr
 
 4. **Retrieve-and-dump vs. reason-over-profile.** PrLM (CIKM 2025) shows that personalization benefits from *explicit reasoning over* retrieved user facts, not just concatenation. Most production systems still concatenate.
 
-5. **"Human-like" memory vs. "context engineering."** Letta's official stance: *"The goal isn't to replicate human memory mechanics but to create memory systems that enable agents to be genuinely helpful."* Counter-position from MemoryBank, A-MEM, EM-LLM, and academic PRIME/REMem: biological analogy pays off structurally (Ebbinghaus decay, event segmentation, dual-memory). The Humazier project has to pick a stance.
+5. **"Human-like" memory vs. "context engineering."** Letta's official stance: *"The goal isn't to replicate human memory mechanics but to create memory systems that enable agents to be genuinely helpful."* Counter-position from MemoryBank, A-MEM, EM-LLM, and academic PRIME/REMem: biological analogy pays off structurally (Ebbinghaus decay, event segmentation, dual-memory). The Unslop project has to pick a stance.
 
 6. **Storage vs. policy.** Is memory a data structure (retrieval system) or a learned behavior (what to remember, how to retrieve, when to forget)? RMM, A-MEM, PrLM argue policy; Mem0, Zep, vector-DB recipes argue storage.
 
@@ -239,7 +239,7 @@ That last gap is the core Humazier opportunity: to treat memory not just as retr
 
 ## Open Questions / Research Gaps
 
-1. **"Does this output sound like me?" has no benchmark.** Every memory system benchmarks retrieval accuracy; none benchmark felt humanness or voice fidelity. This is the core Humazier wedge.
+1. **"Does this output sound like me?" has no benchmark.** Every memory system benchmarks retrieval accuracy; none benchmark felt humanness or voice fidelity. This is the core Unslop wedge.
 
 2. **Tone / style memory is missing as an architectural primitive.** Systems store *what* the user said (facts, preferences), not *how they say it* (cadence, favorite metaphors, punctuation idiosyncrasies, reading level). A dedicated **style memory block** — distinct from semantic memory — is greenfield.
 
@@ -283,7 +283,7 @@ That last gap is the core Humazier opportunity: to treat memory not just as retr
 
 ## How This Category Fits in the Bigger Picture
 
-Memory and personalization are the **single biggest lever** between "an LLM that sounds like every other LLM" and "an LLM that sounds like a specific human talking to a specific human they know." For the Humazier thesis that category matters for these reasons:
+Memory and personalization are the **single biggest lever** between "an LLM that sounds like every other LLM" and "an LLM that sounds like a specific human talking to a specific human they know." For the Unslop thesis that category matters for these reasons:
 
 - **Generic = averaged.** As Lex puts it: *"Generic AI trained on the internet speaks in averages and optimizes for what's most likely, stripping unique voice."* Without memory + personalization, humanization collapses to prompt tricks that wash out within a session. With them, every output gets to stand on a cumulative relationship.
 
@@ -293,11 +293,11 @@ Memory and personalization are the **single biggest lever** between "an LLM that
 
 - **Temporal reasoning is where AI most often fails to feel human.** Knowing "Alice got married *last year*" supersedes "Alice is single" is table stakes for human-feeling recall. Zep's bi-temporal KG and LongMemEval's "knowledge updates" category make this measurable.
 
-- **The humanization blind spot in memory evaluation is the Humazier wedge.** All five angles converge on the same observation: current benchmarks measure factual recall, not whether the output *reads* as coming from someone who knows you. That gap is precisely what this project can fill — and where it can differentiate from Mem0 / Zep / Letta / Supermemory, all of whom compete on benchmark numbers the Humazier target audience doesn't care about.
+- **The humanization blind spot in memory evaluation is the Unslop wedge.** All five angles converge on the same observation: current benchmarks measure factual recall, not whether the output *reads* as coming from someone who knows you. That gap is precisely what this project can fill — and where it can differentiate from Mem0 / Zep / Letta / Supermemory, all of whom compete on benchmark numbers the Unslop target audience doesn't care about.
 
 - **Style memory is the unshipped primitive.** Every vendor has a semantic memory block. None has a first-class *style* memory block — cadence, favorite metaphors, running jokes, punctuation idiosyncrasies. This is both a product opportunity and the cleanest humanization-native research contribution.
 
-- **Humanization connects to other Humazier categories through memory.** Anti-sycophancy work becomes harder and more important when memory stores past agreement signals. Detection-evasion humanization needs style memory to evolve so outputs don't become trivially clusterable over time. Long-horizon agentic workflows (coding, research) need procedural memory to preserve hard-won context.
+- **Humanization connects to other Unslop categories through memory.** Anti-sycophancy work becomes harder and more important when memory stores past agreement signals. Detection-evasion humanization needs style memory to evolve so outputs don't become trivially clusterable over time. Long-horizon agentic workflows (coding, research) need procedural memory to preserve hard-won context.
 
 ---
 
@@ -328,7 +328,7 @@ Memory and personalization are the **single biggest lever** between "an LLM that
 16. **Angle B — Industry** (this folder, `B-industry.md`). Map each vendor's public claims against your implementation.
 17. Benchmarks: run LoCoMo + LongMemEval against your system; report numbers the same way Mem0 / Zep do.
 
-**If you only have 10 minutes and want the Humazier punchline:**
+**If you only have 10 minutes and want the Unslop punchline:**
 Read the final two sections of this document — "Open Questions / Research Gaps" and "How This Category Fits in the Bigger Picture" — then skim the Lex and Zep summaries in `D-commercial.md`. The wedge is: *style memory as a portable, user-editable primitive + a humanness benchmark that measures "sounds like you" rather than "recalled the fact."*
 
 ---

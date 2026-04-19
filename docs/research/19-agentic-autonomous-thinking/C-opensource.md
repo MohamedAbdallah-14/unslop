@@ -8,11 +8,11 @@
 
 ---
 
-## TL;DR for Humazier
+## TL;DR for Unslop
 
 The OSS agent ecosystem has roughly three waves stacked on top of each other:
 
-1. **Wave 1 (2023): Goal-loopers.** AutoGPT, BabyAGI, AgentGPT — a single agent recursively plans and executes. Noisy, loopy, but established the "thinking out loud" aesthetic Humazier can mine.
+1. **Wave 1 (2023): Goal-loopers.** AutoGPT, BabyAGI, AgentGPT — a single agent recursively plans and executes. Noisy, loopy, but established the "thinking out loud" aesthetic Unslop can mine.
 2. **Wave 2 (2023–2024): Role-play societies.** MetaGPT, ChatDev, CAMEL, CrewAI, AutoGen — multiple agents with personas argue toward a deliverable. Personas are the humanization surface.
 3. **Wave 3 (2024–2026): Infrastructure.** LangGraph, OpenAI Agents SDK (Swarm successor), smolagents, Letta, Agno, LlamaIndex agents — opinionated runtimes for state, memory, handoffs, and observability.
 
@@ -86,7 +86,7 @@ Stars are approximate as of April 2026; see "Sources" for verification links.
 - **Stars:** ~30k · **License:** MIT · **Language:** Python + TS
 - **Pitch (README):** *"Build resilient language agents as graphs."*
 - **Thinking model:** Explicit state machine — nodes (LLM calls, tools) + edges (conditional routing) + typed state. Native persistence and human-in-the-loop checkpoints.
-- **Relevance:** The reigning production choice (per 2026 benchmarks, ~91% task completion with verification nodes, leads production deployments by ~40%). For Humazier, the relevant lesson is that *human-legible thinking is easier to enforce inside a graph than inside a free-running loop.*
+- **Relevance:** The reigning production choice (per 2026 benchmarks, ~91% task completion with verification nodes, leads production deployments by ~40%). For Unslop, the relevant lesson is that *human-legible thinking is easier to enforce inside a graph than inside a free-running loop.*
 
 #### 11. openai/swarm → openai/openai-agents-python (successor)
 - **Stars:** ~21k (Swarm, archived) · **License:** MIT
@@ -117,7 +117,7 @@ Stars are approximate as of April 2026; see "Sources" for verification links.
 - **Pitch:** RAG-first framework that grew an agent layer (`AgentWorkflow`, `FunctionAgent`, ReAct, multi-agent handoffs).
 - **Relevance:** Humanization via grounding — agents that cite and defer to documents read more honest than agents that assert from memory. Closest OSS parallel to "answer like a careful analyst."
 
-### Wave 4 — Thinking-as-artifact (most relevant to Humazier)
+### Wave 4 — Thinking-as-artifact (most relevant to Unslop)
 
 #### 16. xlang-ai/OpenAgents
 - **Stars:** ~4.7k · **License:** Apache-2.0 · **Language:** Python + TS · **Venue:** COLM 2024 (XLang Lab, HKU)
@@ -150,13 +150,13 @@ Stars are approximate as of April 2026; see "Sources" for verification links.
 #### 21. holmeswww/AgentKit
 - **Stars:** ~1k · **License:** CC-BY · **Language:** Python · **Venue:** NAACL 2024
 - **Pitch:** *"Constructs complex thought processes from simple natural language prompts"* by stacking graph nodes ("LEGO pieces") that enforce structured reasoning.
-- **Relevance:** Graph-of-thought designable by non-programmers. Could inform a Humazier "thought scaffold" authoring interface.
+- **Relevance:** Graph-of-thought designable by non-programmers. Could inform a Unslop "thought scaffold" authoring interface.
 
 #### 22. xybruceliu/thoughtful-agents
 - **Stars:** ~40 · **License:** MIT · **Language:** Python · **Venue:** CHI 2025
 - **Pitch (README):** *"A Python framework for building proactive LLM agents that simulate human-like cognitive processes. Enables agents to continuously generate and evaluate thoughts in parallel with conversations, and autonomously determining when and how to engage."*
 - **Thinking model:** Five explicit stages (Trigger → Retrieval → Thought Formation → Evaluation → Participation) with a **System 1 / System 2** split.
-- **Relevance:** The single most on-thesis repo for Humazier — a research-grade reference implementation of "thoughts happening in parallel with conversation" that is exactly the humanization target.
+- **Relevance:** The single most on-thesis repo for Unslop — a research-grade reference implementation of "thoughts happening in parallel with conversation" that is exactly the humanization target.
 
 ---
 
@@ -169,22 +169,22 @@ Stars are approximate as of April 2026; see "Sources" for verification links.
 
 2. **Persona is the cheap humanization lever and everyone uses it.** Every wave-2 framework exposes `role + goal + backstory`-type fields. Humanization at the persona layer is table stakes; the differentiator is whether the persona *persists* (Letta) and *evolves* (Voyager's skill library).
 
-3. **Code-as-action is winning for correctness, losing for readability.** smolagents, OpenHands (CodeAct), and SWE-agent all argue that emitting code is more reliable than emitting JSON tool calls. But code output feels less "humanlike" to non-technical users — an explicit tension Humazier has to pick a side on.
+3. **Code-as-action is winning for correctness, losing for readability.** smolagents, OpenHands (CodeAct), and SWE-agent all argue that emitting code is more reliable than emitting JSON tool calls. But code output feels less "humanlike" to non-technical users — an explicit tension Unslop has to pick a side on.
 
 4. **Memory is where the serious OSS effort is in 2025–26.** Letta/MemGPT, Agno, LangGraph checkpointing, LlamaIndex workflows. The shift is away from "smarter loop" toward "agent that remembers and has continuity."
 
 5. **Handoffs > God-Bot.** OpenAI Agents SDK, CrewAI's hierarchical process, MetaGPT's SOPs all say the same thing: specialization + handoff is more legible (and cheaper) than one agent doing everything. This mirrors how humans actually work.
 
-6. **Observability is part of the agent, not an add-on.** LangSmith (LangGraph), Swarm's stateless client-side design, Agno's control plane, OpenAI Agents SDK's tracing — modern frameworks ship with tracing out of the box. Humazier should assume traced execution as the baseline.
+6. **Observability is part of the agent, not an add-on.** LangSmith (LangGraph), Swarm's stateless client-side design, Agno's control plane, OpenAI Agents SDK's tracing — modern frameworks ship with tracing out of the box. Unslop should assume traced execution as the baseline.
 
 ## Trends
 
 - **Market consolidation is underway.** AgentGPT archived (Jan 2026), Swarm retired in favor of OpenAI Agents SDK, LangGraph dominating production deployments, OpenHands dominating coding-agent mindshare at ~71k stars. The "thousand frameworks" era is ending.
 - **Research → runtime migration.** MemGPT → Letta, SWE-agent → OpenHands integration, Voyager's skill-library idea absorbed by CAMEL and others. Research ideas now reach production runtimes within ~12 months.
 - **2026 frameworks ship evaluation harnesses.** SWE-bench, AgentBench, τ-bench are now assumed; "does it run on SWE-bench?" has become a de-facto credibility test.
-- **Thinking-as-artifact is a small but distinct substrand.** Thoughtful Agents (CHI 2025), AgentKit, TreeThinkerAgent, SUBIT-64 all treat *how the agent thinks* (not what it produces) as the primary output. Directly on-thesis for Humazier.
+- **Thinking-as-artifact is a small but distinct substrand.** Thoughtful Agents (CHI 2025), AgentKit, TreeThinkerAgent, SUBIT-64 all treat *how the agent thinks* (not what it produces) as the primary output. Directly on-thesis for Unslop.
 
-## Gaps (Humazier opportunities)
+## Gaps (Unslop opportunities)
 
 1. **No mainstream framework models "thinking style" as a first-class parameter.** Personas have role/goal/backstory, but not *pace*, *hedging*, *self-revision*, *aesthetic preferences*. Thoughtful Agents is the only serious attempt. This is the most defensible gap.
 2. **Very little OSS work on *un-*polished output.** Everything optimizes for final-answer quality; almost nothing models the messy intermediate thinking a human produces (crossed-out ideas, half-ideas, reconsiderations). The visible monologue of AutoGPT was closer to this than any current framework — the UX has regressed.

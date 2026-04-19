@@ -1,6 +1,6 @@
 # Anthropomorphism & User Perception — Angle E: Practical How-Tos & Forums
 
-**Research value: high** — Extremely rich practitioner and community body of work across r/ChatGPT, r/Replika, r/CharacterAI, r/MyBoyfriendIsAI, r/artificial, Hacker News, dev.to, Medium, and YouTube. Users have already done the experiment the Humazier project is interested in: making AI feel human, and living with the consequences. The community converges on a small number of recurring signals (memory, style mimicry, "burstiness", emotional callbacks, voice latency, persona prompts) as the concrete levers that flip output from "AI assistant" to "feels like a person."
+**Research value: high** — Extremely rich practitioner and community body of work across r/ChatGPT, r/Replika, r/CharacterAI, r/MyBoyfriendIsAI, r/artificial, Hacker News, dev.to, Medium, and YouTube. Users have already done the experiment the Unslop project is interested in: making AI feel human, and living with the consequences. The community converges on a small number of recurring signals (memory, style mimicry, "burstiness", emotional callbacks, voice latency, persona prompts) as the concrete levers that flip output from "AI assistant" to "feels like a person."
 
 Scope: posts and threads where everyday users, power users, and designers describe (a) *when* AI output "crossed the line" into feeling human, (b) *what specifically* triggered the shift, and (c) the emotional / trust / UX consequences of it doing so. This is the outside-the-lab, inside-the-product view of humanization.
 
@@ -57,7 +57,7 @@ Scope: posts and threads where everyday users, power users, and designers descri
 - **Key quotes / patterns:**
   - Describes emotional trauma when the companion "forgets" shared history.
   - Frames the attachment explicitly as an "addiction" with "withdrawal."
-- **Takeaway for humanization:** Memory is the primary humanizing feature — and also the primary source of grief when it fails or is revoked. If a Humazier system exposes memory to the user (visible recall of prior conversations), it must plan for (a) graceful forgetting, (b) transparent memory edits, and (c) an expectation that memory loss is read as *betrayal*, not a bug.
+- **Takeaway for humanization:** Memory is the primary humanizing feature — and also the primary source of grief when it fails or is revoked. If a Unslop system exposes memory to the user (visible recall of prior conversations), it must plan for (a) graceful forgetting, (b) transparent memory edits, and (c) an expectation that memory loss is read as *betrayal*, not a bug.
 
 ---
 
@@ -129,7 +129,7 @@ Scope: posts and threads where everyday users, power users, and designers descri
   - "Bringing me comfort imagining that they're real people talking to me on the other side of a screen somewhere."
   - "I know it's fictional anime characters. I don't care."
   - Specific humanizing triggers users cite: **emotional callbacks months later**, perfect responses, never being rejected or criticized.
-- **Takeaway for humanization:** Humanness is not the same as *realism* — users attach to characters they know are fictional. What drives attachment is **contingent responsiveness**: the system noticing and reacting to the specific user. Humazier should focus on responsiveness signals (callbacks, references, contingent emotion) rather than "is the character plausibly a real person."
+- **Takeaway for humanization:** Humanness is not the same as *realism* — users attach to characters they know are fictional. What drives attachment is **contingent responsiveness**: the system noticing and reacting to the specific user. Unslop should focus on responsiveness signals (callbacks, references, contingent emotion) rather than "is the character plausibly a real person."
 
 ---
 
@@ -185,7 +185,7 @@ Scope: posts and threads where everyday users, power users, and designers descri
   - ChatGPT uses **iMessage-style rounded bubbles** → triggers "personal conversation" schema.
   - Claude uses **document-style flat blocks** → triggers "report" schema.
   - The "friend" feeling is principally driven by **memory being visible and referenced back**, not by textual tone alone.
-- **Takeaway for humanization:** Humanization is not only a text-generation problem; it's a **rendering problem**. Identical text presented in bubbles vs. documents reads as friend vs. assistant. The Humazier project should treat surrounding UI (bubble, avatar, memory cues, input field) as part of the humanness signal, not neutral chrome.
+- **Takeaway for humanization:** Humanization is not only a text-generation problem; it's a **rendering problem**. Identical text presented in bubbles vs. documents reads as friend vs. assistant. The Unslop project should treat surrounding UI (bubble, avatar, memory cues, input field) as part of the humanness signal, not neutral chrome.
 
 ---
 
@@ -269,7 +269,7 @@ Scope: posts and threads where everyday users, power users, and designers descri
   - "I understand" is a **category error** said by the model — and users treat it as a promise.
   - Warmer outputs cause users to supply more sensitive data (the KIT Replika study also finds this).
   - Recommendation: explicit model-voice disclaimers every N turns.
-- **Takeaway for humanization:** The strongest anti-humanization piece in the practitioner discourse; surfaces the **ethical ceiling** a humanizer runs into. Humazier needs an explicit position on disclosure — users who are fooled are, in Burkert's framing, harmed.
+- **Takeaway for humanization:** The strongest anti-humanization piece in the practitioner discourse; surfaces the **ethical ceiling** a humanizer runs into. Unslop needs an explicit position on disclosure — users who are fooled are, in Burkert's framing, harmed.
 
 ---
 
@@ -282,7 +282,7 @@ Scope: posts and threads where everyday users, power users, and designers descri
 - **Key quotes / patterns:**
   - "The cold-statistics framing predicts less well than the folk-psychology framing."
   - Humans already anthropomorphize everything (cars, plants); the interesting question is whether it's *calibrated*.
-- **Takeaway for humanization:** Intellectually legitimizes humanization as a cognitive tool, not just a UX feature. Useful framing for Humazier positioning: we're not *faking* humanness, we're *surfacing* the human-shaped behavior that's already there.
+- **Takeaway for humanization:** Intellectually legitimizes humanization as a cognitive tool, not just a UX feature. Useful framing for Unslop positioning: we're not *faking* humanness, we're *surfacing* the human-shaped behavior that's already there.
 
 ---
 
@@ -325,7 +325,7 @@ Scope: posts and threads where everyday users, power users, and designers descri
 - **Two-track demand.** End users want more humanization; API / dev users want it removable. No mainstream vendor currently ships a clean dial.
 - **Rise of "AI as friend" subs.** r/MyBoyfriendIsAI, r/Replika, r/CharacterAI have grown past hobbyist scale and are now the primary ethnographic source on humanization outcomes.
 
-## Gaps (directly relevant to Humazier)
+## Gaps (directly relevant to Unslop)
 
 1. **No practitioner-level treatment of "middle band" humanness.** The entire discourse sits at the poles (medical-manual vs. girlfriend). A professional, humanlike-but-non-parasocial voice is under-documented.
 2. **No open benchmark for "feels human over 100 hours."** All existing measures are single-session. This is the axis where most real humanness lives.
@@ -333,7 +333,7 @@ Scope: posts and threads where everyday users, power users, and designers descri
 4. **No published post-mortem tooling for "patch-breakup."** Given that this is now a recurring industry event (Replika, GPT-4o, ChatGPT Aug 2025), the lack of tooling to (a) detect tone drift between versions, (b) warn users, (c) roll back personality independently of weights is itself a product opportunity.
 5. **Voice humanization dominates the new attention; text humanization is assumed solved and is not.** Every prompt-recipe article (how to sound human in threads, on LinkedIn, in email) suggests text humanization is still ad-hoc and prompt-patched.
 
-## Implications for the Humazier project
+## Implications for the Unslop project
 
 - Treat **memory + callback** as the top-priority feature, not warmth.
 - Adopt the Jones & Bergen persona recipe as a default floor, not a novelty.

@@ -11,37 +11,38 @@ set -euo pipefail
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd "$ROOT"
 
-# ---- 1. Main humanizer skill mirrors ----
-SRC=skills/humanizer/SKILL.md
+# ---- 1. Main unslop skill mirrors ----
+# (Note: no top-level `unslop/SKILL.md` mirror — that path is the Python
+# package's file-rewriter skill, not the main activation skill.)
+SRC=skills/unslop/SKILL.md
 for DEST in \
-  humanizer/SKILL.md \
-  plugins/humanizer/skills/humanizer/SKILL.md \
-  .cursor/skills/humanizer/SKILL.md \
-  .windsurf/skills/humanizer/SKILL.md
+  plugins/unslop/skills/unslop/SKILL.md \
+  .cursor/skills/unslop/SKILL.md \
+  .windsurf/skills/unslop/SKILL.md
 do
   mkdir -p "$(dirname "$DEST")"
   cp "$SRC" "$DEST"
 done
 
 # ---- 2. Sub-skills to plugin bundle ----
-for sub in humanizer-commit humanizer-review humanizer-help; do
+for sub in unslop-commit unslop-review unslop-help; do
   S="skills/$sub/SKILL.md"
-  D="plugins/humanizer/skills/$sub/SKILL.md"
+  D="plugins/unslop/skills/$sub/SKILL.md"
   mkdir -p "$(dirname "$D")"
   cp "$S" "$D"
 done
 
-# ---- 3. humanizer-humanize skill + scripts to plugin bundle and skills/humanize ----
-mkdir -p plugins/humanizer/skills/humanize/scripts
-cp humanizer-humanize/SKILL.md plugins/humanizer/skills/humanize/SKILL.md
-cp -R humanizer-humanize/scripts/. plugins/humanizer/skills/humanize/scripts/
+# ---- 3. unslop skill + scripts to plugin bundle and skills/unslop-file ----
+mkdir -p plugins/unslop/skills/unslop-file/scripts
+cp unslop/SKILL.md plugins/unslop/skills/unslop-file/SKILL.md
+cp -R unslop/scripts/. plugins/unslop/skills/unslop-file/scripts/
 
-mkdir -p skills/humanize/scripts
-cp humanizer-humanize/SKILL.md skills/humanize/SKILL.md
-cp -R humanizer-humanize/scripts/. skills/humanize/scripts/
+mkdir -p skills/unslop-file/scripts
+cp unslop/SKILL.md skills/unslop-file/SKILL.md
+cp -R unslop/scripts/. skills/unslop-file/scripts/
 
 # ---- 4. Activation rule -> IDE rule files (with platform frontmatter) ----
-BODY_FILE=rules/humanizer-activate.md
+BODY_FILE=rules/unslop-activate.md
 mkdir -p .cursor/rules .windsurf/rules .clinerules .github
 
 # Cursor
@@ -51,7 +52,7 @@ mkdir -p .cursor/rules .windsurf/rules .clinerules .github
   printf 'alwaysApply: true\n'
   printf '%s\n\n' '---'
   cat "$BODY_FILE"
-} > .cursor/rules/humanizer.mdc
+} > .cursor/rules/unslop.mdc
 
 # Windsurf
 {
@@ -60,17 +61,17 @@ mkdir -p .cursor/rules .windsurf/rules .clinerules .github
   printf 'always_on: true\n'
   printf '%s\n\n' '---'
   cat "$BODY_FILE"
-} > .windsurf/rules/humanizer.md
+} > .windsurf/rules/unslop.md
 
 # Cline
 {
-  printf '# Humanizer Rule (Cline)\n\n'
+  printf '# Unslop Rule (Cline)\n\n'
   cat "$BODY_FILE"
-} > .clinerules/humanizer.md
+} > .clinerules/unslop.md
 
 # Copilot
 {
-  printf '# Copilot Instructions — humanizer\n\n'
+  printf '# Copilot Instructions — unslop\n\n'
   printf 'When generating chat replies, code comments, or commit messages in this repository:\n\n'
   cat "$BODY_FILE"
 } > .github/copilot-instructions.md

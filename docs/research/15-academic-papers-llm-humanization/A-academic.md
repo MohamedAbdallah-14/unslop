@@ -1,6 +1,6 @@
 # A — Core Academic Survey: Humanizing LLM Output
 
-**Research value: high** — The humanization/evasion literature is substantial, converging on a stable set of attack primitives (paraphrase, style transfer, RL-guided rewriting, watermark removal) and an equally stable set of detector countermoves (adversarial training, rewriting-based detection, augmentation). Enough reproducible code and benchmarks exist to ground the "Humazier" project in prior art.
+**Research value: high** — The humanization/evasion literature is substantial, converging on a stable set of attack primitives (paraphrase, style transfer, RL-guided rewriting, watermark removal) and an equally stable set of detector countermoves (adversarial training, rewriting-based detection, augmentation). Enough reproducible code and benchmarks exist to ground the "Unslop" project in prior art.
 
 Scope: papers that explicitly *humanize* AI-generated text (make it less detectable / more human-like), plus the detection side needed to read the humanization literature coherently. Timeframe is weighted to 2023–2026. Reproducibility is called out in every entry: **[Repro: high / medium / low]** based on whether code, data, and a specified base model are released.
 
@@ -100,7 +100,7 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 ### 2.6 Tulchinskii et al. / DAMAGE (2025, ACL GenAIDetect workshop)
 - **Contribution:** Qualitatively studies **19 real commercial humanizer/paraphraser tools** (GPT-guard, Undetectable.ai, StealthGPT, etc.), then trains a data-centric augmented detector that generalizes across humanizers. Argues detection robustness should be treated as a learned invariance, not a per-humanizer patch.
 - **[Repro: medium]** — detector code public; commercial tools require accounts.
-- **Project relevance:** rare academic engagement with the *commercial humanizer* ecosystem, which is the actual competitive landscape for a "Humazier"-style product.
+- **Project relevance:** rare academic engagement with the *commercial humanizer* ecosystem, which is the actual competitive landscape for a "Unslop"-style product.
 
 ---
 

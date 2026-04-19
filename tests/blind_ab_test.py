@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Blind A/B human-perception test for the Humazier deterministic mode.
+"""Blind A/B human-perception test for the Unslop deterministic mode.
 
 Protocol:
   1. For each sample, randomly assign original and humanized to "Text A" / "Text B"
@@ -43,7 +43,7 @@ import sys
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "humanizer-humanize"))
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "unslop"))
 from scripts.humanize import humanize_deterministic
 
 # ── Samples ──────────────────────────────────────────────────────────────────

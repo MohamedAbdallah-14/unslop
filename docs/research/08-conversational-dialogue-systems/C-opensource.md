@@ -2,7 +2,7 @@
 
 **Angle C — Open-Source & GitHub**
 
-**Project:** Humazier (humanizing AI output and thinking)
+**Project:** Unslop (humanizing AI output and thinking)
 **Research date:** 2026-04-19
 **Scope:** Open-source dialogue frameworks and the new generation of full-duplex voice stacks relevant to humanized conversational AI — Rasa, ParlAI, DialoGPT, Moshi, Ultravox, Pipecat, LiveKit Agents, and adjacent whisper+TTS/open-voice-agent projects.
 

@@ -1,6 +1,6 @@
 # D — Commercial Products: Conversational & Dialogue Systems
 
-**Research value: high** — The commercial field is converging on a shared vocabulary of "humanlike," "natural," and "empathetic" conversation. Vendors differentiate on *which* naturalness dimension they own (latency, prosody, emotion, turn-taking, or empathic reasoning), giving Humazier a concrete map of how "humanization" is marketed, bench-marked, and productized today.
+**Research value: high** — The commercial field is converging on a shared vocabulary of "humanlike," "natural," and "empathetic" conversation. Vendors differentiate on *which* naturalness dimension they own (latency, prosody, emotion, turn-taking, or empathic reasoning), giving Unslop a concrete map of how "humanization" is marketed, bench-marked, and productized today.
 
 **Angle focus:** Voice agents (10) + text chat platforms (5), with emphasis on naturalness / humanlike marketing claims as of 2026.
 
@@ -139,10 +139,10 @@ Virtually every vendor now claims "human-like," "natural," or "empathetic" conve
 Two camps are now visible. **Unified proprietary stacks** (Bland, Retell, Deepgram, ElevenLabs, Hume) pitch naturalness as a side-effect of owning STT+LLM+TTS together. **Orchestration / BYO platforms** (Vapi, LiveKit, Synthflow) pitch naturalness as a side-effect of letting customers mix best-of-breed components and tune turn-taking themselves. Cresta is an outlier: it *deliberately* uses a stitched pipeline because it wants independent control over spoken-style content and vocal delivery.
 
 ### Content-side humanization is under-marketed
-Only **Cresta** explicitly calls out that LLM output must be *rewritten to read like spoken conversation rather than a formal essay* — every other voice vendor treats naturalness as a TTS/latency problem and quietly assumes the LLM already produces humanlike text. This is directly relevant to Humazier: the humanization layer on the *text* side is a gap in how the voice market sells itself, even though every voice agent needs it.
+Only **Cresta** explicitly calls out that LLM output must be *rewritten to read like spoken conversation rather than a formal essay* — every other voice vendor treats naturalness as a TTS/latency problem and quietly assumes the LLM already produces humanlike text. This is directly relevant to Unslop: the humanization layer on the *text* side is a gap in how the voice market sells itself, even though every voice agent needs it.
 
 ### Honest calibration is rare but useful
-Sesame is the only vendor that openly publishes a benchmark showing where they still lose to humans (naturalness is saturated *without* context; humans still win *with* context). Hume publishes head-to-head win rates against ElevenLabs. Most others stop at vibes-based marketing claims. Humazier's positioning can benefit from borrowing Sesame's honest "uncanny valley" framing rather than claiming parity.
+Sesame is the only vendor that openly publishes a benchmark showing where they still lose to humans (naturalness is saturated *without* context; humans still win *with* context). Hume publishes head-to-head win rates against ElevenLabs. Most others stop at vibes-based marketing claims. Unslop's positioning can benefit from borrowing Sesame's honest "uncanny valley" framing rather than claiming parity.
 
 ### Gaps / opportunities
 - **Text-chat naturalness is thinner than voice.** Intercom/Ada/Forethought/Kore market "empathetic" or "human-quality," but none publish a CMOS-style naturalness benchmark. The text side still optimizes almost entirely for *resolution rate*, not *humanness*.

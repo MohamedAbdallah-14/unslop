@@ -29,13 +29,13 @@ jobs:
           node-version: "20"
 
       - name: Install dev dependencies
-        run: pip install -e humanizer-humanize[dev]
+        run: pip install -e unslop[dev]
 
       - name: Lint (ruff)
-        run: ruff check humanizer-humanize/scripts benchmarks
+        run: ruff check unslop/scripts benchmarks
 
       - name: Type check (mypy, strict)
-        run: mypy humanizer-humanize/scripts
+        run: mypy unslop/scripts
 
       - name: Unit + integration tests
         run: python -m pytest tests/ -v --tb=short

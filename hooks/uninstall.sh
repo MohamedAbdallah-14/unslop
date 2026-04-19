@@ -1,16 +1,16 @@
 #!/bin/bash
-# humanizer — uninstall hook files and remove settings.json entries
+# unslop — uninstall hook files and remove settings.json entries
 # Usage: bash hooks/uninstall.sh
 set -e
 
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 SETTINGS="$CLAUDE_DIR/settings.json"
-FLAG="$CLAUDE_DIR/.humanizer-active"
+FLAG="$CLAUDE_DIR/.unslop-active"
 
-HOOK_FILES=("package.json" "humanizer-config.js" "humanizer-activate.js" "humanizer-mode-tracker.js" "humanizer-statusline.sh")
+HOOK_FILES=("package.json" "unslop-config.js" "unslop-activate.js" "unslop-mode-tracker.js" "unslop-statusline.sh")
 
-echo "Uninstalling humanizer hooks..."
+echo "Uninstalling unslop hooks..."
 
 for hook in "${HOOK_FILES[@]}"; do
   target="$HOOKS_DIR/$hook"
@@ -28,16 +28,16 @@ fi
 if [ -f "$SETTINGS" ] && command -v node >/dev/null 2>&1; then
   cp "$SETTINGS" "$SETTINGS.bak"
 
-  HUMANIZER_SETTINGS="$SETTINGS" node -e "
+  UNSLOP_SETTINGS="$SETTINGS" node -e "
     const fs = require('fs');
-    const settingsPath = process.env.HUMANIZER_SETTINGS;
+    const settingsPath = process.env.UNSLOP_SETTINGS;
     const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
 
     if (settings.hooks) {
       for (const event of ['SessionStart', 'UserPromptSubmit']) {
         if (Array.isArray(settings.hooks[event])) {
           settings.hooks[event] = settings.hooks[event].filter(e =>
-            !(e.hooks && e.hooks.some(h => h.command && h.command.includes('humanizer')))
+            !(e.hooks && e.hooks.some(h => h.command && h.command.includes('unslop')))
           );
           if (settings.hooks[event].length === 0) delete settings.hooks[event];
         }
@@ -49,7 +49,7 @@ if [ -f "$SETTINGS" ] && command -v node >/dev/null 2>&1; then
       const cmd = typeof settings.statusLine === 'string'
         ? settings.statusLine
         : (settings.statusLine.command || '');
-      if (cmd.includes('humanizer-statusline')) {
+      if (cmd.includes('unslop-statusline')) {
         delete settings.statusLine;
         console.log('  Removed statusline config.');
       }

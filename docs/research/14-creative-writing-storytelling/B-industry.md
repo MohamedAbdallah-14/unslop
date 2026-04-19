@@ -1,6 +1,6 @@
 # Creative Writing & Storytelling — Industry Blogs / Essays
 
-**Research value: high** — The creative-writing industry has produced an unusually candid corpus on the *specific* failure modes of "AI voice," along with a clear commercial response: purpose-built products (Sudowrite Muse, NovelCrafter Codex, Character.AI PipSqueak, Inworld TTS) that bolt fiction-craft affordances onto general LLMs. Essayists (Max Read, Robin Sloan, Vauhini Vara, Matt Webb) independently converge on the same diagnosis — generic RLHF'd chatbot style is a *mid-magazine* aesthetic, not a ceiling of the technology — which directly validates Humazier's thesis that humanization is a post-training/product-layer problem, not a scaling problem.
+**Research value: high** — The creative-writing industry has produced an unusually candid corpus on the *specific* failure modes of "AI voice," along with a clear commercial response: purpose-built products (Sudowrite Muse, NovelCrafter Codex, Character.AI PipSqueak, Inworld TTS) that bolt fiction-craft affordances onto general LLMs. Essayists (Max Read, Robin Sloan, Vauhini Vara, Matt Webb) independently converge on the same diagnosis — generic RLHF'd chatbot style is a *mid-magazine* aesthetic, not a ceiling of the technology — which directly validates Unslop's thesis that humanization is a post-training/product-layer problem, not a scaling problem.
 
 ## Executive Summary
 
@@ -109,7 +109,7 @@ The strongest shared insight across both camps: **humanization is subtractive (r
 
 4. **Fiction-specific fine-tunes beat general models.** Sudowrite Muse, Character.AI PipSqueak 2, AI Dungeon's custom Dragon fine-tune, Inworld's TTS 1.5. The consistent vendor message (backed by independent essays from Sloan, Kriss, Read) is that frontier general-purpose models are optimized against objectives that *actively degrade prose quality* — so a smaller, narrower, fiction/roleplay-trained model wins on voice despite losing on reasoning.
 
-5. **"Ghost/quiet/hum/echo/liminal" as a named failure mode.** Kriss/Read/Sloan together name a stylistic fingerprint that open-source humanizer blacklists (`aaaronmiller/humanize-writing`, etc.) already target but rarely cite by name. The *industry-canonical* AI-slop vocabulary list now includes: *quiet, hum, whisper, shadow, memory, ghost, spectral, echo, liminal*. Humazier should ship this as a first-class lexical fingerprint alongside the Wikipedia "Signs of AI writing" set.
+5. **"Ghost/quiet/hum/echo/liminal" as a named failure mode.** Kriss/Read/Sloan together name a stylistic fingerprint that open-source humanizer blacklists (`aaaronmiller/humanize-writing`, etc.) already target but rarely cite by name. The *industry-canonical* AI-slop vocabulary list now includes: *quiet, hum, whisper, shadow, memory, ghost, spectral, echo, liminal*. Unslop should ship this as a first-class lexical fingerprint alongside the Wikipedia "Signs of AI writing" set.
 
 6. **Emotionality/expressivity as *measurable* properties.** Inworld's public "arousal" + "expressivity" metrics are the first open industry attempt to treat voice humanness as quantifiable RL-reward signals. Analogous text metrics (prosodic variation, sentence-length burstiness, lexical diversity) are the natural next move — and are already implicit in detector-evasion tooling.
 
@@ -123,7 +123,7 @@ The strongest shared insight across both camps: **humanization is subtractive (r
 
 ## Gaps / Unknowns
 
-- **No public benchmark for long-form voice consistency.** Vendors report internal "EQ benchmarks" (Character.AI) and proprietary revision-pass counts (Sudowrite), but there is no shared public test that Humazier could score against.
+- **No public benchmark for long-form voice consistency.** Vendors report internal "EQ benchmarks" (Character.AI) and proprietary revision-pass counts (Sudowrite), but there is no shared public test that Unslop could score against.
 - **The "writing regression with reasoning gains" claim is anecdotal.** Sloan and Claude5.com review cite it; no lab has published a controlled ablation. Confirming or falsifying this would be a high-leverage small research contribution.
 - **Author essay corpus is narrow.** Serious literary AI-co-writing essays are dominated by Vara, Sloan, Webb, Read, Kriss, Lambert, and a handful of Substack adjacents (Lincoln Michel, Brian Gibb). Broader voices — non-English authors, poets, screenwriters — are sparse in the English-language discourse as of April 2026.
 - **Replika/Character.AI have largely stopped publishing engineering essays.** Most of their 2025–2026 blog output is safety and product announcements, not training methodology. The Inworld research blog is currently the richest live vendor channel for technical humanization writing.

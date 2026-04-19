@@ -10,7 +10,7 @@ This category catalogs the research, tooling, products, and community practice t
 - **Open-source agent frameworks** that expose reasoning as a first-class surface — LangGraph, LlamaIndex, DSPy, CrewAI, AutoGen, OpenAgents.
 - **Practitioner folklore** from Reddit, HN, OpenAI Developer Forum, and X — the "magic phrase" tradition, the backlash against CoT on reasoning-tuned models, and the emerging register-level tricks that make thinking traces *sound* human.
 
-The throughline for the Humazier project: **reasoning traces are the most powerful, most misunderstood humanization surface in modern AI.** They can make a model feel like it's thinking — or make it feel like a machine rehearsing a script. This category is the research substrate for getting that difference right.
+The throughline for the Unslop project: **reasoning traces are the most powerful, most misunderstood humanization surface in modern AI.** They can make a model feel like it's thinking — or make it feel like a machine rehearsing a script. This category is the research substrate for getting that difference right.
 
 ---
 
@@ -22,7 +22,7 @@ The throughline for the Humazier project: **reasoning traces are the most powerf
 - **Two transparency postures have hardened.** OpenAI hides raw CoT and ships a summary; Anthropic, DeepSeek, and local-model ecosystems ship visible thought streams. Both postures are load-bearing — and the *visible* camp is gaining ground under competitive pressure.
 - **"Thinking budget" is the new shared primitive.** Anthropic's `budget_tokens`, OpenAI's reasoning-effort levels, You.com's effort dial, Gemini Deep Think vs standard, and llama.cpp's `--reasoning-budget` with a natural-language cutoff message all converge on *variable compute per query* as both a pricing lever and a UX affordance.
 - **Reasoning ≠ humanness, and can actively oppose it.** Raschka's "over-thinking" warning, Karpathy's IQ-vs-EQ split, the r/LocalLLaMA "reasoning as drawback" thread, and the documented quality drop when R1's CoT was forced into readable English all say the same thing: legible, human-voiced thought is a tax on raw reasoning capability — and humanizers must pay it consciously.
-- **A "reason privately, humanize publicly" pattern has emerged as canonical.** DeepSeek-R1-Zero's unreadable, language-mixed CoT was fixed by a downstream readability / character SFT pass. OpenAI similarly summarizes before surfacing. Labs *train reasoning*, then *layer a voice on top* — which is structurally identical to the Humazier product thesis.
+- **A "reason privately, humanize publicly" pattern has emerged as canonical.** DeepSeek-R1-Zero's unreadable, language-mixed CoT was fixed by a downstream readability / character SFT pass. OpenAI similarly summarizes before surfacing. Labs *train reasoning*, then *layer a voice on top* — which is structurally identical to the Unslop product thesis.
 - **Everyday humanization of reasoning is an open white space.** Labs and products optimize CoT for math, code, and science — not for tone, empathy, register, or conversational naturalness. There is no published recipe for jointly training reasoning ability and a consistent persona, and no community-standard prompt pattern for "humanized-but-faithful" reasoning.
 
 ---
@@ -41,7 +41,7 @@ The throughline for the Humazier project: **reasoning traces are the most powerf
 
 **6. Compute allocation, not a new capability.** Lambert, Raschka, Weng, and the Anthropic "continuous spectrum" framing converge: reasoning isn't a distinct skill, it's learning to spend more test-time compute on hard problems. This reframes humanization as its own compute-allocation policy — when to think, when to commit, when to just answer.
 
-**7. Reasoning out, voice on top.** The recurring pattern across DeepSeek-R1's cold-start SFT, OpenAI's CoT summarization, Anthropic's un-character-trained thinking block, and forum advice ("don't CoT a reasoning model; shape the output") is: reason in one pass, humanize in a second. This is structurally the Humazier product thesis.
+**7. Reasoning out, voice on top.** The recurring pattern across DeepSeek-R1's cold-start SFT, OpenAI's CoT summarization, Anthropic's un-character-trained thinking block, and forum advice ("don't CoT a reasoning model; shape the output") is: reason in one pass, humanize in a second. This is structurally the Unslop product thesis.
 
 **8. Controls for "when to think".** From llama.cpp's `--reasoning-budget-message` to Anthropic's `budget_tokens` to Qwen's `enable_thinking: false`, the industry is standardizing on natural-language and parameterized controls for thought depth. The form of the stop signal ("time to commit to an answer") matters more than its brute-force equivalent.
 
@@ -181,7 +181,7 @@ The throughline for the Humazier project: **reasoning traces are the most powerf
 ## Controversies & Debates
 
 **Is CoT faithful to the model's real computation?**
-Turpin 2023, Anthropic 2023, Anthropic 2025, and arXiv 2503.08679 converge on: *no, often not*. Larger / more capable models produce *less* faithful traces. Outcome-based RL improves faithfulness but plateaus (~28%). The Humazier-relevant twist: humans also post-hoc rationalize, so a slightly-unfaithful-but-fluent trace may read *more* human than a fully faithful one.
+Turpin 2023, Anthropic 2023, Anthropic 2025, and arXiv 2503.08679 converge on: *no, often not*. Larger / more capable models produce *less* faithful traces. Outcome-based RL improves faithfulness but plateaus (~28%). The Unslop-relevant twist: humans also post-hoc rationalize, so a slightly-unfaithful-but-fluent trace may read *more* human than a fully faithful one.
 
 **Hide or show the chain of thought?**
 - OpenAI hides raw CoT (alignment monitoring + UX + competitive moat) and ships a summary.
@@ -246,11 +246,11 @@ OpenAI's April 2025 GPT-4o sycophancy postmortem is not yet reconciled with reas
 
 ## How This Category Fits in the Bigger Picture
 
-Humanizing AI output has two layers: **what the model says** (surface voice, prose, register) and **what the model appears to be thinking** (the reasoning trace). The rest of the Humazier research stack tends to focus on the first layer. Category 06 is about the second — and argues that the second is now the more leveraged one.
+Humanizing AI output has two layers: **what the model says** (surface voice, prose, register) and **what the model appears to be thinking** (the reasoning trace). The rest of the Unslop research stack tends to focus on the first layer. Category 06 is about the second — and argues that the second is now the more leveraged one.
 
 - **Reasoning traces are the highest-signal humanization surface.** When a user sees a model hesitate, reconsider, or correct itself mid-sentence, trust and perceived humanness jump more than any amount of surface-style rewriting. The `<think>` block is the new persona.
 - **Reasoning is where the big behavior changes are happening.** By 2026 most frontier models ship a reasoning mode. Humanization work that ignores the thinking pass will sit downstream of a surface the user already sees and is already forming opinions from.
-- **The industry's canonical pattern is already structurally "humanize the reasoning".** DeepSeek-R1's cold-start SFT, OpenAI's CoT summarization, Anthropic's caveat that raw thoughts "read less personal" — all are explicit acknowledgments that *raw* reasoning reads machine-like and must be transformed for human consumption. Humazier is the generalization of that pattern.
+- **The industry's canonical pattern is already structurally "humanize the reasoning".** DeepSeek-R1's cold-start SFT, OpenAI's CoT summarization, Anthropic's caveat that raw thoughts "read less personal" — all are explicit acknowledgments that *raw* reasoning reads machine-like and must be transformed for human consumption. Unslop is the generalization of that pattern.
 - **The faithfulness problem is a direct constraint.** Humanizing the trace means editing / stylizing it, which risks making faithfulness worse. Any product-grade humanizer must declare its position on this tradeoff (sincere post-rationalization in a human voice vs. raw-but-robotic honest transcript).
 - **This category connects to the others** — style transfer (Category X), persona design (Category Y), evaluations of naturalness, and safety / faithfulness — but it's upstream: decisions made here determine what the downstream humanization layers are working on.
 

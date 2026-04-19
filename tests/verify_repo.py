@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Repo integrity verifier for the humanizer plugin.
+"""Repo integrity verifier for the unslop plugin.
 
 Run locally before releasing:
 
@@ -13,12 +13,12 @@ Checks (each failure is fatal):
   4. All shell scripts pass `bash -n` (syntax-valid).
   5. Install / uninstall scripts reference every required hook file.
   6. Windows install paths statically wire the PowerShell statusline.
-  7. humanizer-humanize modules import without errors.
+  7. unslop modules import without errors.
   8. humanize_deterministic round-trips every fixture pair and the result
      matches the committed `.md` output (detects accidental regex drift).
 
 This mirrors caveman's `tests/verify_repo.py` one-for-one but adapted to the
-humanizer layout (humanizer-humanize, humanizer skill, etc).
+unslop layout (unslop, unslop skill, etc).
 """
 
 from __future__ import annotations
@@ -83,14 +83,13 @@ def verify_synced_mirrors() -> None:
     # Run sync-mirrors.sh first — that's what CI does.
     run(["bash", "scripts/sync-mirrors.sh"])
 
-    skill_source = ROOT / "skills/humanizer/SKILL.md"
-    rule_source = ROOT / "rules/humanizer-activate.md"
+    skill_source = ROOT / "skills/unslop/SKILL.md"
+    rule_source = ROOT / "rules/unslop-activate.md"
 
     skill_copies = [
-        ROOT / "humanizer/SKILL.md",
-        ROOT / "plugins/humanizer/skills/humanizer/SKILL.md",
-        ROOT / ".cursor/skills/humanizer/SKILL.md",
-        ROOT / ".windsurf/skills/humanizer/SKILL.md",
+        ROOT / "plugins/unslop/skills/unslop/SKILL.md",
+        ROOT / ".cursor/skills/unslop/SKILL.md",
+        ROOT / ".windsurf/skills/unslop/SKILL.md",
     ]
     for copy in skill_copies:
         ensure(copy.exists(), f"Missing skill mirror: {copy}")
@@ -102,10 +101,10 @@ def verify_synced_mirrors() -> None:
     # Activation rule has per-platform headers, so we substring-match the body.
     rule_body = rule_source.read_text().strip()
     for copy in [
-        ROOT / ".clinerules/humanizer.md",
+        ROOT / ".clinerules/unslop.md",
         ROOT / ".github/copilot-instructions.md",
-        ROOT / ".cursor/rules/humanizer.mdc",
-        ROOT / ".windsurf/rules/humanizer.md",
+        ROOT / ".cursor/rules/unslop.mdc",
+        ROOT / ".windsurf/rules/unslop.md",
     ]:
         ensure(copy.exists(), f"Missing rule mirror: {copy}")
         ensure(
@@ -113,18 +112,18 @@ def verify_synced_mirrors() -> None:
             f"Rule mirror missing body of {rule_source.name}: {copy}",
         )
 
-    # Humanize package must be mirrored to the plugin bundle and skills/humanize.
-    humanize_src = ROOT / "humanizer-humanize"
+    # File-rewriter package must be mirrored to the plugin bundle and skills/unslop-file.
+    pkg_src = ROOT / "unslop"
     for mirror in [
-        ROOT / "plugins/humanizer/skills/humanize",
-        ROOT / "skills/humanize",
+        ROOT / "plugins/unslop/skills/unslop-file",
+        ROOT / "skills/unslop-file",
     ]:
         ensure(
             (mirror / "SKILL.md").read_text()
-            == (humanize_src / "SKILL.md").read_text(),
-            f"humanize SKILL.md drift: {mirror}",
+            == (pkg_src / "SKILL.md").read_text(),
+            f"unslop-file SKILL.md drift: {mirror}",
         )
-        for py in (humanize_src / "scripts").glob("*.py"):
+        for py in (pkg_src / "scripts").glob("*.py"):
             target = mirror / "scripts" / py.name
             ensure(target.exists(), f"Missing script mirror: {target}")
             ensure(
@@ -142,7 +141,7 @@ def verify_manifests_and_syntax() -> None:
         ROOT / ".claude-plugin/plugin.json",
         ROOT / ".claude-plugin/marketplace.json",
         ROOT / "gemini-extension.json",
-        ROOT / "plugins/humanizer/.codex-plugin/plugin.json",
+        ROOT / "plugins/unslop/.codex-plugin/plugin.json",
     ]
     # Optional manifests — some may not yet exist
     optional = [
@@ -157,16 +156,16 @@ def verify_manifests_and_syntax() -> None:
             read_json(m)
 
     for js in [
-        "hooks/humanizer-config.js",
-        "hooks/humanizer-activate.js",
-        "hooks/humanizer-mode-tracker.js",
+        "hooks/unslop-config.js",
+        "hooks/unslop-activate.js",
+        "hooks/unslop-mode-tracker.js",
     ]:
         run(["node", "--check", js])
 
     for sh in [
         "hooks/install.sh",
         "hooks/uninstall.sh",
-        "hooks/humanizer-statusline.sh",
+        "hooks/unslop-statusline.sh",
         "scripts/sync-mirrors.sh",
     ]:
         run(["bash", "-n", sh])
@@ -174,10 +173,10 @@ def verify_manifests_and_syntax() -> None:
     install_sh = (ROOT / "hooks/install.sh").read_text()
     uninstall_sh = (ROOT / "hooks/uninstall.sh").read_text()
     for needed in (
-        "humanizer-config.js",
-        "humanizer-activate.js",
-        "humanizer-mode-tracker.js",
-        "humanizer-statusline.sh",
+        "unslop-config.js",
+        "unslop-activate.js",
+        "unslop-mode-tracker.js",
+        "unslop-statusline.sh",
     ):
         ensure(needed in install_sh, f"install.sh missing {needed}")
         ensure(needed in uninstall_sh, f"uninstall.sh missing {needed}")
@@ -189,13 +188,13 @@ def verify_powershell_static() -> None:
     section("PowerShell (static)")
     install_ps1 = (ROOT / "hooks/install.ps1").read_text()
     uninstall_ps1 = (ROOT / "hooks/uninstall.ps1").read_text()
-    statusline_ps1 = (ROOT / "hooks/humanizer-statusline.ps1").read_text()
+    statusline_ps1 = (ROOT / "hooks/unslop-statusline.ps1").read_text()
 
     for needed in (
-        "humanizer-config.js",
-        "humanizer-activate.js",
-        "humanizer-mode-tracker.js",
-        "humanizer-statusline.ps1",
+        "unslop-config.js",
+        "unslop-activate.js",
+        "unslop-mode-tracker.js",
+        "unslop-statusline.ps1",
     ):
         ensure(needed in install_ps1, f"install.ps1 missing {needed}")
         ensure(needed in uninstall_ps1, f"uninstall.ps1 missing {needed}")
@@ -205,14 +204,14 @@ def verify_powershell_static() -> None:
         "powershell -ExecutionPolicy Bypass -File" in install_ps1,
         "install.ps1 missing PS statusline wiring",
     )
-    ensure("humanizer" in statusline_ps1.lower(), "statusline.ps1 must emit humanizer badge")
+    ensure("unslop" in statusline_ps1.lower(), "statusline.ps1 must emit unslop badge")
 
     print("Windows install path statically wired")
 
 
 def verify_humanize_modules_importable() -> None:
     section("humanize package importable")
-    sys.path.insert(0, str(ROOT / "humanizer-humanize"))
+    sys.path.insert(0, str(ROOT / "unslop"))
     try:
         import scripts.benchmark  # noqa: F401
         import scripts.cli as cli  # noqa: F401
@@ -233,11 +232,11 @@ def verify_humanize_modules_importable() -> None:
 
 def verify_fixture_pairs() -> None:
     section("Fixture pairs")
-    sys.path.insert(0, str(ROOT / "humanizer-humanize"))
+    sys.path.insert(0, str(ROOT / "unslop"))
     from scripts.humanize import humanize_deterministic
     from scripts.validate import validate
 
-    fixtures_dir = ROOT / "tests/humanizer-humanize/fixtures"
+    fixtures_dir = ROOT / "tests/unslop/fixtures"
     if not fixtures_dir.exists():
         print("  (no fixtures/ dir — skipping)")
         return
@@ -268,7 +267,7 @@ def verify_fixture_pairs() -> None:
 def verify_commands_wired() -> None:
     section("Commands and plugin manifest")
     plugin = read_json(ROOT / ".claude-plugin/plugin.json")
-    ensure(plugin.get("name") == "humanizer", "plugin.json name mismatch")
+    ensure(plugin.get("name") == "unslop", "plugin.json name mismatch")
     hooks_block = plugin.get("hooks", {})
     ensure("SessionStart" in hooks_block, "plugin.json missing SessionStart")
     ensure("UserPromptSubmit" in hooks_block, "plugin.json missing UserPromptSubmit")

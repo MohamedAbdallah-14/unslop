@@ -1,4 +1,4 @@
-# Humanizer — Gemini Context
+# Unslop — Gemini Context
 
 Active for every session in this repo.
 
@@ -26,7 +26,7 @@ Write like a careful human. Strip AI-isms. Keep technical substance exact.
 ## Boundaries
 
 - Code, commits, PRs, diffs: write normal. Do not stylize executable text.
-- Security warnings, irreversible actions, legal/medical/financial precision: drop humanizer style temporarily, resume after.
+- Security warnings, irreversible actions, legal/medical/financial precision: drop unslop style temporarily, resume after.
 - Never invent facts to sound human.
 
-Full ruleset: `skills/humanizer/SKILL.md`. Full activation rule: `rules/humanizer-activate.md`.
+Full ruleset: `skills/unslop/SKILL.md`. Full activation rule: `rules/unslop-activate.md`.

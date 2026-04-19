@@ -2,7 +2,7 @@
 
 **Research value: high** — Memory-as-a-Service is now a crowded, well-funded category (20+ vendors since mid-2025) with clear sub-segments (infra memory layers, personalization APIs, writing assistants, enterprise CRM memory) and active convergence on hybrid vector+graph + temporal architectures.
 
-**Scope.** Commercial products that persist user/customer/author knowledge across sessions so an AI can respond in a way that feels continuous, "mine", and human — directly adjacent to the Humazier goal of humanizing AI output. Ordered by sub-segment.
+**Scope.** Commercial products that persist user/customer/author knowledge across sessions so an AI can respond in a way that feels continuous, "mine", and human — directly adjacent to the Unslop goal of humanizing AI output. Ordered by sub-segment.
 
 ---
 
@@ -64,7 +64,7 @@ These vendors sell a drop-in "memory layer" API that sits between an agent and i
 
 ---
 
-## Sub-segment 2: Personalized writing assistants (directly adjacent to Humazier)
+## Sub-segment 2: Personalized writing assistants (directly adjacent to Unslop)
 
 These are the closest commercial analogs to "humanize my AI output" — they explicitly sell *voice ownership*.
 

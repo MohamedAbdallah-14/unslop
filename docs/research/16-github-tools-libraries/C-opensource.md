@@ -137,7 +137,7 @@
 
 ---
 
-## 5. Implications for the Humazier project
+## 5. Implications for the Unslop project
 
 1. **Differentiation from `blader/humanizer` et al. requires a real evaluation loop, not another pattern list.** Ship a harness that scores output against ≥3 live detectors on every change — no one else does this in OSS.
 2. **Lean on the research tier, not the skill tier, for technique.** DIPPER-style paraphrase + SICO-style in-context optimization + DPO-evasion fine-tuning together cover the known-good evasion space. Skill-pack repos are UX reference at best.

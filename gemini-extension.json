@@ -1,7 +1,7 @@
 {
-  "name": "humanizer",
+  "name": "unslop",
   "version": "0.1.0",
   "description": "Humanize assistant output. Strip AI-isms, engineer burstiness, preserve technical accuracy.",
   "contextFileName": "GEMINI.md",
-  "contextFiles": ["GEMINI.md", "skills/humanizer/SKILL.md", "rules/humanizer-activate.md"]
+  "contextFiles": ["GEMINI.md", "skills/unslop/SKILL.md", "rules/unslop-activate.md"]
 }

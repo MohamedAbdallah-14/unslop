@@ -144,7 +144,7 @@
 
 ## Gaps (what the forums don't answer well)
 
-1. **What does ethical humanization for *tools* (not companions) look like?** Most forum content is about companion bots or detection-evasion. There's almost no worked position on humanizing a coding assistant, a customer-service bot, or a writing tool — the Humazier problem space. The relevant harms are different (sycophancy in review, fabricated certainty, inappropriate intimacy in professional contexts) and not well-catalogued.
+1. **What does ethical humanization for *tools* (not companions) look like?** Most forum content is about companion bots or detection-evasion. There's almost no worked position on humanizing a coding assistant, a customer-service bot, or a writing tool — the Unslop problem space. The relevant harms are different (sycophancy in review, fabricated certainty, inappropriate intimacy in professional contexts) and not well-catalogued.
 2. **No standard taxonomy for "legitimate vs. illegitimate" humanization.** Reddit users intuit the difference (personal anecdotes OK, identity laundering not OK), but no forum has produced a crisp rubric. This is an open niche for a product or framework.
 3. **Disclosure UX is under-specified.** "The bot should say it's a bot" is the floor, but no forum has a serious discussion of *continuous* disclosure (e.g., persistent UI affordances, periodic reminders, persona-shift announcements) or how disclosure interacts with useful warmth.
 4. **Almost nothing on first-person affect in analytical contexts.** When a coding assistant says "I think…" or "I'm worried about…", is that helpful framing, benign pretense, or deception? LessWrong touches this via PSM but no forum grapples with the day-to-day ethics.

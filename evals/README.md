@@ -1,15 +1,15 @@
-# Humanizer Evals
+# Unslop Evals
 
-Quick A/B harness to answer: "does the humanizer make output measurably less
+Quick A/B harness to answer: "does the unslop make output measurably less
 AI-ish without breaking structure?"
 
 Three conditions per prompt:
 
 | Condition | What the model sees |
 |---|---|
-| `baseline` | Prompt only. No humanizer rules, no deterministic pass. |
-| `deterministic` | Baseline response run through the regex humanizer. |
-| `llm` | Baseline response run through the LLM humanizer (Anthropic SDK or `claude` CLI). |
+| `baseline` | Prompt only. No unslop rules, no deterministic pass. |
+| `deterministic` | Baseline response run through the regex unslop. |
+| `llm` | Baseline response run through the LLM unslop (Anthropic SDK or `claude` CLI). |
 
 For each condition we measure:
 - Word count

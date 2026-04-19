@@ -1,6 +1,6 @@
 # RLHF & Alignment — Open-Source & GitHub
 
-> Research dossier for the **Humazier** project ("Humanizing AI output and thinking").
+> Research dossier for the **Unslop** project ("Humanizing AI output and thinking").
 > Scope: Category 02 · Angle **C — Open-Source Tooling & GitHub**. Covers libraries, frameworks, and open datasets that the community uses to steer large language models toward human-preferred output via RLHF, DPO, Constitutional AI, and related post-training recipes.
 > Date of sweep: April 2026.
 
@@ -16,7 +16,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 
 **What matters for humanizing AI output:** The biggest signal for this project is the decisive shift from PPO-style RLHF toward **direct preference methods** (DPO, IPO, KTO, ORPO, SimPO, GRPO) plus **fine-grained preference data with rubric-level labels** (honesty, truthfulness, verbalized calibration, edit quality, multilingual naturalness). LIMA's "1,000 curated examples beat massive RLHF" result reframes humanization as a **data-curation problem** rather than a compute problem, and Constitutional AI demonstrates how to bake style/tone principles ("don't use meta-commentary", "sound like a thoughtful human", etc.) into a self-critique loop without human labels.
 
-**Key gap:** Almost every framework optimizes helpfulness, harmlessness, or reasoning accuracy. **None explicitly target "human-sounding" output** as a named alignment objective — this is an open whitespace Humazier can fill with a custom reward/principle set on top of TRL or OpenRLHF.
+**Key gap:** Almost every framework optimizes helpfulness, harmlessness, or reasoning accuracy. **None explicitly target "human-sounding" output** as a named alignment objective — this is an open whitespace Unslop can fill with a custom reward/principle set on top of TRL or OpenRLHF.
 
 ---
 
@@ -29,7 +29,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** Full-stack post-training library integrated with 🤗 Transformers, Accelerate, PEFT, and DeepSpeed. Exposes `SFTTrainer`, `DPOTrainer`, `GRPOTrainer`, `RewardTrainer`, `RLOOTrainer`, plus a `trl` CLI.
 - **Techniques:** SFT, DPO, GRPO (the algorithm used to train DeepSeek-R1), PPO, RLOO, reward modeling, reasoning reward functions, vision-language alignment, Liger kernels, Unsloth integration, co-located vLLM for GPU efficiency, OpenEnv integration for agentic RL, Open-R1 reproduction.
-- **Takeaways for Humazier:** Easiest on-ramp for DPO/GRPO on preference pairs. `DPOTrainer` + a UltraFeedback-style "humanness" dataset is a ~50-line project. TRL v1 explicitly positions itself as "a post-training library that holds when the field invalidates its own assumptions" — i.e., algorithm-agnostic.
+- **Takeaways for Unslop:** Easiest on-ramp for DPO/GRPO on preference pairs. `DPOTrainer` + a UltraFeedback-style "humanness" dataset is a ~50-line project. TRL v1 explicitly positions itself as "a post-training library that holds when the field invalidates its own assumptions" — i.e., algorithm-agnostic.
 - **Summary (2–3 sentences):** TRL is the reference post-training stack for the Hugging Face ecosystem, covering every major preference-optimization algorithm behind a uniform trainer API. It scales from single-GPU QLoRA to multi-node DeepSpeed/FSDP and is the library most third-party humanization work builds on top of.
 
 ### 2. trlx
@@ -39,7 +39,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** MIT
 - **What it does:** Distributed RLHF training for models up to 20B (Accelerate) and beyond (NeMo-Megatron). Implements PPO and **Implicit Language Q-Learning (ILQL)**.
 - **Techniques:** PPO, ILQL (an offline RL alternative to PPO), reward-labeled datasets, prompt-completion datasets, Accelerate + NeMo-Megatron backends.
-- **Takeaways for Humazier:** Historically important (one of the first open PPO-for-LLM libs), but no longer actively maintained. Its ILQL implementation is still a useful reference for offline methods if DPO is deemed insufficient.
+- **Takeaways for Unslop:** Historically important (one of the first open PPO-for-LLM libs), but no longer actively maintained. Its ILQL implementation is still a useful reference for offline methods if DPO is deemed insufficient.
 - **Summary:** trlx was the community's first serious distributed RLHF framework and is still the canonical open-source reference for ILQL. It has been overtaken by TRL and OpenRLHF but the repo remains widely cited in 2023–2024 RLHF papers.
 
 ### 3. OpenRLHF
@@ -49,7 +49,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** High-performance RLHF framework built on **Ray + vLLM + DeepSpeed** with an agent-based execution paradigm. Separates Actor / Reward / Reference / Critic across GPUs with hybrid-engine scheduling.
 - **Techniques:** PPO, REINFORCE++, REINFORCE++-baseline, GRPO, RLOO, DPO, iterative DPO, IPO, cDPO, KTO, rejection sampling; LoRA RL; async agent RLHF; multi-turn VLM RLHF; reward-model ensembling; vLLM-accelerated generation (claims 2×+ vs. DeepSpeed-Chat).
-- **Takeaways for Humazier:** Best-in-class when training >13B humanization models or when multi-turn/agentic rollouts are needed (e.g., scoring human-likeness after a whole conversation). The agent-based execution model is unusually clean for custom reward functions.
+- **Takeaways for Unslop:** Best-in-class when training >13B humanization models or when multi-turn/agentic rollouts are needed (e.g., scoring human-likeness after a whole conversation). The agent-based execution model is unusually clean for custom reward functions.
 - **Summary:** OpenRLHF is the most production-ready open RLHF stack for Ray + vLLM deployments, and arguably the highest-throughput open framework that is still approachable. It pioneered REINFORCE++ and now supports agentic and VLM RL out of the box.
 
 ### 4. DeepSpeed-Chat
@@ -59,7 +59,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0 / MIT
 - **What it does:** End-to-end three-stage RLHF pipeline (SFT → Reward Model → PPO) implemented on top of DeepSpeed ZeRO. Single-script `e2e_rlhf.py` runs all three stages; `DeepSpeedRLHFEngine` and `DeepSpeedPPOTrainer` handle the actor/critic/reward/reference orchestration.
 - **Techniques:** Classic three-stage RLHF, ZeRO-2/3 offload, Hybrid Engine (shared weights between training and generation), EMA checkpoint, PPO-ptx with SFT loss mixing, support for 125M→66B models.
-- **Takeaways for Humazier:** Still the clearest pedagogical reference for the full RLHF pipeline. Most modern frameworks (OpenRLHF, veRL) explicitly benchmark against it. Not recommended for new work.
+- **Takeaways for Unslop:** Still the clearest pedagogical reference for the full RLHF pipeline. Most modern frameworks (OpenRLHF, veRL) explicitly benchmark against it. Not recommended for new work.
 - **Summary:** DeepSpeed-Chat is the canonical open-source recreation of InstructGPT's three-stage RLHF pipeline, and it is what most people mean when they say "standard RLHF." Active development has largely moved to newer frameworks, but it remains the most readable pipeline for learning.
 
 ### 5. Axolotl
@@ -69,7 +69,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** YAML-driven fine-tuning framework wrapping TRL and custom kernels. Supports SFT, DPO, KTO, ORPO, GRPO, plus MoE expert training, multi-modal, and distributed (FSDP2, ND parallelism, Distributed Muon).
 - **Techniques:** LoRA/QLoRA, DoRA, ScatterMoE LoRA, GDPO (Generalized DPO), EAFT (Entropy-Aware Focal Training), sample packing, Liger kernels, SageAttention, long-context (Scalable Softmax).
-- **Takeaways for Humazier:** Best path from "I have a jsonl of preferred vs. rejected humanized responses" to a trained DPO model with minimal code. Config-first means reproducibility is trivial.
+- **Takeaways for Unslop:** Best path from "I have a jsonl of preferred vs. rejected humanized responses" to a trained DPO model with minimal code. Config-first means reproducibility is trivial.
 - **Summary:** Axolotl is the community's favorite config-first fine-tuning framework, sitting above TRL and offering working recipes for almost every modern open model. Its cadence of day-0 support for new architectures makes it the most pragmatic choice for iteration-heavy humanization work.
 
 ### 6. LLaMA-Factory
@@ -79,7 +79,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** Unified fine-tuning framework for 100+ LLMs and VLMs with **zero-code CLI and Gradio Web UI** (LLaMA Board).
 - **Techniques:** Pre-training, SFT, reward modeling, **PPO, DPO, KTO, ORPO, SimPO**, GaLore, BAdam, APOLLO, Muon, OFT, DoRA, LongLoRA, LLaMA Pro, Mixture-of-Depths, LoRA+, PiSSA, FlashAttention-2, Unsloth, Liger Kernel, KTransformers (1T-param training on 2×4090), NEFTune, rsLoRA, FSDP+QLoRA.
-- **Takeaways for Humazier:** The most approachable end-to-end trainer. Non-ML-engineer stakeholders can retrain a humanization LoRA in the browser via LLaMA Board. Ships preference datasets (UltraFeedback-binarized, HH-RLHF, DPO-En-Zh-20k) out of the box.
+- **Takeaways for Unslop:** The most approachable end-to-end trainer. Non-ML-engineer stakeholders can retrain a humanization LoRA in the browser via LLaMA Board. Ships preference datasets (UltraFeedback-binarized, HH-RLHF, DPO-En-Zh-20k) out of the box.
 - **Summary:** LLaMA-Factory is the most widely adopted open fine-tuning framework and the one most non-researchers actually use. Its integration of 8+ preference-learning algorithms, a web UI, and dataset bundling makes it a strong default front-end for a humanization product.
 
 ### 7. veRL (Volcano Engine RL)
@@ -89,7 +89,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** Flexible, efficient, production-ready RL training library for LLMs. Open-source implementation of the **HybridFlow** paper (EuroSys 2025).
 - **Techniques:** PPO, GRPO, GSPO, ReMax, REINFORCE++, RLOO, PRIME, DAPO, DrGRPO, KL_Cov & Clip_Cov, SPPO, PF-PPO, VAPO; FSDP/FSDP2, Megatron-LM, vLLM, SGLang; 3D-HybridEngine for actor resharding; multi-turn tool calling; VLM RL; scales to 671B MoE and trillion-parameter LoRA RL; expert parallelism.
-- **Takeaways for Humazier:** If humanization ever needs agentic / multi-turn / tool-using RL (e.g., a judge agent evaluating humanness), veRL is the state of the art. DAPO and VAPO achieve SOTA reasoning without losing naturalness.
+- **Takeaways for Unslop:** If humanization ever needs agentic / multi-turn / tool-using RL (e.g., a judge agent evaluating humanness), veRL is the state of the art. DAPO and VAPO achieve SOTA reasoning without losing naturalness.
 - **Summary:** veRL is the fastest and most algorithmically diverse open RL framework for LLMs in 2026, powering ByteDance's Doubao and Seed-Thinking as well as multiple frontier research papers. It is heavier to operate than TRL but essential for frontier-scale humanization research.
 
 ### 8. NVIDIA NeMo-Aligner
@@ -99,7 +99,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** Scalable alignment toolkit on top of NeMo with tensor/data/pipeline parallelism across thousands of GPUs and TensorRT-LLM-accelerated generation.
 - **Techniques:** SFT, Reward Model training, PPO, **REINFORCE**, DPO (with sequence packing), **SteerLM** (attribute-conditioned SFT as an RLHF alternative), Nemotron-4-340B recipes.
-- **Takeaways for Humazier:** SteerLM is interesting prior art — conditioning on attribute labels (helpfulness, correctness, coherence, complexity, verbosity) as an alternative to RLHF. Could map directly to "humanness" as a conditioning attribute.
+- **Takeaways for Unslop:** SteerLM is interesting prior art — conditioning on attribute labels (helpfulness, correctness, coherence, complexity, verbosity) as an alternative to RLHF. Could map directly to "humanness" as a conditioning attribute.
 - **Summary:** NeMo-Aligner was NVIDIA's large-scale alignment toolkit and shipped Nemotron-4-340B's full post-training recipe. While deprecated in favor of NeMo RL, its SteerLM technique remains a useful pattern for conditional alignment.
 
 ### 9. Hugging Face alignment-handbook
@@ -109,7 +109,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** Reproducible recipes for aligning models with human and AI preferences. Produced **Zephyr-7B-β** (the reference SFT→DPO recipe) and **Zephyr-141B-A35B** (ORPO on Mixtral 8x22B).
 - **Techniques:** SFT on filtered UltraChat → DPO on UltraFeedback; ORPO; QLoRA variants (sft-full, sft-qlora, dpo-full, dpo-qlora); accelerate configs for DeepSpeed ZeRO-3 and FSDP.
-- **Takeaways for Humazier:** The Zephyr recipe is the single most copied alignment recipe in the community. For a humanization model, the pattern is: SFT on filtered high-quality human-like corpus + DPO on humanness-preference pairs, exactly mirroring the Zephyr flow.
+- **Takeaways for Unslop:** The Zephyr recipe is the single most copied alignment recipe in the community. For a humanization model, the pattern is: SFT on filtered high-quality human-like corpus + DPO on humanness-preference pairs, exactly mirroring the Zephyr flow.
 - **Summary:** The alignment-handbook is Hugging Face's "canonical recipe" companion to TRL, with working YAML configs for the Zephyr line of models. It is the fastest way to stand up a publishable SFT+DPO pipeline.
 
 ### 10. Direct Preference Optimization (reference implementation)
@@ -119,7 +119,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** Reference implementation of the DPO paper ("Your Language Model is Secretly a Reward Model", NeurIPS 2023). Supports any causal Hugging Face model, DPO + **conservative DPO** (label smoothing) + **IPO**.
 - **Techniques:** DPO loss, cDPO label smoothing, IPO variant, two-stage pipeline (SFT → preference learning).
-- **Takeaways for Humazier:** Clean single-file trainer, useful as a reading companion even though production training should use TRL's `DPOTrainer`.
+- **Takeaways for Unslop:** Clean single-file trainer, useful as a reading companion even though production training should use TRL's `DPOTrainer`.
 - **Summary:** This is the historical reference DPO implementation cited by virtually every DPO paper since. It is small enough to read end-to-end in an hour and includes cDPO/IPO variants that the TRL wrapper now exposes.
 
 ### 11. Safe-RLHF / PKU Beaver
@@ -129,7 +129,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0
 - **What it does:** Constrained-optimization RLHF that jointly maximizes helpfulness subject to safety constraints via a separate **Reward Model + Cost Model**. Full SFT → RM → Cost Model → Safe-PPO pipeline.
 - **Techniques:** Safe-PPO with a Lagrangian for the safety constraint, helpful/harmless decomposition, multi-scale evaluation (BIG-bench, GPT-4 judge).
-- **Takeaways for Humazier:** The decomposition of a single "preferred" signal into **separate reward dimensions** (helpfulness, safety, etc.) maps directly onto a humanization need: separate "correctness" and "human-soundingness" rewards so that the model doesn't sacrifice accuracy to sound casual.
+- **Takeaways for Unslop:** The decomposition of a single "preferred" signal into **separate reward dimensions** (helpfulness, safety, etc.) maps directly onto a humanization need: separate "correctness" and "human-soundingness" rewards so that the model doesn't sacrifice accuracy to sound casual.
 - **Summary:** Safe-RLHF pioneered explicit multi-objective alignment with a constrained-optimization framing rather than a single scalar reward. The approach of training separate reward heads is directly portable to humanization (style reward + task reward).
 
 ### 12. Constitutional AI — open implementations
@@ -141,7 +141,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **Stars / Updated:** community repos small (tens–hundreds), active in 2024–2025
 - **What it does:** Two-phase alignment: (1) **Supervised CAI** — model critiques and revises its own responses against a set of natural-language principles; (2) **RLAIF** — reinforcement learning from AI-generated preference labels rather than human ones.
 - **Techniques:** Self-critique with principle sampling, revise-in-context, AI preference labeling, reward model distillation from AI judgments.
-- **Takeaways for Humazier:** **The most directly applicable pattern for humanization.** The constitution can be literally a list of humanness principles: "Don't use meta-commentary," "Vary sentence length," "Avoid stock LLM phrases ('As an AI language model'), "Sound like a thoughtful human writer." RLAIF removes the need for human preference labels at scale. One community repo noted prompt-engineering improvements including "eliminating meta-commentary in revision responses" — exactly a humanization concern.
+- **Takeaways for Unslop:** **The most directly applicable pattern for humanization.** The constitution can be literally a list of humanness principles: "Don't use meta-commentary," "Vary sentence length," "Avoid stock LLM phrases ('As an AI language model'), "Sound like a thoughtful human writer." RLAIF removes the need for human preference labels at scale. One community repo noted prompt-engineering improvements including "eliminating meta-commentary in revision responses" — exactly a humanization concern.
 - **Summary:** Constitutional AI / RLAIF is the most scalable way to inject stylistic and tonal principles into a model without human labels. Anthropic released the Claude Constitution under CC0 and multiple community reimplementations exist — these are the ideal starting points for a principle-based humanness trainer.
 
 ### 13. AlpacaFarm
@@ -151,7 +151,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0 (code), CC-BY-NC-4.0 (dataset)
 - **What it does:** Simulation framework for RLHF research. Simulates pairwise preference feedback with LLM annotators, provides automated evaluation, and ships reference implementations of PPO, DPO, best-of-n, and expert iteration.
 - **Techniques:** LLM-as-annotator (claims 45–50× cheaper than humans, high human agreement), automated win-rate evaluation, baseline RLHF methods. End-to-end validated: rankings on AlpacaFarm match rankings trained on real human data.
-- **Takeaways for Humazier:** The simulator is nearly purpose-built for the humanization use case — it lets you iterate on humanness-reward models without ever running a human study. Their reference PPO achieves +10% win-rate vs. davinci003, a useful sanity baseline.
+- **Takeaways for Unslop:** The simulator is nearly purpose-built for the humanization use case — it lets you iterate on humanness-reward models without ever running a human study. Their reference PPO achieves +10% win-rate vs. davinci003, a useful sanity baseline.
 - **Summary:** AlpacaFarm is the most rigorous open simulation framework for RLHF experimentation without human labels. For a humanization product, its architecture (LLM judge → simulated preferences → standard RL pipeline) is directly reusable with a swapped-in "humanness" judge prompt.
 
 ### 14. UltraFeedback
@@ -161,7 +161,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** MIT (dataset)
 - **What it does:** Large-scale **fine-grained preference dataset** with GPT-4 annotations across four aspects: instruction-following, truthfulness, honesty, helpfulness. Responses from 17 different models spanning LLaMA/Falcon/MPT/StarChat/Pythia families.
 - **Techniques:** Principle-sampled prompting (Helpfulness, Truthfulness, Honesty, **Verbalized Calibration**, Harmless), per-axis scoring, rationales. Powers **UltraRM** (92.3% win-rate vs. davinci003 on AlpacaEval) and **UltraCM**.
-- **Takeaways for Humazier:** The fine-grained schema is a proven template for multi-dimensional reward modeling. A humanization dataset could use the same four-axis format, substituting "naturalness / authenticity / register-match / low-AI-tell" for the UltraFeedback axes. Note the December 2023 fix of ~2,628 mis-scored completions — a reminder that LLM-judged data requires careful auditing.
+- **Takeaways for Unslop:** The fine-grained schema is a proven template for multi-dimensional reward modeling. A humanization dataset could use the same four-axis format, substituting "naturalness / authenticity / register-match / low-AI-tell" for the UltraFeedback axes. Note the December 2023 fix of ~2,628 mis-scored completions — a reminder that LLM-judged data requires careful auditing.
 - **Summary:** UltraFeedback is the most influential open preference dataset of the post-ChatGPT era and the training data behind Zephyr. Its multi-axis rubric is the template any serious humanization reward model should copy.
 
 ### 15. OpenAssistant (oasst / oasst2)
@@ -171,7 +171,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** Apache-2.0 (code), Apache-2.0 (data)
 - **What it does:** Crowdsourced multi-turn conversation tree dataset with human-written prompts and human-ranked responses across 35+ languages. Full-stack chat platform for collecting the data.
 - **Techniques:** Message-tree data model (conversations as DAGs), ranking + quality labels + category tags, multilingual, both SFT and RM training splits.
-- **Takeaways for Humazier:** oasst/oasst2 is the largest **human-authored** conversational corpus with quality ratings. For a humanization model, it is training data that is human by construction — an excellent SFT base before DPO.
+- **Takeaways for Unslop:** oasst/oasst2 is the largest **human-authored** conversational corpus with quality ratings. For a humanization model, it is training data that is human by construction — an excellent SFT base before DPO.
 - **Summary:** OpenAssistant is the community answer to "where do you get human conversation data if you don't have an annotation budget?" The project is now archived but its two dataset releases (oasst1, oasst2) are still core SFT ingredients for open chat models.
 
 ### 16. LIMA
@@ -181,7 +181,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** CC-BY-NC (dataset)
 - **What it does:** Demonstrates that **1,000 carefully curated examples, with no RLHF and no human preference modeling**, can fine-tune a 65B LLaMA to match or beat GPT-4 in 43% of comparisons and beat DaVinci003 in 65%.
 - **Techniques:** Hand-curation for style/format diversity, extreme data minimalism, no RL at all.
-- **Takeaways for Humazier:** The most important single data point in this dossier. For humanization, it suggests that **a few thousand hand-curated "human-sounding" responses** may beat industrial-scale DPO/RLHF. Consider LIMA-style curation as the v1 strategy before any RL.
+- **Takeaways for Unslop:** The most important single data point in this dossier. For humanization, it suggests that **a few thousand hand-curated "human-sounding" responses** may beat industrial-scale DPO/RLHF. Consider LIMA-style curation as the v1 strategy before any RL.
 - **Summary:** LIMA's "superficial alignment hypothesis" claims that alignment teaches style and format on top of knowledge already learned in pretraining. If true, humanization is primarily a curation problem, and LIMA is the blueprint.
 
 ### 17. HelpSteer / HelpSteer3
@@ -191,7 +191,7 @@ Open-source RLHF tooling has matured from a handful of research forks in 2022–
 - **License:** CC-BY-4.0
 - **What it does:** Open human-annotated preference dataset with **multi-attribute ratings** (helpfulness, correctness, coherence, complexity, verbosity) and a novel **Edit** config where annotators rewrite responses to improve them.
 - **Techniques:** Multi-attribute rating (precursor to SteerLM), edit-based supervision, multilingual preferences, ITS (Inference-Time Scaling) configs.
-- **Takeaways for Humazier:** The **Edit** configuration is gold — it captures not just "A is better than B" but *how* a human would rewrite an AI response to be better. This is almost exactly the training signal for a humanization/rewriter model.
+- **Takeaways for Unslop:** The **Edit** configuration is gold — it captures not just "A is better than B" but *how* a human would rewrite an AI response to be better. This is almost exactly the training signal for a humanization/rewriter model.
 - **Summary:** HelpSteer3 is the most carefully constructed open human-preference dataset in 2025–2026, and its Edit config gives before/after pairs that directly encode "what an LLM response is missing to sound human." Models trained on it hit 85.5% on RM-Bench and 93.4% on Arena Hard.
 
 ---
@@ -206,7 +206,7 @@ Patterns consistently observed across the 17 projects above:
 4. **Multi-axis reward / preference schemas.** UltraFeedback (4 axes), HelpSteer3 (5 axes), Safe-RLHF (helpfulness + cost), SteerLM (conditioned attributes). The community has abandoned single-scalar preferences.
 5. **LLM-as-judge everywhere.** AlpacaFarm, UltraFeedback, and most 2024+ preference datasets use GPT-4-class judges. Humans are used for validation, not primary labeling.
 6. **Ray + vLLM as the RL runtime standard.** OpenRLHF and veRL both built on Ray + vLLM; TRL added co-located vLLM in June 2025. Generation is ~80% of RL wall time, so vLLM integration is now table stakes.
-7. **YAML-driven config layers over Python trainers.** Axolotl, LLaMA-Factory, alignment-handbook all converge on config-first UX. Humazier should ship a config layer, not expose TRL directly.
+7. **YAML-driven config layers over Python trainers.** Axolotl, LLaMA-Factory, alignment-handbook all converge on config-first UX. Unslop should ship a config layer, not expose TRL directly.
 8. **Self-critique / RLAIF as a label-free alternative.** Constitutional AI's two-phase recipe (revise-under-principles → RLAIF) removes the human-labeling bottleneck entirely.
 9. **Minimal-data alignment (LIMA).** The alternative narrative: don't scale data, curate it. Tiny datasets (1k) with extreme quality control can match RLHF.
 10. **Edit-based supervision (HelpSteer3 Edit).** Rewrite-and-rate beats pure rating for teaching a model *how* to be better, not just which of two options is better. Directly applicable to humanization.
@@ -266,7 +266,7 @@ From the READMEs and papers surveyed:
 7. **Ray + vLLM as the RL runtime.** Three of the top five libraries (OpenRLHF, veRL, and TRL via co-located vLLM) converged here.
 8. **Deprecation wave.** trlx (archived), NeMo-Aligner (superseded by NeMo RL in May 2025), DeepSpeed-Chat (stagnant since Aug 2023), OpenAssistant (project completed). The first generation of RLHF tooling is being retired.
 9. **LIMA-style minimalism re-emerging.** With frontier base models now extremely capable, "small hand-curated SFT + tiny DPO" is winning mindshare again for style/tone tasks (Sky-T1 used this; WeClone too).
-10. **Config-first UX is the norm.** LLaMA-Factory, Axolotl, alignment-handbook — all YAML-first. Humazier should ship a config layer rather than expose raw trainer code.
+10. **Config-first UX is the norm.** LLaMA-Factory, Axolotl, alignment-handbook — all YAML-first. Unslop should ship a config layer rather than expose raw trainer code.
 
 ---
 

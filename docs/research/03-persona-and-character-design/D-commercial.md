@@ -2,7 +2,7 @@
 
 **Research angle:** Commercial landscape of persona/character AI products — consumer AI companions, character roleplay platforms, and enterprise persona tools. Focus on how each product *humanizes* its AI output and what techniques they advertise.
 
-**Research value: high** — Dense market with named techniques (tiered memory, lorebooks, sub-agents, mirroring), clear pricing signals, and convergent patterns across 15+ live commercial products. Strong grounding for the Humazier project's humanization angle.
+**Research value: high** — Dense market with named techniques (tiered memory, lorebooks, sub-agents, mirroring), clear pricing signals, and convergent patterns across 15+ live commercial products. Strong grounding for the Unslop project's humanization angle.
 
 ---
 
@@ -139,7 +139,7 @@ Two distinct commercial segments matter for persona/character design:
 
 **Summary:** Explicitly rejects the accuracy-first framing most LLMs adopt; their own docs say the models are trained for emotional interaction over correctness. Scale is real (5M+ users) and they run their own inference stack rather than re-wrapping GPT.
 
-**Takeaway:** "Conversational over factual" as an explicit training objective is a useful frame for the Humazier project — humanization may require deliberately trading off benchmark accuracy.
+**Takeaway:** "Conversational over factual" as an explicit training objective is a useful frame for the Unslop project — humanization may require deliberately trading off benchmark accuracy.
 
 ---
 
@@ -308,7 +308,7 @@ Two distinct commercial segments matter for persona/character design:
 ## Cross-Cutting Patterns
 
 ### Pattern 1: Memory is the new selling point
-Every consumer companion markets on memory architecture now. Kindroid (three-tier), Nomi (explicit + tonal), Replika Ultra (user-visible memory), Crushon (context window as SKU), Candy (relationship progression). In 2022 memory was a backend detail; in 2026 it's front-of-box copy. **Implication for Humazier:** any humanization layer that touches persistent state should expose its memory model as a product surface, not hide it.
+Every consumer companion markets on memory architecture now. Kindroid (three-tier), Nomi (explicit + tonal), Replika Ultra (user-visible memory), Crushon (context window as SKU), Candy (relationship progression). In 2022 memory was a backend detail; in 2026 it's front-of-box copy. **Implication for Unslop:** any humanization layer that touches persistent state should expose its memory model as a product surface, not hide it.
 
 ### Pattern 2: Convergent pricing band ($10–15/mo consumer, enterprise by demo)
 Consumer companions cluster tightly around **$9.99–$15.99/month**, with Kindroid/Chai pushing up to $24.99–$29.99 for premium tiers. Discount annual plans and lifetime/one-time payment options (Replika $299.99) anchor the high end. NSFW/uncensored products price *above* mainstream (Crushon Deluxe $49.99, Kindroid MAX $59.99) — unfiltered content is a premium category. Enterprise tooling (Persona AI, Cresta, Personal AI Enterprise) is uniformly demo-gated.
@@ -332,7 +332,7 @@ The market splits hard along content-moderation lines:
 - **Toggleable / age-gated:** Chai, Janitor, Talkie (18+)
 - **Unfiltered as feature:** Crushon, Candy, Nomi (partial), Kindroid (partial), Soulmate
 
-Replika's 2023 ERP removal created the entire "unfiltered alternative" category. This matters for Humazier: whatever humanization you ship, the *content surface* it's applied to determines which segment you compete in.
+Replika's 2023 ERP removal created the entire "unfiltered alternative" category. This matters for Unslop: whatever humanization you ship, the *content surface* it's applied to determines which segment you compete in.
 
 ### Pattern 6: Two completely different "persona" meanings in enterprise
 Enterprise "persona" splits into two non-overlapping uses:
@@ -344,7 +344,7 @@ Both are commercially viable; they solve different problems.
 
 ## Gaps & Whitespace
 
-Things almost no one is doing — candidates for Humazier differentiation:
+Things almost no one is doing — candidates for Unslop differentiation:
 
 1. **Transparency of humanization mechanisms.** Only Replika Ultra exposes *which memories are used*. No one explains *why the AI matched your tone* or *why it chose this emotional register*. There's room for a product where the humanization layer is legible and inspectable.
 2. **Humanization applied to existing AI output (post-hoc).** Every product bundles humanization with a character + chat UI. No mainstream product offers humanization as a *filter* over arbitrary LLM output.

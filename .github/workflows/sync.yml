@@ -4,13 +4,13 @@ on:
   push:
     branches: [main]
     paths:
-      - skills/humanizer/SKILL.md
-      - skills/humanizer-commit/SKILL.md
-      - skills/humanizer-review/SKILL.md
-      - skills/humanizer-help/SKILL.md
-      - rules/humanizer-activate.md
-      - humanizer-humanize/SKILL.md
-      - humanizer-humanize/scripts/**
+      - skills/unslop/SKILL.md
+      - skills/unslop-commit/SKILL.md
+      - skills/unslop-review/SKILL.md
+      - skills/unslop-help/SKILL.md
+      - rules/unslop-activate.md
+      - unslop/SKILL.md
+      - unslop/scripts/**
       - scripts/sync-mirrors.sh
   workflow_dispatch:
 

@@ -198,11 +198,11 @@
 - **No cross-cultural / non-English deployment data.** All 17 posts are English-only. Detection and humanization dynamics in Arabic, Japanese, German, etc. are absent from this corpus.
 - **Thin on failure modes in long-form.** BypassGPT (#5) is cited as the "long-form champion" past 1,500 words, but the specifics of *how* other humanizers fail at length (repetitive phrasing, tone drift, meaning loss) are stated without side-by-side evidence.
 
-## Implications for Humazier
+## Implications for Unslop
 
-- The revenue-recovery framing (#5, #6, #11) is more monetizable than the "detection bypass" framing. Humazier should instrument *conversion deltas* and *editor-time reduction*, not just AI-score reduction.
-- The two-class split (detector-bypass vs. voice-authored) is a positioning decision Humazier has to make early. Most generic tools plateau fast; specialized tools (academic, B2B technical, cold outbound, creator voice) show revenue traction.
-- The "train on transcripts / tone matrix / negative-phrase list" playbook from #11/#13 is the current state-of-the-art for voice cloning without fine-tuning. Worth treating as a floor, not a ceiling — Humazier's differentiation likely lives in automating this seeding step.
+- The revenue-recovery framing (#5, #6, #11) is more monetizable than the "detection bypass" framing. Unslop should instrument *conversion deltas* and *editor-time reduction*, not just AI-score reduction.
+- The two-class split (detector-bypass vs. voice-authored) is a positioning decision Unslop has to make early. Most generic tools plateau fast; specialized tools (academic, B2B technical, cold outbound, creator voice) show revenue traction.
+- The "train on transcripts / tone matrix / negative-phrase list" playbook from #11/#13 is the current state-of-the-art for voice cloning without fine-tuning. Worth treating as a floor, not a ceiling — Unslop's differentiation likely lives in automating this seeding step.
 - The ethical pushback (#4, #16) is real and loud enough that an anti-deception posture ("preserve the original author's voice" rather than "bypass detectors") materially changes comment-section reception on HN/IH launches.
 
 ---

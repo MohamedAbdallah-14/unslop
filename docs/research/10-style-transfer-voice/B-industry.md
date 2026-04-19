@@ -189,7 +189,7 @@
 ## Gaps / things the industry blogs don't talk about
 
 - **Idiolect-level voice** (the specific mistakes, tics, and idiomatic phrasings of one real individual) is underserved — Sudowrite's *My Voice* is the closest, but nothing in the corpus treats "make it sound like *this* person, down to their comma splices" as a first-class problem.
-- **Thinking, not just output.** Every post is about *produced text*. None of the vendor blogs address humanizing *reasoning traces / AI thought processes*, which is explicit in the Humazier project framing ("Humanizing AI output and thinking"). This is a whitespace.
+- **Thinking, not just output.** Every post is about *produced text*. None of the vendor blogs address humanizing *reasoning traces / AI thought processes*, which is explicit in the Unslop project framing ("Humanizing AI output and thinking"). This is a whitespace.
 - **Evaluation.** Beyond LiGo's qualitative 93% test and Sudowrite's internal "40% fewer revisions," there is almost no publicly shared benchmark or eval methodology for voice fidelity. Fast Forward Labs / RewriteLM are the closest to rigorous evaluation, and those are academic.
 - **Multilingual voice.** HubSpot lists supported languages; none of the posts discuss whether a voice profile transfers across languages or how idiolect survives translation.
 - **Voice drift over long contexts.** Sudowrite hints at it ("POV/tense consistency across 80K-word manuscripts"); no one publishes how their system actually prevents drift, or measures it.

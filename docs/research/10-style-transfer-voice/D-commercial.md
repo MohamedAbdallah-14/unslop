@@ -2,7 +2,7 @@
 
 **Research value: high** — Rich commercial field with multiple established segments (writing suites, sales email coaches, enterprise brand-voice governance, personal AI clones) and clear capability gaps around true style transfer and humanization.
 
-**Scope.** Products that clone, capture, or adapt *written* voice/style — text-first tools, not TTS. Focus angle: what the commercial market already offers, how they frame it, and where Humazier (humanizing AI output) has whitespace.
+**Scope.** Products that clone, capture, or adapt *written* voice/style — text-first tools, not TTS. Focus angle: what the commercial market already offers, how they frame it, and where Unslop (humanizing AI output) has whitespace.
 
 **Last verified:** 2026-04. Pricing and feature claims drift; treat as directional.
 
@@ -269,7 +269,7 @@ The only products openly marketed as "humanizing AI text" (Undetectable.ai, Stea
 
 ---
 
-## Gaps / whitespace (relevant to Humazier)
+## Gaps / whitespace (relevant to Unslop)
 
 1. **No credible commercial product specializes in making AI output sound *more* like a specific human writer.** Brand voice tools smooth toward brand consistency; humanizer tools smooth toward "undetectable but generic." There is no strong incumbent on "sound like *me*, including my roughness."
 2. **Cold-start voice capture is weak everywhere.** Most tools require 300–15,000 words. A product that produces a convincing voice profile from 2–3 short samples would leapfrog the SMB/creator segment.

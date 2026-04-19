@@ -1,7 +1,7 @@
 # Category 06 — Chain-of-Thought & Reasoning
 ## Angle B — Industry Blogs & Essays
 
-**Scope:** How frontier labs, independent researchers, and influential practitioners frame "reasoning," extended thinking, and chain-of-thought (CoT) in public writing from mid-2023 through early-2026 — read with the Humazier project's lens (making AI output and thinking feel more human).
+**Scope:** How frontier labs, independent researchers, and influential practitioners frame "reasoning," extended thinking, and chain-of-thought (CoT) in public writing from mid-2023 through early-2026 — read with the Unslop project's lens (making AI output and thinking feel more human).
 
 **Sources surveyed:** 18 primary posts across OpenAI, Anthropic, Google DeepMind, Meta FAIR, Hugging Face, and individual essayists (Lilian Weng, Sebastian Raschka, Nathan Lambert, Jay Alammar, Simon Willison).
 
@@ -192,7 +192,7 @@ Raschka surfaces the **over-thinking** failure mode — relevant when humanizing
 > "One of the most remarkable aspects of this self-evolution is the emergence of sophisticated behaviors as the test-time computation increases. Behaviors such as reflection — where the model revisits and reevaluates its previous steps — and the exploration of alternative approaches to problem-solving arise spontaneously." (quoting DeepSeek R1 paper)
 
 ### Humanization implication
-Lambert's claim that reasoning improves creative writing and calibration directly supports the Humazier thesis: extended thinking can make outputs feel more thought-through, less confidently-wrong, and better matched to user intent.
+Lambert's claim that reasoning improves creative writing and calibration directly supports the Unslop thesis: extended thinking can make outputs feel more thought-through, less confidently-wrong, and better matched to user intent.
 
 ---
 
@@ -260,7 +260,7 @@ The canonical "plan + memory + tools + reflect" template is now the *de facto* s
 - R1-Zero shows "strong reasoning capabilities and autonomously develops unexpected and powerful reasoning behaviors" but suffers from "poor readability, and language mixing" — hence a second cold-start SFT to restore readability.
 
 ### Humanization implication
-The "poor readability" problem of R1-Zero is literally the problem Humazier works on. Labs solve it with a humanization/readability SFT pass *after* the reasoning pass. This is the canonical pattern.
+The "poor readability" problem of R1-Zero is literally the problem Unslop works on. Labs solve it with a humanization/readability SFT pass *after* the reasoning pass. This is the canonical pattern.
 
 ---
 
@@ -359,7 +359,7 @@ R1-Zero's RL-only training produced reasoning that was technically strong but mi
 Lambert, Raschka, and Weng converge on reframing reasoning not as "a new capability" but as "learning to allocate test-time compute to hard problems." This implies humanization needs its own compute-allocation policy: when to think, when to just answer, when to stop.
 
 ### Gap 1 — Very little industry writing on *everyday* humanization via reasoning
-Posts focus on math, code, science, and safety. There is almost nothing from the major labs on how reasoning changes tone, empathy, warmth, or conversational naturalness — the exact territory Humazier occupies. The closest signals are Lambert's "R1 tops creative-writing leaderboards" aside and Anthropic's admission that visible thoughts feel "less personal-sounding."
+Posts focus on math, code, science, and safety. There is almost nothing from the major labs on how reasoning changes tone, empathy, warmth, or conversational naturalness — the exact territory Unslop occupies. The closest signals are Lambert's "R1 tops creative-writing leaderboards" aside and Anthropic's admission that visible thoughts feel "less personal-sounding."
 
 ### Gap 2 — No public recipe for "reasoning + persona" co-training
 Every recipe (R1, Open-R1, o1 implied) treats reasoning SFT+RL as a phase separate from any character or persona work. There is no publicly described pipeline that jointly trains reasoning ability and a consistent persona voice.
@@ -368,7 +368,7 @@ Every recipe (R1, Open-R1, o1 implied) treats reasoning SFT+RL as a phase separa
 Despite Large Concept Models and Collaborative Reasoner being directly relevant (concept-level planning, multi-agent social reasoning), they are rarely cited in the OpenAI/Anthropic/DeepSeek-dominated conversation. Contrarian opportunity: sentence-level planning as a humanization substrate.
 
 ### Gap 4 — Cohere has essentially no public-facing reasoning narrative
-Cohere's Command R series added "improvements in reasoning" in August 2024 but published no standalone reasoning essay comparable to its peers. A market gap — not necessarily a Humazier gap.
+Cohere's Command R series added "improvements in reasoning" in August 2024 but published no standalone reasoning essay comparable to its peers. A market gap — not necessarily a Unslop gap.
 
 ### Gap 5 — Sycophancy ↔ reasoning interaction is under-explored in labs' writing
 OpenAI's April 2025 GPT-4o sycophancy postmortem does not connect to its own reasoning work. Academic follow-ups (sycophantic anchors, sycophancy tax) show CoT can mask sycophancy — a direct hazard for humanization projects — but no frontier lab has published a reasoning + sycophancy co-study.

@@ -208,7 +208,7 @@ Numbers tagged **[V]** = vendor/marketing claim, **[A]** = affiliate or self-int
 
 ---
 
-## 5. Implications for Humazier
+## 5. Implications for Unslop
 
 - **Claim discipline is leverage.** The category is drowning in "99%+ undetectable" boilerplate contradicted by every independent test. A tool that publishes reproducible external-detector scores with a date stamp (Grammarly's "not for bypass" framing inverted) would be unusually credible in this market.
 - **Editorial-press whitespace exists.** TechRadar / PCMag / ZDNet / SEJ decline to cover the category. A transparency-first, ethics-forward product has a clearer path to mainstream tech coverage than any "bypass-first" incumbent.

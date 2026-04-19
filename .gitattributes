@@ -11,6 +11,6 @@
 *.svg  text eol=lf
 
 # Fixtures must round-trip exactly — never let git rewrite line endings.
-tests/humanizer-humanize/fixtures/*.md          -text
-tests/humanizer-humanize/fixtures/*.original.md -text
+tests/unslop/fixtures/*.md          -text
+tests/unslop/fixtures/*.original.md -text
 benchmarks/fixtures/*.md                        -text

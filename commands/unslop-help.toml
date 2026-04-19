@@ -1,0 +1,5 @@
+description = "Show unslop modes, sub-skills, and slash commands. One-shot reference card."
+prompt = """Read `skills/unslop-help/SKILL.md` and render the reference card.
+
+This is one-shot documentation. Do not toggle a mode. Do not write any flag file.
+"""

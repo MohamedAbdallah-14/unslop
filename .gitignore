@@ -1,28 +1,81 @@
+# --- Python ---
 __pycache__/
 *.pyc
 *.pyo
-.pytest_cache/
-.coverage
-htmlcov/
+*.pyd
 *.egg-info/
+*.egg
+.eggs/
+.Python
+
+# --- Test / type / lint caches ---
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+
+# --- Build artifacts ---
+build/
+dist/
+wheels/
+*.whl
+*.tar.gz
+
+# --- Virtualenvs ---
 .venv/
 venv/
-.DS_Store
+env/
+.python-version
+
+# --- Node (if any hooks need it) ---
 node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- OS cruft ---
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Editor / IDE ---
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.#*
+\#*\#
+
+# --- Logs / misc ---
 *.log
 .cache/
 
-*.original.md
-*.original.txt
-
+# --- Env / secrets ---
 .env
 .env.*
 !.env.example
 
-dist/
-build/
-
+# --- Claude / dev shells ---
 .claude/
 .cursor/projects/
-ideations/
 .cursor/settings.json
+ideations/
+
+# --- Benchmark ad-hoc runs ---
+# Only latest.json + llm-mode-baseline.json are tracked; all timestamped
+# runs (e.g. 20260419T205739Z.json) are machine-local.
+benchmarks/results/2*.json
+
+# --- .original.md / .original.txt backups ---
+# The unslop CLI writes <stem>.original.md next to its output. Users don't
+# commit those. BUT: test fixtures live at tests/unslop/fixtures/*.original.md
+# and are intentionally tracked — whitelisted below.
+*.original.md
+*.original.txt
+!tests/unslop/fixtures/*.original.md

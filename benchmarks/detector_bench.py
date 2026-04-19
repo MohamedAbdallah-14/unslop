@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """AI-detector benchmark harness.
 
-Runs the humanizer's deterministic pass against each benchmark fixture at every
+Runs the unslop's deterministic pass against each benchmark fixture at every
 intensity level and scores the original plus every humanized variant through two
 state-of-the-art AI-detection models:
 
@@ -45,7 +45,7 @@ from pathlib import Path
 from typing import Callable
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "humanizer-humanize"))
+sys.path.insert(0, str(ROOT / "unslop"))
 
 
 def _set_inference_mode(model) -> None:

@@ -1,6 +1,6 @@
 # Agentic Autonomous Thinking — Academic & Scholarly
 
-*Research angle A of category 19: peer-reviewed and pre-print literature on LLM agents that plan, reflect, self-evaluate, and pursue goals with human-like autonomy. Selected for its relevance to Humazier's goal of making AI output and thinking feel more human — that is, deliberative, self-correcting, and goal-directed rather than one-shot and reactive.*
+*Research angle A of category 19: peer-reviewed and pre-print literature on LLM agents that plan, reflect, self-evaluate, and pursue goals with human-like autonomy. Selected for its relevance to Unslop's goal of making AI output and thinking feel more human — that is, deliberative, self-correcting, and goal-directed rather than one-shot and reactive.*
 
 ---
 
@@ -11,7 +11,7 @@
 - **Deliberation and reflection reliably improve reasoning quality, but with non-trivial caveats.** Self-Consistency yields +6–18 points on math/QA (Wang et al. 2023). Tree of Thoughts raises Game-of-24 from 4% (CoT) to 74% (Yao et al. 2023). Reflexion reaches 91% pass@1 on HumanEval vs. GPT-4's 80% baseline (Shinn et al. 2023). Self-Refine averages ~20% improvement across seven diverse tasks (Madaan et al. 2023). However, 2024–2025 follow-ups show these gains depend heavily on (a) having a reliable external signal for the reflection step, (b) sufficient model scale, and (c) task structure — unreflective over-use of self-critique can *degrade* performance when the evaluator itself is miscalibrated.
 - **Metacognition in LLMs is real but selective.** LLMs match or exceed humans on aggregate metacognitive metrics, especially in reduced overconfidence (Steyvers-style studies, 2024); GPT-4 reaches adult-level on higher-order theory-of-mind tasks and surpasses humans on 6th-order inferences (arXiv 2405.18870). At the same time, frontier models fail at *self-modeling* tasks without explicit scratchpads (arXiv 2603.26089), and misjudge their own competence in >20% of cases (KnowRL, arXiv 2510.11407). Training-based methods — ReflectEvo (arXiv 2505.16475), SaySelf (EMNLP 2024), KnowRL (2025) — are converging on "introspection as a learnable objective" rather than a prompting trick.
 - **Agentic software-engineering benchmarks have reset the field's yardstick.** SWE-bench (Jimenez et al. ICLR 2024) exposed that frontier LLMs solve <2% of real GitHub issues out of the box; SWE-agent (Yang et al. NeurIPS 2024) lifted this to 12.5% by engineering an *agent-computer interface* (ACI); Devin (Cognition 2024) reported 13.86% end-to-end and, per its 2025 review, now ships production PRs for major banks; OpenHands (Wang et al. 2024) made the stack open. The lesson is architectural: autonomy gains come from environment design and interface ergonomics, not just from stronger base models.
-- **The humanization implication (core to Humazier).** Agentic systems are the closest academic analog to how humans actually write and think: they *plan, draft, stop, reflect, revise, and defer.* Three research threads connect directly: (i) Generative Agents and HumanLLM show that cognitive-process simulation produces more believable, human-reading output than end-state style transfer; (ii) Self-Refine and Reflexion give mechanical templates for "think-before-you-send" behaviors (drafting, doubting, revising) that reduce the fluent-but-hollow quality of single-shot LLM text; (iii) HugAgent (arXiv 2510.15144) and the 1,000-Agents paper (Park et al. 2024) argue that authentic human-likeness requires *individualized* reasoning trajectories, not population-average voice — a direct parallel to Humazier's personal-voice goals.
+- **The humanization implication (core to Unslop).** Agentic systems are the closest academic analog to how humans actually write and think: they *plan, draft, stop, reflect, revise, and defer.* Three research threads connect directly: (i) Generative Agents and HumanLLM show that cognitive-process simulation produces more believable, human-reading output than end-state style transfer; (ii) Self-Refine and Reflexion give mechanical templates for "think-before-you-send" behaviors (drafting, doubting, revising) that reduce the fluent-but-hollow quality of single-shot LLM text; (iii) HugAgent (arXiv 2510.15144) and the 1,000-Agents paper (Park et al. 2024) argue that authentic human-likeness requires *individualized* reasoning trajectories, not population-average voice — a direct parallel to Unslop's personal-voice goals.
 - **Open gaps are acute.** No unified benchmark yet measures "human-likeness of agent reasoning" (as opposed to correctness); reflection amplifies both correct and incorrect intuitions without a reliable detector (Huang et al. 2024); long-horizon memory remains fragile (arXiv 2504.01990); multi-agent debate converges toward consensus that is often wrong (CAMEL and follow-ups note role-flipping, repetition, infinite loops); and the shift to *model-native* agentic reasoning via RL (arXiv 2504.09037; arXiv 2510.16720) risks internalizing failure modes that were previously debuggable as prompt-level pipelines.
 
 ---
@@ -25,7 +25,7 @@
 - **Core claim**: Twenty-five LLM-driven agents equipped with **observation → memory → reflection → planning** produce believable, emergent social behavior in a Sims-style sandbox, including unprompted coordination (a Valentine's Day party spreading through invitations and RSVPs).
 - **Techniques mentioned**: Natural-language memory stream with retrieval; periodic synthesis of memories into higher-level *reflections*; day-plan generation and decomposition; inter-agent dialogue via the same LLM.
 - **Practical takeaways**: Ablations show **each of observation, planning, and reflection is necessary** for believability — removing any one produces flat or inconsistent behavior. Reflection is the single most important module for complex decision-making. Agents hallucinate embellishments, but plausibly so.
-- **Summary**: The paper that operationalized "autonomous LLM agent with human-like daily life" and gave the field its canonical architecture. For Humazier, its deepest lesson is that *authenticity comes from remembering and reflecting*, not from style. A humanizer that simulates human *process* (observe → remember → reflect → plan → speak) will read more human than one that only rewrites end-text.
+- **Summary**: The paper that operationalized "autonomous LLM agent with human-like daily life" and gave the field its canonical architecture. For Unslop, its deepest lesson is that *authenticity comes from remembering and reflecting*, not from style. A humanizer that simulates human *process* (observe → remember → reflect → plan → speak) will read more human than one that only rewrites end-text.
 
 ### 2. Generative Agent Simulations of 1,000 People
 - **URL**: https://arxiv.org/abs/2411.10109
@@ -43,7 +43,7 @@
 - **Core claim**: A GPT-4-driven agent for Minecraft combines an **automatic curriculum**, an **ever-growing skill library of executable code**, and an **iterative prompting loop with self-verification** to achieve 3.3× more unique items discovered, 2.3× longer travel, and **15.3× faster tech-tree progress** than prior SOTA.
 - **Techniques mentioned**: Curriculum generation; code-as-skill library with retrieval; environment-feedback self-refinement; blackbox LLM queries (no fine-tuning).
 - **Practical takeaways**: Demonstrates that **continual learning without weight updates** is viable when skills are stored as retrievable code. Skills transfer to new worlds zero-shot.
-- **Summary**: The canonical "lifelong learning agent" paper. Relevant to Humazier as a structural analog: humans accumulate writing habits as reusable micro-skills ("how I write an apology," "how I disagree politely"); Voyager's library-of-code pattern maps cleanly onto a personal library of stylistic/cognitive operators.
+- **Summary**: The canonical "lifelong learning agent" paper. Relevant to Unslop as a structural analog: humans accumulate writing habits as reusable micro-skills ("how I write an apology," "how I disagree politely"); Voyager's library-of-code pattern maps cleanly onto a personal library of stylistic/cognitive operators.
 
 ### 4. ReAct: Synergizing Reasoning and Acting in Language Models
 - **URL**: https://arxiv.org/abs/2210.03629
@@ -61,7 +61,7 @@
 - **Core claim**: Agents can improve **without weight updates** by (a) executing a trajectory, (b) verbally reflecting on task feedback, and (c) storing reflections in an episodic memory buffer that conditions the next attempt. Reaches **91% pass@1 on HumanEval**, surpassing GPT-4's 80% baseline.
 - **Techniques mentioned**: Actor–Evaluator–Self-Reflection–Memory decomposition; scalar and free-form feedback; internally-simulated feedback.
 - **Practical takeaways**: **Verbal RL** is the dominant academic alternative to RLHF-style weight updates for agent improvement. Works across coding, decision-making, and language reasoning. Critical dependency: a *reliable signal* (unit tests, environment score) to reflect against — pure self-judgment collapses.
-- **Summary**: The clearest formalization of "reflect to improve." For Humazier, Reflexion's Actor–Evaluator split is a template for a "draft → self-critique → revise" humanization loop where the evaluator checks specific anti-AI markers and the actor rewrites.
+- **Summary**: The clearest formalization of "reflect to improve." For Unslop, Reflexion's Actor–Evaluator split is a template for a "draft → self-critique → revise" humanization loop where the evaluator checks specific anti-AI markers and the actor rewrites.
 
 ### 6. Self-Refine: Iterative Refinement with Self-Feedback
 - **URL**: https://arxiv.org/abs/2303.17651
@@ -106,7 +106,7 @@
 - **Core claim**: An LLM can **self-supervise its own tool-use training** by sampling API calls, keeping only those that reduce downstream loss — producing a model that autonomously decides when to call calculators, QA, search, translation, or calendars.
 - **Techniques mentioned**: Self-supervised API-call filtering; token-level insertion; few demonstrations per API.
 - **Practical takeaways**: Often matches far larger models without losing core LM ability. Establishes tool-use as a *capability of the base model*, not a pipeline around it.
-- **Summary**: Foundational for the "tool-using agent" branch. Relevant to Humazier if humanization is reframed as a tool call (e.g., a "style-guard" tool the model learns to invoke when it drafts) rather than a post-processing step.
+- **Summary**: Foundational for the "tool-using agent" branch. Relevant to Unslop if humanization is reframed as a tool call (e.g., a "style-guard" tool the model learns to invoke when it drafts) rather than a post-processing step.
 
 ### 11. SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering
 - **URL**: https://arxiv.org/abs/2405.15793
@@ -124,7 +124,7 @@
 - **Core claim**: A benchmark of **2,294 real GitHub issues** from 12 popular Python repos evaluates whether LMs can produce a patch that passes the repo's *actual* unit tests. Best baseline (Claude 2): **1.96%**.
 - **Techniques mentioned**: Issue + codebase + test pipeline; retrieval-augmented evaluation; SWE-Llama fine-tune.
 - **Practical takeaways**: Reset the yardstick for "useful" LLM coding. Brutally exposed that HumanEval-level performance does not transfer to production engineering. Drove the subsequent wave of ACI / agentic engineering.
-- **Summary**: Not an agent paper per se, but the evaluative foundation that made the agentic-software-engineering wave legible. Relevant to Humazier as a methodological template: benchmark humanization against *real human text + real detectors + real tasks*, not sanitized style-transfer suites.
+- **Summary**: Not an agent paper per se, but the evaluative foundation that made the agentic-software-engineering wave legible. Relevant to Unslop as a methodological template: benchmark humanization against *real human text + real detectors + real tasks*, not sanitized style-transfer suites.
 
 ### 13. OpenHands (née OpenDevin): An Open Platform for AI Software Developers as Generalist Agents
 - **URL**: https://arxiv.org/abs/2407.16741
@@ -160,7 +160,7 @@
 - **Core claim**: A generic framework of **conversable, customizable agents** combining LLMs, humans, and tools supports flexible patterns (joint chat, hierarchical chat) and lets developers program behavior in natural language *and* code.
 - **Techniques mentioned**: ConversableAgent abstraction; AssistantAgent / UserProxyAgent; function/code-execution integration; group chat manager.
 - **Practical takeaways**: Effective across math, coding, QA, operations research, online decision-making, entertainment. Has become the most-adopted open agent framework in industry.
-- **Summary**: The pragmatic, framework-level contribution that decoupled agent *capabilities* from agent *topology*. Key for Humazier as a build-time choice: AutoGen-style conversable agents let a humanizer combine a drafter, a detector, and a user-proxy in configurable topologies without hard-coding the workflow.
+- **Summary**: The pragmatic, framework-level contribution that decoupled agent *capabilities* from agent *topology*. Key for Unslop as a build-time choice: AutoGen-style conversable agents let a humanizer combine a drafter, a detector, and a user-proxy in configurable topologies without hard-coding the workflow.
 
 ### 17. CAMEL: Communicative Agents for "Mind" Exploration of Large Language Model Society
 - **URL**: https://arxiv.org/abs/2303.17760
@@ -187,7 +187,7 @@
 - **Core claim**: LLM agents are analyzable by **construction framework → applications → evaluation**; a unified construction framework covers profile, memory, planning, and action modules across social-science, natural-science, and engineering deployments.
 - **Techniques mentioned**: Profile / memory / planning / action taxonomy; agent-type catalog (tool, simulation, game, embodied, web, assistant).
 - **Practical takeaways**: Most practically useful survey for "what module should I build next" questions. Tracks growth from 2021–2023.
-- **Summary**: Complements Xi et al. with an engineering lens. Together, the two surveys define the field's shared vocabulary. Humazier architecture should explicitly map onto the profile/memory/planning/action frame.
+- **Summary**: Complements Xi et al. with an engineering lens. Together, the two surveys define the field's shared vocabulary. Unslop architecture should explicitly map onto the profile/memory/planning/action frame.
 
 ### 20. Understanding the Planning of LLM Agents: A Survey
 - **URL**: https://arxiv.org/abs/2402.02716
@@ -196,7 +196,7 @@
 - **Core claim**: LLM-agent planning subdivides into five categories: **task decomposition, multi-plan selection, external module integration, reflection, and memory**.
 - **Techniques mentioned**: Decomposition-first vs interleaved decomposition; heuristic search over plans; PDDL-style external planners; reflection loops; retrieval-augmented memory.
 - **Practical takeaways**: First dedicated planning taxonomy for LLM agents. Makes explicit that *reflection and memory are planning substrates*, not separate concerns.
-- **Summary**: The reference for anyone designing the planning layer of an agent. Its five categories map almost 1-to-1 onto the design decisions Humazier faces (break the humanization task into steps? sample multiple drafts? call detectors? reflect on output? remember user style?).
+- **Summary**: The reference for anyone designing the planning layer of an agent. Its five categories map almost 1-to-1 onto the design decisions Unslop faces (break the humanization task into steps? sample multiple drafts? call detectors? reflect on output? remember user style?).
 
 ### 21. A Survey of Frontiers in LLM Reasoning: Inference Scaling, Learning to Reason, and Agentic Systems
 - **URL**: https://arxiv.org/abs/2504.09037
@@ -214,7 +214,7 @@
 - **Core claim**: A **brain-inspired modular agent architecture** — perception, cognition (memory, world model, reward, goals, emotion), action — subsumes current LLM-agent stacks and provides a principled frame for four open topics: modular foundation, self-enhancement, multi-agent systems, safety.
 - **Techniques mentioned**: Multimodal encoders; hierarchical memory; hybrid symbolic-neural world models; automated capability refinement; collective intelligence.
 - **Practical takeaways**: Extends earlier taxonomies by treating *self-enhancement* (autonomous capability refinement) as a first-class module.
-- **Summary**: The 2025 "grand-unified-theory" survey for foundation agents. Relevant to Humazier as scaffolding for framing humanization as a *goal-and-emotion-module* problem rather than a pure language problem.
+- **Summary**: The 2025 "grand-unified-theory" survey for foundation agents. Relevant to Unslop as scaffolding for framing humanization as a *goal-and-emotion-module* problem rather than a pure language problem.
 
 ### 23. Agentic AI: A Comprehensive Survey of Architectures, Applications, and Future Directions
 - **URL**: https://arxiv.org/abs/2510.25445
@@ -241,7 +241,7 @@
 - **Core claim**: A **self-evolving reflection-learning pipeline** using a 460k-entry self-generated reflection dataset raises Llama-3 on BIG-bench from 52.4% → **71.2%** and Mistral 44.4% → **71.1%** — *without* distillation from a larger model or fine-grained human annotation.
 - **Techniques mentioned**: Iterative reflection generation; self-training; ReflectEvo-460k dataset.
 - **Practical takeaways**: Shows metacognition can be *trained into* small open models via self-supervised reflection alone. Strong evidence that reflection is a transferable skill, not a frontier-scale emergent property.
-- **Summary**: Important counterweight to "reflection only works on GPT-4-scale." For Humazier on-device or OSS deployments, this is the template for installing a reflection capability in a small model.
+- **Summary**: Important counterweight to "reflection only works on GPT-4-scale." For Unslop on-device or OSS deployments, this is the template for installing a reflection capability in a small model.
 
 ### 26. LLMs Achieve Adult Human Performance on Higher-Order Theory of Mind Tasks
 - **URL**: https://arxiv.org/abs/2405.18870
@@ -250,7 +250,7 @@
 - **Core claim**: GPT-4 reaches **adult-level or better** on higher-order ToM (recursive "I think that you believe that she knows…" up to 6th order); Flan-PaLM reaches near-adult. Results depend on an interplay of model size and finetuning.
 - **Techniques mentioned**: MoToMQA benchmark; 2nd–6th-order ToM problems; adult human baseline.
 - **Practical takeaways**: Cognitive capability — not just stylistic mimicry — is within reach of frontier LLMs on ToM. A prerequisite for any "authentically human-reasoning" agent.
-- **Summary**: The strongest empirical claim to date that LLMs can reason *about* minds at human level. Humazier relevance: human-like text increasingly requires modeling of the reader's likely beliefs and updates, which this paper shows is feasible.
+- **Summary**: The strongest empirical claim to date that LLMs can reason *about* minds at human level. Unslop relevance: human-like text increasingly requires modeling of the reader's likely beliefs and updates, which this paper shows is feasible.
 
 ### 27. HumanLLM: Benchmarking and Improving LLM Anthropomorphism via Human Cognitive Patterns
 - **URL**: https://arxiv.org/abs/2601.10198
@@ -259,7 +259,7 @@
 - **Core claim**: Authentic anthropomorphism requires **cognitive modeling**, not behavioral mimicry: HumanLLM constructs 244 interacting psychological patterns from ~12,000 papers, and **HumanLLM-8B outperforms Qwen3-32B** on multi-pattern dynamics.
 - **Techniques mentioned**: Psychology-pattern taxonomy; causal-force simulation; small-model fine-tuning on pattern traces.
 - **Practical takeaways**: Parameter count matters less than *proper cognitive alignment*. Cognitive process simulation beats output-style mimicry for anthropomorphic quality.
-- **Summary**: Directly parallels Humazier's thesis. Argues against style-transfer-only humanization and in favor of simulating the *psychological processes* behind human output.
+- **Summary**: Directly parallels Unslop's thesis. Argues against style-transfer-only humanization and in favor of simulating the *psychological processes* behind human output.
 
 ### 28. HugAgent: Benchmarking LLMs for Simulation of Individualized Human Reasoning
 - **URL**: https://arxiv.org/abs/2510.15144
@@ -268,7 +268,7 @@
 - **Core claim**: Current LLM simulation of humans collapses into an **"average voice"** that erases individuality; HugAgent shifts evaluation from *population-level consensus* to **capturing how specific individuals reason and update beliefs in novel scenarios**.
 - **Techniques mentioned**: Individualized-reasoning benchmark; belief-update traces; per-subject evaluation.
 - **Practical takeaways**: Establishes "averaged vs individualized" as the new axis for human-likeness evaluation. Complements the Park 2024 1,000-agents result empirically.
-- **Summary**: The clearest academic articulation of the gap between "sounds human" and "sounds like *this* human." Critical reference for Humazier's personal-voice direction.
+- **Summary**: The clearest academic articulation of the gap between "sounds human" and "sounds like *this* human." Critical reference for Unslop's personal-voice direction.
 
 ### 29. KnowRL: Teaching Language Models to Know What They Know
 - **URL**: https://arxiv.org/abs/2510.11407
@@ -361,14 +361,14 @@ The academic literature on agentic autonomous thinking converges on a reusable s
 
 ## Open Questions / Gaps
 
-- **No benchmark for "human-likeness of agent reasoning."** SWE-bench measures task success; HumanEval measures code correctness; ToT/CoT benchmarks measure math. Nothing in the mainstream measures whether an agent's *trajectory* reads as something a human would plausibly produce — the central gap for Humazier-style products.
+- **No benchmark for "human-likeness of agent reasoning."** SWE-bench measures task success; HumanEval measures code correctness; ToT/CoT benchmarks measure math. Nothing in the mainstream measures whether an agent's *trajectory* reads as something a human would plausibly produce — the central gap for Unslop-style products.
 - **Reflection amplifies miscalibrated confidence.** Without a reliable external signal (tests, simulation, retrieval), self-critique can reinforce errors (Huang 2024; KnowRL 2025). Research on *when to reflect* is nascent.
 - **Long-horizon memory remains brittle.** Generative Agents use a reflection-synthesis shortcut; OpenHands relies on scrollback; Voyager stores skills as code. No consensus architecture yet balances recall, compression, and drift.
 - **Multi-agent consensus is biased toward consensus, not truth.** CAMEL, ChatDev, and subsequent work all note convergence to confident-but-wrong agreement. Debate-style rigs help sometimes but introduce their own dynamics.
 - **Individualized-reasoning data is scarce.** Park et al. 2024 required 2-hour interviews; HugAgent hand-curates belief updates. No scalable source of authentic individualized reasoning traces exists at population scale.
 - **Evaluation of metacognition is lens-dependent.** AutoMeco shows that different "lenses" on the same model give different metacognitive scores. The field lacks a canonical measurement.
 - **Agent safety research trails agent capability research.** Most frameworks (AutoGen, OpenHands, MetaGPT) sandbox execution but do not model *goal-level* safety. Foundation Agents 2025 flags this as the largest open area.
-- **Humanization × agent autonomy is under-theorized.** Only a handful of papers (HumanLLM, HugAgent, the 1,000-Agents paper, SaySelf-adjacent work) directly connect *agent cognitive architecture* to *authentically human output*. The synthesis that Humazier targets — an agent that *thinks* human, not one that *sounds* human — is a genuinely open research direction as of 2026.
+- **Humanization × agent autonomy is under-theorized.** Only a handful of papers (HumanLLM, HugAgent, the 1,000-Agents paper, SaySelf-adjacent work) directly connect *agent cognitive architecture* to *authentically human output*. The synthesis that Unslop targets — an agent that *thinks* human, not one that *sounds* human — is a genuinely open research direction as of 2026.
 
 ---
 

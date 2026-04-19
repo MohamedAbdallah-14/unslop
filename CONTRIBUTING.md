@@ -10,33 +10,33 @@ Read [`CLAUDE.md`](./CLAUDE.md). It names the SSOT files and explains which dire
 
 | You want to change... | Edit this |
 |-----------------------|-----------|
-| Main humanizer behavior | `skills/humanizer/SKILL.md` |
-| Always-on activation text | `rules/humanizer-activate.md` |
-| File-rewriter behavior | `humanizer-humanize/SKILL.md` and `humanizer-humanize/scripts/*.py` |
-| Commit message rules | `skills/humanizer-commit/SKILL.md` |
-| PR review rules | `skills/humanizer-review/SKILL.md` |
+| Main unslop behavior | `skills/unslop/SKILL.md` |
+| Always-on activation text | `rules/unslop-activate.md` |
+| File-rewriter behavior | `unslop/SKILL.md` and `unslop/scripts/*.py` |
+| Commit message rules | `skills/unslop-commit/SKILL.md` |
+| PR review rules | `skills/unslop-review/SKILL.md` |
 | Slash command behavior | `commands/<name>.toml` |
 | Hook behavior | `hooks/<name>.{js,sh,ps1}` |
-| Plugin manifests | `.claude-plugin/`, `gemini-extension.json`, `plugins/humanizer/.codex-plugin/plugin.json` |
+| Plugin manifests | `.claude-plugin/`, `gemini-extension.json`, `plugins/unslop/.codex-plugin/plugin.json` |
 
 ## Add an AI-ism
 
-1. Add a regex to the right list in `humanizer-humanize/scripts/humanize.py` (`STOCK_VOCAB`, `HEDGING_OPENERS`, or `SYCOPHANCY`).
-2. Add the same regex to `AI_ISMS` in `humanizer-humanize/scripts/validate.py` so the validator catches it.
-3. Add a test in `tests/humanizer-humanize/test_humanize.py`.
-4. Add the phrase to the "Drop" lists in `skills/humanizer/SKILL.md` and `rules/humanizer-activate.md`.
+1. Add a regex to the right list in `unslop/scripts/humanize.py` (`STOCK_VOCAB`, `HEDGING_OPENERS`, or `SYCOPHANCY`).
+2. Add the same regex to `AI_ISMS` in `unslop/scripts/validate.py` so the validator catches it.
+3. Add a test in `tests/unslop/test_humanize.py`.
+4. Add the phrase to the "Drop" lists in `skills/unslop/SKILL.md` and `rules/unslop-activate.md`.
 
 ## Tests
 
 ```bash
-python3 -m pytest tests/humanizer-humanize/
+python3 -m pytest tests/unslop/
 ```
 
 Must pass before any merge. Add coverage for any new behavior.
 
 ## Commit messages
 
-Use the humanizer-commit voice: Conventional Commits, subject ≤72 chars (aim ≤50), imperative mood, body only when "why" isn't obvious. See `skills/humanizer-commit/SKILL.md`.
+Use the unslop-commit voice: Conventional Commits, subject ≤72 chars (aim ≤50), imperative mood, body only when "why" isn't obvious. See `skills/unslop-commit/SKILL.md`.
 
 ```
 fix(humanize): protect heading lines from word substitution

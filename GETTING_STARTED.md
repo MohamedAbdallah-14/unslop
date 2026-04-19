@@ -1,8 +1,8 @@
-# Getting started with humanizer
+# Getting started with unslop
 
 ## What is this, in one paragraph
 
-When you ask ChatGPT or Claude to write something for you, the reply tends to have a specific smell. It opens with a compliment. It stacks three-item lists. It uses words like "delve" and "navigate" and "holistic". Readers notice, and so do AI-detection tools. `humanizer` is a small add-on you turn on inside your AI assistant, and it tells the assistant to drop those habits and write like a person who's tired at the end of a workday. You use it when the writing itself is what you're being judged on: cover letters, college essays, bios, LinkedIn posts, anything a human is about to read and react to.
+When you ask ChatGPT or Claude to write something for you, the reply tends to have a specific smell. It opens with a compliment. It stacks three-item lists. It uses words like "delve" and "navigate" and "holistic". Readers notice, and so do AI-detection tools. `unslop` is a small add-on you turn on inside your AI assistant, and it tells the assistant to drop those habits and write like a person who's tired at the end of a workday. You use it when the writing itself is what you're being judged on: cover letters, college essays, bios, LinkedIn posts, anything a human is about to read and react to.
 
 ## Who this is for
 
@@ -20,8 +20,8 @@ Pick Claude Code. It's the smoothest on-ramp, and you don't need to touch any se
 Open a terminal and run these three commands:
 
 ```bash
-git clone https://github.com/MohamedAbdallah-Hu/humanizer.git
-cd humanizer
+git clone https://github.com/MohamedAbdallah-Hu/unslop.git
+cd unslop
 bash hooks/install.sh
 ```
 
@@ -34,12 +34,12 @@ pwsh hooks/install.ps1
 Now open any Claude Code chat. Type:
 
 ```
-/humanizer
+/unslop
 ```
 
-That's it. You'll see a small badge at the bottom of the screen that reads `[humanizer:BALANCED]`. From this point on, everything Claude writes back to you in this session comes out in a human voice. Paste in a cover letter, ask for edits, and watch the reply. If you ever want the old Claude back, type `stop humanizer` and the badge goes away.
+That's it. You'll see a small badge at the bottom of the screen that reads `[unslop:BALANCED]`. From this point on, everything Claude writes back to you in this session comes out in a human voice. Paste in a cover letter, ask for edits, and watch the reply. If you ever want the old Claude back, type `stop unslop` and the badge goes away.
 
-If you use Cursor or Windsurf instead, the plugin loads automatically when you open the project folder. No install step. Just type `/humanizer` in the chat panel.
+If you use Cursor or Windsurf instead, the plugin loads automatically when you open the project folder. No install step. Just type `/unslop` in the chat panel.
 
 ## What it actually does to your writing
 
@@ -49,7 +49,7 @@ Here's a real-world example: a cover letter opener.
 
 > I am writing to express my profound enthusiasm for the Marketing Coordinator position at Acme Corp. With over five years of experience navigating the dynamic landscape of digital marketing, I am confident that my comprehensive skill set and passion for innovation make me a robust candidate. I am particularly drawn to Acme's cutting-edge approach, and I would welcome the opportunity to delve into how my background aligns with your team's goals.
 
-**After (humanizer on, balanced mode):**
+**After (unslop on, balanced mode):**
 
 > Five years in digital marketing, most of it in small teams where nobody else writes the landing pages, so I end up doing it. I saw your Marketing Coordinator posting yesterday. The part about running campaigns end-to-end instead of handing them off to an agency is what pulled me in — that's the work I actually like.
 
@@ -73,7 +73,7 @@ Same facts. Different voice. A hiring manager reads the second version without w
 
 ## When NOT to use it
 
-Turn humanizer off (or don't turn it on) for any of these:
+Turn unslop off (or don't turn it on) for any of these:
 
 - **Medical or health advice.** Precision matters more than voice. You want the boring, exact version.
 - **Legal documents, contracts, compliance text.** A "more human" lease agreement is a worse lease agreement.
@@ -96,12 +96,12 @@ Mostly, but not always, and nobody honest will tell you otherwise. The research 
 
 **Do I need to know what a regex is, or how to code?**
 
-No. If you can type `/humanizer` into a chat, you have everything you need. The installation is three copy-pasted commands, once, and then you're done forever.
+No. If you can type `/unslop` into a chat, you have everything you need. The installation is three copy-pasted commands, once, and then you're done forever.
 
 ## If you get stuck
 
-Type `/humanizer-help` inside any AI chat where the plugin is installed. It shows every mode and every command on one screen.
+Type `/unslop-help` inside any AI chat where the plugin is installed. It shows every mode and every command on one screen.
 
-To turn it off, type `stop humanizer` or `normal mode`. The badge disappears and the AI goes back to its default voice. Turn it back on any time with `/humanizer`.
+To turn it off, type `stop unslop` or `normal mode`. The badge disappears and the AI goes back to its default voice. Turn it back on any time with `/unslop`.
 
 If something's broken, or you're a developer who wants the technical details (hooks, file rewriter, deterministic mode, test suite), the full [README](./README.md) covers all of it.

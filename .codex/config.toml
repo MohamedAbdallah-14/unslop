@@ -1,14 +1,14 @@
-# OpenAI Codex CLI bundle for the humanizer persona.
+# OpenAI Codex CLI bundle for the unslop persona.
 # Drop this file at ~/.codex/config.toml (or merge into your existing config)
-# to persist the humanizer prompt across Codex sessions.
+# to persist the unslop prompt across Codex sessions.
 #
-# The actual rules live in ../rules/humanizer-activate.md and are synced
+# The actual rules live in ../rules/unslop-activate.md and are synced
 # to every platform via scripts/sync-mirrors.sh.
 
 [persona]
-name = "humanizer"
+name = "unslop"
 description = "Strip AI-isms from chat and output files while preserving code, URLs, headings, and technical content."
-rules_file = "../rules/humanizer-activate.md"
+rules_file = "../rules/unslop-activate.md"
 default_mode = "balanced"
 
 [modes]

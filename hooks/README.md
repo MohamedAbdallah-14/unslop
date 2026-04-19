@@ -1,13 +1,13 @@
-# Humanizer hooks for Claude Code
+# Unslop hooks for Claude Code
 
-Three small hook scripts that keep the humanizer persona active across a
+Three small hook scripts that keep the unslop persona active across a
 session, without asking you to paste anything:
 
 | File | Event | What it does |
 |---|---|---|
-| `humanizer-activate.js` | `SessionStart` | Emits the humanizer rules as hidden context and writes the active mode to `~/.claude/.humanizer-active`. |
-| `humanizer-mode-tracker.js` | `UserPromptSubmit` | Watches your prompt for `/humanizer <mode>`, natural-language triggers (`"humanize this"`), and stop phrases (`"stop humanizer"`). Updates the flag file. |
-| `humanizer-statusline.sh` / `.ps1` | `statusLine` | Prints a short `humanizer: <mode>` badge so you can see what's active. |
+| `unslop-activate.js` | `SessionStart` | Emits the unslop rules as hidden context and writes the active mode to `~/.claude/.unslop-active`. |
+| `unslop-mode-tracker.js` | `UserPromptSubmit` | Watches your prompt for `/unslop <mode>`, natural-language triggers (`"humanize this"`), and stop phrases (`"stop unslop"`). Updates the flag file. |
+| `unslop-statusline.sh` / `.ps1` | `statusLine` | Prints a short `unslop: <mode>` badge so you can see what's active. |
 
 Everything under `hooks/` is plain JavaScript / Bash / PowerShell. No Claude
 Code internals are touched — the installer only patches `settings.json`.
@@ -33,24 +33,24 @@ bash hooks/install.sh --force
 bash hooks/uninstall.sh
 ```
 
-Removes only the humanizer entries. Any existing `statusLine` or `hooks` you
+Removes only the unslop entries. Any existing `statusLine` or `hooks` you
 had before we touched the file is preserved verbatim.
 
 ## Statusline integration
 
 If you already have a custom statusline, the installer won't overwrite it.
-To show the humanizer badge inside your existing statusline, append the
-output of `humanizer-statusline.sh` to your own script:
+To show the unslop badge inside your existing statusline, append the
+output of `unslop-statusline.sh` to your own script:
 
 ```bash
 # your-statusline.sh
-bash ~/.claude/hooks/humanizer-statusline.sh
+bash ~/.claude/hooks/unslop-statusline.sh
 # ... the rest of your line ...
 ```
 
-Windows: use `humanizer-statusline.ps1` the same way inside your own `.ps1`.
+Windows: use `unslop-statusline.ps1` the same way inside your own `.ps1`.
 
-The badge is driven entirely by `~/.claude/.humanizer-active`. Any process
+The badge is driven entirely by `~/.claude/.unslop-active`. Any process
 can read it. Any hook can overwrite it. The file is intentionally small and
 boring so power users can script against it.
 
@@ -58,8 +58,8 @@ boring so power users can script against it.
 
 Precedence, highest first:
 
-1. `HUMANIZER_DEFAULT_MODE` environment variable (`off`, `subtle`, `balanced`, `full`, `voice-match`, `anti-detector`)
-2. `~/.config/humanizer/config.json` → `{ "defaultMode": "..." }`
+1. `UNSLOP_DEFAULT_MODE` environment variable (`off`, `subtle`, `balanced`, `full`, `voice-match`, `anti-detector`)
+2. `~/.config/unslop/config.json` → `{ "defaultMode": "..." }`
 3. Built-in default: `balanced`
 
 Invalid values silently fall back to `balanced` so a typo never breaks the
@@ -70,7 +70,7 @@ flow.
 - The flag file is written with `O_NOFOLLOW` and `0600` on Unix, and refuses
   to follow symlinks on Windows. An attacker who can drop a symlink into
   `~/.claude/` cannot redirect our writes into `/etc/passwd` or similar.
-- The statusline script (`humanizer-statusline.sh`) refuses to read the
+- The statusline script (`unslop-statusline.sh`) refuses to read the
   flag file if it is a symlink. This is explicitly tested in
   `tests/test_hooks.py::test_statusline_refuses_symlink`.
 - `CLAUDE_CONFIG_DIR` is honored everywhere. You can point every hook at a
@@ -88,16 +88,16 @@ language activation, stop phrases, and the symlink refusal.
 
 ## Troubleshooting
 
-**"Nothing to do"** — the installer sees a valid humanizer install already.
+**"Nothing to do"** — the installer sees a valid unslop install already.
 Add `--force` if you want to overwrite.
 
-**No banner on session start** — either `HUMANIZER_DEFAULT_MODE=off` is set,
+**No banner on session start** — either `UNSLOP_DEFAULT_MODE=off` is set,
 or you set the flag file to `off`. Delete it:
 
 ```bash
-rm ~/.claude/.humanizer-active
+rm ~/.claude/.unslop-active
 ```
 
 **Badge not showing** — the statusline is registered but another tool may
-be stealing the slot. Run `bash hooks/humanizer-statusline.sh` manually;
+be stealing the slot. Run `bash hooks/unslop-statusline.sh` manually;
 if it prints, the hook is fine and the issue is elsewhere in your shell.

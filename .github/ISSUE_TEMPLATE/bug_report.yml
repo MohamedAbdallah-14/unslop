@@ -1,5 +1,5 @@
 name: Bug report
-description: Something the humanizer did (or didn't do) that surprised you.
+description: Something the unslop did (or didn't do) that surprised you.
 title: "[bug] "
 labels: [bug]
 body:
@@ -13,8 +13,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: Humanizer version
-      description: "Run `humanize --version` or check pyproject.toml. If installed as a Claude Code plugin, run `/plugin list`."
+      label: Unslop version
+      description: "Run `unslop --version` or check pyproject.toml. If installed as a Claude Code plugin, run `/plugin list`."
       placeholder: "0.3.0"
     validations:
       required: true
@@ -52,7 +52,7 @@ body:
     id: input
     attributes:
       label: Input (exact)
-      description: The text you gave the humanizer. Wrap in a code block.
+      description: The text you gave the unslop. Wrap in a code block.
       render: markdown
     validations:
       required: true

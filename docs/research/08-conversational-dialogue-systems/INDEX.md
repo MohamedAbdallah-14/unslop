@@ -1,6 +1,6 @@
 # Category 08 — Conversational & Dialogue Systems
 
-**Project:** Humanizing AI output and thinking (Humazier)
+**Project:** Humanizing AI output and thinking (Unslop)
 **Category angles synthesized:** A Academic · B Industry · C Open-Source · D Commercial · E Practitioner/Forums
 **Last updated:** 2026-04-19
 
@@ -30,7 +30,7 @@ Dialogue is where "correct response" and "natural response" diverge most sharply
 - **The pipeline is collapsing.** STT → LLM → TTS pipelines throw away prosody, laughter, breaths, overlap, and emotion — the exact signals that make speech sound alive. GPT-4o, Moshi, Sesame CSM, LLaMA-Omni, Ultravox, and Gemini 2.5 Audio all bet on a single end-to-end model over audio tokens; Hume/ElevenLabs reach a similar result by feeding explicit prosody into the LLM.
 - **Turn-taking is now *modeled*, not silence-detected.** Voice Activity Projection (Inoue/Skantze), LiveKit's transformer-based semantic turn detection, Deepgram Flux's eager EOT, OpenAI Realtime `semantic_vad`, and ElevenLabs' emotion-aware turn-taking all replace amplitude thresholds with learned predictors over vocal dynamics.
 - **Humanness ≠ maximum agreeableness.** Anthropic's *Claude's Character* post is the loudest dissent from "more warmth always better" — and it's echoed by the #SaveStandardVoice revolt (users preferred a *worse* engine that had more conversational depth), HN's "keep it sounding slightly artificial" argument, LLMs-Get-Lost's 39% multi-turn performance drop, and Character.AI's anti-repetition work. Humanization is a bundle of 4–6 decomposable axes — sensibleness, specificity, interestingness, prosody, character, grounding — not a single "human-like" dial.
-- **Text and voice humanization are isomorphic but cross-cite rarely.** "Burstiness, hedges, typos, anti-slop banlists" (text) and "disfluencies, pauses, backchannels, non-verbal audio tokens" (voice) are the same pattern set. The Humazier project sits at exactly the seam where they need to merge.
+- **Text and voice humanization are isomorphic but cross-cite rarely.** "Burstiness, hedges, typos, anti-slop banlists" (text) and "disfluencies, pauses, backchannels, non-verbal audio tokens" (voice) are the same pattern set. The Unslop project sits at exactly the seam where they need to merge.
 
 ---
 
@@ -55,7 +55,7 @@ Themes that appear in at least three of the five angles (A, B, C, D, E) are call
 
 ### Must-read papers
 
-Ranked by load-bearing importance for the Humazier project.
+Ranked by load-bearing importance for the Unslop project.
 
 1. **Sacks, Schegloff & Jefferson (1974)** — *A Simplest Systematics for the Organization of Turn-Taking for Conversation*, *Language* 50(4). The DNA of every modern full-duplex architecture. https://doi.org/10.2307/412243
 2. **Clark & Brennan (1991)** — *Grounding in Communication*, APA. The single most useful frame for *why* LLM chat "feels off" (skipped acceptance phase, over-claimed understanding). https://web.stanford.edu/~clark/1990s/Clark,%20H.H.%20_%20Brennan,%20S.A.%20Grounding%20in%20communication.pdf
@@ -202,7 +202,7 @@ Text / omnichannel:
 
 6. **Emotion recognition: feature or theatre?** Hume EVI bets that reading prosody + generating empathic tone is load-bearing for humanness. Skeptics on HN (43200400: "What does it even mean to have a conversation without theory of mind?") and r/ChatGPT (complaints about "fake emotional reassurance") argue empathic affect without corresponding internal state is itself a humanness-eroding behavior.
 
-7. **Who owns humanization — LLM or TTS?** The voice industry largely treats humanization as a TTS/latency problem and assumes the LLM already produces humanlike text. Cresta is the lone explicit dissent: "LLM responses [must be] written to read like spoken conversations rather than formal essays." This is directly the seam the Humazier project targets.
+7. **Who owns humanization — LLM or TTS?** The voice industry largely treats humanization as a TTS/latency problem and assumes the LLM already produces humanlike text. Cresta is the lone explicit dissent: "LLM responses [must be] written to read like spoken conversations rather than formal essays." This is directly the seam the Unslop project targets.
 
 8. **Cross-cultural calibration.** Stivers et al. (2009) demonstrates ±250 ms variation in inter-turn gaps across languages; the entire industry optimizes for an English monolingual latency profile. A Japanese-calibrated Moshi-equivalent (shorter gaps, heavy overlap tolerance) does not exist in the literature or product space.
 
@@ -236,7 +236,7 @@ Text / omnichannel:
 8. **Echo cancellation over telephony.** Full-duplex PSTN barge-in has no published working write-up.
 9. **Character consistency metric.** LaMDA gave us SSI for single turns. Nothing equivalent exists publicly for persona drift or memory-grounded continuity across weeks.
 10. **Sycophancy measurement.** Named by Anthropic; measured by nobody.
-11. **"Thinking humanness" vs "output humanness."** Industry writes almost exclusively about output (tone, prosody, specificity, warmth). Internal reasoning humanness — hesitation, self-correction, uncertainty hedging, non-monotonic thought — is only implicitly handled via Moshi's Inner Monologue and Anthropic's character training. This is the core Humazier whitespace.
+11. **"Thinking humanness" vs "output humanness."** Industry writes almost exclusively about output (tone, prosody, specificity, warmth). Internal reasoning humanness — hesitation, self-correction, uncertainty hedging, non-monotonic thought — is only implicitly handled via Moshi's Inner Monologue and Anthropic's character training. This is the core Unslop whitespace.
 12. **Unified humanization across voice + text.** No vendor combines empathic response + spoken-style content rewriting + multi-turn character consistency in one product.
 13. **Cross-modal (video/avatar + voice) humanization.** Timing lip-sync + turn-taking + gaze aversion as a unified naturalness signal is speculative territory.
 14. **The "right amount" of human-likeness.** HN commenters actively argue *against* crossing the uncanny valley; Sesame/ElevenLabs actively sell crossing it. Context-dependence (companion vs. customer support vs. phone sales) is not characterized.
@@ -246,14 +246,14 @@ Text / omnichannel:
 
 ## How This Category Fits in the Bigger Picture
 
-Within the Humazier project, Conversational & Dialogue Systems is the **interaction substrate** on which every other category plays out:
+Within the Unslop project, Conversational & Dialogue Systems is the **interaction substrate** on which every other category plays out:
 
 - **Voice/prosody/TTS (sibling voice categories):** these supply the *acoustic* naturalness. Category 08 contributes the *interactional* naturalness — the difference between "a beautiful voice reading text" and "a conversation partner."
-- **Style/tone/text humanization (text-side categories):** the "burstiness/hedges/typos/anti-slop" pattern set maps 1:1 onto the "disfluency/pauses/backchannels" pattern set here. Category 08 is where the Humazier project most naturally argues that these are the *same* problem and should share a humanization layer.
+- **Style/tone/text humanization (text-side categories):** the "burstiness/hedges/typos/anti-slop" pattern set maps 1:1 onto the "disfluency/pauses/backchannels" pattern set here. Category 08 is where the Unslop project most naturally argues that these are the *same* problem and should share a humanization layer.
 - **Persona/memory/character:** single-turn persona work underspecifies; the 100+ turn persona-drift problem is a dialogue-systems problem.
-- **Evaluation/benchmarks:** the dialogue literature's decomposed humanness taxonomies (USR sub-qualities, LaMDA SSI/Safety/Groundedness, Sparrow's 23 rules) are the template for any Humazier evaluation harness that avoids a single "human-like" score.
-- **Agent frameworks:** LiveKit Agents, Pipecat, Rasa CALM, Moshi, Ultravox are the concrete integration surfaces where Humazier rules would need to plug in.
-- **Ethics / anthropomorphism:** the #SaveStandardVoice revolt, Anthropic's character dissent, and HN's "keep it artificial" line are the strongest single-category evidence that maximum perceived humanness is not a safe North Star. Humazier's positioning needs to absorb this tension explicitly.
+- **Evaluation/benchmarks:** the dialogue literature's decomposed humanness taxonomies (USR sub-qualities, LaMDA SSI/Safety/Groundedness, Sparrow's 23 rules) are the template for any Unslop evaluation harness that avoids a single "human-like" score.
+- **Agent frameworks:** LiveKit Agents, Pipecat, Rasa CALM, Moshi, Ultravox are the concrete integration surfaces where Unslop rules would need to plug in.
+- **Ethics / anthropomorphism:** the #SaveStandardVoice revolt, Anthropic's character dissent, and HN's "keep it artificial" line are the strongest single-category evidence that maximum perceived humanness is not a safe North Star. Unslop's positioning needs to absorb this tension explicitly.
 
 In the taxonomy of "humanize thinking *and* output," this category is the one that forces both halves to be real: thinking humanness surfaces as pacing, hesitation, backchannels, and self-repair; output humanness surfaces as prosody, spoken-style phrasing, and character-consistent replies.
 

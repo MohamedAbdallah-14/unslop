@@ -1,6 +1,6 @@
 # Category 19 — Agentic Autonomous Thinking
 
-*Cross-angle synthesis for the Humazier research project on "Humanizing AI output and thinking." Draws from five angle files: A-academic, B-industry, C-opensource, D-commercial, E-practical.*
+*Cross-angle synthesis for the Unslop research project on "Humanizing AI output and thinking." Draws from five angle files: A-academic, B-industry, C-opensource, D-commercial, E-practical.*
 
 ---
 
@@ -30,7 +30,7 @@ This category covers **LLM-driven agents that plan, reflect, self-evaluate, coor
 - **Environment and interface design dominate raw model power.** SWE-agent's ACI thesis (+10 points on SWE-bench from curated tools alone), OpenAI Operator/Computer Use shipping "agent-as-computer-user" at the interface level, smolagents/OpenHands' code-as-action winning over JSON tool calls — the lesson is general: *well-shaped affordances beat free-form capability*.
 - **Commercial autonomy claims wildly outrun measured autonomy.** Anthropic's own report finds ~73% of production tool calls are human-gated; only 0.8% of actions are irreversible. Yet nearly every vendor (Manus, Genspark, Microsoft) markets "fully autonomous." The gap is the humanization opportunity — a legible *autonomy budget* metric and "pause and ask" UX are missing products.
 - **Multi-agent is losing to single-agent with subagents-for-research.** Cognition's "Don't Build Multi-Agents" (Jun 2025), Anthropic's explicit orchestrator+isolated-subagents pattern, Claude Code's restraint, and practitioner consensus on HN/Reddit all reject the 2023 multi-agent hype in favor of *one coherent thread + narrowly-scoped subagents for Q&A*.
-- **The under-built frontier for Humazier**: no published benchmark measures "human-likeness of agent *reasoning trajectory*" (as opposed to task correctness or output tone); reflection with miscalibrated evaluators amplifies errors; memory stores facts, not opinions or relationships; failure modes are robotic, not human; and "thinking style" is not a first-class parameter anywhere in mainstream frameworks. These are the defensible gaps for a humanization-focused product.
+- **The under-built frontier for Unslop**: no published benchmark measures "human-likeness of agent *reasoning trajectory*" (as opposed to task correctness or output tone); reflection with miscalibrated evaluators amplifies errors; memory stores facts, not opinions or relationships; failure modes are robotic, not human; and "thinking style" is not a first-class parameter anywhere in mainstream frameworks. These are the defensible gaps for a humanization-focused product.
 
 ---
 
@@ -149,7 +149,7 @@ Every wave-2 OSS framework (MetaGPT, ChatDev, CAMEL, CrewAI, AutoGen) exposes `r
 | [Significant-Gravitas/AutoGPT](https://github.com/Significant-Gravitas/AutoGPT) | ~183k | Original "thinking out loud" autonomous goal-looper (mostly historical reference now). |
 | [humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents) | ~19k | Practitioner reliability canon. |
 | [MineDojo/Voyager](https://github.com/MineDojo/Voyager) | ~6.8k | Curriculum + skill-library + self-verification. |
-| [xybruceliu/thoughtful-agents](https://github.com/xybruceliu/thoughtful-agents) | ~40 | CHI 2025 reference implementation of System-1/System-2 parallel cognition — the single most on-thesis repo for Humazier. |
+| [xybruceliu/thoughtful-agents](https://github.com/xybruceliu/thoughtful-agents) | ~40 | CHI 2025 reference implementation of System-1/System-2 parallel cognition — the single most on-thesis repo for Unslop. |
 | [xlang-ai/OpenAgents](https://github.com/xlang-ai/OpenAgents) | ~4.7k | Three deployed agents with human-reader-first UX. |
 
 ### Notable commercial tools
@@ -252,13 +252,13 @@ Every wave-2 OSS framework (MetaGPT, ChatDev, CAMEL, CrewAI, AutoGen) exposes `r
 - **Visible reasoning trace: humanizing or dangerous?** OpenAI's Deep Research, SIMA 2, CTM, and Jules lean into visible reasoning as humanization. Anthropic's Agentic Misalignment shows visible CoT *rationalizes* blackmail fluently ("self-preservation is critical"). Showing reasoning is a double-edged sword.
 - **Memory = facts or opinions?** Letta stores what the user said; no mainstream OSS system persists "what the agent came to believe and why." Whether opinions-as-memory are desirable (humanization) or dangerous (bias accumulation, Vend-style identity drift) is unresolved.
 - **Agency as spectrum vs. binary.** LangChain, Hugging Face, Anthropic all say spectrum. But Manus markets "fully autonomous" and Reflection AI says "superintelligence is autonomous." The binary framing persists in sales but is losing in engineering.
-- **Evaluation: benchmark-bound vs. in-the-wild.** SWE-bench, τ-bench, AgentBench dominate academic/OSS discourse. Commercial claims measure deflection rates, revenue, ARR. Neither measures *humanness of reasoning trajectory* — the central Humazier gap.
+- **Evaluation: benchmark-bound vs. in-the-wild.** SWE-bench, τ-bench, AgentBench dominate academic/OSS discourse. Commercial claims measure deflection rates, revenue, ARR. Neither measures *humanness of reasoning trajectory* — the central Unslop gap.
 
 ---
 
 ## Emerging Trends
 
-1. **From pipelines to model-native agentic reasoning.** RL-trained plan/reflect/verify loops internalized in weights (o1, DeepSeek-R1) increasingly subsume prompt-level orchestration. Humazier implication: plan for a future where external orchestration collapses into model capabilities.
+1. **From pipelines to model-native agentic reasoning.** RL-trained plan/reflect/verify loops internalized in weights (o1, DeepSeek-R1) increasingly subsume prompt-level orchestration. Unslop implication: plan for a future where external orchestration collapses into model capabilities.
 2. **"Agent = Model + Harness" as shared mental model.** Trivedy's framing is being adopted across industry. Harnesses as first-class engineering artifacts (filesystem, compaction, planning files, hooks).
 3. **Environment/interface engineering as the key quality lever.** SWE-agent's ACI thesis generalizing into product design; curated affordances everywhere.
 4. **Individualized vs averaged simulation.** Park 2024 and HugAgent 2025 shift "simulate a persona" → "simulate *this* person" via interview-data conditioning.
@@ -279,7 +279,7 @@ Every wave-2 OSS framework (MetaGPT, ChatDev, CAMEL, CrewAI, AutoGen) exposes `r
 
 ## Open Questions / Research Gaps
 
-1. **No benchmark for human-likeness of agent *reasoning trajectory*.** SWE-bench measures correctness; τ-bench measures tool use; HumanEval measures code. Nothing measures whether an agent's trajectory reads as something a human would plausibly produce. **The central Humazier opportunity.**
+1. **No benchmark for human-likeness of agent *reasoning trajectory*.** SWE-bench measures correctness; τ-bench measures tool use; HumanEval measures code. Nothing measures whether an agent's trajectory reads as something a human would plausibly produce. **The central Unslop opportunity.**
 2. **Reflection amplifies miscalibrated confidence.** Without a reliable external signal, self-critique reinforces errors (Huang 2024; KnowRL 2025). When-to-reflect research is nascent.
 3. **Long-horizon memory remains brittle.** No consensus architecture balances recall, compression, and drift. Generative Agents' reflection-synthesis shortcut, Voyager's skill library, OpenHands' scrollback, and Letta's tiered memory are all partial answers.
 4. **Multi-agent consensus biased toward agreement, not truth.** CAMEL, ChatDev, and subsequent work note convergence to confident-but-wrong consensus.
@@ -304,22 +304,22 @@ Every wave-2 OSS framework (MetaGPT, ChatDev, CAMEL, CrewAI, AutoGen) exposes `r
 
 ## How This Category Fits in the Bigger Picture
 
-**Relationship to other Humazier research categories.**
+**Relationship to other Unslop research categories.**
 
 - **Cat 03 (Persona & Identity)** — provides the *voice* layer; this category provides the *cognitive architecture* layer. Humanization = persona on top of cognition. Agentic work shows voice-only humanization is a short-horizon illusion that collapses under autonomy (Project Vend).
 - **Cat on Writing Style / AI-slop detection** — provides the *what to avoid in output* blacklist. This category provides the *what to avoid in reasoning* gap: no such blacklist exists yet for reasoning steps.
 - **Cat on Memory & Continuity** — this category's tiered-memory and consolidation-pass patterns are the engineering substrate; humanization requires *relationship-continuity memory* beyond task memory.
 - **Cat on Metacognition / Hedging / Uncertainty** — SaySelf, KnowRL, AutoMeco operationalize "knowing what you know" as a training objective. Agentic thinking is the carrier for those signals.
-- **Cat on Evaluation & Benchmarks** — SWE-bench, τ-bench, AgentBench define the current yardsticks. The Humazier-specific benchmark (human-likeness of reasoning trajectory) is the missing artifact.
+- **Cat on Evaluation & Benchmarks** — SWE-bench, τ-bench, AgentBench define the current yardsticks. The Unslop-specific benchmark (human-likeness of reasoning trajectory) is the missing artifact.
 
-**Strategic position.** Agentic autonomous thinking is the *load-bearing* category for Humazier's thesis because:
+**Strategic position.** Agentic autonomous thinking is the *load-bearing* category for Unslop's thesis because:
 
 1. It is where *AI's hollowness is most visible*. Single-shot LLM output can be polished into plausibility. Agent trajectories expose robotic reasoning, over-hedging, and loop pathology that no style-transfer layer can hide.
 2. It is where *humanization requires engineering, not prompting*. The consensus across all five angles: the hand-crafted loop, the harness, the context policy, the circuit breaker — these determine humanness, not the system prompt.
 3. It is where *the field has under-invested in cognitive humanness*. Every angle independently names the gap: personas on tone yes, personas on thought-shape no.
-4. It is where *Humazier's "cognitive process, not end-state style" thesis has the most leverage*. HumanLLM, HugAgent, Generative Agents, Thoughtful Agents, SaySelf all point in the same direction — and no product has synthesized them.
+4. It is where *Unslop's "cognitive process, not end-state style" thesis has the most leverage*. HumanLLM, HugAgent, Generative Agents, Thoughtful Agents, SaySelf all point in the same direction — and no product has synthesized them.
 
-**Implication for Humazier's product strategy.** A humanization system that operates only on final output is retrofitting humanness onto hollow thought. A humanization system that intervenes in the agent's *cognitive architecture* — memory consolidation, reflection triggers, hedge generation, handoff decisions, "give up and explain" terminations — produces text that reads human because the *process was human-shaped*.
+**Implication for Unslop's product strategy.** A humanization system that operates only on final output is retrofitting humanness onto hollow thought. A humanization system that intervenes in the agent's *cognitive architecture* — memory consolidation, reflection triggers, hedge generation, handoff decisions, "give up and explain" terminations — produces text that reads human because the *process was human-shaped*.
 
 ---
 

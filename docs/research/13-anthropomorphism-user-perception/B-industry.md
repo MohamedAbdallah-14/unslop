@@ -2,7 +2,7 @@
 
 **Research angle:** How industry UX writers, AI labs, and HCI research groups currently frame the *humanization* of AI output and its effect on user perception. Sources surveyed: Nielsen Norman Group (NN/g), Microsoft Research HAX Toolkit, Anthropic research blog, Stanford HAI / Digital Economy Lab, UX Collective (Medium), Smashing Magazine, and adjacent practitioner essays (Dan Saffer, Open Ethics Initiative, BotWash on the "uncanny valley of text").
 
-**Research value: high** — The industry discourse has converged on a tight, named vocabulary (anthropomorphization vs. *humanization*, "ELIZA effect", "persona selection", "persona vectors", "4 degrees", "uncanny valley of text", "humanizing trap"). It's polarized between a *safety/legibility camp* (NN/g, Stanford HAI, Microsoft HAX, Bora) that wants AI to present as a tool, and a *character/relationship camp* (Anthropic, IDEO-adjacent essayists, Dan Saffer) that sees humanization as inevitable and worth shaping carefully. This split is the single most important signal for the Humazier project — the technical question of *how* to humanize output is unresolved, but the framing question of *whether and how much* is now a named industry debate.
+**Research value: high** — The industry discourse has converged on a tight, named vocabulary (anthropomorphization vs. *humanization*, "ELIZA effect", "persona selection", "persona vectors", "4 degrees", "uncanny valley of text", "humanizing trap"). It's polarized between a *safety/legibility camp* (NN/g, Stanford HAI, Microsoft HAX, Bora) that wants AI to present as a tool, and a *character/relationship camp* (Anthropic, IDEO-adjacent essayists, Dan Saffer) that sees humanization as inevitable and worth shaping carefully. This split is the single most important signal for the Unslop project — the technical question of *how* to humanize output is unresolved, but the framing question of *whether and how much* is now a named industry debate.
 
 ---
 
@@ -41,7 +41,7 @@ The angle is essay/blog writing from industry design voices, AI labs' research s
 
 > "Humanization makes AI systems worse and users less reliant on them."
 
-**Takeaway for Humazier:** NN/g draws a sharp line between *naturalness* (sentence variation, tonal fit) and *humanization* (personhood cues: "I", "love this", simulated feelings). For a humanization product, this line is the single most important distinction to respect — users should get prose that reads like a thoughtful human *wrote it*, not prose that claims to *be* a human.
+**Takeaway for Unslop:** NN/g draws a sharp line between *naturalness* (sentence variation, tonal fit) and *humanization* (personhood cues: "I", "love this", simulated feelings). For a humanization product, this line is the single most important distinction to respect — users should get prose that reads like a thoughtful human *wrote it*, not prose that claims to *be* a human.
 
 ---
 
@@ -79,7 +79,7 @@ The angle is essay/blog writing from industry design voices, AI labs' research s
 
 **Pull quote:** Requesting a "happy" tone produced "overly enthusiastic language like 'delightful' and 'magic' that felt forced."
 
-**Takeaway for Humazier:** Tone descriptors are brittle levers; style-by-example (few-shot) is more robust than style-by-adjective. This is a direct input to the Humazier prompt-engineering layer.
+**Takeaway for Unslop:** Tone descriptors are brittle levers; style-by-example (few-shot) is more robust than style-by-adjective. This is a direct input to the Unslop prompt-engineering layer.
 
 ---
 
@@ -148,7 +148,7 @@ The angle is essay/blog writing from industry design voices, AI labs' research s
 
 > "An excessive desire to be engaging seems like an undesirable character trait for a model to have."
 
-**Takeaway for Humazier:** Anthropic is the most explicit *pro-character* voice in the industry, but its character is designed to **refuse sycophancy and flag its own machine-ness** — a humanizer product can borrow this stance: human-sounding writing does *not* have to claim personhood to feel authored.
+**Takeaway for Unslop:** Anthropic is the most explicit *pro-character* voice in the industry, but its character is designed to **refuse sycophancy and flag its own machine-ness** — a humanizer product can borrow this stance: human-sounding writing does *not* have to claim personhood to feel authored.
 
 ---
 
@@ -229,7 +229,7 @@ The angle is essay/blog writing from industry design voices, AI labs' research s
 | Venue | FAccT '24 (Stanford-affiliated) |
 | Core claim | Affective-design chatbots use personal pronouns, conversational conventions, and affirmations to position themselves as **companions**, which induces trust-forming behavior (parasocial relationships) that is *unearned*. |
 
-**Takeaway:** The specific linguistic affordances the paper criticizes — first-person pronouns, affirmations, social conventions — are exactly the humanizer dials a product like Humazier manipulates. The product should ship them with context flags: "companion-mode" vs "author-mode".
+**Takeaway:** The specific linguistic affordances the paper criticizes — first-person pronouns, affirmations, social conventions — are exactly the humanizer dials a product like Unslop manipulates. The product should ship them with context flags: "companion-mode" vs "author-mode".
 
 ---
 
@@ -399,7 +399,7 @@ Three independent findings point the same way:
 - Colombatto / Birch / Fleming 2025: attributing emotion to AI *decreases* users' willingness to accept its advice.
 - OpenAI's own GPT-4o sycophancy rollback (April 2025): optimizing for thumbs-ups produced over-agreeable, less-trustworthy output.
 
-**Implication for Humazier:** humanization of *style* (sentence rhythm, vocabulary, voice-matching) is safer than humanization of *stance* (warmth, affirmation, emotional agreement). The product should separate the two sliders.
+**Implication for Unslop:** humanization of *style* (sentence rhythm, vocabulary, voice-matching) is safer than humanization of *stance* (warmth, affirmation, emotional agreement). The product should separate the two sliders.
 
 ### Pattern 4 — Product interfaces are drifting away from chat
 
@@ -417,7 +417,7 @@ Anthropic's persona-vectors work, the AnthroScore metric, and the "171 emotion-l
 
 ### Gap 1 — No industry essay cleanly separates "naturalness" from "personhood"
 
-NN/g gets closest, but the dominant discourse conflates "AI that writes like a human" with "AI that claims to be human". The market position for Humazier is exactly this unclaimed middle — produce output that reads as written by a thoughtful human author, *without* the system itself adopting first-person authority. No major essay has named this middle position, which is both a gap and an opportunity.
+NN/g gets closest, but the dominant discourse conflates "AI that writes like a human" with "AI that claims to be human". The market position for Unslop is exactly this unclaimed middle — produce output that reads as written by a thoughtful human author, *without* the system itself adopting first-person authority. No major essay has named this middle position, which is both a gap and an opportunity.
 
 ### Gap 2 — Voice-matching is almost absent from the legibility discourse
 

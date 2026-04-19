@@ -169,13 +169,13 @@ How post-training (SFT → reward modeling → PPO/DPO → character/constitutio
 
 ## How This Category Fits in the Bigger Picture
 
-RLHF & Alignment is the **causal layer** for the "AI tell" that Humazier exists to reverse. The other categories orbit it:
+RLHF & Alignment is the **causal layer** for the "AI tell" that Unslop exists to reverse. The other categories orbit it:
 
 - **Pretraining / base models** set the capability ceiling but do not determine voice; Janus's Simulators framing shows the base model is a generic next-token engine, not an assistant.
 - **Prompting / system prompts / inference-time tricks** (abliteration, activation steering, persona forcing) exploit the fact that the simulator survives under the RLHF mask — they operate *downstream* of what this category produces.
 - **Evaluation / benchmarks** mostly measure the things RLHF was trained toward (helpfulness, harmlessness), not humanness — hence the benchmark gap.
 - **AI-text detection** adversarially measures RLHF residues (length, hedging, stock phrases). A detection reward is a natural humanization loss, though ethically fraught.
-- **Writing tools, creative-AI products, brand-voice platforms** sit on top of this stack and either accept the default voice (most) or work around it (Humazier-style products, Contra, HumanTone).
+- **Writing tools, creative-AI products, brand-voice platforms** sit on top of this stack and either accept the default voice (most) or work around it (Unslop-style products, Contra, HumanTone).
 
 The core insight: **if the "AI tell" is produced by preference tuning, then the cleanest place to remove it is also preference tuning** — either by re-tuning against a humanness-specific preference schema (DPO/ORPO/KTO on curated style pairs, or RLAIF against a humanness constitution) or by surgically removing the residues post-hoc (abliteration, steering, prompted rewrites). Everything else is a hack.
 

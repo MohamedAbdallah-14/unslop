@@ -3,7 +3,7 @@
 
 Emits a plain-text summary to stdout and a machine-readable `measure.json`
 next to the input snapshot. Use `--fail-on-regression` in CI to fail the
-build if the humanizer made AI-isms *worse* or broke structure.
+build if the unslop made AI-isms *worse* or broke structure.
 
 Metrics per condition (baseline | deterministic | llm):
   - word_count
@@ -24,7 +24,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "humanizer-humanize"))
+sys.path.insert(0, str(ROOT / "unslop"))
 
 from scripts.validate import AI_ISM_PATTERNS, validate  # noqa: E402
 
@@ -93,7 +93,7 @@ def summarize(snapshot_dir: Path) -> dict:
 
 
 def print_summary(summary: dict) -> None:
-    print("Humanizer eval summary\n======================\n")
+    print("Unslop eval summary\n======================\n")
     for pid, prompt in summary["prompts"].items():
         print(f"• {pid}")
         if "skipped" in prompt:

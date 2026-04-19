@@ -1,6 +1,6 @@
 # Research Status — How This Compendium Was Produced
 
-**Project.** Humazier — Humanizing the Output and Thinking of AI Models.
+**Project.** Unslop — Humanizing the Output and Thinking of AI Models.
 **Date of compilation.** Sunday, 19 April 2026.
 **Status.** Complete. 20 categories × 5 angles + 20 category indices + 1 master index = **122 markdown files**.
 

@@ -117,7 +117,7 @@ Fifteen headline insights that the 20 categories independently converge on:
 
 ### Theme H — Humanness is two-factor, not scalar
 
-- **Description.** Every measurement tradition — Gray/Wegner (Agency × Experience), Fiske/McKee (Warmth × Competence), Godspeed (Anthropomorphism × Animacy), NN/g's 4 Degrees, AnthroBench's 14 axes — separates *capability* from *inner life*, and *warmth* from *stance*. Style vs. stance is the Humazier-specific split.
+- **Description.** Every measurement tradition — Gray/Wegner (Agency × Experience), Fiske/McKee (Warmth × Competence), Godspeed (Anthropomorphism × Animacy), NN/g's 4 Degrees, AnthroBench's 14 axes — separates *capability* from *inner life*, and *warmth* from *stance*. Style vs. stance is the Unslop-specific split.
 - **Spans.** 03, 07, 09, 13, 15.
 - **Why it matters.** Single-slider humanizer UIs are architecturally behind the curve; at minimum, style (cadence, register, voice) and stance (warmth, sycophancy, confidence) must move independently.
 
@@ -251,7 +251,7 @@ Every item below is named with its originating angle file so the full evidence c
 8. **ElevenLabs** — voice cloning that dominates perceived humanness; $11B valuation. → [13/D-commercial.md](./13-anthropomorphism-user-perception/D-commercial.md)
 9. **Cresta Agent Assist & Coach** — industrial empathy-coaching pipeline; Holiday Inn attrition 120% → 60%. → [17/D-commercial.md](./17-industry-blogs-case-studies/D-commercial.md)
 10. **Sudowrite (Muse + Story Bible)** — fiction-tuned base + voice calibration + per-character sub-voices. → [14/D-commercial.md](./14-creative-writing-storytelling/D-commercial.md)
-11. **Lex (Style Guides)** — closest commercial analog to the Humazier thesis: "your signature tone, metaphors, terminology, narrative voice." → [20/D-commercial.md](./20-memory-personalization/D-commercial.md)
+11. **Lex (Style Guides)** — closest commercial analog to the Unslop thesis: "your signature tone, metaphors, terminology, narrative voice." → [20/D-commercial.md](./20-memory-personalization/D-commercial.md)
 12. **Mem0** — $24M raised, 186M+ monthly API calls; category leader on setup speed. → [20/D-commercial.md](./20-memory-personalization/D-commercial.md)
 13. **Undetectable.ai** — 15M+ users, `readability/purpose/strength/model` API; 72–89% independent bypass. → [18/D-commercial.md](./18-commercial-humanizer-tools/D-commercial.md)
 14. **Devin (Cognition)** — "first AI software engineer"; coworker framing; $2B val, >$150M ARR. → [19/D-commercial.md](./19-agentic-autonomous-thinking/D-commercial.md)
@@ -354,7 +354,7 @@ Fifteen ordered recommendations synthesized across all 20 categories. Each step 
 6. **Ground grinding answers in your own corpus.** RAG over tenant/brand content is the negative-humanization lever: it suppresses hallucinated APIs and made-up policies that are the loudest "this is a bot" signal. *(Cat 17)*
 7. **Budget latency to ~1 second first token for text, ~200 ms for voice.** Stream. Prefer invisible surfaces (slash menus, inline rewrites) to chatbot modals. *(Cats 08, 17)*
 8. **For long conversations, invest in tiered memory from day one.** Short-term buffer + working memory + archival + structured profile. Use a two-agent memory manager (cheap Sentinel + typed Knowledge Master). Episodic / semantic / procedural split from CoALA. *(Cats 12, 20)*
-9. **Add a style-memory block, not just a semantic-memory block.** Record how the user writes — cadence, metaphors, punctuation — and inject it at generation time. This is the Humazier wedge. *(Cat 20)*
+9. **Add a style-memory block, not just a semantic-memory block.** Record how the user writes — cadence, metaphors, punctuation — and inject it at generation time. This is the Unslop wedge. *(Cat 20)*
 10. **Pair reasoning with a voice layer ("reason privately, humanize publicly").** Use a reasoning model for correctness; pipe the conclusion through a voice-conditioned rewriter for output. Visible CoT is optional and risky. *(Cats 06, 19)*
 11. **Adopt human-in-the-loop as a feature, not a fallback.** Anthropic's measured 73% oversight rate is correct; ship a principled "pause-and-ask" UX with editable plans (Jules/Overture style). *(Cat 19)*
 12. **Measure what matters.** Beyond correctness: blind-preference on prose, anti-sycophancy (DarkBench/MASK), perceived empathy (EPITOME), homogenization (NoveltyBench), memory recall (LongMemEval), humanness of trajectory (custom — this is greenfield). *(Cats 07, 09, 14, 20)*

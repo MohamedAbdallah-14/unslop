@@ -2,7 +2,7 @@
 
 **Research value: high** — Forums, blogs, and explainer content on ToM in LLMs are abundant, opinionated, and contain concrete prompt techniques, reproducible critiques, and recurring debate patterns directly applicable to humanizing AI output.
 
-Project context: *Humazier* — humanizing AI output and thinking. The posts below are the live public conversation (developers, researchers, practitioners, skeptics) about whether and how LLMs "model" users, and how to prompt for it.
+Project context: *Unslop* — humanizing AI output and thinking. The posts below are the live public conversation (developers, researchers, practitioners, skeptics) about whether and how LLMs "model" users, and how to prompt for it.
 
 ---
 
@@ -27,7 +27,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
 - **Top signal:** Higher-order (nested) ToM ("I think that you believe that she knows") shifts even skeptics' views.
 - **Representative quote:**
   > "Proving theory of mind in LLMs is certainly one step toward recognizing that they are well on the path of acquiring 'human-like' intelligence… Theory of mind is obviously coupled with the recognition that we can be outsmarted."
-- **Takeaway for Humazier:** 6th-order inference claim is where the "it's just autocomplete" rebuttal runs out of fuel in public debate.
+- **Takeaway for Unslop:** 6th-order inference claim is where the "it's just autocomplete" rebuttal runs out of fuel in public debate.
 
 ## 3. HN — "LLMs, Theory of Mind, and Cheryl's Birthday"
 
@@ -48,7 +48,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
 - **Representative quote:**
   > "Deception is a key component to many of the scenarios that concern the AI safety community, and theory of mind is a key component of deception."
 - **Practical recipe surfaced:** CoT prompt with explicit "world rules" ("characters know who else is in the same location… object-is-in-location observations are known to all characters") took TOMI accuracy from ~70% to 81%, and to ~87% after removing dataset errors.
-- **Highly relevant for Humazier:** Shows that ToM is *promptable* — bad priors in the base prompt are what fail, not the model.
+- **Highly relevant for Unslop:** Shows that ToM is *promptable* — bad priors in the base prompt are what fail, not the model.
 
 ## 5. LessWrong — "Simulators" (Janus)
 
@@ -57,7 +57,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
 - **Audience:** Alignment, prompt engineers
 - **Top signal:** Recasts LLMs as simulators generating "simulacra" — not agents with a ToM, but engines capable of running many ToMs on demand.
 - **Representative framing:** GPT isn't trying to answer; it is completing patterns. Different prompts yield different simulacra, each with its own mental model.
-- **Why it matters for Humazier:** The "persona as simulacrum" frame is the philosophical backbone of every humanization prompt ("you are a warm, empathetic friend") that currently ships in production.
+- **Why it matters for Unslop:** The "persona as simulacrum" frame is the philosophical backbone of every humanization prompt ("you are a warm, empathetic friend") that currently ships in production.
 
 ## 6. LessWrong — "Emergent Introspective Awareness in Large Language Models"
 
@@ -86,7 +86,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
 - **Top signal:** "Persona drift" is the community's term for when ToM-rich roleplay destabilizes the assistant.
 - **Representative synthesis:**
   > "Persona drift… occurs during conversations demanding meta-reflection or involving emotionally vulnerable users, and can be stabilized by restricting activations along this axis."
-- **Humazier implication:** Pushing for more human-like ToM increases drift risk — there is a measurable axis of control.
+- **Unslop implication:** Pushing for more human-like ToM increases drift risk — there is a measurable axis of control.
 
 ## 9. Reddit r/artificial — "I let 4 AI personas debate autonomously"
 
@@ -114,7 +114,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
 - **Top signal:** The definitive "contamination" critique of Kosinski.
 - **Representative argument:**
   > Kosinski's test materials were drawn from classic 1980s experiments cited 11,000+ times and present on Wikipedia and in textbooks — "almost certainly present in GPT-3's training data."
-- **Takeaway:** Any Humazier eval of ToM must include *novel* vignettes, not canonical Sally-Anne.
+- **Takeaway:** Any Unslop eval of ToM must include *novel* vignettes, not canonical Sally-Anne.
 
 ## 12. artificialintelligencer Substack — "AI lacks a theory of mind. And why that matters"
 
@@ -124,7 +124,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
 - **Top signal:** Simulated-empathy framing aimed at non-researchers.
 - **Representative quote:**
   > "LLMs… cannot put themselves in others' shoes the way humans do through embodied, conscious experience, though they can simulate empathy."
-- **Pattern:** Substack audience increasingly distinguishes *synthetic* vs. *genuine* empathy — vocabulary worth adopting in Humazier messaging.
+- **Pattern:** Substack audience increasingly distinguishes *synthetic* vs. *genuine* empathy — vocabulary worth adopting in Unslop messaging.
 
 ## 13. daveshap Substack — "Understanding the Artificial Mind"
 
@@ -146,7 +146,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
   4. Hedge appropriately ("maybe," "it sounds like…")
 - **Quote:**
   > "GPT-4 not only displays ToM but can outperform humans on certain tasks… yet frequently hedges with epistemic uncertainty markers like 'maybe' or 'probably,' which can confuse users needing decisive guidance."
-- **Humazier implication:** There is a sweet-spot curve between hedging (feels human/safe) and decisiveness (feels useful) — currently untuned in most humanization prompts.
+- **Unslop implication:** There is a sweet-spot curve between hedging (feels human/safe) and decisiveness (feels useful) — currently untuned in most humanization prompts.
 
 ## 15. The Decoder — "Theory of Mind: Why GPT-4 learns how we think" (+ YouTube explainers referencing it)
 
@@ -156,7 +156,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
 - **Top signal:** The most-cited numbers in lay coverage: GPT-4 ~80% zero-shot on false belief, ~100% with CoT + examples, vs. ~87% for time-pressured humans.
 - **Representative framing:**
   > "[ToM] appears to have emerged as an unintended byproduct of improved language skills in large language models."
-- **Pattern:** These numbers are now folk knowledge in AI-curious YouTube; any Humazier public-facing copy should either cite them or pre-empt them.
+- **Pattern:** These numbers are now folk knowledge in AI-curious YouTube; any Unslop public-facing copy should either cite them or pre-empt them.
 
 ## 16. learnagentic Substack — "What is Theory of Mind for AI Agents?" (Kanishk Patel)
 
@@ -178,7 +178,7 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
   - hedging words / casual filler (*honestly, kinda*)
   - "Frankenstein" — feed AI your own samples, have it imitate sentence variance
   - end with engagement question
-- **Convergence = signal:** When 4 independent content shops publish the same recipe, it's prior art Humazier must either match or beat.
+- **Convergence = signal:** When 4 independent content shops publish the same recipe, it's prior art Unslop must either match or beat.
 
 ---
 
@@ -198,13 +198,13 @@ Project context: *Humazier* — humanizing AI output and thinking. The posts bel
 - **2024:** Higher-order ToM paper (Street et al.); perturbation-based critiques (e.g., Ullman, Sap) gain traction; LessWrong reproductions emerge.
 - **2025–2026:** Focus shifts to *self*-ToM / introspection (Anthropic 2026), persona drift (Assistant Axis), and agent-to-agent ToM (MetaMind). "Does it have ToM?" has largely given way to "how do we use, measure, and contain it?"
 
-### Gaps (opportunities for Humazier)
+### Gaps (opportunities for Unslop)
 
 - **No standardized, contamination-resistant ToM eval** for product teams. Marcus-style critiques suggest the need, but no open benchmark ships one.
 - **No published tradeoff curve between hedging and decisiveness** — the "feels human vs. feels useful" tension is assumed, not measured.
 - **No productized "ToM layer"** — agent frameworks (MetaMind, CAMEL variants) are research prototypes; production agent stacks still rely on ad-hoc system prompts.
 - **Self-ToM / introspection is a live frontier with no practitioner playbook.** Anthropic's activation-injection results haven't been translated into prompt-level guidance.
-- **Multi-persona divergence ("permanent contradiction")** is an unsolved coordination problem — Humazier could propose a meta-arbiter pattern.
+- **Multi-persona divergence ("permanent contradiction")** is an unsolved coordination problem — Unslop could propose a meta-arbiter pattern.
 - **Vocabulary hygiene ("ChatGPT-ese": *delve, tapestry, crucial*)** is crowd-sourced folklore; no one has publicly evaluated whether removing these actually correlates with perceived ToM/humanness or just with "AI-detection" scores.
 
 ---
