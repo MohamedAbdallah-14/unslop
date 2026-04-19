@@ -5,6 +5,7 @@
 **Make AI output sound like a human wrote it.**
 
 [![Tests](https://github.com/MohamedAbdallah-14/unslop/actions/workflows/ci.yml/badge.svg)](https://github.com/MohamedAbdallah-14/unslop/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/MohamedAbdallah-14/unslop/branch/main/graph/badge.svg)](https://codecov.io/gh/MohamedAbdallah-14/unslop)
 [![PyPI](https://img.shields.io/pypi/v/unslop.svg)](https://pypi.org/project/unslop/)
 [![Python](https://img.shields.io/pypi/pyversions/unslop.svg)](https://pypi.org/project/unslop/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)

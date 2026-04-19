@@ -38,7 +38,15 @@ jobs:
         run: mypy unslop/scripts
 
       - name: Unit + integration tests
-        run: python -m pytest tests/ -v --tb=short
+        run: python -m pytest tests/ -v --tb=short --cov=unslop/scripts --cov-report=xml --cov-report=term
+
+      - name: Upload coverage to Codecov
+        if: matrix.python-version == '3.12'
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./coverage.xml
+          flags: unittests
+          fail_ci_if_error: false
 
       - name: Repo integrity verifier
         run: python3 tests/verify_repo.py
