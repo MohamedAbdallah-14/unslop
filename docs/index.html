@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Humanizer — make AI output sound human</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Humanizer is a plugin + CLI that strips AI-isms from chat replies and markdown files. Works with Claude Code, Cursor, Windsurf, Gemini, Codex, and Copilot." />
+  <meta property="og:title" content="Humanizer — make AI output sound human" />
+  <meta property="og:description" content="Strip sycophancy, stock vocab, hedging stacks, and performative balance. Preserve code, URLs, headings, and technical content." />
+  <style>
+    :root {
+      --bg: #0f1117;
+      --fg: #e6e6e6;
+      --muted: #9aa0a6;
+      --accent: #8ab4f8;
+      --border: #222831;
+      --code-bg: #161a23;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.6;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+    h1 { font-size: 2.25rem; margin: 0 0 0.5rem; line-height: 1.1; }
+    h2 { margin-top: 3rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; }
+    .tag { color: var(--muted); font-size: 1rem; margin: 0 0 2rem; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, pre { font-family: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace; }
+    pre {
+      background: var(--code-bg);
+      padding: 1rem 1.2rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      font-size: 0.92rem;
+    }
+    code { background: var(--code-bg); padding: 0.15em 0.4em; border-radius: 4px; font-size: 0.9em; }
+    pre code { background: transparent; padding: 0; }
+    ul { padding-left: 1.2rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    @media (min-width: 640px) { .grid { grid-template-columns: 1fr 1fr; } }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem;
+      background: rgba(255,255,255,0.02);
+    }
+    .card h3 { margin: 0 0 0.4rem; font-size: 1rem; color: var(--accent); }
+    .card p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+    footer {
+      margin-top: 4rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Humanizer</h1>
+    <p class="tag">Strip AI-isms from chat replies and markdown files. Keep code, URLs, headings, and technical content exactly as written.</p>
+
+    <p>Humanizer runs as a plugin (Claude Code, Cursor, Windsurf, Gemini CLI, Codex, Copilot) and as a standalone Python CLI for rewriting files on disk.</p>
+
+    <h2>Install</h2>
+
+    <h3>Claude Code plugin</h3>
+<pre><code>/plugin install humanizer</code></pre>
+
+    <h3>Standalone hooks (any shell)</h3>
+<pre><code>git clone https://github.com/juliusbrussee/humanizer
+cd humanizer
+bash hooks/install.sh
+</code></pre>
+
+    <h3>File humanizer (Python)</h3>
+<pre><code>pipx install humanizer-humanize
+humanize --deterministic README.md
+</code></pre>
+
+    <h2>What it drops</h2>
+    <ul>
+      <li>Sycophancy openers (<code>Great question!</code>, <code>Certainly!</code>, <code>I'd be happy to help</code>)</li>
+      <li>Stock vocab (<code>delve</code>, <code>tapestry</code>, <code>testament</code>, <code>navigate</code>, <code>journey</code>, <code>realm</code>, <code>pivotal</code>, <code>paramount</code>, <code>seamless</code>, <code>holistic</code>, <code>leverage</code>, <code>robust</code> as filler)</li>
+      <li>Hedging stack openers (<code>It's important to note that</code>, <code>Generally speaking</code>, <code>In essence</code>, <code>At its core</code>)</li>
+      <li>Performative balance (every claim does not need a "however")</li>
+      <li>Em-dash pileups and tricolon padding</li>
+    </ul>
+
+    <h2>What stays exact</h2>
+    <ul>
+      <li>Fenced code blocks (<code>```</code>)</li>
+      <li>Inline code (<code>`...`</code>)</li>
+      <li>URLs, markdown links, file paths, commands</li>
+      <li>Headings (text and level)</li>
+      <li>Version numbers and error messages</li>
+    </ul>
+
+    <h2>Modes</h2>
+    <div class="grid">
+      <div class="card"><h3>subtle</h3><p>Lightest touch. Strip the obvious AI-isms and stop.</p></div>
+      <div class="card"><h3>balanced (default)</h3><p>Strip AI-isms, engineer burstiness, tighten tricolons.</p></div>
+      <div class="card"><h3>full</h3><p>Aggressive rewrite for varied cadence. Merge bullet soup.</p></div>
+      <div class="card"><h3>voice-match</h3><p>Match the user's voice from their previous messages.</p></div>
+      <div class="card"><h3>anti-detector</h3><p>Maximize variety to reduce AI-detector score. Truthfulness still required.</p></div>
+      <div class="card"><h3>off</h3><p>Disable. Return to default model behavior.</p></div>
+    </div>
+
+    <h2>Links</h2>
+    <ul>
+      <li><a href="https://github.com/juliusbrussee/humanizer">Source on GitHub</a></li>
+      <li><a href="https://github.com/juliusbrussee/humanizer#readme">README</a></li>
+      <li><a href="https://github.com/juliusbrussee/humanizer/blob/main/CLAUDE.md">Maintainer guide</a></li>
+    </ul>
+
+    <footer>
+      MIT licensed. Built by the Humazier maintainers.
+    </footer>
+  </main>
+</body>
+</html>

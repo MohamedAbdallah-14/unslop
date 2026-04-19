@@ -1,0 +1,20 @@
+# OpenAI Codex CLI bundle for the humanizer persona.
+# Drop this file at ~/.codex/config.toml (or merge into your existing config)
+# to persist the humanizer prompt across Codex sessions.
+#
+# The actual rules live in ../rules/humanizer-activate.md and are synced
+# to every platform via scripts/sync-mirrors.sh.
+
+[persona]
+name = "humanizer"
+description = "Strip AI-isms from chat and output files while preserving code, URLs, headings, and technical content."
+rules_file = "../rules/humanizer-activate.md"
+default_mode = "balanced"
+
+[modes]
+subtle = "Lightest touch — only strip sycophancy openers, stock vocab, and hedging stacks. Keep everything else."
+balanced = "Default — strip AI-isms, engineer burstiness, tighten tricolons, preserve structure."
+full = "Aggressive — rewrite for varied cadence, merge bullet soup, delete performative balance."
+voice-match = "Match the user's voice from their previous messages."
+anti-detector = "Maximize surface variety to reduce AI-detector score. Truthfulness still required."
+off = "Disable. Return to default model behavior."

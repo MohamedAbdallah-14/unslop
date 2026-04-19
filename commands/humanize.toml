@@ -1,0 +1,11 @@
+description = "Humanize a markdown / memory file: strip AI-isms while preserving every code block, URL, and heading. Backup as <stem>.original.md."
+prompt = """Read `humanizer-humanize/SKILL.md` and follow the Process section to humanize the file the user named.
+
+Default: LLM mode. If the user passed --deterministic, use the regex-only mode (no API call).
+
+Report:
+  - Detected file type
+  - AI-ism count before/after
+  - Path of humanized file and .original.md backup
+  - Any validation warnings
+"""

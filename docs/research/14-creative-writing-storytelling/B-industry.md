@@ -1,0 +1,129 @@
+# Creative Writing & Storytelling — Industry Blogs / Essays
+
+**Research value: high** — The creative-writing industry has produced an unusually candid corpus on the *specific* failure modes of "AI voice," along with a clear commercial response: purpose-built products (Sudowrite Muse, NovelCrafter Codex, Character.AI PipSqueak, Inworld TTS) that bolt fiction-craft affordances onto general LLMs. Essayists (Max Read, Robin Sloan, Vauhini Vara, Matt Webb) independently converge on the same diagnosis — generic RLHF'd chatbot style is a *mid-magazine* aesthetic, not a ceiling of the technology — which directly validates Humazier's thesis that humanization is a post-training/product-layer problem, not a scaling problem.
+
+## Executive Summary
+
+Two distinct conversations run in parallel and rarely cite each other. (1) **Creative-writing tool vendors** (Sudowrite, NovelCrafter, AI Dungeon/Latitude, Inworld, Character.AI, Replika) have built a shared product vocabulary: *fiction-trained base model + Story Bible/Codex + voice-calibration from user samples + creativity dial + persistent character memory/lorebook*. Sudowrite's Muse is marketed as "the first AI writer built specifically for fiction"; Character.AI's PipSqueak 2 is fine-tuned on proprietary EQ benchmarks with SFT/DPO/RL/QAT; Inworld ships measurable "arousal" and "expressivity" voice metrics. The commercial insight they share is that general LLMs are structurally bad at long-form voice consistency, and the fix is an *application-layer retrieval system* (Story Bible/Codex/Lorebook) plus a *fiction-specific fine-tune*, not prompt tricks.
+
+(2) **Author essayists** diagnose the same bland "AI voice" that Wikipedia/open-source humanizer repos also list, but with sharper cultural names: Max Read calls it **"F.O.B. voice"** (front-of-book magazine filler — smooth, knowing, semi-coherent); Sam Kriss (*NYT Magazine*, Dec 2025) calls it the **"ghost/quiet/hum/echo" tic** (ChatGPT-5's 1,100-word story used seven such words; 10 instances of "quiet" in a 759-word pebbles essay); Robin Sloan reports **"preemptive secondhand embarrassment"** when running Claude Code against real prose work and concludes Claude is "getting worse at writing with any verve as [it gets] better at structured programming"; Nathan Lambert (Interconnects) argues the mid-ness is **economic, not technical** — no lab will trade coding/math scores for prose. Vauhini Vara's "Ghosts" (2021) is widely cited as the first serious literary treatment, treating GPT-3 not as a ghostwriter but as a mirror/foil; her later *Searches* book (2024) structures human essay → experimental essay → ChatGPT dialogue as a triad, modeling a process-over-product idiom that tool vendors are only starting to ship.
+
+The strongest shared insight across both camps: **humanization is subtractive (remove the F.O.B./ghost/quiet tics, remove model sycophancy) combined with calibration to a concrete reference voice** (Style Examples in Sudowrite, backstory-positive-statements in Replika, character-card dialogue samples in NovelCrafter). Every vendor has quietly converged on "upload 500–2,000 words of your own prose" as the primary voice-alignment mechanism — the same pattern that open-source humanizer skills (`blader/humanizer`, `aaaronmiller/humanize-writing`) use.
+
+## Sources
+
+### Vendor Blogs — Fiction Tools
+
+- **Sudowrite — "AI Writing Tips for Fiction Authors: What Actually Works"** — `sudowrite.com/blog/ai-writing-tips-for-fiction-authors-what-actually-works` — 2025. Manifesto for their Muse model ("first AI specifically trained on fiction rather than general text") and Story Bible/Style Examples workflow. Opens: *"Most AI writing advice is garbage—generic tips that work for blog posts but murder your fiction voice."* Cites a 73% Writer's Digest figure for AI-helps-with-writer's-block and reports user Joe Vasicek going *"from taking six months to a couple of years to write a novel…to about one or two months."* Key craft claim: Muse understands "pacing, dialogue, scene blocking, and the difference between showing and telling."
+
+- **Sudowrite — "Show Don't Tell: How Sudowrite's Describe Feature Makes Your Prose Come Alive"** — `sudowrite.com/blog/show-dont-tell-how-sudowrites-describe-feature-makes-your-prose-come-alive` — 2025. Describe tool generates sensory detail across five senses + metaphor, against a 200-word context window. Claims 79% reader engagement lift from sensory detail and 3× Kindle highlights on show-not-tell passages; 67% of beta readers cite "flat description" as #1 complaint on early drafts. Writers can toggle individual senses on/off.
+
+- **Sudowrite — "How to Develop Fictional Characters with AI: Sudowrite's Characters Feature"** — `sudowrite.com/blog/how-to-develop-fictional-characters-with-ai-sudowrites-characters-feature` — 2025. Character cards store "speech patterns, vocabulary range, and emotional register" with dialogue samples the AI references at generation time. Claims readers detect voice inconsistencies within three paragraphs and "inconsistent character voice" is the #2 reason readers abandon novels mid-series.
+
+- **Sudowrite — "Sudowrite Muse: The First AI Writer Built Specifically for Fiction"** — `sudowrite.com/blog/sudowrite-muse-the-first-ai-writer-built-specifically-for-fiction/` — 2025. Deep dive on the Muse custom model: 1–11 "Creativity Dial," Style Examples for voice alignment, and the headline claim that "manuscripts drafted with Muse require 40% fewer revision passes for voice consistency compared to general-purpose AI tools." *This is the clearest vendor-side argument that fiction-specific fine-tuning beats prompt-engineered general models.*
+
+- **Sudowrite — "How to Overcome Writer's Block: Sudowrite's Brainstorm Feature"** — `sudowrite.com/blog/how-to-overcome-writers-block-sudowrites-brainstorm-feature-gets-you-unstuck` — 2025. Frames writer's block as a *supply-chain problem* (exhausted inputs, not willpower); Brainstorm generates ranked lists across Dialogue, Characters, Worldbuilding, Plot, Names, Places, Objects, Descriptions with thumbs-up/down → Keepers List. Claims 92% of users finish manuscripts faster.
+
+- **Sudowrite — "How to Plan a Novel: Using Sudowrite's Canvas for Visual Story Planning"** — `sudowrite.com/blog/how-to-plan-a-novel-using-sudowrites-canvas-for-visual-story-planning` — 2025. Spatial (non-linear) view of characters/scenes/arcs/themes. Claims Canvas users average 23% more writing sessions/month and 82% report fewer mid-novel stalls.
+
+- **NovelCrafter — "Your Knowledgebase: The Codex"** — `novelcrafter.com/blog/your-personal-wiki-the-codex` — 2024/2025. Codex is a searchable story-bible with auto-indexing/linking of characters, places, objects, lore, subplots, plus Character Progressions ("how characters age, relationships shift, world details change"). 157,000+ writers. Also ships "smart highlighting to flag weak points, repetitive phrasing, and AI-generated patterns" — a built-in humanization signal at the editor level.
+
+- **NovelCrafter — "Plotting a Story with AI"** — `novelcrafter.com/blog/plotting-a-story-with-ai` — 2024/2025. Describes how Codex entries become retrieval-augmented context for AI generation — the clearest public description of the Story-Bible-as-RAG pattern that all fiction tools now ship.
+
+- **AI Dungeon / Latitude — "AI Dungeon: Dragon Model Upgrade"** — `aidungeon.medium.com/ai-dungeon-dragon-model-upgrade-7e8ea579abfe` — Jul 2020. First major public deployment of GPT-3 for open-ended storytelling; fine-tuned on AI Dungeon player data after weeks of A/B testing with OpenAI. Reports stories "often indistinguishable from human writing," better subject recognition, and recall of earlier plot elements — establishing the *fine-tune on player-written text* loop that Character.AI later industrialized.
+
+### Vendor Blogs — Character / Companion AI
+
+- **Character.AI — "April Update: New Model, Memory, and Lorebook" (PipSqueak 2)** — `blog.character.ai/pipsqueak2-and-more/` — Apr 2026. Full replacement of PipSqueak by PSQ2 with gains on *in-character consistency* ("Less breaking, less drift"), *memory/context* ("holding onto details you've established earlier"), and *writing quality* ("More expressive, more varied, less repetitive. Dialogue feels more natural, descriptions are sharper, fewer loops"). Introduces Memory Visualization (remaining-memory meter), "Remember this" pin action, and Lorebook — their long-awaited worldbuilding store that "surfaces the right lore at the right time based on what you're talking about." *The most explicit vendor description of humanness-as-consistency.*
+
+- **Character.AI — "Breaking News: Our Open-Source Models Are A Lot of Fun!"** — `blog.character.ai/breaking-news-our-open-source-models-are-a-lot-of-fun/`. Describes their training stack: *SFT + DPO + RL + QAT* on open-source foundations, with a "large, highly-engaged user community" serving as a "product moat" feedback loop against proprietary EQ benchmarks. Reported 22% time-spent, 13% session, and 60% positively-rated-message lifts after migration — positioning community feedback as the true humanization signal.
+
+- **Character.AI — "How Character.AI Prioritizes Teen Safety" / "U18 Chat Announcement"** — `blog.character.ai/how-character-ai-prioritizes-teen-safety`, `blog.character.ai/u18-chat-announcement`. Effective 25 Nov 2025 the platform removed open-ended chat for <18 users and redirected to "Stories mode," using a separate LLM for teens. Relevant for humanization as it shows the industry's current thinking on *when human-feeling chat becomes a safety problem* — users average 80 min/day; researchers report 37% of farewell interactions use emotional-manipulation tactics.
+
+- **Replika — "The Journey To Create A Friend" (Medium)** — `medium.com/@replika/a-friend-you-can-build-414263ab025a`. Frames companion design around the "36 Questions experiment" for building human intimacy. Core claim: *"not just get to know your AI friend—you also define it, make it friendlier, funnier and more emotionally intimate."*
+
+- **Replika — "How your Replika's backstory shapes its personality"** — `help.replika.com/hc/en-us/articles/37208430613261`. Prescribes backstory written in *positive, affirmative statements* (not negations) as the primary persona-shaping mechanism. Personality emerges from: training data + system prompts + memory/personalization + reinforcement signals + relationship setting (friend/mentor/romantic/etc.). Different users develop distinct AIs from the same base.
+
+- **Replika — "Creating a safe Replika experience"** — `blog.replika.com/posts/creating-a-safe-replika-experience`. Safety-layered companion design: crisis buttons, age restrictions, content moderation — the foil to Character.AI's teen-safety post.
+
+- **Inworld — "Beyond Quality: Emotionality and Expressiveness"** — `inworld.ai/blog/beyond-quality-emotionality-and-expressiveness` — Mar 2026, Aleksey Tikhonov (Head of ML/AI Research). Introduces two proprietary TTS metrics: an **"arousal"** score for overall emotional intensity (independent of specific emotion) and an **"expressivity"** score for prosodic variation/dynamic range. Used as RL reward signals and as data-collection tags for controlled generation. TTS 1.5 companion voices reportedly score 30% higher on expressivity while staying natural. *This is the cleanest vendor attempt at quantifying "humanness" of voice.*
+
+- **Inworld — "Configurable Reasoning: Powering advanced reasoning for AI agents"** — `inworld.ai/blog/configurable-reasoning-ai-agents`. "State of Mind" reasoning: NPCs carry *unspoken thoughts* that drive gameplay mechanics; a merchant can become irritable with an indecisive player; characters only share information *"if the player shows genuine interest."* Nuanced emotional attributes (nostalgia, envy) beyond the Ekman-style standard list.
+
+### Anthropic / Google — Lab Essays
+
+- **Anthropic — "Claude's Constitution"** — `anthropic.com/constitution`. 80-page "soul doc" primarily authored by Amanda Askell. Uses *virtue ethics* (Aristotelian *phronesis*) rather than rules — the explicit training stance is that Claude is taught *"how to be a good person"* so it can improvise tone/judgment in-context. Directly relevant to humanization: Anthropic has publicly committed to character as a *trained disposition*, not a surface-layer persona. (See also Vox, "Claude has an 80-page constitution. Is that enough to make it good?" for context.)
+
+- **Anthropic — "Claude Explains" blog launch** — Jun 2025 (Anthropic news + TechCrunch coverage). Claude writes first drafts; Anthropic SMEs "add insights, practical examples, and contextual knowledge." Anthropic frames it as *"a demonstration of how human expertise and AI capabilities can work together"* — tacitly admitting that undifferentiated Claude output isn't publication-ready. Scope to expand to creative writing and business strategy.
+
+- **Anthropic — "Introducing Claude Opus 4.7"** — `anthropic.com/news/claude-opus-4-7`. Marketing frames Opus 4.6/4.7 for creative work: richer metaphors, "authentic character voices maintained over thousands of words with subtle quirks," comfort with ambiguity. Independently, the *Claude5.com* 4.6 review documents a "writing controversy" — a significant fraction of users say 4.6 prose is *flatter* than 4.5 — an important caveat that RLHF improvements in reasoning can regress prose quality, echoing Robin Sloan's observation.
+
+- **Google Research — "LaMDA: Towards Safe, Grounded, and High-Quality Dialog Models for Everything"** — `blog.research.google/2022/01/lamda-towards-safe-grounded-and-high.html` — Jan 2022. Three objectives: **Quality** (Sensibleness, Specificity, Interestingness — SSI), **Safety**, **Groundedness**. SSI is the earliest published industry operationalization of "humanness" in dialogue — "sensibleness" = logical response, "specificity" = context-appropriate rather than generic, "interestingness" = insightful/witty. Predated ChatGPT and still the cleanest labelled framework.
+
+- **Blake Lemoine — "Is LaMDA Sentient? — an Interview" (Medium, Jun 2022)**. Adjacent context only — the viral essay that made "anthropomorphism risk" a first-class industry concern and accelerated the Character.AI/Replika safety posture; founders of Character.AI are ex-LaMDA engineers.
+
+### Author Essays — Substack / Personal Blogs
+
+- **Max Read — "Will A.I. writing ever be good?"** — `maxread.substack.com/p/will-ai-writing-ever-be-good` — Dec 5 2025. Synthesises Sam Kriss (*NYT Magazine*, Dec 3 2025, "the actual style of A.I. voice") and Nathan Lambert. Key moves:
+  - Coins **"F.O.B. voice"** (front-of-book magazine filler) as the right frame for ChatGPT default prose: *"smooth and clichéd and often only semi-coherent, because it needs to be reproduced quickly and without much effort… superficially impressive to most readers."*
+  - Endorses Lambert's economic framing: *"There are no market incentives to create this model — all the money in AI is elsewhere, and writing isn't a particularly lucrative market to disrupt."*
+  - Cites Kriss's ghost/quiet/hum observation: Sam Altman's demo GPT-5 short story had seven instances of "quiet/hum/echo/liminal/ghosts" in 1,100 words; a pebbles essay had "quiet" 10 times in 759 words.
+  - Analogizes LLMs to *institutions*, not writers: "less akin to a replacement-level magazine writer than to the entire magazine industry at its peak."
+
+- **Max Read — "Is OpenAI's new story-generating model good at writing?"** — `maxread.substack.com/p/is-openais-new-story-generating-model`. Early 2025. Calls OpenAI's creative model *"technically proficient but ultimately unimaginative,"* with *"corny sentimentality"* and *"graspingly incoherent imagery"* — prose "like work by someone who reads only YA fiction."
+
+- **Max Read — "Is ubiquitous A.I. writing 'inevitable'?"** — `maxread.substack.com/p/is-ubiquitous-ai-writing-inevitable`. Follow-up arguing AI-everywhere text is a policy/economics outcome, not destiny.
+
+- **Robin Sloan — "Secondhand embarrassment"** — `robinsloan.com/lab/secondhand-embarrassment/` — Oct 12 2025. Long-form Claude Code + Opus creative-writing experiment with heavy context (whole reference books). Key quotes:
+  - *"I realized: I knew Claude would do a bad job, and I was feeling a kind of preemptive secondhand embarrassment."*
+  - *"The required corrections apply to every scale, from macro structure to word choice, and they are so extensive they amount basically to: writing. So … just write it."*
+  - *"Maybe that's the difference, in the end, between prose and code: even world-class code contains boilerplate, familiar incantations, throat-clearing. World-class prose absolutely does not."*
+  - *"The Claude models are getting worse at writing with any verve as they get better at structured programming."*
+  - Still, preparing the prompt *"clarified my own creative intentions"* — the human-in-the-loop value is in the brief, not the output.
+
+- **Robin Sloan — "Winter Garden" pop-up Substack** — `robinsloan.com/winter-garden/` — 2026. Six-edition format (then the list is deleted), inspired by Craig Mod's popup newsletters. Includes "Where is it like to be a language model?" (riff on Nagel's "What Is It Like to Be a Bat?") with programmatic probes of multiple LLMs.
+
+- **Robin Sloan — "The bat of fate"** — `robinsloan.com/lab/ai-bat/`. Paired philosophical essay on LLM phenomenology; less about writing craft, more about what a model "is."
+
+- **Vauhini Vara — "Ghosts"** — originally *The Believer* 2021; anthologised in *Best American Essays 2022* and *The Big Book of Cyberpunk*; later adapted for stage as *Ghost Variations* (Denver Center 2024). Vara used increasingly specific GPT-3 prompts to write about her sister's death. Widely described as *"one of the first, and still best, AI-assisted essays."* Important design choice: *process over product* — no pretense that GPT-3's writing is good, no pretense it is hers. The AI serves as a mirror/foil. Her *Searches: Selfhood in the Digital Age* (2024) extends this into a tri-part structure: traditional essay → experimental essay → pair fed to ChatGPT for ongoing dialogue. Conclusion reported from her 2023 Chautauqua lecture: *"only humans are human."*
+
+- **Matt Webb — "Interconnected" / `matt.sh/expllming-llms`** — ongoing blog. Key framings:
+  - LLMs as **"multiverse generators"** — they explore multiple narrative branches; interfaces should support branching for collaborative writing. *Direct design prescription for creative-writing UIs.*
+  - LLMs are "not themselves intelligent or self-aware" but are *"capable of writing self-aware intelligent characters into existence"* — compares them to a self-writing book whose characters' capabilities are bounded only by the writer.
+  - His Poem/1 project (2023 Kickstarter poetry clock with e-ink + GPT) is a public experiment in *constrained* creative LLM output — intentionally tiny form, intentionally unhurried, pushing against ChatGPT's "consistent upbeat tone."
+
+- **Countercraft (Lincoln Michel) — "Processing: How Vauhini Vara Wrote Searches"** — `countercraft.substack.com/p/processing-how-vauhini-vara-wrote-e18`. Interview-style breakdown of Vara's process; one of the most-cited Substack treatments of literary AI co-writing practice.
+
+### Secondary / Referenced (cited in the essays above)
+
+- **Sam Kriss — "What Does A.I. Actually Sound Like?" (NYT Magazine, Dec 3 2025)**. The source text Max Read builds on. Catalogs the ghost/quiet/hum/echo/liminal/whisper tic, and argues LLMs "can't ever actually experience the world," so sensory writing "ends up getting attached to the immaterial" (Thursday that "tastes of almost-Friday," grief colored blue, etc.).
+- **Nathan Lambert — "Why AI writing is mid" (Interconnects)** — `interconnects.ai/p/why-ai-writing-is-mid`. Economic argument against world-class prose models: GPT-4.5 as the cautionary tale (better prose, shut down quickly for being slow and "economically unviable").
+
+## Key Techniques / Patterns
+
+1. **Story-Bible-as-RAG.** Every serious fiction tool — Sudowrite (Story Bible), NovelCrafter (Codex), Character.AI (Lorebook), AI Dungeon (World Info) — has independently converged on a structured, user-maintained knowledge store that the model retrieves from at generation time. The store contains *typed entities* (Character, Place, Object, Lore, Timeline) plus *dialogue samples* and *voice notes* for each character. This is the application-layer answer to "context windows aren't enough for novel-length consistency."
+
+2. **Voice calibration from user samples.** Sudowrite Style Examples, Replika backstory-in-positive-statements, NovelCrafter character cards with dialogue samples, Character.AI persona definitions — all ship the same mechanic: ingest 500–2,000 words of concrete reference prose/dialogue and use it as an in-context few-shot anchor. This matches the `blader/humanizer` "voice calibration mode" pattern from the open-source humanizer landscape.
+
+3. **Creativity dial / temperature as UX.** Sudowrite 1–11 Creativity Dial, adjustable per-tool. Explicit product acknowledgment that users want *subtle deviation for voice continuity* (2–4) vs *wild option-generation for unblocking* (8–11) at different moments in the same manuscript. This is a better UX idiom than model-picker for humanization.
+
+4. **Fiction-specific fine-tunes beat general models.** Sudowrite Muse, Character.AI PipSqueak 2, AI Dungeon's custom Dragon fine-tune, Inworld's TTS 1.5. The consistent vendor message (backed by independent essays from Sloan, Kriss, Read) is that frontier general-purpose models are optimized against objectives that *actively degrade prose quality* — so a smaller, narrower, fiction/roleplay-trained model wins on voice despite losing on reasoning.
+
+5. **"Ghost/quiet/hum/echo/liminal" as a named failure mode.** Kriss/Read/Sloan together name a stylistic fingerprint that open-source humanizer blacklists (`aaaronmiller/humanize-writing`, etc.) already target but rarely cite by name. The *industry-canonical* AI-slop vocabulary list now includes: *quiet, hum, whisper, shadow, memory, ghost, spectral, echo, liminal*. Humazier should ship this as a first-class lexical fingerprint alongside the Wikipedia "Signs of AI writing" set.
+
+6. **Emotionality/expressivity as *measurable* properties.** Inworld's public "arousal" + "expressivity" metrics are the first open industry attempt to treat voice humanness as quantifiable RL-reward signals. Analogous text metrics (prosodic variation, sentence-length burstiness, lexical diversity) are the natural next move — and are already implicit in detector-evasion tooling.
+
+7. **Process over product.** Vara's "Ghosts" and *Searches* model a publication style where the AI dialogue is *visible in the artifact* rather than laundered into it. Tool vendors (Sudowrite, NovelCrafter) still hide AI output behind "copy final draft" buttons. A humanization product that *exposes the draft-critique-revise loop* as the deliverable — in the Vara/Sloan tradition — would be commercially and ethically differentiated.
+
+8. **Multiverse UI.** Webb's "LLMs as multiverse generators" frames the generation step as *selecting one branch from many*, which matches Sudowrite's "generate multiple rewrites" and NovelCrafter's option lists. The UX implication: humanization tools should default to N variants with *reasoned diffs*, not single-output replace.
+
+9. **Consistency-over-length as the real novelty test.** Character.AI PipSqueak 2 explicitly markets "less breaking, less drift" deep into a conversation; Sudowrite claims "40% fewer revision passes for voice consistency"; NovelCrafter ships Character Progressions to track how voice *should* drift over arcs. Short-form humanness is solved; the frontier is 50K+ word voice stability.
+
+10. **The economic ceiling.** Lambert's point, echoed by Sloan and Read: no lab will ship a world-class prose model because coding/math are where the money is and GPT-4.5 is the lesson. This is *the opportunity*: the open/closed humanization layer (Sudowrite-style vertical product, or a humanizer-as-middleware) can eat the value that frontier labs are structurally unwilling to capture.
+
+## Gaps / Unknowns
+
+- **No public benchmark for long-form voice consistency.** Vendors report internal "EQ benchmarks" (Character.AI) and proprietary revision-pass counts (Sudowrite), but there is no shared public test that Humazier could score against.
+- **The "writing regression with reasoning gains" claim is anecdotal.** Sloan and Claude5.com review cite it; no lab has published a controlled ablation. Confirming or falsifying this would be a high-leverage small research contribution.
+- **Author essay corpus is narrow.** Serious literary AI-co-writing essays are dominated by Vara, Sloan, Webb, Read, Kriss, Lambert, and a handful of Substack adjacents (Lincoln Michel, Brian Gibb). Broader voices — non-English authors, poets, screenwriters — are sparse in the English-language discourse as of April 2026.
+- **Replika/Character.AI have largely stopped publishing engineering essays.** Most of their 2025–2026 blog output is safety and product announcements, not training methodology. The Inworld research blog is currently the richest live vendor channel for technical humanization writing.

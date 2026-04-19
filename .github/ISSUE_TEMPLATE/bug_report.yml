@@ -1,0 +1,80 @@
+name: Bug report
+description: Something the humanizer did (or didn't do) that surprised you.
+title: "[bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! A tight, reproducible example helps a lot.
+        If the bug is about a specific rewrite, please paste the *exact* input
+        and the *exact* output you got. The deterministic mode is line-accurate.
+
+  - type: input
+    id: version
+    attributes:
+      label: Humanizer version
+      description: "Run `humanize --version` or check pyproject.toml. If installed as a Claude Code plugin, run `/plugin list`."
+      placeholder: "0.3.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Claude Code plugin
+        - Cursor rule
+        - Windsurf rule
+        - Gemini CLI
+        - OpenAI Codex
+        - Copilot instructions
+        - Standalone hooks (install.sh)
+        - Python CLI (humanize command)
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: OS
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: input
+    attributes:
+      label: Input (exact)
+      description: The text you gave the humanizer. Wrap in a code block.
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual output
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected output
+      description: What you thought would happen. Concrete is better than vague.
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / traceback (optional)
+      render: shell

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security issue
+    url: https://github.com/juliusbrussee/humanizer/security/advisories/new
+    about: Please do NOT open a public issue for security problems. Use a GitHub security advisory.
+  - name: Question or usage help
+    url: https://github.com/juliusbrussee/humanizer/discussions
+    about: Use Discussions for "how do I ..." questions.

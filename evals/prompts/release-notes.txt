@@ -1,0 +1,1 @@
+Draft release notes in markdown for version 2.4.0 of a fictional CLI tool called `fingerling`. Include a short overview paragraph, a bulleted list of three new features, and a "Breaking changes" section with one entry. Target 200 words.

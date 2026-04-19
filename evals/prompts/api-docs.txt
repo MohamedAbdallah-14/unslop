@@ -1,0 +1,1 @@
+Write markdown API documentation for a hypothetical `/v1/users` REST endpoint that supports GET (list), POST (create), and DELETE (by id). Include request/response examples in fenced JSON blocks. Target 250 words.

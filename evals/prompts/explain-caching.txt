@@ -1,0 +1,1 @@
+Explain, in markdown, why you'd add a caching layer in front of a database-backed API. Discuss Redis vs Memcached vs in-process LRU. Include a short code example in Python or Node. Target roughly 300 words.

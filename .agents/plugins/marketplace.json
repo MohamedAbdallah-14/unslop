@@ -1,0 +1,13 @@
+{
+  "name": "humanizer-agents-marketplace",
+  "description": "Local agents marketplace for the humanizer plugin (anti-AI-slop tooling).",
+  "plugins": [
+    {
+      "name": "humanizer-repo",
+      "displayName": "Humanizer (this repo)",
+      "description": "Humanizer plugin sourced from this repository.",
+      "version": "0.1.0",
+      "source": "./plugins/humanizer"
+    }
+  ]
+}

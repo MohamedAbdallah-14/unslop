@@ -1,0 +1,30 @@
+{
+  "timestamp": "20260419T183843Z",
+  "fixture_count": 2,
+  "total_ai_isms_before": 49,
+  "total_ai_isms_after": 4,
+  "total_delta": 45,
+  "percent_reduced": 91.8,
+  "fixtures": [
+    {
+      "file": "ai-slop-release-notes.md",
+      "words_before": 194,
+      "words_after": 164,
+      "ai_isms_before": 17,
+      "ai_isms_after": 1,
+      "delta": 16,
+      "structural_ok": true,
+      "structural_errors": []
+    },
+    {
+      "file": "ai-slop-tutorial.md",
+      "words_before": 294,
+      "words_after": 239,
+      "ai_isms_before": 32,
+      "ai_isms_after": 3,
+      "delta": 29,
+      "structural_ok": true,
+      "structural_errors": []
+    }
+  ]
+}

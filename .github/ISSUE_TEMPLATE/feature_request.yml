@@ -1,0 +1,47 @@
+name: Feature request
+description: Suggest a new behavior or a new AI-ism pattern to catch.
+title: "[feat] "
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If you're proposing a new AI-ism pattern, include a concrete example of
+        the input you'd like stripped and the output you'd like to see. Patterns
+        that preserve quoted technical content and rarely fire on human prose
+        are strongly preferred.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: One or two sentences, no preamble.
+    validations:
+      required: true
+
+  - type: textarea
+    id: example
+    attributes:
+      label: Example input → desired output
+      render: markdown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Which mode does this belong in?
+      options:
+        - subtle
+        - balanced (default)
+        - full
+        - voice-match
+        - anti-detector
+        - not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else

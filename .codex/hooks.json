@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openai.com/schemas/codex-hooks-v1.json",
+  "name": "humanizer",
+  "version": "0.3.0",
+  "description": "Humanizer hooks for OpenAI Codex CLI. Activate humanizer rules at session start and track mode changes across turns.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "node",
+        "args": ["${HOME}/.codex/hooks/humanizer-activate.js"],
+        "timeoutMs": 2000
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "type": "command",
+        "command": "node",
+        "args": ["${HOME}/.codex/hooks/humanizer-mode-tracker.js"],
+        "timeoutMs": 2000
+      }
+    ]
+  },
+  "notes": [
+    "These hook scripts are byte-identical to hooks/humanizer-*.js — copy them to ~/.codex/hooks/ before enabling.",
+    "Set HUMANIZER_DEFAULT_MODE in your environment to override the default mode (subtle, balanced, full, voice-match, anti-detector, off).",
+    "The flag file at ~/.codex/.humanizer-active is what the statusline reads; set CLAUDE_CONFIG_DIR=~/.codex to keep everything under one dir."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "humanizer",
+  "description": "Make assistant output sound human. Strip AI-isms (sycophancy, stock vocab, hedging stacks, em-dash pileups), engineer burstiness, restore voice. Preserves code, URLs, and technical accuracy.",
+  "author": {
+    "name": "Mohamed Abdallah",
+    "url": "https://github.com/MohamedAbdallah-Hu"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/humanizer-activate.js\"",
+            "timeout": 5,
+            "statusMessage": "Loading humanizer mode..."
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/hooks/humanizer-mode-tracker.js\"",
+            "timeout": 5,
+            "statusMessage": "Tracking humanizer mode..."
+          }
+        ]
+      }
+    ]
+  }
+}
