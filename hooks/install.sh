@@ -32,7 +32,7 @@ fi
 CLAUDE_DIR="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
 HOOKS_DIR="$CLAUDE_DIR/hooks"
 SETTINGS="$CLAUDE_DIR/settings.json"
-REPO_URL="https://raw.githubusercontent.com/MohamedAbdallah-Hu/unslop/main/hooks"
+REPO_URL="https://raw.githubusercontent.com/MohamedAbdallah-14/unslop/main/hooks"
 
 HOOK_FILES=("package.json" "unslop-config.js" "unslop-activate.js" "unslop-mode-tracker.js" "unslop-statusline.sh")
 

@@ -53,7 +53,7 @@ foreach ($hook in $HookFiles) {
   if (Test-Path $src) {
     Copy-Item -Force $src $dst
   } else {
-    $url = "https://raw.githubusercontent.com/MohamedAbdallah-Hu/unslop/main/hooks/$hook"
+    $url = "https://raw.githubusercontent.com/MohamedAbdallah-14/unslop/main/hooks/$hook"
     Invoke-WebRequest -Uri $url -OutFile $dst
   }
   Write-Host "  Installed: $dst"

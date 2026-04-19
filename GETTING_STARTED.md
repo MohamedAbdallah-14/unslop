@@ -20,7 +20,7 @@ Pick Claude Code. It's the smoothest on-ramp, and you don't need to touch any se
 Open a terminal and run these three commands:
 
 ```bash
-git clone https://github.com/MohamedAbdallah-Hu/unslop.git
+git clone https://github.com/MohamedAbdallah-14/unslop.git
 cd unslop
 bash hooks/install.sh
 ```

@@ -35,7 +35,7 @@ FROM python:${PYTHON_VERSION}-slim
 
 LABEL org.opencontainers.image.title="unslop"
 LABEL org.opencontainers.image.description="Strip AI-isms from markdown/text; preserve code, URLs, and headings."
-LABEL org.opencontainers.image.source="https://github.com/MohamedAbdallah-Hu/unslop"
+LABEL org.opencontainers.image.source="https://github.com/MohamedAbdallah-14/unslop"
 LABEL org.opencontainers.image.licenses="MIT"
 
 RUN groupadd --system humanize && useradd --system --gid humanize --no-create-home humanize

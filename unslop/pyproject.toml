@@ -33,10 +33,10 @@ llm = ["anthropic>=0.34"]
 dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.8"]
 
 [project.urls]
-Homepage = "https://github.com/MohamedAbdallah-Hu/unslop"
-Issues = "https://github.com/MohamedAbdallah-Hu/unslop/issues"
-Source = "https://github.com/MohamedAbdallah-Hu/unslop"
-Changelog = "https://github.com/MohamedAbdallah-Hu/unslop/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/MohamedAbdallah-14/unslop"
+Issues = "https://github.com/MohamedAbdallah-14/unslop/issues"
+Source = "https://github.com/MohamedAbdallah-14/unslop"
+Changelog = "https://github.com/MohamedAbdallah-14/unslop/blob/main/CHANGELOG.md"
 
 [project.scripts]
 unslop = "scripts.cli:main"

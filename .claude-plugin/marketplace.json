@@ -10,7 +10,7 @@
       "description": "Humanize assistant output. Strips AI-isms, engineers burstiness, preserves technical accuracy. Sub-skills for commits, PR reviews, and memory files.",
       "version": "0.1.0",
       "author": "Mohamed Abdallah",
-      "homepage": "https://github.com/MohamedAbdallah-Hu/unslop",
+      "homepage": "https://github.com/MohamedAbdallah-14/unslop",
       "license": "MIT",
       "source": "./",
       "tags": ["writing", "ai-detection", "voice", "anti-slop"]

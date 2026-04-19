@@ -4,6 +4,11 @@
 
 **Make AI output sound like a human wrote it.**
 
+[![Tests](https://github.com/MohamedAbdallah-14/unslop/actions/workflows/ci.yml/badge.svg)](https://github.com/MohamedAbdallah-14/unslop/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/unslop.svg)](https://pypi.org/project/unslop/)
+[![Python](https://img.shields.io/pypi/pyversions/unslop.svg)](https://pypi.org/project/unslop/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
+
 A plugin for Claude Code, Cursor, Windsurf, Gemini CLI, OpenAI Codex, and Copilot.
 Strips AI-isms (sycophancy, stock vocab, hedging stacks, em-dash pileups), engineers
 burstiness, restores voice. Preserves code blocks, URLs, and technical terms.
@@ -37,7 +42,7 @@ Same correctness. Different voice.
 ### Claude Code (recommended)
 
 ```bash
-git clone https://github.com/MohamedAbdallah-Hu/unslop.git
+git clone https://github.com/MohamedAbdallah-14/unslop.git
 cd unslop
 bash hooks/install.sh
 ```

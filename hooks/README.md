@@ -12,6 +12,27 @@ session, without asking you to paste anything:
 Everything under `hooks/` is plain JavaScript / Bash / PowerShell. No Claude
 Code internals are touched — the installer only patches `settings.json`.
 
+## How it works
+
+```
+SessionStart hook ──writes mode──▶ $CLAUDE_CONFIG_DIR/.unslop-active ◀──writes mode── UserPromptSubmit hook
+                                              │
+                                           reads
+                                              ▼
+                                    Statusline script
+                                  [unslop] / [unslop:FULL] / ...
+```
+
+`SessionStart` stdout is injected as hidden context — Claude sees it, the
+user does not. The statusline runs as a separate process that reads the flag
+file. The flag file is the bridge between the two write hooks and the
+statusline reader.
+
+`unslop-config.js` is not itself a hook — it's a shared module imported by
+the two write hooks. It owns `safeWriteFlag` (symlink-refusing, atomic,
+`O_NOFOLLOW`, `0600`) and `readFlag` (size-capped, whitelist-validated). Any
+new hook that touches the flag file must go through these helpers.
+
 ## Install (one command)
 
 ```bash

@@ -2,6 +2,21 @@
 
 This file is for agents and maintainers working on the unslop plugin itself. End-user docs live in [`README.md`](./README.md).
 
+## README is a product artifact
+
+The README is the product front door. Non-technical people read it to decide whether unslop is worth installing. Treat it like UI copy, not internal docs.
+
+**Rules for any README change:**
+
+- Readable by non-AI-agent users. If you write "SessionStart hook injects system context", that phrase is invisible to most readers — translate it ("loads the unslop rules every time you open Claude Code").
+- Keep the **Before / After** examples first. That is the pitch. Cutting them or burying them under prose breaks the conversion path.
+- Install table must stay accurate. One broken install command costs a real user. Re-test every command in the install table on every PR that touches install scripts, plugin manifests, or hook paths.
+- The "What unslop does" feature list must sync with the actual code. If a rule ships or gets removed in `unslop/scripts/humanize.py`, update the README in the same PR.
+- Preserve voice. The README's terse, no-AI-ism style is intentional — it is unslop eating its own dog food. If you find a stock phrase ("comprehensive solution", "leverages cutting-edge"), a sycophancy opener ("Great question!"), or a hedging stack ("It's important to note that"), fix it in the same commit.
+- Benchmark numbers come from real runs in `benchmarks/` and `evals/`. Never invent or round. Re-run the suite if you doubt a number you're about to print.
+- Adding a new IDE/agent integration to the install table: also add a per-agent detail block in the appropriate `<details>` section so the table itself stays scannable.
+- Readability check before any README commit: would a non-programmer understand the value prop and complete the install within 60 seconds? If not, simplify or move detail into `GETTING_STARTED.md`.
+
 ## What this repo is
 
 A multi-platform plugin that makes assistant output sound human. Single source of truth (SSOT) files are synced to mirrored locations (Cursor, Windsurf, Codex bundle, etc.) by `scripts/sync-mirrors.sh` on push via `.github/workflows/sync.yml`.
@@ -91,7 +106,7 @@ Reads JSON from stdin. Three responsibilities:
 
 Reads flag file at `$CLAUDE_CONFIG_DIR/.unslop-active`. Security hardened: refuses symlinks, caps read at 64 bytes, strips non-alphanumeric characters, whitelists valid modes. Outputs colored badge string for Claude Code statusline:
 - `balanced` or empty → `[unslop]` (green)
-- anything else → `[unslop:<MODE_UPPERCASED>]` (green)
+- Anything else → `[unslop:<MODE_UPPERCASED>]` (green)
 
 PowerShell counterpart at `hooks/unslop-statusline.ps1` for Windows.
 

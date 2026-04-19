@@ -54,7 +54,7 @@ Modes persist until changed or the session ends.
 
 ### More
 
-Full docs and source: <https://github.com/MohamedAbdallah-Hu/unslop>
+Full docs and source: <https://github.com/MohamedAbdallah-14/unslop>
 
 ## Boundaries
 
