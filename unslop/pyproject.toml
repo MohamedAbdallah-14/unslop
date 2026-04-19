@@ -69,3 +69,7 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 check_untyped_defs = true
 files = ["scripts"]
+
+[[tool.mypy.overrides]]
+module = "anthropic"
+ignore_missing_imports = true
