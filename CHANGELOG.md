@@ -11,12 +11,45 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.4.1] — 2026-04-20
+
 ### Added
 - Root-level `CHANGELOG.md`, `SECURITY.md`, `.github/dependabot.yml`,
-  `.github/PULL_REQUEST_TEMPLATE.md`. Brings the repo in line with conventional
-  GitHub project layout used by `davila7/claude-code-templates`,
-  `obra/superpowers`, `cline/cline`, and `anthropics/claude-code`.
-- Status badges in `README.md` (CI, PyPI, Python versions, license).
+  `.github/PULL_REQUEST_TEMPLATE.md`, `.github/FUNDING.yml`. Brings the repo
+  in line with conventional GitHub project layout used by
+  `davila7/claude-code-templates`, `obra/superpowers`, `cline/cline`,
+  and `anthropics/claude-code`.
+- Status badges in `README.md` (CI, Codecov, PyPI, Python versions, license).
+- `evals/snapshots/<timestamp>/` baseline (3 prompts, sonnet-4-5 via local
+  CLI fallback) so future PRs can be diffed against a real reference.
+- `evals/plot.py` — grouped bar chart of AI-isms per prompt × condition
+  (optional `plotly` + `kaleido` deps).
+- `hooks/README.md` data-flow diagram (SessionStart → flag file →
+  statusline reader).
+- `CLAUDE.md` "README is a product artifact" section codifying README
+  maintenance rules.
+- Codecov upload step in CI with explicit token.
+- Dependabot auto-merge workflow for patch + minor updates (major bumps
+  still require manual review).
+
+### Fixed
+- All repo URL references corrected to `MohamedAbdallah-14/unslop` across
+  13 files (was a mix of `juliusbrussee`, `MohamedAbdallah-Hu`, `MAbdallah14`).
+- mypy now finds the strict config + `[[tool.mypy.overrides]]` for the
+  optional `anthropic` dep — CI was running mypy with defaults from repo
+  root and failing on missing-stub errors.
+- `tests/ai_detector_test.py` uses `pytest.importorskip` for its heavy ML
+  deps so CI without `torch`/`transformers` skips cleanly instead of failing
+  collection.
+
+### Changed
+- All GitHub Actions bumped to v6 (`actions/checkout`, `actions/setup-python`,
+  `actions/setup-node`, `codecov/codecov-action`). Silences the Node.js 20
+  deprecation warning.
+- Dev dep floors bumped to current latest: `pytest>=9`, `pytest-cov>=7`,
+  `ruff>=0.15`, `mypy>=1.20`.
+- `Dockerfile` default `PYTHON_VERSION` bumped from 3.12 to 3.13 (matches
+  the highest version in the CI matrix).
 
 ## [0.4.0] — 2026-04-19
 

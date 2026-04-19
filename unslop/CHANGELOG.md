@@ -1,3 +1,22 @@
+## 0.4.1 — 2026-04-20
+
+Pure infrastructure / packaging release. No runtime changes — all behavior
+identical to 0.4.0.
+
+### Fixed
+- `pyproject.toml` URLs (Homepage, Issues, Source, Changelog) now point to
+  the live `MohamedAbdallah-14/unslop` repo (was `MohamedAbdallah-Hu`).
+- `[[tool.mypy.overrides]]` for the optional `anthropic` import — type
+  checking no longer requires the SDK to be installed.
+
+### Changed
+- Dev extra floors: `pytest>=9`, `pytest-cov>=7`, `ruff>=0.15`, `mypy>=1.20`.
+- New `pytest-cov` dependency in the dev extra (CI now reports coverage).
+
+For the full repo-level changelog (CI, docs, hooks, eval baseline,
+caveman-parity polish, etc.) see [`/CHANGELOG.md`](../CHANGELOG.md) at the
+repo root.
+
 ## 0.4.0 — 2026-04-19
 
 Major release driven by a comparative study against `humanizr/Unslop` (Unslop.Net, a .NET inflection/formatting library) and `blader/unslop` (a Claude-Code humanization skill). The goal: out-humanize both by importing what each does well.

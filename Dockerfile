@@ -16,7 +16,7 @@
 # --build-arg INSTALL_LLM=1 to include it if you plan to use LLM mode inside
 # the container.
 
-ARG PYTHON_VERSION=3.12
+ARG PYTHON_VERSION=3.13
 
 FROM python:${PYTHON_VERSION}-slim AS builder
 

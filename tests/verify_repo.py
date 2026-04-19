@@ -16,9 +16,6 @@ Checks (each failure is fatal):
   7. unslop modules import without errors.
   8. humanize_deterministic round-trips every fixture pair and the result
      matches the committed `.md` output (detects accidental regex drift).
-
-This mirrors caveman's `tests/verify_repo.py` one-for-one but adapted to the
-unslop layout (unslop, unslop skill, etc).
 """
 
 from __future__ import annotations
