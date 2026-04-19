@@ -81,6 +81,98 @@ class TestDetect:
         f.write_text("")
         assert not should_compress(f)
 
+    @pytest.mark.parametrize(
+        "name",
+        [
+            "config.aws/credentials",
+            "secret.txt",
+            "credentials.json",
+            "my-password.md",
+            "auth-token.yaml",
+            ".npmrc",
+            ".pypirc",
+            ".netrc",
+            "server.key",
+            "client.crt",
+            "ca.cer",
+            "cert.pfx",
+            "store.p12",
+        ],
+    )
+    def test_sensitive_fragments_refused(self, tmp_path: Path, name: str) -> None:
+        f = tmp_path / name
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text("placeholder")
+        assert is_sensitive_path(f)
+        assert not should_compress(f)
+
+    def test_ssh_dir_path_is_sensitive(self, tmp_path: Path) -> None:
+        d = tmp_path / ".ssh"
+        d.mkdir()
+        f = d / "id_ed25519"
+        f.write_text("placeholder")
+        assert is_sensitive_path(f)
+
+    def test_original_txt_backup(self, tmp_path: Path) -> None:
+        f = tmp_path / "essay.original.txt"
+        f.write_text("hi")
+        assert detect_file_type(f) == "backup"
+        assert not should_compress(f)
+
+    def test_unknown_extension_is_other(self, tmp_path: Path) -> None:
+        f = tmp_path / "data.xyzfoo"
+        f.write_text("hi")
+        assert detect_file_type(f) == "other"
+        assert not should_compress(f)
+
+    def test_extensionless_readme_basename(self, tmp_path: Path) -> None:
+        f = tmp_path / "README"
+        f.write_text("This is a project. It does things people care about.\n")
+        assert detect_file_type(f) == "natural-language-extensionless"
+
+    def test_extensionless_binary_detected_via_null_byte(self, tmp_path: Path) -> None:
+        f = tmp_path / "blob"
+        f.write_bytes(b"hello\x00\x01world")
+        assert detect_file_type(f) == "binary"
+        assert not should_compress(f)
+
+    def test_extensionless_shebang_is_code(self, tmp_path: Path) -> None:
+        f = tmp_path / "runme"
+        f.write_text("#!/usr/bin/env bash\necho hi\n")
+        assert detect_file_type(f) == "code-or-config"
+
+    def test_extensionless_utf8_decode_failure_is_binary(self, tmp_path: Path) -> None:
+        f = tmp_path / "bytes"
+        f.write_bytes(b"\xff\xfe\x80\x81 not utf-8")
+        assert detect_file_type(f) == "binary"
+
+    def test_extensionless_symbol_heavy_is_unknown(self, tmp_path: Path) -> None:
+        # Looks like code/config (lots of braces, parens) but no extension and
+        # no NL basename — falls through the prose heuristic and stays unknown.
+        f = tmp_path / "mystery"
+        f.write_text("if (x === 0) { return $foo|bar; } else { y[i] = `tpl`; }\n" * 5)
+        assert detect_file_type(f) == "unknown"
+        assert not should_compress(f)
+
+    def test_extensionless_low_alpha_is_unknown(self, tmp_path: Path) -> None:
+        # Mostly digits + punctuation. Alpha ratio drops below 0.65.
+        f = tmp_path / "numbers"
+        f.write_text("1234567890 9876543210 1111 2222 3333 4444 5555 6666 7777 8888\n")
+        assert detect_file_type(f) == "unknown"
+
+    def test_extensionless_empty_file_is_unknown(self, tmp_path: Path) -> None:
+        # Empty extensionless files have no signal — heuristic returns False
+        # and detect_file_type falls through to unknown.
+        f = tmp_path / "blank"
+        f.write_text("")
+        assert detect_file_type(f) == "unknown"
+
+    def test_should_compress_handles_missing_file(self, tmp_path: Path) -> None:
+        # Path that does not exist: stat() raises OSError and should_compress
+        # must return False rather than propagate.
+        ghost = tmp_path / "does-not-exist.md"
+        assert not should_compress(ghost)
+
 
 # ---------- humanize.py: deterministic ----------
 
