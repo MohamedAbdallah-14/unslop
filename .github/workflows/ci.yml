@@ -28,8 +28,14 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install pytest
-        run: pip install pytest
+      - name: Install dev dependencies
+        run: pip install -e humanizer-humanize[dev]
+
+      - name: Lint (ruff)
+        run: ruff check humanizer-humanize/scripts benchmarks
+
+      - name: Type check (mypy, strict)
+        run: mypy humanizer-humanize/scripts
 
       - name: Unit + integration tests
         run: python -m pytest tests/ -v --tb=short
@@ -37,5 +43,8 @@ jobs:
       - name: Repo integrity verifier
         run: python3 tests/verify_repo.py
 
-      - name: Benchmark (offline, strict)
+      - name: Benchmark (offline, strict, default intensity)
         run: python3 benchmarks/run.py --strict
+
+      - name: Benchmark (all intensities, monotonicity gate)
+        run: python3 benchmarks/run.py --all-intensities --strict

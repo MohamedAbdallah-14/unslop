@@ -1,0 +1,75 @@
+{
+  "timestamp": "20260419T203715Z",
+  "fixtures": [
+    "ai-slop-expanded-categories.md",
+    "ai-slop-release-notes.md",
+    "ai-slop-tutorial.md"
+  ],
+  "intensities": [
+    "subtle",
+    "balanced",
+    "full"
+  ],
+  "detectors": [
+    {
+      "name": "TMR",
+      "model_id": "Oxidane/tmr-ai-text-detector",
+      "rows": [
+        {
+          "fixture": "ai-slop-expanded-categories.md",
+          "original_ai_probability": 0.9857,
+          "humanized": {
+            "subtle": {
+              "ai_probability": 0.985,
+              "reduction_pct": 0.1
+            },
+            "balanced": {
+              "ai_probability": 0.9843,
+              "reduction_pct": 0.1
+            },
+            "full": {
+              "ai_probability": 0.9837,
+              "reduction_pct": 0.2
+            }
+          }
+        },
+        {
+          "fixture": "ai-slop-release-notes.md",
+          "original_ai_probability": 0.9862,
+          "humanized": {
+            "subtle": {
+              "ai_probability": 0.9852,
+              "reduction_pct": 0.1
+            },
+            "balanced": {
+              "ai_probability": 0.9843,
+              "reduction_pct": 0.2
+            },
+            "full": {
+              "ai_probability": 0.9843,
+              "reduction_pct": 0.2
+            }
+          }
+        },
+        {
+          "fixture": "ai-slop-tutorial.md",
+          "original_ai_probability": 0.9851,
+          "humanized": {
+            "subtle": {
+              "ai_probability": 0.9844,
+              "reduction_pct": 0.1
+            },
+            "balanced": {
+              "ai_probability": 0.9833,
+              "reduction_pct": 0.2
+            },
+            "full": {
+              "ai_probability": 0.9833,
+              "reduction_pct": 0.2
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

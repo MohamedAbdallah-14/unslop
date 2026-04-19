@@ -9,8 +9,7 @@ from __future__ import annotations
 
 import math
 import re
-from dataclasses import dataclass, field
-from typing import Iterable
+from dataclasses import dataclass
 
 FENCED_CODE = re.compile(r"^```[^\n]*\n[\s\S]*?^```\s*$", re.MULTILINE)
 INDENTED_CODE = re.compile(
@@ -31,19 +30,36 @@ TABLE_BLOCK = re.compile(
 
 AI_ISMS = (
     # Sycophancy openers (case-insensitive)
-    r"\bgreat question\b", r"\bcertainly!", r"\babsolutely!", r"\bsure!",
+    r"\bgreat question\b", r"\bcertainly[!.,]", r"\babsolutely[!.,]", r"\bsure[!.,]",
     r"\bi'?d be happy to help\b", r"\bwhat a (?:fascinating|wonderful|great|terrific)\b",
+    r"\bi hope this (?:email|message) finds you well\b",
+    r"\bthank you for (?:your |the )?(?:question|asking)\b",
     # Stock vocab — context-guarded to match humanize.py's STOCK_VOCAB patterns.
     # Bare \bnavigate\b etc. caused false positives on literal uses like
     # "navigate to the next page" that the humanizer correctly preserves.
-    r"\bdelve\b", r"\btapestry\b", r"\btestament to\b",
-    r"\bnavigate(?=\s+(?:the|through|around|these|this|that|our|complex))\b",
-    r"\bembark on\b",
+    r"\bdelv(?:e|es|ed|ing)\b", r"\btapestry\b", r"\btestament to\b",
+    r"\bnavigate(?:s|d)?(?=\s+(?:the|through|around|these|this|that|our|complex))\b",
+    r"\bnavigating(?=\s+(?:the|through|around|these|this|that|our|complex))\b",
+    r"\bembark(?:s|ed|ing)? on\b",
     r"\bjourney(?=\s+(?:toward|to|of))\b",
     r"\brealm of\b", r"\blandscape of\b",
-    r"\bpivotal\b", r"\bparamount\b", r"\bseamless\b", r"\bholistic\b",
-    r"\brobust(?=\s+(?:and|solution|implementation|approach|system|architecture))\b",
-    r"\bleverage\b", r"\bcutting-edge\b", r"\bstate-of-the-art\b",
+    r"\bpivotal\b", r"\bparamount\b", r"\bseamless(?:ly)?\b", r"\bholistic(?:ally)?\b",
+    r"\brobust(?=\s+(?:and|solution|implementation|approach|system|architecture|framework|platform|infrastructure|backend|frontend|foundation|delivery|automation|CI/CD|pipeline|tooling|mechanism|strategy))\b",
+    r"\bleverage\b", r"\bleverag(?:es|ed|ing)\b",
+    r"\bcutting-edge\b", r"\bstate-of-the-art\b",
+    r"\bcomprehensive(?:ly)?\b",
+    # Expanded vocabulary (2026-04 sync with blader/humanizer and
+    # Wikipedia:Signs_of_AI_writing). Each entry mirrors a rule in
+    # humanize.py's STOCK_VOCAB so the residual check can detect when a
+    # rewrite accidentally introduces them.
+    r"\binterplay\s+(?:between|of)\b",
+    r"\bintricate\b", r"\bvibrant\b",
+    r"\bunderscor(?:e|es|ed|ing)\s+(?:the|our|a|an|its|their|this|that|how|why)\b",
+    r"\bcrucial\b",
+    r"\bvital(?=\s+(?:role|importance|part|component|aspect))\b",
+    r"\bever[- ](?:evolving|changing)\b",
+    r"\bin today'?s (?:digital )?(?:world|age|landscape|era)\b",
+    r"\bdynamic landscape\b",
     # Hedging stacks
     r"\bit'?s important to note that\b",
     r"\bit'?s worth (?:mentioning|noting|pointing out) that\b",
@@ -51,11 +67,33 @@ AI_ISMS = (
     r"\bin essence\b",
     r"\bat its core\b",
     r"\bit should be noted that\b",
-    # Transitional AI tics at sentence start. Guard: capture only when they
-    # open a sentence (line start or after sentence-end punctuation).
+    r"\bneedless to say\b",
+    # Authority tropes (blader/humanizer #27). Position-sensitive — only at
+    # sentence start is the AI tell strong.
+    r"(?:^|(?<=[.!?]\s))In reality\b",
+    r"(?:^|(?<=[.!?]\s))Fundamentally\b",
+    r"(?:^|(?<=[.!?]\s))What really matters\b",
+    r"(?:^|(?<=[.!?]\s))The heart of the matter\b",
+    # Signposting announcements (blader/humanizer #28).
+    r"\blet(?:'s| us) dive in(?:to\b|\b)",
+    r"\blet(?:'s| us) (?:break|walk) (?:this|it) down\b",
+    r"\bhere'?s what you need to know\b",
+    r"\bwithout further ado\b",
+    r"\bbuckle up\b",
+    # Filler phrases (blader/humanizer #23). These are the strongest signals;
+    # we keep the list short and conservative. More verbose expansions can
+    # occasionally appear in legitimate prose (e.g. legal boilerplate).
+    r"\bin order to\b",
+    r"\bdue to the fact that\b",
+    r"\bfor (?:the|all) intents and purposes\b",
+    # Transitional AI tics at sentence start or after bullet markers.
     r"(?:^|(?<=[.!?]\s))(?:furthermore|moreover|additionally)\b",
+    r"(?:^[ \t]*(?:[-*+]|\d+\.)[ \t]+)(?:furthermore|moreover|additionally)\b",
     r"(?:^|(?<=[.!?]\s))in conclusion\b",
+    r"(?:^[ \t]*(?:[-*+]|\d+\.)[ \t]+)in conclusion\b",
     r"(?:^|(?<=[.!?]\s))to summarize\b",
+    r"(?:^|(?<=[.!?]\s))(?:firstly|secondly|thirdly|finally)\b",
+    r"(?:^[ \t]*(?:[-*+]|\d+\.)[ \t]+)(?:firstly|secondly|thirdly|finally)\b",
 )
 AI_ISM_PATTERNS = [re.compile(p, re.IGNORECASE) for p in AI_ISMS]
 
@@ -70,6 +108,18 @@ class ValidationResult:
     burstiness_before: float = 0.0
     burstiness_after: float = 0.0
     sentence_length_range_after: tuple[int, int] = (0, 0)
+
+    def to_dict(self) -> dict:
+        return {
+            "ok": self.ok,
+            "errors": list(self.errors),
+            "warnings": list(self.warnings),
+            "ai_isms_before": self.ai_isms_before,
+            "ai_isms_after": self.ai_isms_after,
+            "burstiness_before": round(self.burstiness_before, 3),
+            "burstiness_after": round(self.burstiness_after, 3),
+            "sentence_length_range_after": list(self.sentence_length_range_after),
+        }
 
 
 def _extract(pattern: re.Pattern, text: str) -> list[str]:
@@ -209,7 +259,7 @@ def validate(original: str, humanized: str) -> ValidationResult:
                 f"Heading count changed: {len(orig_headings)} → {len(new_headings)}"
             )
         else:
-            for (lo, ho), (ln, hn) in zip(orig_headings, new_headings):
+            for (lo, ho), (ln, hn) in zip(orig_headings, new_headings, strict=False):
                 if lo != ln or ho != hn:
                     errors.append(f"Heading changed: {lo} {ho!r} → {ln} {hn!r}")
                     break

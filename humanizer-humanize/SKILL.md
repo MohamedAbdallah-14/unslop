@@ -21,6 +21,25 @@ Two modes:
 
 Humanized version overwrites the original. A `FILE.original.md` backup is written first. Re-run after editing the `.original.md` to regenerate.
 
+### Intensity levels (`--mode`)
+
+| Mode       | What runs                                                                                   | Use when…                                                    |
+| ---------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `subtle`   | Stock vocab only.                                                                           | Structure is fine; you just want AI vocabulary gone.         |
+| `balanced` | (Default.) Sycophancy, hedging, transitions, stock vocab, authority tropes, signposting, performative balance, em-dash cap. | Everyday docs / READMEs / CLAUDE.md.                         |
+| `full`     | Balanced + filler phrases + negative-parallelism tricolons + stronger LLM prompt.           | Marketing copy, release notes, slop-heavy LLM output.        |
+
+### Two-pass audit
+
+Use the deterministic pass to get a report, then fix anything that slipped:
+
+```bash
+humanize --deterministic --report audit.json doc.md     # writes audit + humanized
+humanize doc.md                                         # optional LLM polish on top
+```
+
+`audit.json` lists every rule that fired, every `before → after` pair, and `counts_by_rule`. Great for reviewing what the regex changed before trusting the diff to merge.
+
 ## Trigger
 
 `/humanize <filepath>`, `/humanizer:humanize <filepath>`, or "humanize memory file", "de-slop this doc", "strip AI tone from this file".
@@ -49,11 +68,16 @@ Steps:
 
 ### Remove (canonical AI-isms)
 
-- Sycophancy openers: "Great question!", "Certainly!", "Absolutely!", "Sure!", "I'd be happy to help", "What a fascinating..."
-- Stock vocab: delve, tapestry, testament (when used as praise), navigate (figurative), embark, journey (figurative), realm, landscape (figurative), pivotal, paramount, seamless, holistic, leverage (as filler verb), robust (as filler), comprehensive (when "complete" works), cutting-edge, state-of-the-art (as filler)
-- Hedging stacks: "It's important to note that", "It's worth mentioning", "Generally speaking", "In essence", "At its core", "It should be noted that", "It's also worth pointing out"
-- Performative balance: "however" / "on the other hand" appended to every claim
-- Em-dash pileups (more than two em-dashes per paragraph)
+- **Sycophancy openers**: "Great question!", "Certainly!", "Absolutely!", "Sure!", "I'd be happy to help", "What a fascinating..."
+- **Stock vocab**: `delve`, `tapestry`, `testament` (praise form), `navigate`/`embark`/`journey` (figurative), `realm`, `landscape` (figurative), `pivotal`, `paramount`, `seamless`, `holistic`, `leverage` (filler verb), `robust` (filler), `comprehensive` (when "complete" works), `cutting-edge`, `state-of-the-art` (filler), `interplay`, `intricate`, `vibrant`, `underscore(s)/d/ing` (figurative), `crucial`, `vital` (role/importance/part), `ever-evolving`, `ever-changing`, `in today's (digital) world/age`, `dynamic landscape`.
+- **Hedging openers**: "It's important to note that", "It's worth mentioning", "Generally speaking", "In essence", "At its core", "It should be noted that", "It's also worth pointing out".
+- **Authority tropes** (sentence start): "At its core,", "In reality,", "Fundamentally,", "What really matters is", "The heart of the matter is", "At the heart of X is/lies".
+- **Signposting announcements**: "Let's dive in(to ...)", "Let's break this down", "Here's what you need to know", "Without further ado", "In this article, I'll ...", "Buckle up".
+- **Transition tics** (sentence start): "Furthermore,", "Moreover,", "Additionally,", "In conclusion,", "To summarize,".
+- **Performative balance**: "however" / "on the other hand" appended to every claim.
+- **Em-dash pileups** (more than two em-dashes per paragraph).
+- **Filler phrases** (`--mode full` only): "in order to" → "to", "due to the fact that" → "because", "prior to" → "before", "with regard to" → "about", "a wide variety of" → "many", "at this point in time" → "now", "the fact that" → "that", etc.
+- **Negative-parallelism tricolons** (`--mode full` only): "No guesswork, no bloat, no surprises." — the rhetorical triple-no punch.
 
 ### Tighten
 
@@ -87,17 +111,28 @@ Everything inside ` ``` ... ``` ` is read-only. No comment changes, no whitespac
 
 ## Pattern (before → after)
 
-### Before
-> It's important to note that running tests prior to pushing changes is a comprehensive best practice that helps ensure code quality. Additionally, it's worth mentioning that this practice can prevent broken builds from being deployed to production environments.
+| #   | Before                                                                                                                                                                                                                | After (deterministic, `--mode balanced`)                                               |
+| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| 1   | It's important to note that running tests prior to pushing changes is a comprehensive best practice. Additionally, it's worth mentioning that this can prevent broken builds.                                         | Running tests before pushing changes is a broad best practice. This can prevent broken builds. |
+| 2   | The application leverages a microservices architecture that comprises multiple discrete components.                                                                                                                   | The application uses a microservices architecture that comprises multiple discrete components. |
+| 3   | At its core, caching trades memory for latency.                                                                                                                                                                       | Caching trades memory for latency.                                                     |
+| 4   | Let's dive in. Here is the first step.                                                                                                                                                                                | Here is the first step.                                                                |
+| 5   | The intricate interplay between caching and latency is crucial.                                                                                                                                                       | The detailed link between caching and latency is important.                            |
+| 6   | In today's digital world, we ship fast.                                                                                                                                                                               | Today, we ship fast.                                                                   |
 
-### After
-> Run tests before you push to main. Catches bugs early; keeps prod builds green.
+### At `--mode full`, additionally:
 
-### Before
-> The application leverages a microservices architecture that comprises multiple discrete components which collectively deliver functionality to end users. The API gateway, which serves as the entry point for all incoming requests, handles routing to the appropriate downstream service.
+| #   | Before                                                   | After                                 |
+| --- | -------------------------------------------------------- | ------------------------------------- |
+| 7   | We ran the tests in order to verify the fix.             | We ran the tests to verify the fix.   |
+| 8   | The build failed due to the fact that the disk was full. | The build failed because the disk was full. |
+| 9   | No guesswork, no bloat, no surprises.                    | _(stripped)_                          |
 
-### After
-> We run microservices: a gateway routes traffic, auth owns sessions and JWTs, and orders does the heavy DB work.
+### Reference
+
+- `blader/humanizer` — Claude-Code skill listing 30+ AI tells; we incorporated the strongest signals.
+- Wikipedia: *Signs of AI writing* — public taxonomy cross-referenced for vocab.
+- Full comparison + gap analysis: `docs/research/IMPLEMENTATION_TRACE.md`.
 
 ## Boundaries
 

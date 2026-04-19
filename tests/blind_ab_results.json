@@ -1,0 +1,215 @@
+{
+  "overall": "PASS",
+  "total_samples": 6,
+  "quant_passed": 6,
+  "llm_judge_used": true,
+  "llm_verdict": "PASS",
+  "results": [
+    {
+      "sample_id": "resume-1",
+      "domain": "resume",
+      "passed": true,
+      "fail_reasons": [
+        "word count barely reduced (40 -> 39, 2%)"
+      ],
+      "quant_original": {
+        "word_count": 40,
+        "ai_markers": 8,
+        "burstiness": 0.071,
+        "sentence_count": 2
+      },
+      "quant_humanized": {
+        "word_count": 39,
+        "ai_markers": 0,
+        "burstiness": 0.109,
+        "sentence_count": 2
+      },
+      "grammar_errors": [],
+      "blind_slot": "A",
+      "llm_original": {
+        "naturalness": 3,
+        "vocabulary": 3,
+        "rhythm": 4,
+        "grammar": 9,
+        "directness": 3
+      },
+      "llm_humanized": {
+        "naturalness": 5,
+        "vocabulary": 5,
+        "rhythm": 4,
+        "grammar": 9,
+        "directness": 5
+      }
+    },
+    {
+      "sample_id": "resume-2",
+      "domain": "resume",
+      "passed": true,
+      "fail_reasons": [],
+      "quant_original": {
+        "word_count": 33,
+        "ai_markers": 9,
+        "burstiness": 0.386,
+        "sentence_count": 2
+      },
+      "quant_humanized": {
+        "word_count": 27,
+        "ai_markers": 0,
+        "burstiness": 0.576,
+        "sentence_count": 2
+      },
+      "grammar_errors": [],
+      "blind_slot": "A",
+      "llm_original": {
+        "naturalness": 3,
+        "vocabulary": 3,
+        "rhythm": 4,
+        "grammar": 7,
+        "directness": 2
+      },
+      "llm_humanized": {
+        "naturalness": 5,
+        "vocabulary": 5,
+        "rhythm": 5,
+        "grammar": 4,
+        "directness": 6
+      }
+    },
+    {
+      "sample_id": "slack-1",
+      "domain": "slack",
+      "passed": true,
+      "fail_reasons": [],
+      "quant_original": {
+        "word_count": 51,
+        "ai_markers": 9,
+        "burstiness": 0.543,
+        "sentence_count": 5
+      },
+      "quant_humanized": {
+        "word_count": 34,
+        "ai_markers": 0,
+        "burstiness": 0.27,
+        "sentence_count": 3
+      },
+      "grammar_errors": [],
+      "blind_slot": "B",
+      "llm_original": {
+        "naturalness": 3,
+        "vocabulary": 3,
+        "rhythm": 5,
+        "grammar": 9,
+        "directness": 2
+      },
+      "llm_humanized": {
+        "naturalness": 6,
+        "vocabulary": 6,
+        "rhythm": 5,
+        "grammar": 9,
+        "directness": 8
+      }
+    },
+    {
+      "sample_id": "slack-2",
+      "domain": "slack",
+      "passed": true,
+      "fail_reasons": [],
+      "quant_original": {
+        "word_count": 40,
+        "ai_markers": 6,
+        "burstiness": 0.69,
+        "sentence_count": 5
+      },
+      "quant_humanized": {
+        "word_count": 31,
+        "ai_markers": 0,
+        "burstiness": 0.339,
+        "sentence_count": 4
+      },
+      "grammar_errors": [],
+      "blind_slot": "A",
+      "llm_original": {
+        "naturalness": 3,
+        "vocabulary": 3,
+        "rhythm": 5,
+        "grammar": 9,
+        "directness": 3
+      },
+      "llm_humanized": {
+        "naturalness": 7,
+        "vocabulary": 7,
+        "rhythm": 6,
+        "grammar": 10,
+        "directness": 8
+      }
+    },
+    {
+      "sample_id": "email-1",
+      "domain": "email",
+      "passed": true,
+      "fail_reasons": [],
+      "quant_original": {
+        "word_count": 101,
+        "ai_markers": 17,
+        "burstiness": 0.294,
+        "sentence_count": 7
+      },
+      "quant_humanized": {
+        "word_count": 63,
+        "ai_markers": 0,
+        "burstiness": 0.267,
+        "sentence_count": 5
+      },
+      "grammar_errors": [],
+      "blind_slot": "A",
+      "llm_original": {
+        "naturalness": 2,
+        "vocabulary": 2,
+        "rhythm": 3,
+        "grammar": 9,
+        "directness": 2
+      },
+      "llm_humanized": {
+        "naturalness": 5,
+        "vocabulary": 4,
+        "rhythm": 4,
+        "grammar": 9,
+        "directness": 6
+      }
+    },
+    {
+      "sample_id": "email-2",
+      "domain": "email",
+      "passed": true,
+      "fail_reasons": [],
+      "quant_original": {
+        "word_count": 85,
+        "ai_markers": 18,
+        "burstiness": 0.508,
+        "sentence_count": 8
+      },
+      "quant_humanized": {
+        "word_count": 61,
+        "ai_markers": 0,
+        "burstiness": 0.405,
+        "sentence_count": 6
+      },
+      "grammar_errors": [],
+      "blind_slot": "A",
+      "llm_original": {
+        "naturalness": 2,
+        "vocabulary": 2,
+        "rhythm": 4,
+        "grammar": 9,
+        "directness": 2
+      },
+      "llm_humanized": {
+        "naturalness": 5,
+        "vocabulary": 4,
+        "rhythm": 4,
+        "grammar": 9,
+        "directness": 6
+      }
+    }
+  ]
+}

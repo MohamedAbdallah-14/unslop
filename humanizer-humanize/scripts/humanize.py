@@ -6,6 +6,13 @@ Contract:
   - Humanize prose. Preserve fenced code, inline code, URLs, paths, headings.
   - Validate. On failure: targeted fix (LLM mode only) up to 2 retries.
   - On final success: overwrite original. On final failure: restore original.
+
+Intensity levels:
+  - subtle   — stock vocab only. Keep structure and rhythm mostly intact.
+  - balanced — default. Adds sycophancy, hedging, transition tics, em-dash cap,
+               performative balance, authority tropes, signposting.
+  - full     — balanced plus filler phrases, negative parallelisms, and an
+               LLM pass when available.
 """
 
 from __future__ import annotations
@@ -15,11 +22,72 @@ import re
 import shutil
 import subprocess
 import sys
+from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Literal
 
-from .validate import format_report, validate
+from .validate import ValidationResult, validate
 
 MAX_RETRIES = 2
+
+Intensity = Literal["subtle", "balanced", "full"]
+VALID_INTENSITIES: tuple[Intensity, ...] = ("subtle", "balanced", "full")
+
+
+@dataclass
+class Replacement:
+    """One deterministic edit made by `humanize_deterministic_with_report`.
+
+    `rule` is the category (e.g. `sycophancy`, `stock_vocab`, `authority_trope`);
+    `pattern` is the human-readable summary of the regex that matched; `before`
+    and `after` are the matched text and its replacement. Offsets refer to
+    positions in the protected text (code blocks replaced with placeholders)
+    so they're mainly useful for an audit trail, not for re-applying to raw
+    text."""
+
+    rule: str
+    pattern: str
+    before: str
+    after: str
+
+
+@dataclass
+class HumanizeReport:
+    """Summary of a deterministic humanization pass.
+
+    Returned by `humanize_deterministic_with_report`. The CLI uses this for
+    `--report` and `--json` output."""
+
+    intensity: Intensity
+    replacements: list[Replacement] = field(default_factory=list)
+    em_dashes_before: int = 0
+    em_dashes_after: int = 0
+
+    @property
+    def counts_by_rule(self) -> dict[str, int]:
+        counts: dict[str, int] = {}
+        for r in self.replacements:
+            counts[r.rule] = counts.get(r.rule, 0) + 1
+        return counts
+
+    def to_dict(self) -> dict:
+        """JSON-serializable shape. Used by the CLI's --json and --report modes."""
+        return {
+            "intensity": self.intensity,
+            "replacements": [
+                {
+                    "rule": r.rule,
+                    "pattern": r.pattern,
+                    "before": r.before,
+                    "after": r.after,
+                }
+                for r in self.replacements
+            ],
+            "counts_by_rule": self.counts_by_rule,
+            "em_dashes_before": self.em_dashes_before,
+            "em_dashes_after": self.em_dashes_after,
+        }
+
 
 # ---------- Code block protection ----------
 
@@ -118,11 +186,16 @@ def _restore(text: str, table: dict[str, str]) -> str:
 # is consumed so the next sentence flows naturally. Looped until stable so multiple
 # stacked openers (e.g. "Great question! I'd be happy to help.") all get stripped.
 SYCOPHANCY = [
-    re.compile(r"^[ \t]*(?:Great|Excellent|Wonderful|Fantastic|Awesome) question[!.]?[ \t]*", re.IGNORECASE | re.MULTILINE),
-    re.compile(r"^[ \t]*(?:Certainly|Absolutely|Sure)[!.][ \t]*", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"^[ \t]*(?:Great|Excellent|Wonderful|Fantastic|Awesome) question[^.!\n]*[.!]?[ \t]*", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"^[ \t]*(?:Certainly|Absolutely|Sure)[!.,][ \t]*", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"(?<=[.!?]\s)(?:Certainly|Absolutely|Sure)[!.,][ \t]*", re.IGNORECASE),
     re.compile(r"^[ \t]*I(?:'m| am) happy to help[^.!\n]*[.!]?[ \t]*", re.IGNORECASE | re.MULTILINE),
     re.compile(r"^[ \t]*I(?:'d| would) be happy to help[^.!\n]*[.!]?[ \t]*", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"(?<=[.!?]\s)I(?:'d| would) be happy to help[^.!\n]*[.!]?[ \t]*", re.IGNORECASE),
     re.compile(r"^[ \t]*What a (?:fascinating|wonderful|great|terrific)[^.!\n]*[.!]?[ \t]*", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"^[ \t]*I hope this (?:email|message) finds you well[.!]?[ \t]*", re.IGNORECASE | re.MULTILINE),
+    re.compile(r"(?<=[.!?]\s)I hope this (?:email|message) finds you well[.!]?[ \t]*", re.IGNORECASE),
+    re.compile(r"^[ \t]*Thank you for (?:your |the )?(?:question|asking)[^.!\n]*[.!]?[ \t]*", re.IGNORECASE | re.MULTILINE),
 ]
 
 # Hedging stack openers — strip the opener AND the optional trailing ", " so the
@@ -144,21 +217,59 @@ HEDGING_OPENERS = [
 # Do NOT strip mid-sentence, where they sometimes appear legitimately.
 TRANSITION_TICS = [
     re.compile(r"(^|(?<=[.!?]\s))(?:Furthermore|Moreover|Additionally)[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^[ \t]*(?:[-*+]|\d+\.)[ \t]+)(?:Furthermore|Moreover|Additionally)[,]?[ \t]+", re.MULTILINE),
     re.compile(r"(^|(?<=[.!?]\s))In conclusion[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^[ \t]*(?:[-*+]|\d+\.)[ \t]+)In conclusion[,]?[ \t]+", re.MULTILINE),
     re.compile(r"(^|(?<=[.!?]\s))To summarize[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^[ \t]*(?:[-*+]|\d+\.)[ \t]+)To summarize[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^|(?<=[.!?]\s))(?:Firstly|Secondly|Thirdly|Finally)[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^[ \t]*(?:[-*+]|\d+\.)[ \t]+)(?:Firstly|Secondly|Thirdly|Finally)[,]?[ \t]+", re.MULTILINE),
 ]
 
 # Stock vocab → plain replacement. Keep the noun-context guard on `navigate`/`journey`
 # so we don't replace literal navigation or actual journeys.
+#
+# New additions (2026-04 audit vs blader/humanizer #7–#12 and
+# Wikipedia:Signs_of_AI_writing): `interplay`, `intricate`, `vibrant`,
+# `underscore(s)` in the figurative-verb sense, `crucial`, `vital`,
+# `ever-evolving`, `ever-changing`, `in today's (digital) world`,
+# `in today's (digital) age`, and `dynamic landscape` as a compound.
+# Each change has a corresponding entry in validate.py's AI_ISMS so the
+# validator refuses to let the count grow.
 STOCK_VOCAB = [
+    (re.compile(r"\bdelving into\b", re.IGNORECASE), "looking at"),
+    (re.compile(r"\bdelves into\b", re.IGNORECASE), "looks at"),
+    (re.compile(r"\bdelved into\b", re.IGNORECASE), "looked at"),
     (re.compile(r"\bdelve into\b", re.IGNORECASE), "look at"),
+    (re.compile(r"\bdelving\b", re.IGNORECASE), "looking at"),
+    (re.compile(r"\bdelves\b", re.IGNORECASE), "looks at"),
+    (re.compile(r"\bdelved\b", re.IGNORECASE), "looked at"),
     (re.compile(r"\bdelve\b", re.IGNORECASE), "look at"),
-    (re.compile(r"\btapestry\b", re.IGNORECASE), "mix"),
-    (re.compile(r"\b(?:is|was|are|were)\s+a\s+testament\s+to\b", re.IGNORECASE), r"shows"),
+    (re.compile(r"\btapestry\b", re.IGNORECASE), "blend"),
+    (re.compile(r"\bhas\s+been\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "shows"),
+    (re.compile(r"\bhave\s+been\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "show"),
+    (re.compile(r"\b(?:is|was)\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "shows"),
+    (re.compile(r"\b(?:are|were)\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "show"),
+    (re.compile(r"\b\w+(?:es|s|ed)\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), r"shows"),
     (re.compile(r"\b(?:a|the)\s+testament\s+to\b", re.IGNORECASE), r"shows"),
     (re.compile(r"\btestament to\b", re.IGNORECASE), "shows"),
+    (re.compile(r"\bnavigating\s+through\b", re.IGNORECASE), "working through"),
+    (re.compile(r"\bnavigated\s+through\b", re.IGNORECASE), "worked through"),
+    (re.compile(r"\bnavigates\s+through\b", re.IGNORECASE), "works through"),
     (re.compile(r"\bnavigate\s+through\b", re.IGNORECASE), "work through"),
+    (re.compile(r"\bnavigating(?=\s+(?:the|around|these|this|that|our|complex))\b", re.IGNORECASE), "working through"),
+    (re.compile(r"\bnavigated(?=\s+(?:the|around|these|this|that|our|complex))\b", re.IGNORECASE), "worked through"),
+    (re.compile(r"\bnavigates(?=\s+(?:the|around|these|this|that|our|complex))\b", re.IGNORECASE), "works through"),
     (re.compile(r"\bnavigate(?=\s+(?:the|around|these|this|that|our|complex))\b", re.IGNORECASE), "work through"),
+    (re.compile(r"\bembarking on (?:a |the )?journey of (\w+)ing\b", re.IGNORECASE),
+     lambda m: "starting to " + m.group(1).lower()),
+    (re.compile(r"\bembark(?:ed|s)? on (?:a |the )?journey of (\w+)ing\b", re.IGNORECASE),
+     lambda m: "start " + m.group(1).lower() + "ing"),
+    (re.compile(r"\bembarking on (?:a |the )?journey to ", re.IGNORECASE), "starting to "),
+    (re.compile(r"\bembark(?:ed|s)? on (?:a |the )?journey to ", re.IGNORECASE), "start to "),
+    (re.compile(r"\bembarking on\b", re.IGNORECASE), "starting"),
+    (re.compile(r"\bembarks on\b", re.IGNORECASE), "starts"),
+    (re.compile(r"\bembarked on\b", re.IGNORECASE), "started"),
     (re.compile(r"\bembark on\b", re.IGNORECASE), "start"),
     (re.compile(r"\bjourney(?=\s+(?:toward|to|of))\b", re.IGNORECASE), "path"),
     (re.compile(r"\brealm of\b", re.IGNORECASE), "world of"),
@@ -167,14 +278,96 @@ STOCK_VOCAB = [
     (re.compile(r"\bparamount\b", re.IGNORECASE), "essential"),
     (re.compile(r"\bseamlessly\b", re.IGNORECASE), "smoothly"),
     (re.compile(r"\bseamless\b", re.IGNORECASE), "smooth"),
-    (re.compile(r"\bholistically\b", re.IGNORECASE), "completely"),
-    (re.compile(r"\bholistic\b", re.IGNORECASE), "complete"),
-    (re.compile(r"\bleverag(?:e|es|ed|ing)\b", re.IGNORECASE), "use"),
-    (re.compile(r"\bcutting-edge\b", re.IGNORECASE), "modern"),
-    (re.compile(r"\bstate-of-the-art\b", re.IGNORECASE), "modern"),
-    (re.compile(r"\bcomprehensively\b", re.IGNORECASE), "completely"),
-    (re.compile(r"\bcomprehensive\b", re.IGNORECASE), "complete"),
-    (re.compile(r"\brobust(?=\s+(?:and|solution|implementation|approach|system|architecture))\b", re.IGNORECASE), "solid"),
+    (re.compile(r"\bholistically\b", re.IGNORECASE), "as a whole"),
+    (re.compile(r"\bholistic\b", re.IGNORECASE), "overall"),
+    (re.compile(r"\bleverages\b", re.IGNORECASE), "uses"),
+    (re.compile(r"\bleveraged\b", re.IGNORECASE), "used"),
+    (re.compile(r"\bleveraging\b", re.IGNORECASE), "using"),
+    (re.compile(r"\bleverage\b", re.IGNORECASE), "use"),
+    (re.compile(r"\bcutting-edge\b", re.IGNORECASE), "advanced"),
+    (re.compile(r"\ba state-of-the-art\b", re.IGNORECASE), "the latest"),
+    (re.compile(r"\bstate-of-the-art\b", re.IGNORECASE), "latest"),
+    (re.compile(r"\bcomprehensively\b", re.IGNORECASE), "thoroughly"),
+    (re.compile(r"\bcomprehensive\b", re.IGNORECASE), "broad"),
+    (re.compile(r"\brobust(?=\s+(?:and|solution|implementation|approach|system|architecture|framework|platform|infrastructure|backend|frontend|foundation|delivery|automation|CI/CD|pipeline|tooling|mechanism|strategy))\b", re.IGNORECASE), "reliable"),
+    # Expanded vocabulary (blader/humanizer + Wikipedia:Signs_of_AI_writing).
+    (re.compile(r"\binterplay\s+(?:between|of)\b", re.IGNORECASE), "link between"),
+    (re.compile(r"\bintricate\b", re.IGNORECASE), "detailed"),
+    (re.compile(r"\bvibrant\b", re.IGNORECASE), "lively"),
+    # `underscore(s)` as a figurative verb — guard so literal underscore chars
+    # (in code, in variable_name discussions) pass through. We only match it in
+    # verb position with a following noun phrase article.
+    (re.compile(r"\bunderscores\s+(?=(?:the|our|a|an|its|their|this|that|how|why)\b)", re.IGNORECASE), "shows "),
+    (re.compile(r"\bunderscored\s+(?=(?:the|our|a|an|its|their|this|that|how|why)\b)", re.IGNORECASE), "showed "),
+    (re.compile(r"\bunderscoring\s+(?=(?:the|our|a|an|its|their|this|that|how|why)\b)", re.IGNORECASE), "showing "),
+    (re.compile(r"\bunderscore\s+(?=(?:the|our|a|an|its|their|this|that|how|why)\b)", re.IGNORECASE), "show "),
+    (re.compile(r"\bcrucial\b", re.IGNORECASE), "important"),
+    (re.compile(r"\bvital(?=\s+(?:role|importance|part|component|aspect))\b", re.IGNORECASE), "important"),
+    (re.compile(r"\bever[- ]evolving\b", re.IGNORECASE), "changing"),
+    (re.compile(r"\bever[- ]changing\b", re.IGNORECASE), "changing"),
+    (re.compile(r"\bin today'?s (?:digital )?(?:world|age|landscape|era)\b", re.IGNORECASE), "today"),
+    (re.compile(r"\bdynamic landscape\b", re.IGNORECASE), "world"),
+]
+
+# Authority tropes (blader/humanizer #27). Persuasive framing that signals
+# AI-voice when stacked, but a bare "at its core" sometimes appears in genuine
+# writing. We strip these only when they appear at sentence start (same
+# position as the existing transition tics), where the tell is strongest.
+AUTHORITY_TROPES = [
+    re.compile(r"(^|(?<=[.!?]\s))At its core[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^[ \t]*(?:[-*+]|\d+\.)[ \t]+)At its core[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^|(?<=[.!?]\s))In reality[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^[ \t]*(?:[-*+]|\d+\.)[ \t]+)In reality[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^|(?<=[.!?]\s))What really matters is that[,]?[ \t]+", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"(^|(?<=[.!?]\s))What really matters is[,]?[ \t]+", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"(^|(?<=[.!?]\s))Fundamentally[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^[ \t]*(?:[-*+]|\d+\.)[ \t]+)Fundamentally[,]?[ \t]+", re.MULTILINE),
+    re.compile(r"(^|(?<=[.!?]\s))The heart of the matter is that[,]?[ \t]+", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"(^|(?<=[.!?]\s))At the heart of [^.!?\n]+? (?:is|lies)[,]?[ \t]+", re.MULTILINE | re.IGNORECASE),
+]
+
+# Signposting announcements (blader/humanizer #28). Meta-commentary that
+# announces the writing rather than doing the writing. Strip whole sentence
+# where possible; at sentence start, strip the lead-in and let the next clause
+# carry the content.
+SIGNPOSTING = [
+    re.compile(r"(^|(?<=[.!?]\s))Let(?:'s| us) dive in(?:to [^.!?\n]+)?[.!]?[ \t]*", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"(^|(?<=[.!?]\s))Let(?:'s| us) (?:break|walk) (?:this|it) down[.!]?[ \t]*", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"(^|(?<=[.!?]\s))Here'?s what you need to know[:.!]?[ \t]*", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"(^|(?<=[.!?]\s))Without further ado[,]?[ \t]*", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"(^|(?<=[.!?]\s))In this (?:article|post|guide|section|piece|write-up), (?:I|we)(?:'ll| will) [^.!?\n]+?[.!][ \t]*", re.MULTILINE | re.IGNORECASE),
+    re.compile(r"(^|(?<=[.!?]\s))Buckle up[.!]?[ \t]*", re.MULTILINE | re.IGNORECASE),
+]
+
+# Filler phrases (blader/humanizer #23). Wordy constructions that collapse to
+# one or two words with no loss of meaning. Applied only at `full` intensity:
+# `due to the fact that` is occasionally justified in legal/technical text.
+FILLER_PHRASES = [
+    (re.compile(r"\bin order to\b", re.IGNORECASE), "to"),
+    (re.compile(r"\bdue to the fact that\b", re.IGNORECASE), "because"),
+    (re.compile(r"\bin spite of the fact that\b", re.IGNORECASE), "although"),
+    (re.compile(r"\ba (?:wide )?(?:variety|range) of\b", re.IGNORECASE), "many"),
+    (re.compile(r"\ba (?:significant|substantial) (?:amount|number) of\b", re.IGNORECASE), "many"),
+    (re.compile(r"\bat (?:the|this) (?:point|moment) in time\b", re.IGNORECASE), "now"),
+    (re.compile(r"\bfor (?:the|all) intents and purposes\b", re.IGNORECASE), "effectively"),
+    (re.compile(r"\bin the event that\b", re.IGNORECASE), "if"),
+    (re.compile(r"\bwith (?:regard|regards|respect) to\b", re.IGNORECASE), "about"),
+    (re.compile(r"\bprior to\b", re.IGNORECASE), "before"),
+    (re.compile(r"\bsubsequent to\b", re.IGNORECASE), "after"),
+    (re.compile(r"\bthe fact that\b", re.IGNORECASE), "that"),
+]
+
+# Negative parallelisms + trailing negations (blader/humanizer #10). Applied at
+# `full` only. Example: "No guesswork. No bloated frameworks." — each clause
+# flags as AI on its own but the stack is the real tell. We strip the
+# standalone sentence form "No <noun>." that appears at paragraph end as a
+# rhetorical punch. Conservative: only when the clause has no verb.
+NEGATIVE_PARALLELISM = [
+    # "No guesswork, no bloat, no surprises." — three-clause tricolon of negations
+    re.compile(
+        r"(^|(?<=[.!?]\s))No [A-Za-z][A-Za-z -]{1,20}(?:, no [A-Za-z][A-Za-z -]{1,20}){2,}[.!]",
+        re.MULTILINE,
+    ),
 ]
 
 # Performative balance: collapse mid-sentence ", however," to ". " (sentence break),
@@ -201,12 +394,26 @@ _LIST_MARKER = re.compile(r"^[ \t]*(?:[-*+]|\d+\.)[ \t]")
 def _cap_in_block(block: str, max_dashes: int) -> str:
     count = 0
     buf: list[str] = []
-    for ch in block:
-        if ch == "—":
+    chars = list(block)
+    i = 0
+    while i < len(chars):
+        if chars[i] == "—":
             count += 1
-            buf.append("—" if count <= max_dashes else ",")
+            if count <= max_dashes:
+                buf.append("—")
+            else:
+                # Replace " — " with ", " to avoid ugly " , " spacing.
+                if buf and buf[-1] == " ":
+                    buf.pop()
+                buf.append(",")
+                if i + 1 < len(chars) and chars[i + 1] == " ":
+                    buf.append(" ")
+                    i += 1
+                else:
+                    buf.append(" ")
         else:
-            buf.append(ch)
+            buf.append(chars[i])
+        i += 1
     return "".join(buf)
 
 
@@ -258,33 +465,138 @@ def _cap_em_dashes_per_paragraph(text: str, max_dashes: int = 2) -> str:
     return "\n\n".join(paragraphs)
 
 
-def humanize_deterministic(text: str) -> str:
-    """Pure regex pass. Preserves code/URLs via placeholders; strips canonical AI-isms."""
+def _tracking_sub(
+    pattern: re.Pattern,
+    repl,
+    text: str,
+    *,
+    rule: str,
+    log: list[Replacement] | None,
+) -> str:
+    """Like `pattern.sub(repl, text)` but records each replacement when `log`
+    is provided. `repl` may be a string or a callable, matching `re.sub`."""
+    if log is None:
+        return pattern.sub(repl, text)
+
+    def track(match: re.Match) -> str:
+        before = match.group(0)
+        if callable(repl):
+            after = repl(match)
+        else:
+            try:
+                after = match.expand(repl)
+            except re.error:
+                after = repl
+        if before != after:
+            log.append(
+                Replacement(
+                    rule=rule,
+                    pattern=pattern.pattern,
+                    before=before,
+                    after=after,
+                )
+            )
+        return after
+
+    return pattern.sub(track, text)
+
+
+def humanize_deterministic(
+    text: str,
+    *,
+    intensity: Intensity = "balanced",
+) -> str:
+    """Pure regex pass. Preserves code/URLs via placeholders; strips canonical AI-isms.
+
+    `intensity` gates which rule families run:
+      - subtle:   stock vocab only.
+      - balanced: sycophancy, hedging openers, transition tics, stock vocab,
+                  performative balance, authority tropes, signposting,
+                  em-dash cap.
+      - full:     everything balanced does, plus filler phrases and
+                  negative-parallelism knockouts.
+    """
+    result, _report = humanize_deterministic_with_report(text, intensity=intensity)
+    return result
+
+
+def humanize_deterministic_with_report(
+    text: str,
+    *,
+    intensity: Intensity = "balanced",
+) -> tuple[str, HumanizeReport]:
+    """Like `humanize_deterministic` but returns an audit trail of every
+    replacement made. Used by the CLI's `--report` and `--json` output."""
+    if intensity not in VALID_INTENSITIES:
+        raise ValueError(
+            f"unknown intensity {intensity!r}; expected one of {VALID_INTENSITIES}"
+        )
+
+    report = HumanizeReport(intensity=intensity)
+    log = report.replacements
+    em_dashes_before = text.count("—")
+
     protected, table = _protect(text)
 
     # Sycophancy stacks ("Great question! I'd be happy to help.") need multiple passes
     # because each strip can expose a new line-start pattern. Cap at 5 to avoid
     # pathological loops on adversarial input.
-    for _ in range(5):
-        before = protected
-        for pattern in SYCOPHANCY:
-            protected = pattern.sub("", protected)
-        if protected == before:
-            break
+    run_sycophancy = intensity in ("balanced", "full")
+    run_hedging = intensity in ("balanced", "full")
+    run_transitions = intensity in ("balanced", "full")
+    run_performative = intensity in ("balanced", "full")
+    run_authority = intensity in ("balanced", "full")
+    run_signposting = intensity in ("balanced", "full")
+    run_em_dash_cap = intensity in ("balanced", "full")
+    run_filler = intensity == "full"
+    run_negative_parallelism = intensity == "full"
 
-    for pattern in HEDGING_OPENERS:
-        protected = pattern.sub("", protected)
+    if run_sycophancy:
+        for _ in range(5):
+            before = protected
+            for pattern in SYCOPHANCY:
+                protected = _tracking_sub(pattern, "", protected, rule="sycophancy", log=log)
+            if protected == before:
+                break
 
-    for pattern in TRANSITION_TICS:
-        protected = pattern.sub(r"\1", protected)
+    if run_hedging:
+        for pattern in HEDGING_OPENERS:
+            protected = _tracking_sub(pattern, "", protected, rule="hedging_opener", log=log)
 
+    if run_transitions:
+        for pattern in TRANSITION_TICS:
+            protected = _tracking_sub(pattern, r"\1", protected, rule="transition_tic", log=log)
+
+    if run_authority:
+        for pattern in AUTHORITY_TROPES:
+            protected = _tracking_sub(
+                pattern, r"\1", protected, rule="authority_trope", log=log
+            )
+
+    if run_signposting:
+        for pattern in SIGNPOSTING:
+            protected = _tracking_sub(pattern, r"\1", protected, rule="signposting", log=log)
+
+    # Stock vocab runs at every intensity, including `subtle`.
     for pattern, repl in STOCK_VOCAB:
-        protected = pattern.sub(repl, protected)
+        protected = _tracking_sub(pattern, repl, protected, rule="stock_vocab", log=log)
 
-    for pattern, repl in PERFORMATIVE:
-        protected = pattern.sub(repl, protected)
+    if run_filler:
+        for pattern, repl in FILLER_PHRASES:
+            protected = _tracking_sub(pattern, repl, protected, rule="filler_phrase", log=log)
 
-    protected = _cap_em_dashes_per_paragraph(protected, max_dashes=2)
+    if run_negative_parallelism:
+        for pattern in NEGATIVE_PARALLELISM:
+            protected = _tracking_sub(
+                pattern, r"\1", protected, rule="negative_parallelism", log=log
+            )
+
+    if run_performative:
+        for pattern, repl in PERFORMATIVE:
+            protected = _tracking_sub(pattern, repl, protected, rule="performative", log=log)
+
+    if run_em_dash_cap:
+        protected = _cap_em_dashes_per_paragraph(protected, max_dashes=2)
 
     # Cleanup: strip stranded leading punctuation that openers left behind, e.g.
     # "It's worth mentioning that, generally speaking, you should..." after both
@@ -298,9 +610,8 @@ def humanize_deterministic(text: str) -> str:
     # Guard against common abbreviations (i.e., e.g., etc.) so "i.e. not" doesn't
     # become "i.e. Not". Python's re does not support variable-width lookbehind,
     # so we inspect the prefix inside the replacement callback.
-    _SENTENCE_ABBREVS = (
-        "i.e", "e.g", "etc", "vs", "cf", "viz", "al",  # "et al."
-        "Dr", "Mr", "Mrs", "Ms", "St", "Jr", "Sr", "No",
+    _SENTENCE_ABBREVS = re.compile(
+        r"(?:^|[^a-zA-Z])(?:i\.e|e\.g|etc|vs|cf|viz|et al|Dr|Mr|Mrs|Ms|St|Jr|Sr|No)\Z"
     )
 
     def capitalize_after_start(m: re.Match) -> str:
@@ -308,28 +619,73 @@ def humanize_deterministic(text: str) -> str:
 
     def capitalize_after_sentence(m: re.Match) -> str:
         start = m.start()
-        prefix = m.string[max(0, start - 5):start]
-        for abbr in _SENTENCE_ABBREVS:
-            if prefix.endswith(abbr):
-                return m.group(0)
+        prefix = m.string[max(0, start - 10):start]
+        if _SENTENCE_ABBREVS.search(prefix):
+            return m.group(0)
         return m.group(1) + m.group(2).upper()
 
     protected = re.sub(r"(^|\n\n)([a-z])", capitalize_after_start, protected)
     protected = re.sub(r"([.!?]\s+)([a-z])", capitalize_after_sentence, protected)
+    # Capitalize after bullet markers when opener stripping left lowercase.
+    protected = re.sub(
+        r"(^[ \t]*(?:[-*+]|\d+\.)[ \t]+)([a-z])",
+        lambda m: m.group(1) + m.group(2).upper(),
+        protected,
+        flags=re.MULTILINE,
+    )
+
+    # Article agreement: replacements like holistic→overall or state-of-the-art→latest
+    # can leave "a overall" or "a advanced" which is ungrammatical. Fix "a" → "an"
+    # before words starting with a vowel sound.
+    protected = re.sub(
+        r"\ba(?= (?:overall|advanced|essential|important|earlier|original|"
+        r"open|obvious|interesting|unusual|earlier|underlying|ongoing|optional|"
+        r"older|outer|initial|ideal|upper|ultimate|average|alternate|"
+        r"effective|efficient|elaborate|elegant|enormous))\b",
+        "an",
+        protected,
+        flags=re.IGNORECASE,
+    )
 
     # Collapse 3+ blank lines to 2 (BUT not 1 → preserve heading/paragraph spacing)
     protected = re.sub(r"\n{3,}", "\n\n", protected)
     # Strip trailing whitespace on each line so we don't ship messy diffs
     protected = re.sub(r"[ \t]+\n", "\n", protected)
 
-    return _restore(protected, table)
+    restored = _restore(protected, table)
+    report.em_dashes_before = em_dashes_before
+    report.em_dashes_after = restored.count("—")
+    return restored, report
 
 
 # ---------- LLM-driven humanization ----------
 
 
-def _build_humanize_prompt(original: str) -> str:
+_INTENSITY_PROMPT_GUIDANCE: dict[str, str] = {
+    "subtle": (
+        "INTENSITY: subtle. Trim AI tells only. Keep paragraph structure and "
+        "sentence count roughly intact. Do not restructure, do not merge bullets, "
+        "do not break tricolons unless they are obviously redundant."
+    ),
+    "balanced": (
+        "INTENSITY: balanced (default). Cut slop, vary rhythm, restore voice, "
+        "allow contractions and short fragments. Moderate rewrite allowed. Paragraph "
+        "order must stay the same; paragraph boundaries may shift."
+    ),
+    "full": (
+        "INTENSITY: full. Strong rewrite. Restructure paragraphs for rhythm. Drop "
+        "performative balance. Merge bullet-soup. Collapse filler phrases "
+        "(\"in order to\" → \"to\", \"due to the fact that\" → \"because\"). Use "
+        "contractions. Sound like a human with a stake."
+    ),
+}
+
+
+def _build_humanize_prompt(original: str, intensity: Intensity = "balanced") -> str:
+    guidance = _INTENSITY_PROMPT_GUIDANCE.get(intensity, _INTENSITY_PROMPT_GUIDANCE["balanced"])
     return f"""Humanize this markdown so it reads like a careful human wrote it.
+
+{guidance}
 
 STRICT RULES (preservation):
 - Do NOT modify anything inside ``` code blocks
@@ -342,13 +698,21 @@ STRICT RULES (preservation):
 
 HUMANIZATION RULES (only on natural-language prose between code regions):
 - Drop sycophancy openers ("Great question!", "Certainly!", "I'd be happy to help")
-- Drop stock vocab (delve, tapestry, testament, navigate, embark, journey, realm, landscape, pivotal, paramount, seamless, holistic, leverage as filler, robust as filler, comprehensive as filler, cutting-edge, state-of-the-art)
+- Drop stock vocab (delve, tapestry, testament, navigate, embark, journey, realm, landscape, pivotal, paramount, seamless, holistic, leverage as filler, robust as filler, comprehensive as filler, cutting-edge, state-of-the-art, interplay, intricate, vibrant, underscore [verb], crucial, vital [as filler], ever-evolving/ever-changing, "in today's digital world/age")
 - Drop hedging stack openers ("It's important to note that", "It's worth mentioning that", "Generally speaking", "In essence", "At its core")
+- Drop authority tropes at sentence start ("At its core", "In reality", "What really matters", "Fundamentally", "The heart of the matter")
+- Drop signposting announcements ("Let's dive in", "Let's break this down", "Here's what you need to know", "Without further ado", "Buckle up")
 - Drop performative balance — every claim does not need a "however"
-- Engineer burstiness — mix short and long sentences deliberately
+- Engineer burstiness — mix short and long sentences deliberately (target a mix of 4–35 word sentences per paragraph)
 - Tighten tricolons — "X, Y, and Z" stacks where two would suffice → keep two
 - Merge bullet soup — three bullets that say the same thing → one sentence
 - Vary paragraph length — no tidy five-paragraph essay shape
+- Prefer active voice; avoid subjectless AI fragments ("Works great." by itself — add a subject)
+
+TWO-PASS SELF-AUDIT (required):
+1. After your first rewrite, silently ask yourself: "What in the draft above still reads as obviously AI-generated?"
+2. Revise in place, then return the revised version only.
+Do NOT include the audit in the output. Return the final text directly.
 
 Pattern: [concrete observation]. [why or implication]. [what to do next].
 
@@ -407,8 +771,8 @@ def _call_claude_cli(prompt: str) -> str | None:
     return proc.stdout.strip()
 
 
-def humanize_llm(text: str) -> str:
-    prompt = _build_humanize_prompt(text)
+def humanize_llm(text: str, *, intensity: Intensity = "balanced") -> str:
+    prompt = _build_humanize_prompt(text, intensity=intensity)
     result = _call_anthropic_sdk(prompt) or _call_claude_cli(prompt)
     if result is None:
         raise RuntimeError(
@@ -438,53 +802,131 @@ def _llm_fix(original: str, broken: str, errors: list[str]) -> str | None:
 # ---------- Top-level orchestrator ----------
 
 
-def humanize_file(path: Path, *, deterministic: bool = False) -> bool:
+@dataclass
+class HumanizeOutcome:
+    """Result of `humanize_file_ex`. Carries enough information for the CLI's
+    --json, --diff, and --report modes without duplicating the read/write."""
+
+    ok: bool
+    original: str
+    humanized: str
+    validation: ValidationResult | None = None
+    report: HumanizeReport | None = None
+    attempts: int = 1
+    error: str | None = None
+
+
+def humanize_file(
+    path: Path,
+    *,
+    deterministic: bool = False,
+    intensity: Intensity = "balanced",
+    backup: bool = True,
+) -> bool:
+    """Legacy entry point: read, humanize, write, return success bool."""
+    outcome = humanize_file_ex(
+        path,
+        deterministic=deterministic,
+        intensity=intensity,
+        backup=backup,
+        write=True,
+    )
+    return outcome.ok
+
+
+def humanize_file_ex(
+    path: Path,
+    *,
+    deterministic: bool = False,
+    intensity: Intensity = "balanced",
+    backup: bool = True,
+    write: bool = True,
+) -> HumanizeOutcome:
+    """Rich entry point. Returns the full outcome (humanized text, report,
+    validation) regardless of whether we actually wrote to disk. The CLI uses
+    `write=False` for `--dry-run` and `--diff`."""
     original_text = path.read_text(encoding="utf-8")
     backup_path = path.with_name(path.stem + ".original.md")
 
-    if backup_path.exists():
-        sys.stderr.write(
-            f"Backup already exists at {backup_path}. "
-            "Remove or rename it before re-humanizing.\n"
+    if backup and write and backup_path.exists():
+        return HumanizeOutcome(
+            ok=False,
+            original=original_text,
+            humanized=original_text,
+            error=(
+                f"Backup already exists at {backup_path}. "
+                "Remove or rename it before re-humanizing."
+            ),
         )
-        return False
 
     if deterministic:
-        humanized = humanize_deterministic(original_text)
+        humanized, report = humanize_deterministic_with_report(
+            original_text, intensity=intensity
+        )
         result = validate(original_text, humanized)
-        sys.stdout.write(format_report(result) + "\n")
         if not result.ok:
-            sys.stderr.write(
-                "Deterministic pass produced a structural change; refusing to write.\n"
+            return HumanizeOutcome(
+                ok=False,
+                original=original_text,
+                humanized=humanized,
+                validation=result,
+                report=report,
+                error="Deterministic pass produced a structural change.",
             )
-            return False
-        backup_path.write_text(original_text, encoding="utf-8")
-        path.write_text(humanized, encoding="utf-8")
-        return True
+        if write:
+            if backup:
+                backup_path.write_text(original_text, encoding="utf-8")
+            path.write_text(humanized, encoding="utf-8")
+        return HumanizeOutcome(
+            ok=True,
+            original=original_text,
+            humanized=humanized,
+            validation=result,
+            report=report,
+        )
 
-    backup_path.write_text(original_text, encoding="utf-8")
+    # LLM mode.
+    if backup and write:
+        backup_path.write_text(original_text, encoding="utf-8")
 
     try:
-        humanized = humanize_llm(original_text)
+        humanized = humanize_llm(original_text, intensity=intensity)
     except RuntimeError as exc:
-        sys.stderr.write(f"{exc}\n")
-        backup_path.unlink(missing_ok=True)
-        return False
+        if backup and write:
+            backup_path.unlink(missing_ok=True)
+        return HumanizeOutcome(
+            ok=False,
+            original=original_text,
+            humanized=original_text,
+            error=str(exc),
+        )
 
+    last_result = None
     for attempt in range(MAX_RETRIES + 1):
-        result = validate(original_text, humanized)
-        sys.stdout.write(f"Attempt {attempt + 1}:\n{format_report(result)}\n")
-        if result.ok:
-            path.write_text(humanized, encoding="utf-8")
-            return True
+        last_result = validate(original_text, humanized)
+        if last_result.ok:
+            if write:
+                path.write_text(humanized, encoding="utf-8")
+            return HumanizeOutcome(
+                ok=True,
+                original=original_text,
+                humanized=humanized,
+                validation=last_result,
+                attempts=attempt + 1,
+            )
         if attempt < MAX_RETRIES:
-            sys.stdout.write("Requesting targeted fix...\n")
-            fixed = _llm_fix(original_text, humanized, result.errors)
+            fixed = _llm_fix(original_text, humanized, last_result.errors)
             if fixed is None:
                 break
             humanized = fixed
 
-    sys.stderr.write("Could not produce a structurally valid humanization. Restoring original.\n")
-    sys.stderr.write(f"Backup preserved at {backup_path} for debugging.\n")
-    path.write_text(original_text, encoding="utf-8")
-    return False
+    if write:
+        path.write_text(original_text, encoding="utf-8")
+    return HumanizeOutcome(
+        ok=False,
+        original=original_text,
+        humanized=humanized,
+        validation=last_result,
+        attempts=MAX_RETRIES + 1,
+        error="Could not produce a structurally valid humanization.",
+    )

@@ -139,7 +139,4 @@ def should_compress(path: Path) -> bool:
         size = path.stat().st_size
     except OSError:
         return False
-    if size == 0 or size > MAX_BYTES:
-        return False
-
-    return True
+    return not (size == 0 or size > MAX_BYTES)

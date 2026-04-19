@@ -1,0 +1,39 @@
+changelog:
+  exclude:
+    labels:
+      - ignore-for-release
+      - dependencies
+  categories:
+    - title: Breaking changes
+      labels:
+        - breaking
+    - title: New features
+      labels:
+        - feature
+        - enhancement
+    - title: Pattern rules
+      labels:
+        - rules
+        - patterns
+    - title: CLI
+      labels:
+        - cli
+    - title: Validation + benchmarks
+      labels:
+        - validator
+        - benchmarks
+    - title: Bug fixes
+      labels:
+        - bug
+        - fix
+    - title: Documentation
+      labels:
+        - docs
+    - title: Internal
+      labels:
+        - chore
+        - ci
+        - refactor
+    - title: Other changes
+      labels:
+        - "*"

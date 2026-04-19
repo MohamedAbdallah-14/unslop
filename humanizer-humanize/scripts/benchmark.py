@@ -60,10 +60,7 @@ def main() -> None:
     for f in files:
         original = f.read_text(encoding="utf-8")
         try:
-            if args.llm:
-                humanized = humanize_llm(original)
-            else:
-                humanized = humanize_deterministic(original)
+            humanized = humanize_llm(original) if args.llm else humanize_deterministic(original)
         except Exception as exc:
             failures.append(f"{f.name}: {exc}")
             continue

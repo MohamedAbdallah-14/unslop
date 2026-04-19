@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "humanizer-humanize"
-version = "0.3.0"
+dynamic = ["version"]
 description = "Humanize markdown and text files — strip AI-isms while preserving code, URLs, headings, and technical content."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "Humazier maintainers" }]
+authors = [{ name = "Humanizer maintainers" }]
 keywords = ["humanize", "llm", "markdown", "ai-detection", "de-slop", "prose"]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -18,23 +18,25 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Topic :: Text Processing :: Markup :: Markdown",
   "Topic :: Software Development :: Documentation",
+  "Typing :: Typed",
 ]
 dependencies = []
 
 [project.optional-dependencies]
 llm = ["anthropic>=0.34"]
-dev = ["pytest>=8", "ruff>=0.6"]
+dev = ["pytest>=8", "ruff>=0.6", "mypy>=1.8"]
 
 [project.urls]
-Homepage = "https://github.com/juliusbrussee/humanizer"
-Issues = "https://github.com/juliusbrussee/humanizer/issues"
+Homepage = "https://github.com/MohamedAbdallah-Hu/humanizer"
+Issues = "https://github.com/MohamedAbdallah-Hu/humanizer/issues"
+Source = "https://github.com/MohamedAbdallah-Hu/humanizer"
+Changelog = "https://github.com/MohamedAbdallah-Hu/humanizer/blob/main/CHANGELOG.md"
 
 [project.scripts]
 humanize = "scripts.cli:main"
@@ -42,14 +44,28 @@ humanize = "scripts.cli:main"
 [tool.setuptools]
 py-modules = []
 
+[tool.setuptools.dynamic]
+version = { attr = "scripts.__version__" }
+
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["scripts*"]
 
+[tool.setuptools.package-data]
+scripts = ["py.typed"]
+
 [tool.ruff]
 line-length = 100
-target-version = "py39"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
 ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.10"
+strict_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+check_untyped_defs = true
+files = ["scripts"]

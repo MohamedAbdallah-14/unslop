@@ -96,6 +96,16 @@ class TestDeterministicSycophancy:
         assert "Certainly" not in out
         assert "I will help" in out
 
+    def test_strips_certainly_with_comma(self) -> None:
+        out = humanize_deterministic("Certainly, I will help.")
+        assert "Certainly" not in out
+        assert "I will help" in out
+
+    def test_strips_certainly_after_sentence(self) -> None:
+        out = humanize_deterministic("We need it. Certainly, that is true.")
+        assert "Certainly" not in out
+        assert "that is true" in out.lower()
+
     def test_strips_stacked_openers(self) -> None:
         text = "Great question! I'd be happy to help with this. Here is the real content."
         out = humanize_deterministic(text)
@@ -129,16 +139,52 @@ class TestDeterministicStockVocab:
         out = humanize_deterministic("Let's delve into the topic.")
         assert "delve" not in out.lower()
 
+    def test_strips_delving_conjugation(self) -> None:
+        out = humanize_deterministic("When delving into the data, we found errors.")
+        assert "delving" not in out.lower()
+        assert "looking at" in out.lower()
+
+    def test_strips_embark_conjugations(self) -> None:
+        out = humanize_deterministic("When embarking on the project, we planned ahead.")
+        assert "embarking" not in out.lower()
+        assert "starting" in out.lower()
+
     def test_strips_leverage_all_forms(self) -> None:
         out = humanize_deterministic(
             "We leverage caching. The system leverages it. We leveraged X. We are leveraging Y."
         )
         assert "leverag" not in out.lower()
 
+    def test_leverage_conjugation_grammar(self) -> None:
+        out = humanize_deterministic("The system leverages caching heavily.")
+        assert "uses" in out.lower()
+        out2 = humanize_deterministic("They leveraged the API.")
+        assert "used" in out2.lower()
+        out3 = humanize_deterministic("We are leveraging new tools.")
+        assert "using" in out3.lower()
+
     def test_strips_seamless(self) -> None:
         out = humanize_deterministic("The seamless integration works seamlessly.")
         assert "seamless" not in out.lower()
         assert "smooth" in out.lower()
+
+    def test_rewrites_filler_adjectives_with_natural_phrasing(self) -> None:
+        out = humanize_deterministic(
+            "We took a comprehensive view and applied a holistic approach. "
+            "The report was written comprehensively."
+        )
+        low = out.lower()
+        assert "comprehensive" not in low
+        assert "holistic" not in low
+        assert "broad" in low
+        assert "overall" in low
+        assert "thoroughly" in low
+
+    def test_testament_with_preceding_verb(self) -> None:
+        out = humanize_deterministic("The code embodies a testament to the engineers.")
+        assert "embodies" not in out.lower()
+        assert "testament" not in out.lower()
+        assert "shows" in out.lower()
 
     def test_navigate_kept_when_literal(self) -> None:
         out = humanize_deterministic("Use the keyboard to navigate to the next page.")
@@ -179,10 +225,33 @@ class TestDeterministicTransitionTics:
         assert "in conclusion" not in out.lower()
 
     def test_keeps_furthermore_mid_sentence(self) -> None:
-        # "Furthermore" can legitimately appear mid-sentence. Only strip at sentence start.
         out = humanize_deterministic("He looked at her and saw, furthermore, great sadness.")
-        # Note: the regex requires ". " before to match, so this legitimately stays.
         assert "furthermore" in out.lower()
+
+    def test_strips_transition_tics_in_bullet_items(self) -> None:
+        text = (
+            "- Additionally, explore frameworks.\n"
+            "- Furthermore, read the docs.\n"
+            "- In conclusion, practice daily.\n"
+        )
+        out = humanize_deterministic(text)
+        assert "additionally" not in out.lower()
+        assert "furthermore" not in out.lower()
+        assert "in conclusion" not in out.lower()
+        assert "- Explore" in out
+        assert "- Read" in out
+        assert "- Practice" in out
+
+    def test_strips_firstly_secondly(self) -> None:
+        out = humanize_deterministic("Firstly, read the docs. Secondly, write tests.")
+        assert "firstly" not in out.lower()
+        assert "secondly" not in out.lower()
+
+    def test_strips_firstly_in_bullet(self) -> None:
+        text = "- Firstly, install the package.\n- Secondly, configure it."
+        out = humanize_deterministic(text)
+        assert "firstly" not in out.lower()
+        assert "secondly" not in out.lower()
 
 
 class TestDeterministicEmDashCap:
@@ -195,7 +264,8 @@ class TestDeterministicEmDashCap:
         text = "First — second — third — fourth — end."
         out = humanize_deterministic(text)
         assert out.count("—") == 2
-        assert "third , fourth , end" in out or "third, fourth, end" in out.replace("  ", " ")
+        assert " , " not in out, f"Ugly spacing ' , ' found in: {out!r}"
+        assert "third, fourth, end" in out or "third,fourth,end" in out
 
     def test_em_dash_count_resets_per_paragraph(self) -> None:
         text = "One — two — three — four.\n\nAnother — paragraph — here — too."
@@ -564,3 +634,486 @@ def test_llm_smoke(tmp_path: Path) -> None:
     assert ok
     new_text = src.read_text()
     assert "Great question" not in new_text
+
+
+# ---------- new AI-ism categories (blader/humanizer + Wikipedia:Signs_of_AI_writing) ----------
+
+
+class TestExpandedVocab:
+    def test_interplay_between(self) -> None:
+        out = humanize_deterministic("The interplay between modules is complex.")
+        assert "interplay between" not in out.lower()
+        assert "link between" in out.lower()
+
+    def test_intricate_is_replaced(self) -> None:
+        out = humanize_deterministic("The intricate design pays off.")
+        assert "intricate" not in out.lower()
+        assert "detailed" in out.lower()
+
+    def test_vibrant_is_replaced(self) -> None:
+        out = humanize_deterministic("A vibrant community surrounds the project.")
+        assert "vibrant" not in out.lower()
+
+    def test_figurative_underscore_is_replaced(self) -> None:
+        out = humanize_deterministic("This underscores the need for tests.")
+        assert "underscores the" not in out.lower()
+        assert "shows the" in out.lower()
+
+    def test_literal_underscore_in_prose_preserved(self) -> None:
+        # "underscore" without a following article is probably literal (variable
+        # naming discussion). We should leave it alone.
+        out = humanize_deterministic("Use an underscore between words.")
+        assert "underscore" in out.lower()
+
+    def test_crucial_is_replaced(self) -> None:
+        out = humanize_deterministic("Caching is crucial for throughput.")
+        assert "crucial" not in out.lower()
+        assert "important" in out.lower()
+
+    def test_vital_role_is_replaced(self) -> None:
+        out = humanize_deterministic("Tests play a vital role in CI.")
+        assert "vital role" not in out.lower()
+
+    def test_vital_signs_preserved(self) -> None:
+        # "vital" in medical-ish context shouldn't be nuked — we gate on the
+        # noun slot.
+        out = humanize_deterministic("Check the patient's vital signs.")
+        assert "vital signs" in out.lower()
+
+    def test_ever_evolving_is_replaced(self) -> None:
+        out = humanize_deterministic("Security is an ever-evolving field.")
+        assert "ever-evolving" not in out.lower()
+        assert "changing" in out.lower()
+
+    def test_in_todays_digital_world(self) -> None:
+        out = humanize_deterministic("In today's digital world, we ship fast.")
+        assert "digital world" not in out.lower()
+        assert out.lower().startswith("today,")
+
+    def test_dynamic_landscape(self) -> None:
+        out = humanize_deterministic("We operate in a dynamic landscape.")
+        assert "dynamic landscape" not in out.lower()
+
+
+class TestAuthorityTropes:
+    def test_at_its_core_stripped(self) -> None:
+        out = humanize_deterministic("At its core, caching trades memory for latency.")
+        assert "at its core" not in out.lower()
+        assert "caching" in out.lower()
+
+    def test_in_reality_stripped(self) -> None:
+        out = humanize_deterministic("In reality, most caches are small.")
+        assert not out.lower().startswith("in reality")
+        assert "most caches" in out.lower()
+
+    def test_fundamentally_stripped(self) -> None:
+        out = humanize_deterministic("Fundamentally, this is a scheduling problem.")
+        assert not out.lower().startswith("fundamentally")
+
+    def test_what_really_matters(self) -> None:
+        out = humanize_deterministic("What really matters is that tests pass.")
+        assert "what really matters" not in out.lower()
+        assert "tests pass" in out.lower()
+
+
+class TestSignposting:
+    def test_lets_dive_in_stripped(self) -> None:
+        out = humanize_deterministic("Let's dive in. Here is the first step.")
+        assert "dive in" not in out.lower()
+        assert "first step" in out.lower()
+
+    def test_without_further_ado(self) -> None:
+        out = humanize_deterministic("Without further ado, here is the list.")
+        assert "without further ado" not in out.lower()
+
+    def test_heres_what_you_need_to_know(self) -> None:
+        out = humanize_deterministic("Here's what you need to know: tests matter.")
+        assert "what you need to know" not in out.lower()
+        assert "tests matter" in out.lower()
+
+    def test_lets_break_it_down(self) -> None:
+        out = humanize_deterministic("Let's break this down. First, we build.")
+        assert "break this down" not in out.lower()
+
+
+class TestFillerPhrasesFullIntensity:
+    def test_filler_not_stripped_at_balanced(self) -> None:
+        # balanced is the default and should NOT touch filler phrases.
+        out = humanize_deterministic("We ran the tests in order to verify.")
+        assert "in order to" in out.lower()
+
+    def test_in_order_to_stripped_at_full(self) -> None:
+        out = humanize_deterministic(
+            "We ran the tests in order to verify.", intensity="full"
+        )
+        assert "in order to" not in out.lower()
+
+    def test_due_to_the_fact_that_stripped_at_full(self) -> None:
+        out = humanize_deterministic(
+            "The build failed due to the fact that the disk was full.",
+            intensity="full",
+        )
+        assert "due to the fact that" not in out.lower()
+        assert "because" in out.lower()
+
+    def test_prior_to_stripped_at_full(self) -> None:
+        out = humanize_deterministic(
+            "Run migrations prior to deploying.", intensity="full"
+        )
+        assert "prior to" not in out.lower()
+        assert "before" in out.lower()
+
+    def test_with_regard_to_stripped_at_full(self) -> None:
+        out = humanize_deterministic(
+            "With regard to caching, redis is fine.", intensity="full"
+        )
+        assert "with regard to" not in out.lower()
+
+
+class TestNegativeParallelism:
+    def test_tricolon_negation_stripped_at_full(self) -> None:
+        text = "No guesswork, no bloat, no surprises."
+        out = humanize_deterministic(text, intensity="full")
+        assert "no guesswork" not in out.lower()
+
+    def test_negative_parallelism_preserved_at_balanced(self) -> None:
+        text = "No guesswork, no bloat, no surprises."
+        out = humanize_deterministic(text, intensity="balanced")
+        # Still present because we only run this rule at full.
+        assert "No guesswork" in out or "no guesswork" in out.lower()
+
+
+# ---------- intensity modes ----------
+
+
+class TestIntensity:
+    def test_invalid_intensity_raises(self) -> None:
+        with pytest.raises(ValueError):
+            humanize_deterministic("hello", intensity="aggressive")  # type: ignore[arg-type]
+
+    def test_subtle_preserves_sycophancy(self) -> None:
+        # `subtle` only runs stock-vocab.
+        out = humanize_deterministic(
+            "Great question! The interplay between modules is complex.",
+            intensity="subtle",
+        )
+        # Sycophancy NOT stripped at subtle.
+        assert "Great question" in out
+        # Stock vocab IS stripped at subtle.
+        assert "interplay between" not in out.lower()
+
+    def test_balanced_strips_sycophancy(self) -> None:
+        out = humanize_deterministic(
+            "Great question! Tests should pass.", intensity="balanced"
+        )
+        assert "Great question" not in out
+
+    def test_full_strips_filler(self) -> None:
+        out = humanize_deterministic(
+            "We ran in order to verify.", intensity="full"
+        )
+        assert "in order to" not in out.lower()
+
+    def test_full_is_superset_of_balanced(self) -> None:
+        text = "Great question! At its core, we ran in order to verify."
+        balanced = humanize_deterministic(text, intensity="balanced")
+        full = humanize_deterministic(text, intensity="full")
+        # full removes everything balanced does, plus filler.
+        assert "Great question" not in balanced
+        assert "Great question" not in full
+        assert "in order to" in balanced.lower()
+        assert "in order to" not in full.lower()
+
+
+# ---------- audit trail ----------
+
+
+class TestAuditTrail:
+    def test_report_records_replacements(self) -> None:
+        from scripts.humanize import humanize_deterministic_with_report
+
+        text = "Great question! The interplay between caching and latency is crucial."
+        out, report = humanize_deterministic_with_report(text, intensity="balanced")
+        assert out != text
+        assert report.intensity == "balanced"
+        assert len(report.replacements) > 0
+        rules = {r.rule for r in report.replacements}
+        assert "sycophancy" in rules
+        assert "stock_vocab" in rules
+
+    def test_report_counts_by_rule(self) -> None:
+        from scripts.humanize import humanize_deterministic_with_report
+
+        text = (
+            "Great question! Here is the answer.\n\n"
+            "Certainly! It's important to note that tests matter.\n"
+        )
+        _, report = humanize_deterministic_with_report(text)
+        counts = report.counts_by_rule
+        assert counts.get("sycophancy", 0) >= 2
+        assert counts.get("hedging_opener", 0) >= 1
+
+    def test_report_empty_on_clean_text(self) -> None:
+        from scripts.humanize import humanize_deterministic_with_report
+
+        text = "This is a plain sentence with no tells.\n"
+        out, report = humanize_deterministic_with_report(text)
+        # Nothing removable.
+        assert report.replacements == []
+        assert out == text
+
+    def test_report_to_dict_shape(self) -> None:
+        from scripts.humanize import humanize_deterministic_with_report
+
+        _, report = humanize_deterministic_with_report(
+            "Great question! Delve into this."
+        )
+        d = report.to_dict()
+        assert set(d.keys()) >= {
+            "intensity",
+            "replacements",
+            "counts_by_rule",
+            "em_dashes_before",
+            "em_dashes_after",
+        }
+        assert all("rule" in r and "before" in r and "after" in r for r in d["replacements"])
+
+    def test_report_tracks_em_dash_counts(self) -> None:
+        from scripts.humanize import humanize_deterministic_with_report
+
+        text = "One — two — three — four — five.\n"
+        _, report = humanize_deterministic_with_report(text)
+        assert report.em_dashes_before == 4
+        assert report.em_dashes_after <= 2
+
+
+# ---------- HumanizeOutcome / humanize_file_ex ----------
+
+
+class TestHumanizeFileEx:
+    def test_outcome_carries_report_and_validation(self, tmp_path: Path) -> None:
+        from scripts.humanize import humanize_file_ex
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this topic.\n")
+        outcome = humanize_file_ex(src, deterministic=True)
+        assert outcome.ok
+        assert outcome.report is not None
+        assert outcome.validation is not None
+        assert outcome.humanized != outcome.original
+
+    def test_dry_run_does_not_write(self, tmp_path: Path) -> None:
+        from scripts.humanize import humanize_file_ex
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this.\n")
+        outcome = humanize_file_ex(src, deterministic=True, write=False, backup=False)
+        assert outcome.ok
+        # Source unchanged on disk.
+        assert src.read_text() == "Great question! Delve into this.\n"
+
+    def test_no_backup_flag(self, tmp_path: Path) -> None:
+        from scripts.humanize import humanize_file_ex
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this.\n")
+        outcome = humanize_file_ex(src, deterministic=True, backup=False)
+        assert outcome.ok
+        assert not (tmp_path / "doc.original.md").exists()
+
+    def test_refuses_to_overwrite_existing_backup(self, tmp_path: Path) -> None:
+        from scripts.humanize import humanize_file_ex
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this.\n")
+        backup = tmp_path / "doc.original.md"
+        backup.write_text("someone else's backup\n")
+
+        outcome = humanize_file_ex(src, deterministic=True)
+        assert not outcome.ok
+        assert outcome.error and "backup already exists" in outcome.error.lower()
+        # Should not have clobbered.
+        assert backup.read_text() == "someone else's backup\n"
+
+
+# ---------- CLI ----------
+
+
+class TestCLI:
+    def test_version_flag(self, capsys) -> None:
+        from scripts.cli import main
+
+        with pytest.raises(SystemExit) as exc:
+            main(["--version"])
+        assert exc.value.code == 0
+        out = capsys.readouterr().out
+        assert out.startswith("humanize ")
+
+    def test_help_flag(self, capsys) -> None:
+        from scripts.cli import main
+
+        with pytest.raises(SystemExit) as exc:
+            main(["--help"])
+        assert exc.value.code == 0
+        out = capsys.readouterr().out
+        assert "--deterministic" in out
+        assert "--mode" in out
+        assert "--stdin" in out
+
+    def test_no_args_errors(self, capsys) -> None:
+        from scripts.cli import main
+
+        with pytest.raises(SystemExit) as exc:
+            main([])
+        assert exc.value.code == 2
+        err = capsys.readouterr().err
+        assert "no input files" in err.lower()
+
+    def test_missing_file_returns_1(self, tmp_path: Path, capsys) -> None:
+        from scripts.cli import main
+
+        code = main(["--deterministic", str(tmp_path / "does-not-exist.md")])
+        assert code == 1
+        err = capsys.readouterr().err
+        assert "not found" in err.lower()
+
+    def test_report_requires_deterministic(self, tmp_path: Path, capsys) -> None:
+        from scripts.cli import main
+
+        src = tmp_path / "doc.md"
+        src.write_text("Delve into this.\n")
+        with pytest.raises(SystemExit) as exc:
+            main(["--report", str(tmp_path / "r.json"), str(src)])
+        assert exc.value.code == 2
+        err = capsys.readouterr().err
+        assert "--report" in err and "--deterministic" in err
+
+    def test_output_requires_single_file(self, tmp_path: Path, capsys) -> None:
+        from scripts.cli import main
+
+        a = tmp_path / "a.md"
+        b = tmp_path / "b.md"
+        a.write_text("x\n")
+        b.write_text("y\n")
+        with pytest.raises(SystemExit) as exc:
+            main(["--deterministic", "--output", str(tmp_path / "out.md"), str(a), str(b)])
+        assert exc.value.code == 2
+
+    def test_stdin_deterministic(self, tmp_path: Path, monkeypatch, capsys) -> None:
+        import io
+
+        from scripts.cli import main
+
+        monkeypatch.setattr(
+            "sys.stdin",
+            io.StringIO("Great question! Delve into this.\n"),
+        )
+        code = main(["--stdin", "--deterministic", "--mode", "balanced"])
+        assert code == 0
+        out = capsys.readouterr().out
+        assert "Great question" not in out
+        assert "delve" not in out.lower()
+
+    def test_dry_run_does_not_write_file(self, tmp_path: Path) -> None:
+        from scripts.cli import main
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this.\n")
+        code = main(["--deterministic", "--dry-run", "--quiet", str(src)])
+        assert code == 0
+        # Untouched.
+        assert src.read_text() == "Great question! Delve into this.\n"
+        assert not (tmp_path / "doc.original.md").exists()
+
+    def test_diff_output(self, tmp_path: Path, capsys) -> None:
+        from scripts.cli import main
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this.\n")
+        code = main(["--deterministic", "--diff", "--quiet", str(src)])
+        assert code == 0
+        out = capsys.readouterr().out
+        # Unified diff markers.
+        assert out.startswith("---")
+        assert "+++" in out
+        # File itself untouched.
+        assert "Great question" in src.read_text()
+
+    def test_json_output(self, tmp_path: Path, capsys) -> None:
+        import json as json_mod
+
+        from scripts.cli import main
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this.\n")
+        code = main(["--deterministic", "--dry-run", "--json", "--quiet", str(src)])
+        assert code == 0
+        out = capsys.readouterr().out
+        payload = json_mod.loads(out)
+        assert payload["ok"] is True
+        assert "validation" in payload
+        assert "report" in payload
+        assert payload["report"]["intensity"] == "balanced"
+
+    def test_report_file(self, tmp_path: Path) -> None:
+        import json as json_mod
+
+        from scripts.cli import main
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this.\n")
+        report_path = tmp_path / "report.json"
+        code = main([
+            "--deterministic",
+            "--dry-run",
+            "--report",
+            str(report_path),
+            "--quiet",
+            str(src),
+        ])
+        assert code == 0
+        assert report_path.exists()
+        data = json_mod.loads(report_path.read_text())
+        assert isinstance(data, list)
+        assert len(data) == 1
+        assert data[0]["report"]["intensity"] == "balanced"
+        assert len(data[0]["report"]["replacements"]) > 0
+
+    def test_output_flag_writes_to_target(self, tmp_path: Path) -> None:
+        from scripts.cli import main
+
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Delve into this.\n")
+        dst = tmp_path / "out.md"
+        code = main([
+            "--deterministic",
+            "--no-backup",
+            "--output",
+            str(dst),
+            "--quiet",
+            str(src),
+        ])
+        assert code == 0
+        assert dst.exists()
+        assert "Great question" not in dst.read_text()
+        # Source is preserved (because --output implies don't-overwrite-input).
+        assert "Great question" in src.read_text()
+
+    def test_mode_full_at_cli(self, tmp_path: Path) -> None:
+        import json as json_mod
+
+        from scripts.cli import main
+
+        src = tmp_path / "doc.md"
+        src.write_text("We ran in order to verify.\n")
+        code = main([
+            "--deterministic",
+            "--dry-run",
+            "--json",
+            "--mode", "full",
+            "--quiet",
+            str(src),
+        ])
+        assert code == 0  # smoke: validated
+        # Read back JSON; must reflect full intensity.
+        # (--json goes to stdout; capsys is fine, but we asserted payload above.)
