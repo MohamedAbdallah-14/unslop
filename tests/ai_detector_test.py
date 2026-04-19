@@ -12,7 +12,15 @@ Models:
 
 import sys
 import re
-import torch
+
+import pytest
+
+# Heavy ML deps. Skip the whole module if any are missing (e.g. CI without torch).
+torch = pytest.importorskip("torch")
+pytest.importorskip("transformers")
+pytest.importorskip("huggingface_hub")
+pytest.importorskip("safetensors")
+
 import torch.nn as nn
 import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModelForSequenceClassification, AutoModel, AutoConfig
