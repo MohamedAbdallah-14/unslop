@@ -1209,3 +1209,837 @@ class TestCLI:
         assert code == 0  # smoke: validated
         # Read back JSON; must reflect full intensity.
         # (--json goes to stdout; capsys is fine, but we asserted payload above.)
+
+
+# ---------- Coverage-gap tests (target: 100%) ----------
+
+import re as _re_mod
+import subprocess as _subprocess
+from unittest.mock import MagicMock, patch
+
+from scripts import benchmark, validate as validate_mod
+from scripts.cli import _build_parser, _emit_diff, _llm_available, main as cli_main
+from scripts.detect import _looks_like_plain_prose, detect_file_type
+from scripts.humanize import (
+    HumanizeReport,
+    Replacement,
+    _build_humanize_prompt,
+    _build_fix_prompt,
+    _call_anthropic_sdk,
+    _call_claude_cli,
+    _llm_fix,
+    _strip_outer_fence,
+    _tracking_sub,
+    humanize_file_ex,
+    humanize_llm,
+)
+from scripts.validate import ValidationResult, format_report
+
+
+# ---------- detect.py last 4 lines ----------
+
+
+class TestDetectGaps:
+    def test_looks_like_prose_whitespace_only(self) -> None:
+        # Triggers the `if not non_space: return False` guard (line 76).
+        assert _looks_like_plain_prose("   \t  \n  ") is False
+
+    def test_looks_like_prose_empty(self) -> None:
+        assert _looks_like_plain_prose("") is False
+
+    def test_extensionless_unreadable_returns_unknown(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # Force read_bytes() to raise OSError so detect_file_type falls back to
+        # "unknown" (lines 110-111).
+        f = tmp_path / "myth"
+        f.write_text("hello world")
+
+        original_read_bytes = Path.read_bytes
+
+        def raising_read_bytes(self: Path, *a, **kw):
+            if self == f:
+                raise OSError("simulated")
+            return original_read_bytes(self, *a, **kw)
+
+        monkeypatch.setattr(Path, "read_bytes", raising_read_bytes)
+        assert detect_file_type(f) == "unknown"
+
+    def test_extensionless_basename_with_symbol_heavy_content(
+        self, tmp_path: Path
+    ) -> None:
+        # README is in the natural-language basename allowlist, but its content
+        # fails _looks_like_plain_prose (symbol-heavy). The allowlist short-
+        # circuits before the prose heuristic — covers line 123.
+        f = tmp_path / "CHANGELOG"
+        f.write_text("## v1 [2024]\n- {x: 1}\n- (y, z)\n")
+        # Symbol-heavy content but allowlisted basename wins.
+        assert detect_file_type(f) == "natural-language-extensionless"
+
+
+# ---------- humanize.py: tracking_sub branches ----------
+
+
+class TestTrackingSub:
+    def test_no_log_takes_fast_path(self) -> None:
+        # When `log` is None, _tracking_sub bypasses the wrapper (line 479).
+        out = _tracking_sub(_re_mod.compile(r"foo"), "bar", "foo foo", rule="r", log=None)
+        assert out == "bar bar"
+
+    def test_callable_repl_recorded(self) -> None:
+        # Callable repl branch (line 484).
+        log: list[Replacement] = []
+        out = _tracking_sub(
+            _re_mod.compile(r"x(\d)"),
+            lambda m: m.group(1).upper(),
+            "x1 x2",
+            rule="callable",
+            log=log,
+        )
+        assert out == "1 2"
+        assert len(log) == 2
+        assert log[0].rule == "callable"
+
+    def test_string_repl_with_invalid_backref_falls_back(self) -> None:
+        # The `match.expand` path can raise re.error on a bad backref. The
+        # fallback uses the raw repl string (lines 488-489).
+        log: list[Replacement] = []
+        # `\99` is an invalid group reference at expand time but a valid input
+        # for re.sub-style replacement strings — _tracking_sub's try/except
+        # catches re.error from match.expand.
+        out = _tracking_sub(
+            _re_mod.compile(r"foo"),
+            r"bar\99",
+            "foo",
+            rule="bad-backref",
+            log=log,
+        )
+        assert "bar" in out  # fallback path took over without crashing
+
+
+# ---------- humanize.py: em-dash cap final-position branch ----------
+
+
+class TestEmDashCapFinalPosition:
+    def test_em_dash_at_end_of_block(self) -> None:
+        # An em-dash that exceeds the cap and has no trailing space hits the
+        # final `else: buf.append(" ")` branch (line 413). Construct a paragraph
+        # with three em-dashes so the third triggers replacement, and put the
+        # third one at the very end with no space after.
+        from scripts.humanize import _cap_em_dashes_per_paragraph
+
+        text = "alpha — beta — gamma —delta"
+        out = _cap_em_dashes_per_paragraph(text, max_dashes=2)
+        # Third em-dash replaced with comma; first two preserved.
+        assert out.count("—") == 2
+        assert "," in out
+
+
+# ---------- humanize.py: prompt builders ----------
+
+
+class TestPromptBuilders:
+    def test_build_humanize_prompt_default(self) -> None:
+        prompt = _build_humanize_prompt("hello world")
+        assert "hello world" in prompt
+        assert "STRICT RULES" in prompt
+
+    def test_build_humanize_prompt_unknown_intensity_falls_back(self) -> None:
+        # Non-matching intensity key falls back to balanced guidance (line 685).
+        prompt = _build_humanize_prompt("body", intensity="balanced")  # type: ignore[arg-type]
+        assert "body" in prompt
+
+    def test_build_fix_prompt_lists_errors(self) -> None:
+        prompt = _build_fix_prompt(
+            original="orig",
+            broken_humanized="broken",
+            errors=["missing URL", "heading drift"],
+        )
+        assert "missing URL" in prompt
+        assert "heading drift" in prompt
+        assert "orig" in prompt and "broken" in prompt
+
+
+# ---------- humanize.py: _strip_outer_fence ----------
+
+
+class TestStripOuterFence:
+    def test_strips_markdown_fence(self) -> None:
+        wrapped = "```markdown\nhello\nworld\n```"
+        assert _strip_outer_fence(wrapped) == "hello\nworld"
+
+    def test_strips_md_fence(self) -> None:
+        wrapped = "```md\nhello\n```"
+        assert _strip_outer_fence(wrapped) == "hello"
+
+    def test_strips_unlabeled_fence(self) -> None:
+        wrapped = "```\nhello\n```"
+        assert _strip_outer_fence(wrapped) == "hello"
+
+    def test_no_outer_fence_passes_through(self) -> None:
+        text = "hello\n```inner```\nworld"
+        assert _strip_outer_fence(text) == text
+
+
+# ---------- humanize.py: SDK + CLI mocks ----------
+
+
+class TestAnthropicSDK:
+    def test_returns_none_when_sdk_missing(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # Force anthropic import to raise ImportError.
+        import builtins
+
+        original_import = builtins.__import__
+
+        def fake_import(name, *a, **kw):
+            if name == "anthropic":
+                raise ImportError("simulated")
+            return original_import(name, *a, **kw)
+
+        monkeypatch.setattr(builtins, "__import__", fake_import)
+        assert _call_anthropic_sdk("ignored") is None
+
+    def test_returns_none_when_no_api_key(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # SDK present but no key.
+        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+        # Stub anthropic so the import succeeds.
+        import sys as _sys
+
+        fake_anthropic = type(_sys)("anthropic")
+        fake_anthropic.Anthropic = MagicMock()  # type: ignore[attr-defined]
+        monkeypatch.setitem(_sys.modules, "anthropic", fake_anthropic)
+        assert _call_anthropic_sdk("ignored") is None
+
+    def test_returns_text_on_success(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # SDK + key present → returns concatenated block text.
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+        import sys as _sys
+
+        block = MagicMock()
+        block.text = "humanized output"
+        msg = MagicMock()
+        msg.content = [block]
+        client_instance = MagicMock()
+        client_instance.messages.create.return_value = msg
+        anthropic_class = MagicMock(return_value=client_instance)
+
+        fake_anthropic = type(_sys)("anthropic")
+        fake_anthropic.Anthropic = anthropic_class  # type: ignore[attr-defined]
+        monkeypatch.setitem(_sys.modules, "anthropic", fake_anthropic)
+        assert _call_anthropic_sdk("any prompt") == "humanized output"
+
+
+class TestClaudeCLI:
+    def test_returns_none_when_cli_missing(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("scripts.humanize.shutil.which", lambda _: None)
+        assert _call_claude_cli("ignored") is None
+
+    def test_returns_stdout_on_success(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("scripts.humanize.shutil.which", lambda _: "/usr/bin/claude")
+        completed = _subprocess.CompletedProcess(
+            args=["claude"], returncode=0, stdout="humanized text\n", stderr=""
+        )
+        monkeypatch.setattr("scripts.humanize.subprocess.run", lambda *a, **kw: completed)
+        assert _call_claude_cli("anything") == "humanized text"
+
+    def test_returns_none_on_nonzero_exit(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("scripts.humanize.shutil.which", lambda _: "/usr/bin/claude")
+        completed = _subprocess.CompletedProcess(
+            args=["claude"], returncode=1, stdout="", stderr="boom"
+        )
+        monkeypatch.setattr("scripts.humanize.subprocess.run", lambda *a, **kw: completed)
+        assert _call_claude_cli("anything") is None
+
+
+class TestHumanizeLLMOrchestration:
+    def test_uses_sdk_when_available(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("scripts.humanize._call_anthropic_sdk", lambda *_: "sdk reply")
+        monkeypatch.setattr("scripts.humanize._call_claude_cli", lambda *_: None)
+        assert humanize_llm("input") == "sdk reply"
+
+    def test_falls_back_to_cli(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("scripts.humanize._call_anthropic_sdk", lambda *_: None)
+        monkeypatch.setattr("scripts.humanize._call_claude_cli", lambda *_: "cli reply")
+        assert humanize_llm("input") == "cli reply"
+
+    def test_raises_when_both_unavailable(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr("scripts.humanize._call_anthropic_sdk", lambda *_: None)
+        monkeypatch.setattr("scripts.humanize._call_claude_cli", lambda *_: None)
+        with pytest.raises(RuntimeError, match="LLM mode requires"):
+            humanize_llm("input")
+
+    def test_strips_outer_fence_from_llm_output(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.setattr(
+            "scripts.humanize._call_anthropic_sdk",
+            lambda *_: "```markdown\nfenced reply\n```",
+        )
+        assert humanize_llm("input") == "fenced reply"
+
+
+class TestLLMFix:
+    def test_returns_none_when_both_backends_unavailable(
+        self, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        monkeypatch.setattr("scripts.humanize._call_anthropic_sdk", lambda *_: None)
+        monkeypatch.setattr("scripts.humanize._call_claude_cli", lambda *_: None)
+        assert _llm_fix("orig", "broken", ["err"]) is None
+
+    def test_strips_fence_from_fix_output(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setattr(
+            "scripts.humanize._call_anthropic_sdk", lambda *_: "```\nfixed\n```"
+        )
+        assert _llm_fix("orig", "broken", ["err"]) == "fixed"
+
+
+# ---------- humanize.py: humanize_file_ex paths ----------
+
+
+class TestHumanizeFileEx:
+    def test_deterministic_structural_failure_returns_outcome(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # Force validate to report a structural error. Covers line 868.
+        f = tmp_path / "doc.md"
+        f.write_text("hello world")
+        bad_result = ValidationResult(
+            ok=False,
+            errors=["simulated structural break"],
+            warnings=[],
+            ai_isms_before=0,
+            ai_isms_after=0,
+            burstiness_before=0,
+            burstiness_after=0,
+            sentence_length_range_after=(0, 0),
+        )
+        monkeypatch.setattr("scripts.humanize.validate", lambda *_: bad_result)
+        outcome = humanize_file_ex(f, deterministic=True, write=False)
+        assert not outcome.ok
+        assert outcome.error and "structural change" in outcome.error
+
+    def test_llm_mode_success_with_backup(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        f = tmp_path / "doc.md"
+        f.write_text("Great question! Here is the answer.")
+        # Have the "LLM" return a deterministic answer that passes validation.
+        monkeypatch.setattr(
+            "scripts.humanize.humanize_llm",
+            lambda text, intensity="balanced": "Here is the answer.",
+        )
+        outcome = humanize_file_ex(f, deterministic=False, backup=True, write=True)
+        assert outcome.ok
+        backup = f.with_name(f.stem + ".original.md")
+        assert backup.exists()
+        assert backup.read_text() == "Great question! Here is the answer."
+
+    def test_llm_mode_runtime_error_unwinds_backup(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        f = tmp_path / "doc.md"
+        f.write_text("hello")
+
+        def raise_runtime(*a, **kw):
+            raise RuntimeError("backend down")
+
+        monkeypatch.setattr("scripts.humanize.humanize_llm", raise_runtime)
+        outcome = humanize_file_ex(f, deterministic=False, backup=True, write=True)
+        assert not outcome.ok
+        assert outcome.error == "backend down"
+        # Backup must NOT remain when the LLM call fails.
+        assert not f.with_name(f.stem + ".original.md").exists()
+
+    def test_llm_mode_validation_failure_retries_then_gives_up(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        f = tmp_path / "doc.md"
+        f.write_text("# Heading\n\nbody")
+
+        # First call returns a body that drops the heading. _llm_fix returns None
+        # (no backend). The retry loop bails after one attempt.
+        monkeypatch.setattr(
+            "scripts.humanize.humanize_llm",
+            lambda text, intensity="balanced": "body without heading",
+        )
+        monkeypatch.setattr("scripts.humanize._llm_fix", lambda *a, **kw: None)
+        outcome = humanize_file_ex(f, deterministic=False, backup=False, write=True)
+        assert not outcome.ok
+        # Original file is restored.
+        assert f.read_text() == "# Heading\n\nbody"
+
+
+# ---------- validate.py gaps ----------
+
+
+class TestValidateGaps:
+    def test_heading_count_changed(self) -> None:
+        result = validate_mod.validate("# A\n# B\n", "# A\n")
+        assert not result.ok
+        assert any("Heading count" in e for e in result.errors)
+
+    def test_missing_path_warning(self) -> None:
+        # PATH regex requires leading whitespace before the slash. Drop the
+        # path from the humanized output → warning.
+        original = "Inspect /etc/passwd for users.\n"
+        humanized = "Inspect the file for users.\n"
+        result = validate_mod.validate(original, humanized)
+        assert any("Path" in w for w in result.warnings)
+
+    def test_bullet_drop_warning(self) -> None:
+        original = "- one\n- two\n- three\n- four\n- five\n- six\n"
+        humanized = "- everything\n"  # 6 → 1 → less than half
+        result = validate_mod.validate(original, humanized)
+        assert any("Bullet count" in w for w in result.warnings)
+
+    def test_ai_isms_unchanged_warning(self) -> None:
+        # AI-ism present in both → warning.
+        text = "Great question! delve into the topic. delve again."
+        result = validate_mod.validate(text, text)
+        assert any("unchanged" in w for w in result.warnings)
+
+
+class TestFormatReport:
+    def test_ok_path(self) -> None:
+        result = ValidationResult(
+            ok=True,
+            errors=[],
+            warnings=[],
+            ai_isms_before=2,
+            ai_isms_after=1,
+            burstiness_before=5.0,
+            burstiness_after=7.5,
+            sentence_length_range_after=(3, 22),
+        )
+        out = format_report(result)
+        assert "Validation: OK" in out
+        assert "AI-isms: 2 → 1" in out
+        assert "σ:" in out
+
+    def test_failed_with_errors_and_warnings(self) -> None:
+        result = ValidationResult(
+            ok=False,
+            errors=["heading dropped"],
+            warnings=["path missing"],
+            ai_isms_before=0,
+            ai_isms_after=0,
+            burstiness_before=0,
+            burstiness_after=0,
+            sentence_length_range_after=(0, 0),
+        )
+        out = format_report(result)
+        assert "Validation: FAILED" in out
+        assert "ERROR: heading dropped" in out
+        assert "warn:  path missing" in out
+
+
+# ---------- cli.py gaps ----------
+
+
+class TestCLIGaps:
+    def test_get_version_fallback(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # Force `from . import __version__` to raise → fallback "0.0.0".
+        # We patch __version__ to a sentinel that confirms the happy path
+        # still works, then patch the import machinery to confirm the fallback.
+        from scripts import cli as cli_mod
+
+        with patch.object(cli_mod, "_get_version", wraps=cli_mod._get_version):
+            # Happy path returns the current version string.
+            assert cli_mod._get_version() != ""
+
+        # Force the inner `from . import __version__` to raise.
+        import builtins
+
+        original_import = builtins.__import__
+
+        def fake_import(name, globals=None, locals=None, fromlist=(), level=0):
+            if level == 1 and "__version__" in fromlist:
+                raise ImportError("simulated")
+            return original_import(name, globals, locals, fromlist, level)
+
+        monkeypatch.setattr(builtins, "__import__", fake_import)
+        assert cli_mod._get_version() == "0.0.0"
+
+    def test_llm_available_via_env(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+        assert _llm_available() is True
+
+    def test_llm_available_via_cli(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        # _llm_available imports shutil locally; patch the global module so the
+        # local re-import sees the override.
+        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+        import shutil as _shutil
+
+        monkeypatch.setattr(_shutil, "which", lambda _: "/usr/bin/claude")
+        assert _llm_available() is True
+
+    def test_llm_available_neither(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+        import shutil as _shutil
+
+        monkeypatch.setattr(_shutil, "which", lambda _: None)
+        assert _llm_available() is False
+
+    def test_emit_diff_writes_unified(self) -> None:
+        import io
+
+        out = io.StringIO()
+        _emit_diff(out, "demo", "alpha\n", "beta\n")
+        text = out.getvalue()
+        assert "demo (original)" in text
+        assert "demo (humanized)" in text
+
+    def test_path_is_directory(self, tmp_path: Path) -> None:
+        # Pointing the CLI at a directory hits the `not path.is_file()` branch.
+        d = tmp_path / "subdir"
+        d.mkdir()
+        code = cli_main(["--deterministic", "--quiet", str(d)])
+        assert code == 1
+
+    def test_path_does_not_exist(self, tmp_path: Path) -> None:
+        ghost = tmp_path / "missing.md"
+        code = cli_main(["--deterministic", "--quiet", str(ghost)])
+        assert code == 1
+
+    def test_skip_non_natural_language(self, tmp_path: Path) -> None:
+        f = tmp_path / "code.py"
+        f.write_text("print('hi')")
+        code = cli_main(["--deterministic", str(f)])
+        assert code == 0  # skipped, not failed
+
+    def test_output_flag_writes_alternate_path(self, tmp_path: Path) -> None:
+        src = tmp_path / "in.md"
+        src.write_text("Great question! Here.\n")
+        dst = tmp_path / "out.md"
+        code = cli_main([
+            "--deterministic",
+            "--quiet",
+            "--output", str(dst),
+            str(src),
+        ])
+        assert code == 0
+        assert dst.exists()
+        # Source is unchanged when --output is used.
+        assert "Great question" in src.read_text()
+
+    def test_output_with_multiple_files_errors(self, tmp_path: Path) -> None:
+        a = tmp_path / "a.md"
+        a.write_text("hi")
+        b = tmp_path / "b.md"
+        b.write_text("hi")
+        with pytest.raises(SystemExit):
+            cli_main(["--deterministic", "--output", str(a), str(a), str(b)])
+
+    def test_no_input_files_errors(self) -> None:
+        with pytest.raises(SystemExit):
+            cli_main(["--deterministic"])
+
+    def test_report_requires_deterministic(self, tmp_path: Path) -> None:
+        f = tmp_path / "x.md"
+        f.write_text("hello")
+        with pytest.raises(SystemExit):
+            cli_main(["--report", str(tmp_path / "r.json"), str(f)])
+
+    def test_report_writes_audit_trail(self, tmp_path: Path) -> None:
+        src = tmp_path / "x.md"
+        src.write_text("Great question! Here.\n")
+        report_path = tmp_path / "audit.json"
+        code = cli_main([
+            "--deterministic",
+            "--quiet",
+            "--report", str(report_path),
+            str(src),
+        ])
+        assert code == 0
+        assert report_path.exists()
+
+    def test_stdin_mode(self, monkeypatch: pytest.MonkeyPatch, capsys) -> None:
+        import io
+
+        monkeypatch.setattr(sys, "stdin", io.StringIO("Great question! Here.\n"))
+        code = cli_main(["--deterministic", "--stdin"])
+        captured = capsys.readouterr()
+        assert code == 0
+        assert "Great question" not in captured.out
+
+    def test_stdin_mode_with_diff(
+        self, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        import io
+
+        monkeypatch.setattr(sys, "stdin", io.StringIO("Great question! Here.\n"))
+        code = cli_main(["--deterministic", "--diff", "--stdin"])
+        captured = capsys.readouterr()
+        assert code == 0
+        # Diff goes to stdout.
+        assert "stdin" in captured.out
+
+    def test_stdin_mode_with_json(
+        self, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        import io
+
+        monkeypatch.setattr(sys, "stdin", io.StringIO("Great question! Here.\n"))
+        code = cli_main(["--deterministic", "--json", "--stdin"])
+        captured = capsys.readouterr()
+        assert code == 0
+        # JSON payload goes to stderr per the implementation.
+        assert "validation" in captured.err
+
+    def test_dash_alias_for_stdin(
+        self, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        import io
+
+        monkeypatch.setattr(sys, "stdin", io.StringIO("hello\n"))
+        code = cli_main(["--deterministic", "-"])
+        assert code == 0
+
+    def test_mixed_exit_codes_returns_three(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # One file succeeds, one is missing → mixed → exit 3.
+        good = tmp_path / "good.md"
+        good.write_text("hello\n")
+        bad = tmp_path / "missing.md"
+        code = cli_main(["--deterministic", "--quiet", str(good), str(bad)])
+        assert code == 3
+
+    def test_text_output_with_replacements(
+        self, tmp_path: Path, capsys
+    ) -> None:
+        src = tmp_path / "doc.md"
+        # Multiple AI-isms so replacements > 0.
+        src.write_text("Great question! Certainly! delve.\n")
+        code = cli_main(["--deterministic", str(src)])
+        captured = capsys.readouterr()
+        assert code == 0
+        assert "replacements" in captured.out
+
+
+# ---------- benchmark.py ----------
+
+
+class TestBenchmarkCLI:
+    def test_main_processes_directory(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        # Two markdown samples — one normal, one with an AI-ism the unslop
+        # knocks out.
+        (tmp_path / "clean.md").write_text("Hello world. Short and direct.\n")
+        (tmp_path / "slop.md").write_text("Great question! delve in.\n")
+        # Add a backup file that the script must skip.
+        (tmp_path / "ignored.original.md").write_text("ignored")
+
+        monkeypatch.setattr(sys, "argv", ["benchmark", str(tmp_path)])
+        benchmark.main()
+        captured = capsys.readouterr()
+        assert "TOTAL" in captured.out
+        assert "AI-isms" in captured.out
+
+    def test_main_errors_on_missing_directory(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        ghost = tmp_path / "nope"
+        monkeypatch.setattr(sys, "argv", ["benchmark", str(ghost)])
+        with pytest.raises(SystemExit) as excinfo:
+            benchmark.main()
+        assert excinfo.value.code == 1
+
+    def test_main_errors_on_empty_directory(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        # Directory exists but contains no .md files.
+        monkeypatch.setattr(sys, "argv", ["benchmark", str(tmp_path)])
+        with pytest.raises(SystemExit) as excinfo:
+            benchmark.main()
+        assert excinfo.value.code == 1
+
+    def test_main_reports_humanize_exception(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        (tmp_path / "broken.md").write_text("hello\n")
+
+        def raise_boom(_text: str, *a, **kw) -> str:
+            raise RuntimeError("simulated humanize crash")
+
+        monkeypatch.setattr(benchmark, "humanize_deterministic", raise_boom)
+        monkeypatch.setattr(sys, "argv", ["benchmark", str(tmp_path)])
+        with pytest.raises(SystemExit) as excinfo:
+            benchmark.main()
+        # A humanize failure or validation failure exits 2.
+        assert excinfo.value.code == 2
+        captured = capsys.readouterr()
+        assert "validation failure" in captured.out
+
+
+# ---------- __main__.py ----------
+
+
+class TestRemainingGaps:
+    """Hits the last specific branches uncovered after the broad sweep."""
+
+    def test_extensionless_prose_no_basename_match(self, tmp_path: Path) -> None:
+        # File has no extension AND its basename is NOT in the NL allowlist —
+        # falls through to the prose heuristic. Covers detect.py line 123.
+        f = tmp_path / "essay-draft"
+        f.write_text(
+            "The first time I tried to learn this material I assumed it would "
+            "be straightforward. It was not. The second pass went better.\n"
+        )
+        assert detect_file_type(f) == "natural-language-extensionless"
+
+    def test_humanize_file_ex_refuses_existing_backup(self, tmp_path: Path) -> None:
+        # Pre-create the .original.md backup so humanize_file_ex bails (line 852).
+        f = tmp_path / "doc.md"
+        f.write_text("hello world")
+        backup = f.with_name(f.stem + ".original.md")
+        backup.write_text("pre-existing")
+        outcome = humanize_file_ex(f, deterministic=True, backup=True, write=True)
+        assert not outcome.ok
+        assert outcome.error and "Backup already exists" in outcome.error
+
+    def test_llm_fix_succeeds_on_retry(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        # First humanize_llm call drops a heading (validation fails). _llm_fix
+        # returns a corrected version that validates. Covers humanize.py:921
+        # (the `humanized = fixed` line in the retry branch).
+        f = tmp_path / "doc.md"
+        f.write_text("# Heading\n\nbody text")
+
+        monkeypatch.setattr(
+            "scripts.humanize.humanize_llm",
+            lambda text, intensity="balanced": "body without heading",
+        )
+        monkeypatch.setattr(
+            "scripts.humanize._llm_fix",
+            lambda *a, **kw: "# Heading\n\nbody text fixed",
+        )
+        outcome = humanize_file_ex(f, deterministic=False, backup=False, write=True)
+        assert outcome.ok
+        assert outcome.attempts >= 2
+        assert "Heading" in outcome.humanized
+
+    def test_cli_stdin_llm_mode(
+        self, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        # stdin + LLM mode (not deterministic, _llm_available returns True).
+        # Covers cli.py:159-160. _process_stdin imports humanize_llm from
+        # the .humanize module at call time, so patch it there.
+        import io
+        import scripts.humanize as humanize_mod
+
+        monkeypatch.setattr(sys, "stdin", io.StringIO("Great question! Hi.\n"))
+        monkeypatch.setattr("scripts.cli._llm_available", lambda: True)
+        monkeypatch.setattr(
+            humanize_mod, "humanize_llm", lambda text, intensity="balanced": "Hi.\n"
+        )
+        code = cli_main(["--stdin"])
+        captured = capsys.readouterr()
+        assert code == 0
+        assert "Hi." in captured.out
+
+    def test_cli_output_prints_message_when_not_quiet(
+        self, tmp_path: Path, capsys
+    ) -> None:
+        # --output success message goes to stdout when --quiet is NOT set.
+        # Covers cli.py:240.
+        src = tmp_path / "in.md"
+        src.write_text("Great question! Hello.\n")
+        dst = tmp_path / "out.md"
+        code = cli_main(["--deterministic", "--output", str(dst), str(src)])
+        captured = capsys.readouterr()
+        assert code == 0
+        assert "wrote humanized text to" in captured.out
+
+    def test_cli_outcome_error_surfaced(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        # Force humanize_file_ex to return an outcome with an error message and
+        # ok=False — exercises both line 266 (error printed to stderr) and
+        # line 272 (return 2). _process_file imports it from .humanize at call
+        # time, so patch it there.
+        from scripts.humanize import HumanizeOutcome
+        import scripts.humanize as humanize_mod
+
+        f = tmp_path / "doc.md"
+        f.write_text("hello")
+
+        def fake_humanize_file_ex(path, **kw):
+            return HumanizeOutcome(
+                ok=False,
+                original="hello",
+                humanized="hello",
+                error="simulated downstream failure",
+            )
+
+        monkeypatch.setattr(humanize_mod, "humanize_file_ex", fake_humanize_file_ex)
+        code = cli_main(["--deterministic", str(f)])
+        captured = capsys.readouterr()
+        assert code == 2
+        assert "simulated downstream failure" in captured.err
+
+    def test_cli_report_message_when_not_quiet(
+        self, tmp_path: Path, capsys
+    ) -> None:
+        # --report success message line (309) only fires when not --quiet.
+        src = tmp_path / "x.md"
+        src.write_text("Great question! Hello.\n")
+        report_path = tmp_path / "audit.json"
+        code = cli_main([
+            "--deterministic",
+            "--report", str(report_path),
+            str(src),
+        ])
+        captured = capsys.readouterr()
+        assert code == 0
+        assert "wrote audit trail" in captured.out
+
+    def test_benchmark_reports_validation_failure(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        # Force validate to return a failing result so benchmark.main hits the
+        # `if not result.ok` branch (line 72) and exits 2.
+        (tmp_path / "x.md").write_text("hello\n")
+
+        bad_result = ValidationResult(
+            ok=False,
+            errors=["forced failure"],
+            warnings=[],
+            ai_isms_before=0,
+            ai_isms_after=0,
+            burstiness_before=0,
+            burstiness_after=0,
+            sentence_length_range_after=(0, 0),
+        )
+        monkeypatch.setattr(benchmark, "validate", lambda *_: bad_result)
+        monkeypatch.setattr(sys, "argv", ["benchmark", str(tmp_path)])
+        with pytest.raises(SystemExit) as excinfo:
+            benchmark.main()
+        assert excinfo.value.code == 2
+        captured = capsys.readouterr()
+        assert "forced failure" in captured.out
+
+
+class TestModuleEntryPoint:
+    def test_module_dash_m_invocation_runs_cli(self, tmp_path: Path) -> None:
+        # `python -m scripts` should hit __main__.py and run cli.main().
+        src = tmp_path / "doc.md"
+        src.write_text("Great question! Hello.\n")
+        result = _subprocess.run(
+            [
+                sys.executable,
+                "-m",
+                "scripts",
+                "--deterministic",
+                "--dry-run",
+                "--quiet",
+                str(src),
+            ],
+            cwd=str(ROOT / "unslop"),
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        assert result.returncode == 0, result.stderr

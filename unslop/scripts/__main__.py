@@ -1,3 +1,3 @@
-from .cli import main
+from .cli import main  # pragma: no cover
 
-main()
+main()  # pragma: no cover

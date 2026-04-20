@@ -72,7 +72,7 @@ def _looks_like_plain_prose(sample_text: str) -> bool:
         return False
 
     non_space = [ch for ch in text if not ch.isspace()]
-    if not non_space:
+    if not non_space:  # pragma: no cover  (unreachable: strip() above guarantees content)
         return False
     alpha_ratio = sum(ch.isalpha() for ch in non_space) / len(non_space)
     return alpha_ratio >= 0.65
