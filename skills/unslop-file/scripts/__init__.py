@@ -7,4 +7,4 @@ The single source of truth for the package version is this `__version__`.
 """
 
 __all__ = ["cli", "humanize", "detect", "validate"]
-__version__ = "0.4.1"
+__version__ = "0.4.2"
