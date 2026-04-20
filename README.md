@@ -40,7 +40,20 @@ Same correctness. Different voice.
 
 ## Install
 
-### Claude Code (recommended)
+### Claude Code (recommended — two commands, no clone)
+
+In any Claude Code session:
+
+```
+/plugin marketplace add MohamedAbdallah-14/unslop
+/plugin install unslop
+```
+
+The plugin system fetches the manifest from this repo, wires the `SessionStart` and `UserPromptSubmit` hooks, and registers the statusline. Restart Claude Code, then type `/unslop` to activate. Uninstall via `/plugin uninstall unslop`.
+
+### Claude Code (standalone — no plugin system)
+
+For users who want the hooks installed manually (e.g. before a plugin restart, or on a fork):
 
 ```bash
 git clone https://github.com/MohamedAbdallah-14/unslop.git
