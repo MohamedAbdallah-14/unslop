@@ -3,13 +3,20 @@
   "name": "unslop-marketplace",
   "displayName": "Unslop",
   "description": "Plugins that make model-assisted text sound natural and human: clearer voice, less robotic phrasing, better burstiness, no AI fingerprint.",
+  "owner": {
+    "name": "Mohamed Abdallah",
+    "url": "https://github.com/MohamedAbdallah-14"
+  },
   "plugins": [
     {
       "name": "unslop",
       "displayName": "Unslop",
       "description": "Humanize assistant output. Strips AI-isms, engineers burstiness, preserves technical accuracy. Sub-skills for commits, PR reviews, and memory files.",
       "version": "0.4.1",
-      "author": "Mohamed Abdallah",
+      "author": {
+        "name": "Mohamed Abdallah",
+        "url": "https://github.com/MohamedAbdallah-14"
+      },
       "homepage": "https://github.com/MohamedAbdallah-14/unslop",
       "license": "MIT",
       "source": "./",
