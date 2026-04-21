@@ -157,6 +157,14 @@ Lives in `unslop/scripts/`. The package is split:
 - `humanize.py` — core logic (deterministic regex + LLM mode)
 - `validate.py` — preserve check (code/URL/heading) + AI-ism residual check
 - `benchmark.py` — quality benchmark across a directory of samples
+- `reasoning.py` — agent reasoning-trace stripper (`<thinking>`, `## Reasoning`). Opt-in via `--strip-reasoning`
+- `surprisal.py` — optional local-LM DivEye reading. Opt-in via `--surprisal-variance`; requires `pip install torch transformers`
+- `stylometry.py` — deterministic voice-match signal extraction (incl. DivEye proxies)
+- `style_memory.py` — persisted voice profile storage (security-hardened)
+- `structural.py` — Phase 1 structural pass
+- `soul.py` — Phase 5 soul / contraction pass
+- `detector.py` — optional AI-text detector feedback loop
+- `fetch_detectors.py` — one-shot HF weight fetcher for `detector.py`
 
 **Add a new AI-ism**: edit `STOCK_VOCAB`, `HEDGING_OPENERS`, `SYCOPHANCY`, `PERFORMATIVE`, or `TRANSITION_TICS` in `humanize.py` AND add a corresponding pattern to `AI_ISMS` in `validate.py` so the validator catches additions. Add a test in `tests/unslop/test_humanize.py`.
 

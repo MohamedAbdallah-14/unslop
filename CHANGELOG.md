@@ -11,6 +11,74 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.5.4] — 2026-04-21
+
+Quality + feature pass. Adds two closed-loop capabilities the research trace
+previously listed as "partial" or "convention-enforced": a programmatic
+reasoning-trace sanitizer (Cat 06 / 19) and a real DivEye surprisal-variance
+reading against a small local LM (Cat 15). Also fills a hole the test suite
+had been carrying since v0.5.0 — the CLI itself had no direct test coverage.
+All 474 tests pass; 92.0% AI-ism reduction benchmark holds.
+
+### Added
+
+- **`unslop/scripts/reasoning.py`** — strips agent reasoning traces before
+  humanization. Six named shapes: `<thinking>` / `<think>` / `<analysis>` /
+  `<reasoning>` / `<scratchpad>` / `<plan>` XML wrappers, plus markdown
+  `## Reasoning` / `## Thought Process` / `## Plan` sections. Returns a
+  `ReasoningReport` with audit detail. Idempotent; empty-input safe.
+- **`--strip-reasoning` CLI flag** (default off). On file mode, stripped
+  content is written to `<stem>.reasoning.md` as an audit sidecar. On
+  stdin, content is discarded. Humanize-file report now carries a
+  `reasoning` field. Research: "reason privately, humanize publicly"
+  (Turpin et al. on CoT faithfulness; s1 budget-forcing EMNLP 2025;
+  Anthropic `<thinking>` convention; DeepSeek-R1 `<think>` tags).
+- **`unslop/scripts/surprisal.py`** — real DivEye reading via an optional
+  small causal LM (distilgpt2 by default, ~330MB). Computes per-token
+  surprisal and reports mean log-prob, stdev, coefficient-of-variation,
+  token count. Heavy deps (`torch`, `transformers`) import lazily;
+  `SurprisalUnavailable` raised on missing deps or failed load. Cached
+  per-process so second call is ~1s on CPU.
+- **`--surprisal-variance` one-shot CLI command** with `--surprisal-model`
+  override. Reads stdin (or a file), prints JSON, exits. `UNSLOP_SKIP_SURPRISAL=1`
+  forces the unavailable path (for CI).
+- **`tests/unslop/test_reasoning.py`** — 19 tests: XML wrappers, markdown
+  sections, idempotency, multi-block concatenation, empty/whitespace
+  safety, inline-use preservation.
+- **`tests/unslop/test_surprisal.py`** — 9 unit tests + 2 end-to-end
+  tests (guarded by `UNSLOP_RUN_REAL_SURPRISAL=1`). Exercises the full
+  pipeline against a patched fake LM and, when opted in, verifies the
+  DivEye claim (bursty prose produces higher stdev than flat prose)
+  against real distilgpt2.
+- **`tests/unslop/test_cli.py`** — 21 tests covering the CLI end-to-end:
+  version/help, stdin deterministic mode, JSON output, diff mode,
+  --strip-reasoning on stdin and file (sidecar written), --surprisal-variance
+  JSON shape, file mode with/without backup, --dry-run, --output single-file
+  constraint, --report requires --deterministic, missing-file handling.
+  The CLI previously had zero direct coverage.
+- **`tests/unslop/test_detect.py`** — 30 tests for the safety gate:
+  sensitive-path detection (`.env`, SSH keys, `.pem`), extension routing,
+  extensionless sniffing (shebang, null bytes, symbol density), size and
+  backup-file guards. First tests for `detect.py`.
+
+### Changed
+
+- `humanize.HumanizeReport` now carries a `reasoning: ReasoningReport`
+  field, `to_dict()` reports it under `reasoning`.
+- `humanize_deterministic` and `humanize_deterministic_with_report` gain
+  a `strip_reasoning: bool = False` kwarg.
+- `humanize_file_ex` gains `strip_reasoning` and, when enabled with a
+  non-empty result, writes the `<stem>.reasoning.md` sidecar.
+- `README.md` documents both new features in the Use section.
+- `CLAUDE.md` package module map now enumerates every module in
+  `unslop/scripts/`, not just the original five.
+- `docs/research/IMPLEMENTATION_TRACE.md` gains two new rows (real DivEye
+  reading; programmatic reasoning-trace stripping). The "What research we
+  are NOT using yet" section is updated: Cat 15 moves from "partial" to
+  "implemented"; Cat 06 / 19 moves from "convention-enforced" to
+  "partial — programmatic stripper ships; latent-CoT analysis and
+  inference-time reasoning-budget control stay out of scope".
+
 ## [0.5.3] — 2026-04-21
 
 DivEye-proxy release. Closes the Category 15 research gap from

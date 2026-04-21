@@ -12,7 +12,7 @@
       "name": "unslop",
       "displayName": "Unslop",
       "description": "Humanize assistant output. Strips AI-isms, engineers burstiness, preserves technical accuracy. Sub-skills for commits, PR reviews, and memory files.",
-      "version": "0.5.3",
+      "version": "0.5.4",
       "author": {
         "name": "Mohamed Abdallah",
         "url": "https://github.com/MohamedAbdallah-14"

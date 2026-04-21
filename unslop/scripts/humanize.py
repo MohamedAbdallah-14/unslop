@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
+from .reasoning import ReasoningReport, strip_reasoning_traces
 from .soul import SoulReport, humanize_soul
 from .structural import StructuralReport, humanize_structural
 from .validate import ValidationResult, validate
@@ -66,6 +67,7 @@ class HumanizeReport:
     em_dashes_after: int = 0
     structural: StructuralReport = field(default_factory=StructuralReport)
     soul: SoulReport = field(default_factory=SoulReport)
+    reasoning: ReasoningReport = field(default_factory=ReasoningReport)
 
     @property
     def counts_by_rule(self) -> dict[str, int]:
@@ -92,6 +94,7 @@ class HumanizeReport:
             "em_dashes_after": self.em_dashes_after,
             "structural": self.structural.to_dict(),
             "soul": self.soul.to_dict(),
+            "reasoning": self.reasoning.to_dict(),
         }
 
 
@@ -743,6 +746,7 @@ def humanize_deterministic(
     intensity: Intensity = "balanced",
     structural: bool | None = None,
     soul: bool | None = None,
+    strip_reasoning: bool = False,
 ) -> str:
     """Pure regex pass. Preserves code/URLs via placeholders; strips canonical AI-isms.
 
@@ -757,11 +761,24 @@ def humanize_deterministic(
 
     `structural` and `soul` default to None and are resolved by intensity
     (on for balanced/full, off for subtle). Pass True/False to override.
+
+    `strip_reasoning` (default False) removes agent reasoning traces —
+    `<thinking>`, `<think>`, `<analysis>`, `<reasoning>`, `<scratchpad>`,
+    `<plan>` wrappers and markdown `## Reasoning` / `## Thought Process` /
+    `## Analysis` / `## Plan` sections — before any other rule runs. Opt-in
+    because it is destructive; see `unslop/scripts/reasoning.py` for the
+    full pattern list and the "reason privately, humanize publicly" research
+    basis (Category 06).
+
     Phase 6 benchmark: balanced with both defaults wins 100% blind LLM-judge
     preference vs the original AI text.
     """
     result, _report = humanize_deterministic_with_report(
-        text, intensity=intensity, structural=structural, soul=soul
+        text,
+        intensity=intensity,
+        structural=structural,
+        soul=soul,
+        strip_reasoning=strip_reasoning,
     )
     return result
 
@@ -772,6 +789,7 @@ def humanize_deterministic_with_report(
     intensity: Intensity = "balanced",
     structural: bool | None = None,
     soul: bool | None = None,
+    strip_reasoning: bool = False,
 ) -> tuple[str, HumanizeReport]:
     """Like `humanize_deterministic` but returns an audit trail of every
     replacement made. Used by the CLI's `--report` and `--json` output."""
@@ -784,6 +802,15 @@ def humanize_deterministic_with_report(
 
     report = HumanizeReport(intensity=intensity)
     log = report.replacements
+
+    # Reasoning-trace strip runs first — before em-dash measurement and
+    # _protect. Stripping here means `<thinking>` wrappers don't show up
+    # in em-dash counts or placeholder tables, and the stripped content
+    # doesn't leak into the voice-match profile if the caller later feeds
+    # the cleaned text back into stylometry.
+    if strip_reasoning:
+        text, report.reasoning = strip_reasoning_traces(text)
+
     em_dashes_before = text.count("—")
 
     protected, table = _protect(text)
@@ -1205,6 +1232,7 @@ def humanize_file_ex(
     soul: bool | None = None,
     voice_sample: str | None = None,
     voice_profile=None,
+    strip_reasoning: bool = False,
 ) -> HumanizeOutcome:
     """Rich entry point. Returns the full outcome (humanized text, report,
     validation) regardless of whether we actually wrote to disk. The CLI uses
@@ -1215,6 +1243,11 @@ def humanize_file_ex(
     after benchmark validation.
 
     `soul=True` enables the Phase 5 soul pass (contraction lift).
+
+    `strip_reasoning=True` (deterministic mode only) removes agent reasoning
+    traces (`<thinking>`, `<think>`, `## Reasoning` sections, etc.) before
+    humanization. Stripped content is written to `<stem>.reasoning.md` next
+    to the target file when `write=True`, so the audit trail survives.
 
     `voice_sample` (LLM mode only) is a text sample whose stylometric profile
     the rewrite should match. Ignored in deterministic mode."""
@@ -1234,9 +1267,29 @@ def humanize_file_ex(
 
     if deterministic:
         humanized, report = humanize_deterministic_with_report(
-            original_text, intensity=intensity, structural=structural, soul=soul
+            original_text,
+            intensity=intensity,
+            structural=structural,
+            soul=soul,
+            strip_reasoning=strip_reasoning,
         )
-        result = validate(original_text, humanized)
+        # Validation compares the humanized text against the text the
+        # regex rules actually saw. When we stripped reasoning traces
+        # first, we need to validate against the stripped input, not the
+        # raw input — otherwise the validator correctly flags the
+        # reasoning block as missing content.
+        validate_against = (
+            original_text.replace(report.reasoning.stripped_content, "")
+            if strip_reasoning and report.reasoning.blocks_stripped
+            else original_text
+        )
+        # Fall back to the raw input if the replace didn't match cleanly
+        # (stripping reformats whitespace, so an exact substring match
+        # isn't guaranteed). The simpler and correct approach: re-strip
+        # the original and compare against that.
+        if strip_reasoning and report.reasoning.blocks_stripped:
+            validate_against, _ = strip_reasoning_traces(original_text)
+        result = validate(validate_against, humanized)
         if not result.ok:
             return HumanizeOutcome(
                 ok=False,
@@ -1250,6 +1303,11 @@ def humanize_file_ex(
             if backup:
                 backup_path.write_text(original_text, encoding="utf-8")
             path.write_text(humanized, encoding="utf-8")
+            if strip_reasoning and report.reasoning.blocks_stripped:
+                reasoning_path = path.with_name(path.stem + ".reasoning.md")
+                reasoning_path.write_text(
+                    report.reasoning.stripped_content + "\n", encoding="utf-8"
+                )
         return HumanizeOutcome(
             ok=True,
             original=original_text,

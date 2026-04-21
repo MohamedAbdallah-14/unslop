@@ -160,6 +160,30 @@ unslop --clear-voice-profile                        # delete
 
 Storage: `$UNSLOP_STYLE_MEMORY`, then `$XDG_CONFIG_HOME/unslop/style-memory.json`, then `~/.config/unslop/style-memory.json`. File is mode-0600; symlinks refused. Profile is numeric metrics only — no prose stored.
 
+### Strip reasoning traces (agent output)
+
+Agent output often carries private reasoning wrappers (`<thinking>`, `<think>`, `<analysis>`, `<reasoning>`, `<scratchpad>`, `<plan>`) or markdown sections labelled `## Reasoning` / `## Thought Process` / `## Plan`. Ship these into a final doc and you leak a process artifact the reader never wanted.
+
+```bash
+unslop --deterministic --strip-reasoning agent-output.md
+```
+
+On a file, stripped content is written to `agent-output.reasoning.md` next to the target. On stdin, the sidecar is discarded (no target path). Opt-in; default off. Research basis: "reason privately, humanize publicly" (Cat 06; Turpin et al. on CoT faithfulness; s1 budget-forcing EMNLP 2025).
+
+### Surprisal-variance reading (real DivEye)
+
+The voice-match prompt already uses two deterministic proxies for DivEye's surprisal-variance signal (`sentence_length_cv`, `word_length_stdev`). When you want the real reading — actual per-token log-probabilities from a small local LM — use the one-shot mode:
+
+```bash
+cat sample.md | unslop --surprisal-variance
+# { "path": "<stdin>", "mean_log_prob": -2.83, "surprisal_stdev": 1.74,
+#   "surprisal_cv": 0.61, "token_count": 412, "model": "distilgpt2" }
+```
+
+First call downloads `distilgpt2` (~330MB) via HuggingFace; subsequent calls are ~1s on CPU. Override model with `--surprisal-model gpt2-medium` for a stronger but slower reading. Source: Ganapathi et al., DivEye (arXiv 2509.18880, TMLR 2026). Requires `pip install torch transformers`. Set `UNSLOP_SKIP_SURPRISAL=1` to disable.
+
+Flat AI prose lands around 0.6–0.9 surprisal stdev on distilgpt2; literary human prose often exceeds 1.5. Treat as a field reading, not a gate — detectors move fast (Nicks et al. ICLR 2024).
+
 ### Configure default mode
 
 Env var:

@@ -1,3 +1,39 @@
+## 0.5.4 — 2026-04-21
+
+Quality + feature pass. Closes two research gaps previously marked partial:
+a reasoning-trace sanitizer (Cat 06 / 19) and a real DivEye surprisal-variance
+reading against a small local LM (Cat 15). Fills the CLI test-coverage hole
+carried since v0.5.0. All 474 tests pass; 92.0% AI-ism reduction holds.
+
+### Added
+
+- `unslop.scripts.reasoning.strip_reasoning_traces()` — strips six shapes
+  of agent reasoning traces (`<thinking>`, `<think>`, `<analysis>`,
+  `<reasoning>`, `<scratchpad>`, `<plan>`, plus markdown `## Reasoning`
+  sections). Returns a `ReasoningReport` audit trail.
+- `unslop --strip-reasoning` CLI flag (opt-in). File mode writes stripped
+  content to `<stem>.reasoning.md`; stdin mode discards it.
+- `unslop.scripts.surprisal.compute_surprisal_variance()` — real DivEye
+  reading via an optional small causal LM (distilgpt2 default, ~330MB).
+  Lazy deps (`torch`, `transformers`). `SurprisalUnavailable` on missing
+  deps. Cached per-process.
+- `unslop --surprisal-variance` one-shot CLI command with
+  `--surprisal-model` override. `UNSLOP_SKIP_SURPRISAL=1` forces unavailable.
+- `HumanizeReport.reasoning` field and `strip_reasoning` kwarg on
+  `humanize_deterministic`, `humanize_deterministic_with_report`, and
+  `humanize_file_ex`.
+- First direct CLI tests (`tests/unslop/test_cli.py`, 21 cases).
+- First tests for `detect.py` (`tests/unslop/test_detect.py`, 30 cases).
+- Reasoning-trace and surprisal tests (19 + 9).
+
+### Changed
+
+- `README.md` documents both new features in the Use section.
+- `CLAUDE.md` module map enumerates every module in `unslop/scripts/`.
+- `docs/research/IMPLEMENTATION_TRACE.md` gains two new rows; Cat 15
+  moves from "partial" to "implemented"; Cat 06 / 19 moves from
+  "convention-enforced" to "partial".
+
 ## 0.5.3 — 2026-04-21
 
 DivEye-proxy release. Two deterministic, LM-free proxies for

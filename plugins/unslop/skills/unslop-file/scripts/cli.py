@@ -159,6 +159,17 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--strip-reasoning",
+        action="store_true",
+        help=(
+            "Strip agent reasoning traces (<thinking>, <think>, <analysis>, "
+            "<reasoning>, <scratchpad>, <plan> tags and markdown '## Reasoning' "
+            "sections) before humanization. Destructive; default off. Stripped "
+            "content is written to <stem>.reasoning.md for audit. Research: "
+            "'reason privately, humanize publicly' (Category 06)."
+        ),
+    )
+    parser.add_argument(
         "--voice-sample",
         type=Path,
         default=None,
@@ -225,6 +236,27 @@ def _build_parser() -> argparse.ArgumentParser:
         help="Which detector to use. TMR (~500MB) is the default.",
     )
     parser.add_argument(
+        "--surprisal-variance",
+        action="store_true",
+        help=(
+            "One-shot: read text from stdin (or --file if provided), run it "
+            "through a small local LM (distilgpt2, ~330MB), and print a real "
+            "DivEye-style surprisal-variance reading as JSON. Exits after. "
+            "First call downloads weights; subsequent calls are ~1s. Research: "
+            "Cat 15 DivEye (arXiv 2509.18880)."
+        ),
+    )
+    parser.add_argument(
+        "--surprisal-model",
+        default="distilgpt2",
+        metavar="MODEL_ID",
+        help=(
+            "HuggingFace model id for --surprisal-variance. Default distilgpt2. "
+            "Any causal-LM that transformers can load works; bigger models "
+            "give more reliable readings but take longer."
+        ),
+    )
+    parser.add_argument(
         "--quiet",
         "-q",
         action="store_true",
@@ -246,6 +278,16 @@ def _process_stdin(args: argparse.Namespace) -> int:
     else:
         voice_profile = _resolve_voice_profile(args)
 
+    # --strip-reasoning runs on stdin input before any humanizer (deterministic,
+    # LLM, or detector-feedback) sees it. Keeps the three paths consistent: the
+    # LLM doesn't need to re-strip, and the deterministic inner pass becomes a
+    # no-op on the reasoning step. stdin never writes a .reasoning.md sidecar
+    # (no target path to write beside), so the content is discarded.
+    if args.strip_reasoning:
+        from .reasoning import strip_reasoning_traces
+
+        text, _ = strip_reasoning_traces(text)
+
     if args.detector_feedback:
         from .detector import DetectorUnavailable, feedback_loop
 
@@ -263,8 +305,13 @@ def _process_stdin(args: argparse.Namespace) -> int:
         feedback = outcome
         report = None
     elif args.deterministic or not _llm_available():
+        # strip_reasoning already applied above on stdin entry; pass False here
+        # so the deterministic report doesn't misleadingly show 0 blocks.
         humanized, report = humanize_deterministic_with_report(
-            text, intensity=args.mode, structural=args.structural, soul=args.soul
+            text,
+            intensity=args.mode,
+            structural=args.structural,
+            soul=args.soul,
         )
     else:
         llm_kwargs: dict = {"intensity": args.mode}
@@ -431,6 +478,7 @@ def _process_file(
         soul=args.soul,
         voice_sample=voice_sample_text,
         voice_profile=voice_profile,
+        strip_reasoning=args.strip_reasoning,
     )
 
     if args.diff:
@@ -510,6 +558,36 @@ def _handle_voice_memory_commands(args: argparse.Namespace) -> int | None:
     return None
 
 
+def _handle_surprisal_command(args: argparse.Namespace) -> int:
+    """Run the DivEye surprisal-variance reading and print JSON. One-shot.
+
+    Source priority: --stdin > first positional file > stdin by default.
+    No humanization; just the reading. Exits after."""
+    from .surprisal import SurprisalUnavailable, compute_surprisal_variance
+
+    if args.stdin or not args.files or args.files == ["-"]:
+        text = sys.stdin.read()
+        source = "<stdin>"
+    else:
+        source_path = Path(args.files[0])
+        try:
+            text = source_path.read_text(encoding="utf-8")
+        except OSError as exc:
+            sys.stderr.write(f"error: cannot read {source_path}: {exc}\n")
+            return 1
+        source = str(source_path)
+
+    try:
+        reading = compute_surprisal_variance(text, model=args.surprisal_model)
+    except SurprisalUnavailable as exc:
+        sys.stderr.write(f"surprisal reading unavailable: {exc}\n")
+        return 1
+
+    payload = {"path": source, **reading.to_dict()}
+    sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+    return 0
+
+
 def _resolve_voice_profile(args: argparse.Namespace):
     """Return a StyleProfile when --voice-memory is requested and memory
     exists. Explicit --voice-sample is handled via text in the prompt
@@ -536,6 +614,11 @@ def main(argv: list[str] | None = None) -> int:
     memory_rc = _handle_voice_memory_commands(args)
     if memory_rc is not None:
         return memory_rc
+
+    # One-shot: surprisal variance reading. Reads stdin (or the first file),
+    # scores, prints JSON, exits. No humanization.
+    if args.surprisal_variance:
+        return _handle_surprisal_command(args)
 
     # --diff implies --dry-run. --stdin forces no-backup.
     if args.diff:
