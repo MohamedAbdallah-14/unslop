@@ -156,17 +156,62 @@ def contract_negations(
     return text
 
 
+_PARAGRAPH_SPLIT = re.compile(r"\n\s*\n")
+_FIRST_SENTENCE_END = re.compile(r"[.!?](?:\s+|$)")
+
+
+def _split_first_sentence(paragraph: str) -> tuple[str, str]:
+    """Return (first_sentence, rest) for a paragraph. When the paragraph is a
+    single sentence or has no sentence-ender, everything is first sentence."""
+    m = _FIRST_SENTENCE_END.search(paragraph)
+    if not m:
+        return paragraph, ""
+    return paragraph[: m.end()], paragraph[m.end() :]
+
+
 def contract_copula(
     text: str,
     *,
     report: SoulReport | None = None,
+    preserve_first_sentence: bool = True,
 ) -> str:
     """Contract `it is`, `that is`, `there is`, `I am`, `we/you/they are`,
     `I/we/they have + participle`, `I/we/you/they will` where safe.
 
     Each pattern has an explicit allow-list for what can follow, so the
     contractions only fire in positions where the copula reading is
-    unambiguous. Operates on protected text."""
+    unambiguous. Operates on protected text.
+
+    `preserve_first_sentence` (default True) leaves the first sentence of
+    each paragraph uncontracted. The opening sentence sets register; human
+    writers often keep it formal and relax into contractions as the
+    paragraph develops. Phase 6 3-run benchmark surfaced this: soul's
+    uniform 100% contraction rate read as "single find-replace pass" to a
+    sophisticated judge. Skipping the first sentence cuts that tell
+    without breaking determinism.
+    """
+    if not preserve_first_sentence:
+        return _apply_copula_patterns(text, report)
+
+    paragraphs = _PARAGRAPH_SPLIT.split(text)
+    separators = _PARAGRAPH_SPLIT.findall(text)
+    out_parts: list[str] = []
+    for idx, paragraph in enumerate(paragraphs):
+        first, rest = _split_first_sentence(paragraph)
+        # Single-sentence paragraph: nothing to reserve register for; apply
+        # contractions normally. Register preservation only matters when the
+        # first sentence is followed by more.
+        if not rest.strip():
+            out_parts.append(_apply_copula_patterns(paragraph, report))
+        else:
+            rest_contracted = _apply_copula_patterns(rest, report)
+            out_parts.append(first + rest_contracted)
+        if idx < len(separators):
+            out_parts.append(separators[idx])
+    return "".join(out_parts)
+
+
+def _apply_copula_patterns(text: str, report: SoulReport | None) -> str:
     for pattern, repl in _COPULA_CONTRACTIONS:
         if report is not None:
             matches = len(pattern.findall(text))

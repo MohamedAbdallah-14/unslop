@@ -132,6 +132,32 @@ class TestPreservation:
         assert "don't" in out
 
 
+class TestFirstSentencePreservation:
+    def test_first_sentence_of_multi_sentence_paragraph_untouched(self):
+        text = (
+            "We are excited to ship this. "
+            "We are also running benchmarks. "
+            "We are confident it will work."
+        )
+        out = contract_copula(text)
+        # First sentence keeps "We are"; later sentences contract.
+        assert out.startswith("We are excited to ship this.")
+        assert "We're also running" in out or "We're confident" in out
+
+    def test_single_sentence_paragraph_still_contracts(self):
+        # Preserve-first is conditional on there being a rest. Solo
+        # sentences get normal treatment.
+        out = contract_copula("We are ready to ship.")
+        assert out == "We're ready to ship."
+
+    def test_opt_out_flag(self):
+        text = "We are excited. We are ready. We are confident."
+        out = contract_copula(text, preserve_first_sentence=False)
+        assert "We're excited" in out
+        assert "We're ready" in out
+        assert "We're confident" in out
+
+
 class TestHumanizeSoulIntegration:
     def test_both_passes_run(self):
         text = (
