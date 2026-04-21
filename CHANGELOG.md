@@ -11,6 +11,71 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+### Added
+
+- **Phase 1 structural rewriter** (`unslop/scripts/structural.py`). Shape-aware
+  sentence-length rebalancer: splits overlong sentences at safe boundaries
+  (`;`, `, but `, `, and then `, `, so `, `, while `, `, however, `, em-dash)
+  when the paragraph's sentence-length σ sits below 5. Flat paragraphs use
+  a 20-word cutoff; varied paragraphs use 30. Parallel-bullet-soup merger
+  collapses ≥3 short bullets sharing a first word into one sentence. Gated
+  behind a new `--structural` flag. 23 new tests.
+- **Phase 2 six new lexical families** (mirrored into `validate.py` AI_ISMS):
+  SIGNIFICANCE_INFLATION, NOTABILITY_NAMEDROPPING, SUPERFICIAL_ING (full
+  only), COPULA_AVOIDANCE, plus validator-only FALSE_RANGES and
+  SYNONYM_CYCLING. Source taxonomy: Wikipedia "Signs of AI writing" +
+  blader/humanizer. 24 new tests.
+- **Phase 3 live detector feedback loop** (`unslop/scripts/detector.py`).
+  Lazy-loads TMR (default, ~500MB) or Desklib (~1.5GB) from HuggingFace.
+  `feedback_loop(text, ...)` escalates humanize settings until the detector
+  score drops below target or the ladder is exhausted.
+  `--detector-feedback` CLI flag. `unslop/scripts/fetch_detectors.py`
+  bootstrap. 12 new tests.
+- **Phase 4 stylometry module** (`unslop/scripts/stylometry.py`).
+  Deterministic 17-signal profile: sentence-length μ/σ, fragment rate,
+  contraction rate, em-dash / semicolon / colon / parenthetical rates,
+  type-token ratio, comma-per-sentence, Latinate ratio, first- and
+  second-person rates, approximate passive-voice rate, And/But-opener
+  rate. `StyleProfile.delta(other)` for voice-match deltas. 22 new tests.
+- **Phase 5 soul injection** (`unslop/scripts/soul.py`). 18 auxiliary-
+  negation contractions + 12 copula contractions with allow-listed
+  follow-ons to avoid possessive-fronting ambiguity. `--soul` CLI flag.
+  23 new tests.
+- **Phase 6 perceived-humanness benchmark** (`evals/perceived_humanness.py`).
+  Blind LLM-as-judge preference harness. Claude Sonnet 4.5 compares each
+  unslop rewrite against the original without side metadata; randomized
+  A/B; aggregates win rate. First-pass result: 100% (7/7) humanized wins.
+  11 new tests (judge calls mocked).
+- **`benchmarks/check_regression.py`** — compares latest run against pinned
+  baseline; fails on >2pp drop in AI-ism reduction, >+2 flat-paragraph rise,
+  or preservation break.
+- **`.github/workflows/weekly-detector-bench.yml`** — cron-Monday-09:00
+  detector + humanness regression; artifacts uploaded; nothing auto-committed.
+
+### Changed
+
+- `balanced` and `full` intensities now include Phase 1 structural and
+  Phase 5 soul passes by default. Old behavior available via
+  `--no-structural` and `--no-soul`. `subtle` unchanged (lexical only).
+  Motivation: Phase 6 benchmark showed 100% blind-judge win rate with the
+  new defaults.
+- `HumanizeReport` gains `structural: StructuralReport` and
+  `soul: SoulReport` sub-dataclasses with per-pass counts.
+- `ValidationResult` gains `flat_paragraphs_before/after`,
+  `false_ranges_before/after`, `synonym_cycling_before/after`.
+- CLI `--structural` and `--soul` are now `BooleanOptionalAction`
+  (supports `--no-structural` / `--no-soul`).
+- README updated to lead with the 100% humanness result, flag the
+  detector-resistance limits (deterministic rewriting moves TMR by
+  <0.5pp across all tested fixtures), and document the new mode gating.
+
+### Fixed
+
+- `merge_bullet_soup` treated protected-region placeholders (inline code,
+  URLs, quoted prose) as a shared first word. A 4-bullet list of inline-code
+  entries was collapsing to one line. Breaks run-scan on placeholder prefix
+  now; the fixed empty-run advance guarantees every line gets emitted.
+
 ## [0.4.1] — 2026-04-20
 
 ### Added
