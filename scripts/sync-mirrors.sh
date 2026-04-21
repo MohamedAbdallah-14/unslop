@@ -25,7 +25,7 @@ do
 done
 
 # ---- 2. Sub-skills to plugin bundle ----
-for sub in unslop-commit unslop-review unslop-help; do
+for sub in unslop-commit unslop-review unslop-help unslop-reasoning; do
   S="skills/$sub/SKILL.md"
   D="plugins/unslop/skills/$sub/SKILL.md"
   mkdir -p "$(dirname "$D")"

@@ -35,6 +35,7 @@ Modes persist until changed or the session ends.
 | `unslop-commit` | `/unslop-commit`, `/commit`, "write a commit" | Conventional Commits in human voice. |
 | `unslop-review` | `/unslop-review`, `/review`, "review this PR" | Direct, kind PR review comments. |
 | `unslop-file` | `/unslop-file <filepath>`, "unslop this file", "humanize memory file" | Rewrite a markdown file removing AI-isms while preserving code/URLs/structure. |
+| `unslop-reasoning` | `/unslop-reasoning`, "fix this chain of thought", "clean up my reasoning" | Strip AI-slop reasoning patterns (over-hedging, over-decomposing, infinite-loop rationalization) from chain-of-thought traces. |
 | `unslop-help` | `/unslop-help`, "unslop help" | This card. |
 
 ### Deactivate

@@ -140,6 +140,7 @@ Mode persists for the whole session.
 | `unslop-commit` | `/unslop-commit`, `/commit` | Conventional Commits in human voice |
 | `unslop-review` | `/unslop-review`, `/review` | Direct, kind PR review comments |
 | `humanize` (`unslop`) | `/unslop-file <file>` | Rewrite a markdown file (preserves code, URLs, headings) |
+| `unslop-reasoning` | `/unslop-reasoning` | Strip AI slop from chain-of-thought (over-hedging, over-decomposing, loops) |
 | `unslop-help` | `/unslop-help` | Reference card |
 
 ### Configure default mode
