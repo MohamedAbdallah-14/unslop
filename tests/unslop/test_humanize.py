@@ -951,6 +951,23 @@ class TestNotabilityNamedropping:
         assert "widely cited" not in out.lower()
         assert "appeared in" in out.lower()
 
+    def test_is_widely_cited_consumes_auxiliary(self) -> None:
+        # Regression: earlier pattern left "is has appeared" by not consuming
+        # the preceding "is". Now the auxiliary is part of the match.
+        text = "It is widely cited in the literature."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "is has" not in out.lower()
+        assert "appeared in" in out.lower()
+
+    def test_stands_as_testament_consumes_prefix(self) -> None:
+        # Regression: STOCK_VOCAB 'testament to' → 'shows' left "stands shows"
+        # when the source was "stands as a testament to". A narrower pattern
+        # runs first and consumes the whole phrase.
+        text = "The release stands as a testament to the team's work."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "stands shows" not in out.lower()
+        assert "testament" not in out.lower()
+
     def test_internationally_recognized_rewritten(self) -> None:
         text = "The library is internationally recognized as the gold standard."
         out = humanize_deterministic(text, intensity="balanced")

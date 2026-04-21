@@ -211,8 +211,8 @@ def run(
     fixtures_dir: Path,
     *,
     intensity: str,
-    structural: bool,
-    soul: bool,
+    structural: bool | None,
+    soul: bool | None,
     judge_model: str,
     runs: int,
     seed: int,
@@ -326,8 +326,18 @@ def main() -> int:
     p.add_argument("--fixtures", default=str(ROOT / "benchmarks/fixtures"))
     p.add_argument("--out", default=str(ROOT / "benchmarks/results"))
     p.add_argument("--intensity", default="balanced", choices=("subtle", "balanced", "full"))
-    p.add_argument("--structural", action="store_true")
-    p.add_argument("--soul", action="store_true")
+    p.add_argument(
+        "--structural",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Phase 1 structural pass. Default: on for balanced/full, off for subtle.",
+    )
+    p.add_argument(
+        "--soul",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Phase 5 soul pass. Default: on for balanced/full, off for subtle.",
+    )
     p.add_argument(
         "--judge-model",
         default=os.environ.get("UNSLOP_JUDGE_MODEL", "claude-sonnet-4-5"),

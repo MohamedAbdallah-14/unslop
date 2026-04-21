@@ -252,6 +252,16 @@ STOCK_VOCAB = [
     (re.compile(r"\bdelved\b", re.IGNORECASE), "looked at"),
     (re.compile(r"\bdelve\b", re.IGNORECASE), "look at"),
     (re.compile(r"\btapestry\b", re.IGNORECASE), "blend"),
+    # "stands/stood/standing as a testament to" — must run before the other
+    # testament-variants so it consumes the full phrase; otherwise the shorter
+    # `(?:a|the)\s+testament\s+to` pattern leaves "stands as" stranded.
+    (
+        re.compile(
+            r"\b(?:stand(?:s|ing)?|stood)\s+as\s+(?:a|an|the)\s+testament\s+to\b",
+            re.IGNORECASE,
+        ),
+        "shows",
+    ),
     (re.compile(r"\bhas\s+been\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "shows"),
     (re.compile(r"\bhave\s+been\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "show"),
     (re.compile(r"\b(?:is|was)\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "shows"),
@@ -476,13 +486,16 @@ NOTABILITY_NAMEDROPPING = [
         ),
         "known for work on",
     ),
-    # "has been widely cited in" → "has appeared in"
+    # "has been / is / was / are / were widely cited in" → "appeared in".
+    # The match consumes the preceding auxiliary so we don't leave "is has
+    # appeared" or "are appeared" behind.
     (
         re.compile(
-            r"\b(?:has\s+been\s+)?widely\s+(?:cited|featured|covered)\s+(?:in|by)\b",
+            r"\b(?:(?:is|are|was|were|has\s+been|have\s+been|had\s+been)\s+)?"
+            r"widely\s+(?:cited|featured|covered)\s+(?:in|by)\b",
             re.IGNORECASE,
         ),
-        "has appeared in",
+        "appeared in",
     ),
     # "recognized globally as" / "internationally recognized as" → "known as"
     (
