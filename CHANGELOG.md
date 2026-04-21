@@ -11,6 +11,23 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.5.2] — 2026-04-21
+
+CI hot-fix. No functional change; re-tag of 0.5.1 with a mypy config
+correction so the Tests workflow stays green in matrix rows that do
+not install the optional detector stack.
+
+### Fixed
+
+- `unslop/pyproject.toml`: `tool.mypy.overrides` now lists `torch`,
+  `torch.nn`, `torch.nn.functional`, `transformers`, `huggingface_hub`,
+  `safetensors`, `safetensors.torch` alongside `anthropic` under
+  `ignore_missing_imports = true`. These are lazy-loaded runtime
+  dependencies of `unslop/scripts/detector.py` and
+  `unslop/scripts/fetch_detectors.py`; CI runners without the heavy
+  detector stack were failing strict mypy with `import-not-found` on
+  each of the four Python versions in the matrix.
+
 ## [0.5.1] — 2026-04-21
 
 Research sync release. Follows the April 2026 update to

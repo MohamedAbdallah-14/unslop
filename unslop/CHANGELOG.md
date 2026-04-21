@@ -1,3 +1,11 @@
+## 0.5.2 — 2026-04-21
+
+CI hot-fix. No functional change; re-tag of 0.5.1 with a mypy config
+correction. `tool.mypy.overrides` in `unslop/pyproject.toml` now covers
+the lazy-loaded detector stack (`torch`, `transformers`, `huggingface_hub`,
+`safetensors`) so strict mypy passes in CI matrix rows that do not install
+those optional dependencies.
+
 ## 0.5.1 — 2026-04-21
 
 Research-sync release. Ports the April 2026 update of `docs/research/`
