@@ -36,6 +36,19 @@ You ask the model a question. The default reply opens with "Great question!", us
 
 Same correctness. Different voice.
 
+### Measured result
+
+Blind LLM-as-judge preference test: Claude Sonnet 4.5 compares each unslop rewrite against the original, without knowing which is which. Seven fixtures, randomized A/B sides, single-run.
+
+| Metric | Baseline | unslop (balanced) |
+|---|---|---|
+| Blind humanness preference (win rate) | — | **100% (7/7)** |
+| AI-ism reduction (rule-counted) | 0% | **89.1%** |
+| Flat-paragraph count across suite | 14 | 13 |
+| Preservation of code / URLs / headings | — | byte-identical |
+
+Reproduce with `python3 evals/perceived_humanness.py` (requires `ANTHROPIC_API_KEY`). Archived at `benchmarks/results/humanness/first-pass-20260421.json`.
+
 ---
 
 ## Install
@@ -175,14 +188,26 @@ LLM mode (default) receives the same preservation list as an explicit instructio
 | Category | Examples | Mode |
 |----------|----------|------|
 | Sycophancy openers | "Great question!", "Certainly!", "I'd be happy to help" | det |
-| Stock vocab | delve, tapestry, testament, navigate (figurative), embark, journey (figurative), realm, landscape, pivotal, paramount, seamless, holistic, leverage (filler), robust (filler), comprehensive (filler), cutting-edge, state-of-the-art | det |
+| Stock vocab | delve, tapestry, testament, navigate (figurative), embark, journey (figurative), realm, landscape, pivotal, paramount, seamless, holistic, leverage, robust (filler), comprehensive, cutting-edge, state-of-the-art | det |
 | Hedging stacks | "It's important to note that", "It's worth mentioning", "Generally speaking", "In essence", "At its core" | det |
 | Performative balance | A "however" appended to every claim | det |
 | Transition tics | "Furthermore,", "Moreover,", "Additionally,", "In conclusion,", "To summarize," at start of a sentence | det |
 | Em-dash pileups | More than two em-dashes per paragraph (bullet lists get a per-item budget) | det |
-| Tricolon padding | "X, Y, and Z" stacks where two would suffice | llm |
-| Bullet soup | Three bullets that say the same thing → one sentence | llm |
+| Significance inflation | "marks a pivotal moment", "stands as a testament", "enduring legacy", "leaves an indelible mark", "deeply rooted", "contributing to the broader narrative" | det |
+| Notability namedropping | "maintains an active social media presence", "a leading expert in", "renowned for his work", "widely cited in", "internationally recognized as" | det |
+| Superficial `-ing` tails | ", highlighting the importance", ", emphasizing its role" — filler participle phrases | det (full) |
+| Copula avoidance | ", being a reliable platform," → ", a reliable platform," | det |
+| Long-sentence run-ons | Sentences ≥20 words in flat-shape paragraphs split at safe boundaries (`;`, `, but `, `, however, `, em-dash) | det (Phase 1) |
+| Parallel bullet soup | 3+ bullets sharing first word merged into one sentence | det (Phase 1) |
+| Missing contractions | "do not" → "don't", "it is" → "it's" where safe | det (Phase 5) |
+| Filler phrases | "in order to" → "to", "due to the fact that" → "because" | det (full) |
+| Negative parallelism | "No guesswork, no bloat, no surprises" tricolons | det (full) |
+| False-range clichés | "from beginners to experts", "from humble beginnings to" | warning |
+| Synonym cycling | utilize + leverage + employ in one paragraph | warning |
+| Tricolon padding (general) | "X, Y, and Z" stacks where two would suffice | llm |
 | Tidy 5-paragraph essay | Real prose has uneven paragraph length | llm |
+
+**Mode gating.** `subtle` runs stock vocab only. `balanced` (default) runs everything tagged `det` plus Phase 1 structural and Phase 5 contractions. `full` adds filler phrases, negative parallelism, and superficial `-ing`. Use `--no-structural` or `--no-soul` to turn off the newer passes for highly formal content.
 
 ---
 
@@ -207,18 +232,33 @@ After reading the full compendium, it all comes back to two moves. Everything el
 
 ### AI detectors — the honest version
 
-The academic consensus across Categories 05, 15, 16, and 18: **the detection arms race is structurally unwinnable for detectors**. Adversarial Paraphrasing (NeurIPS 2025) drops every tested detector's TPR by ~87%. DIPPER did roughly the same thing in 2023. At the same time, detectors have a huge false-positive problem on non-native English writers (Liang et al. *Patterns* 2023: >50% of TOEFL essays flagged as AI). So a flagged score means less than marketing pages suggest.
+The academic consensus across Categories 05, 15, 16, and 18: **the detection arms race is structurally unwinnable for detectors**. Adversarial Paraphrasing (NeurIPS 2025) drops every tested detector's TPR by ~87%. DIPPER did roughly the same thing in 2023. At the same time, detectors have a huge false-positive problem on non-native English writers (Liang et al. *Patterns* 2023: >50% of TOEFL essays flagged as AI). A flagged score means less than marketing pages suggest.
+
+**What our own testing found.** We ran the TMR AI-text detector (99.28% AUROC on RAID, 125M-param RoBERTa) against the unslop pipeline on four AI-generated fixtures. Result: deterministic surface rewriting — lexical + structural + contractions, every combination — moves the detector score by **0.0 to 0.2 percentage points**. Scores stay pinned above p_ai = 0.98 regardless of what we strip. This matches Adversarial Paraphrasing NeurIPS 2025 predicting exactly this outcome: modern detectors fingerprint on the structural signal that synonym-swap rewriting cannot move.
+
+So unslop is a polish tool, not a detector-defeat tool. The blind LLM-judge test shows it decisively wins the "reads more human" comparison (100% 7/7). It does not fool GPTZero. Two different jobs.
 
 What actually lowers detector scores, ordered by strength:
 
-1. **Paraphrase through a different model family.** If GPT wrote it, have Claude rewrite. Or Gemini. Different stylometric fingerprints. This is the single strongest lever.
-2. **Burstiness.** Span sentence lengths roughly 4 to 35 words inside a single paragraph.
+1. **Paraphrase through a different model family.** If GPT wrote it, have Claude rewrite. Or Gemini. Different stylometric fingerprints. This is the single strongest lever and unslop cannot do it alone.
+2. **Burstiness.** Span sentence lengths roughly 4 to 35 words inside a paragraph. Phase 1 structural does this when material exists.
 3. **Specificity the model can't fake.** Real dates, real project names, real numbers, first-person anecdotes. Training data doesn't contain *your* specifics.
-4. **Contractions and small fragments.** "don't", "won't", the occasional start with "And" or "But".
+4. **Contractions and small fragments.** "don't", "won't", the occasional start with "And" or "But". Phase 5 soul does the contraction half.
 5. **Break predictable structure.** If every bullet has the same shape (verb + metric + with + tool), vary half of them.
 6. **One or two rough edges.** A slightly awkward phrasing, a parenthetical trail, a non-linear logical jump — all of these read human.
 
 Commercial unslop SaaS (Undetectable.ai, StealthGPT, WriteHuman, HIX Bypass, the ~150 products Category 18 audits) mostly don't beat a second pass through a different model plus five minutes of manual editing. Independent audits (DAMAGE COLING 2025; Epaphras & Mtenzi 2026) show wide gaps between their "99.8% undetectable" claims and reality, and the gap shifts monthly.
+
+### Live detector feedback loop
+
+Measurement is available as an opt-in CLI flag. It does not claim to lower scores — it just tells you where you are:
+
+```bash
+python3 -m unslop.scripts.fetch_detectors   # one-time: ~500MB of weights
+unslop --detector-feedback file.md          # humanize, score, escalate, report
+```
+
+First run downloads the TMR detector. Subsequent runs score offline. Escalation ladder: balanced → full → full + structural + soul. Reports the score at each step.
 
 ### Resume playbook
 
@@ -241,7 +281,9 @@ After humanizing anything factual, re-verify every number, date, title, and tool
 
 ### `/unslop anti-detector` mode
 
-Covers items 1, 2, 4, 5 from the detector list in one pass. Slower than `full` because it does adversarial paraphrase and burstiness targeting explicitly. Use it for resumes, essays, and anything where the reader might pipe the text into GPTZero or Turnitin. Skip it for code, legal, or anything where precision beats voice.
+An LLM-mode procedure. Covers items 2, 4, 5 from the detector list in one pass: burstiness targeting, contraction lift, structural variance. Item 1 (different-model paraphrase) the skill cannot execute alone — it must be requested. Use this mode when the reader might pipe the text into GPTZero or Turnitin. Skip for code, legal, or anything where precision beats voice.
+
+Our own testing: deterministic rewriting moves TMR scores by <0.5pp. Real detector resistance needs the different-model pass that only you can orchestrate. The skill's value in anti-detector mode is doing the local burstiness / contraction / specificity work correctly so the cross-model pass has less to fix.
 
 ---
 
@@ -256,6 +298,8 @@ Covers items 1, 2, 4, 5 from the detector list in one pass. Slower than `full` b
 │   ├── unslop-help/        — reference card
 │   └── humanize/              — mirror of unslop file rewriter
 ├── unslop/       # SSOT for the file-rewriter (Python + skill)
+│   └── scripts/              — humanize, validate, structural (Ph1),
+│                                soul (Ph5), detector (Ph3), stylometry (Ph4)
 ├── rules/                    # SSOT for the short always-on activation text
 ├── commands/                 # Claude Code slash commands (TOML)
 ├── hooks/                    # SessionStart + UserPromptSubmit + statusline + installers
@@ -289,11 +333,14 @@ python3 benchmarks/run.py --strict
 
 Coverage:
 
-- **`tests/unslop/`** — file-type detection, sycophancy / hedging / stock-vocab / performative-balance strip, code + URL + heading preservation, end-to-end round trip, and fixture-pair regression. LLM tests are opt-in (`UNSLOP_RUN_LLM_TESTS=1`).
+- **`tests/unslop/`** — 333 tests covering file-type detection; every deterministic rule family (sycophancy, hedging, stock-vocab, performative, authority, signposting, significance inflation, notability namedropping, copula avoidance, superficial `-ing`, filler, negative parallelism); structural rewriter (Phase 1); soul contractions (Phase 5); detector feedback loop (Phase 3); stylometry (Phase 4); humanness harness (Phase 6); preservation (code, URLs, headings, YAML, tables, blockquotes); end-to-end round trip. LLM tests are opt-in (`UNSLOP_RUN_LLM_TESTS=1`).
 - **`tests/test_hooks.py`** — hook installer (fresh, idempotent, preserves custom statusline), `unslop-activate.js` banner, `unslop-mode-tracker.js` slash commands + natural language + stop phrases, statusline badge output, symlink refusal, and `CLAUDE_CONFIG_DIR` honoring.
 - **`tests/verify_repo.py`** — every SSOT mirror is byte-identical after sync, JSON manifests parse, all JS / Bash / PowerShell scripts are syntax-clean, fixture pairs round-trip, and the plugin + marketplace manifests are wired.
-- **`benchmarks/run.py`** — runs `humanize_deterministic` over a corpus of AI-slop markdown and reports AI-ism reduction, word delta, and per-file structural integrity. `--strict` fails the build on any regression.
-- **`evals/`** — optional LLM-driven A/B harness (`llm_run.py` + `measure.py`) for snapshotting baseline vs deterministic vs LLM unslop on a fixed prompt set. Requires `ANTHROPIC_API_KEY` or the `claude` CLI.
+- **`benchmarks/run.py`** — runs `humanize_deterministic` over a corpus of AI-slop markdown and reports AI-ism reduction, per-paragraph flat count, sentences split, bullet groups merged, and per-file structural integrity. `--strict` fails the build on any regression.
+- **`benchmarks/check_regression.py`** — compares latest benchmark output against a pinned `post-phase*.json` baseline. Fails if AI-ism reduction drops >2pp, flat-paragraph total rises >2, or preservation breaks. Runs in CI on every PR.
+- **`benchmarks/detector_bench.py`** — opt-in AI-detector benchmark (TMR, Desklib). Downloads HF weights on first run. Scheduled weekly via `.github/workflows/weekly-detector-bench.yml`.
+- **`evals/perceived_humanness.py`** — blind LLM-as-judge preference harness. Claude Sonnet 4.5 (default) compares unslop-rewritten vs original without side metadata. Emits per-fixture votes + aggregate win rate. Requires `ANTHROPIC_API_KEY`.
+- **`evals/`** — additional LLM-driven A/B harness (`llm_run.py` + `measure.py`) for snapshotting baseline vs deterministic vs LLM unslop on a fixed prompt set.
 
 ---
 
