@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
+from .structural import StructuralReport, humanize_structural
 from .validate import ValidationResult, validate
 
 MAX_RETRIES = 2
@@ -62,6 +63,7 @@ class HumanizeReport:
     replacements: list[Replacement] = field(default_factory=list)
     em_dashes_before: int = 0
     em_dashes_after: int = 0
+    structural: StructuralReport = field(default_factory=StructuralReport)
 
     @property
     def counts_by_rule(self) -> dict[str, int]:
@@ -86,6 +88,7 @@ class HumanizeReport:
             "counts_by_rule": self.counts_by_rule,
             "em_dashes_before": self.em_dashes_before,
             "em_dashes_after": self.em_dashes_after,
+            "structural": self.structural.to_dict(),
         }
 
 
@@ -505,6 +508,7 @@ def humanize_deterministic(
     text: str,
     *,
     intensity: Intensity = "balanced",
+    structural: bool = False,
 ) -> str:
     """Pure regex pass. Preserves code/URLs via placeholders; strips canonical AI-isms.
 
@@ -515,8 +519,14 @@ def humanize_deterministic(
                   em-dash cap.
       - full:     everything balanced does, plus filler phrases and
                   negative-parallelism knockouts.
+
+    `structural=True` also runs the Phase 1 structural rewriter (sentence-length
+    rebalancer + bullet-soup merger). Off by default while the pass bakes;
+    flip on after baseline benchmarks prove it doesn't regress preservation.
     """
-    result, _report = humanize_deterministic_with_report(text, intensity=intensity)
+    result, _report = humanize_deterministic_with_report(
+        text, intensity=intensity, structural=structural
+    )
     return result
 
 
@@ -524,6 +534,7 @@ def humanize_deterministic_with_report(
     text: str,
     *,
     intensity: Intensity = "balanced",
+    structural: bool = False,
 ) -> tuple[str, HumanizeReport]:
     """Like `humanize_deterministic` but returns an audit trail of every
     replacement made. Used by the CLI's `--report` and `--json` output."""
@@ -594,6 +605,14 @@ def humanize_deterministic_with_report(
     if run_performative:
         for pattern, repl in PERFORMATIVE:
             protected = _tracking_sub(pattern, repl, protected, rule="performative", log=log)
+
+    # Phase 1 structural pass — sentence-length rebalancer + bullet-soup merger.
+    # Runs after lexical scrubbing because the lexical passes remove openers and
+    # phrases that would otherwise skew word counts, and before the em-dash cap
+    # because splitting a long sentence can move an em-dash into its own clause
+    # where it's no longer an offender. Gated off by default — see flag doc.
+    if structural:
+        protected = humanize_structural(protected, report=report.structural)
 
     if run_em_dash_cap:
         protected = _cap_em_dashes_per_paragraph(protected, max_dashes=2)
@@ -841,10 +860,15 @@ def humanize_file_ex(
     intensity: Intensity = "balanced",
     backup: bool = True,
     write: bool = True,
+    structural: bool = False,
 ) -> HumanizeOutcome:
     """Rich entry point. Returns the full outcome (humanized text, report,
     validation) regardless of whether we actually wrote to disk. The CLI uses
-    `write=False` for `--dry-run` and `--diff`."""
+    `write=False` for `--dry-run` and `--diff`.
+
+    `structural=True` enables the Phase 1 structural pass (sentence splitting
+    and bullet-soup merging). Opt-in until we default it on for `balanced`
+    after benchmark validation."""
     original_text = path.read_text(encoding="utf-8")
     backup_path = path.with_name(path.stem + ".original.md")
 
@@ -861,7 +885,7 @@ def humanize_file_ex(
 
     if deterministic:
         humanized, report = humanize_deterministic_with_report(
-            original_text, intensity=intensity
+            original_text, intensity=intensity, structural=structural
         )
         result = validate(original_text, humanized)
         if not result.ok:

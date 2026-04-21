@@ -23,7 +23,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "unslop"))
 
-from scripts.humanize import VALID_INTENSITIES, humanize_deterministic  # noqa: E402
+from scripts.humanize import (  # noqa: E402
+    VALID_INTENSITIES,
+    humanize_deterministic,
+    humanize_deterministic_with_report,
+)
 from scripts.validate import AI_ISM_PATTERNS, _sentence_lengths, validate  # noqa: E402
 
 WORD = re.compile(r"\w+")
@@ -33,11 +37,13 @@ def count_ai_isms(text: str) -> int:
     return sum(len(p.findall(text)) for p in AI_ISM_PATTERNS)
 
 
-def run(fixtures_dir: Path, intensity: str = "balanced") -> dict:
+def run(fixtures_dir: Path, intensity: str = "balanced", structural: bool = False) -> dict:
     results = []
     for md in sorted(fixtures_dir.glob("*.md")):
         original = md.read_text()
-        humanized = humanize_deterministic(original, intensity=intensity)  # type: ignore[arg-type]
+        humanized, hreport = humanize_deterministic_with_report(
+            original, intensity=intensity, structural=structural  # type: ignore[arg-type]
+        )
         report = validate(original, humanized)
         orig_sentence_lengths = _sentence_lengths(original)
         new_sentence_lengths = _sentence_lengths(humanized)
@@ -56,6 +62,10 @@ def run(fixtures_dir: Path, intensity: str = "balanced") -> dict:
                 "burstiness_delta": round(
                     report.burstiness_after - report.burstiness_before, 2
                 ),
+                "flat_paragraphs_before": report.flat_paragraphs_before,
+                "flat_paragraphs_after": report.flat_paragraphs_after,
+                "sentences_split": hreport.structural.sentences_split,
+                "bullet_groups_merged": hreport.structural.bullet_groups_merged,
                 "structural_ok": report.ok,
                 "structural_errors": report.errors,
                 "warnings": report.warnings,
@@ -86,16 +96,22 @@ def print_report(report: dict) -> None:
     print(f"AI-isms after:       {report['total_ai_isms_after']}")
     print(f"Delta (stripped):    {report['total_delta']}")
     print(f"% reduction:         {report['percent_reduced']}%\n")
-    print(f"{'file':<40}{'before':>10}{'after':>8}{'delta':>8}{'σ':>12}  struct")
+    print(
+        f"{'file':<36}{'ai':>8}{'σ':>12}{'flat¶':>10}{'split':>7}{'merge':>7}  struct"
+    )
     for f in report["fixtures"]:
         tag = "ok" if f["structural_ok"] else "FAIL"
-        sigma = f"{f['burstiness_before']:.1f}->{f['burstiness_after']:.1f}"
+        sigma = f"{f['burstiness_before']:.1f}→{f['burstiness_after']:.1f}"
+        flat = f"{f.get('flat_paragraphs_before', 0)}→{f.get('flat_paragraphs_after', 0)}"
+        ai = f"{f['ai_isms_before']}→{f['ai_isms_after']}"
         print(
-            f"{f['file']:<40}"
-            f"{f['ai_isms_before']:>10}"
-            f"{f['ai_isms_after']:>8}"
-            f"{f['delta']:>8}"
-            f"{sigma:>12}  {tag}"
+            f"{f['file']:<36}"
+            f"{ai:>8}"
+            f"{sigma:>12}"
+            f"{flat:>10}"
+            f"{f.get('sentences_split', 0):>7}"
+            f"{f.get('bullet_groups_merged', 0):>7}"
+            f"  {tag}"
         )
 
 
@@ -117,6 +133,11 @@ def main() -> int:
         help="Run the benchmark across subtle, balanced, and full. Useful for "
         "checking that higher intensity strips strictly more AI-isms than lower.",
     )
+    p.add_argument(
+        "--structural",
+        action="store_true",
+        help="Enable the Phase 1 structural pass (sentence splitter + bullet merger).",
+    )
     args = p.parse_args()
 
     fixtures = Path(args.fixtures)
@@ -126,7 +147,10 @@ def main() -> int:
 
     if args.all_intensities:
         # Monotonicity check: each intensity must strip >= previous.
-        reports = {lvl: run(fixtures, intensity=lvl) for lvl in VALID_INTENSITIES}
+        reports = {
+            lvl: run(fixtures, intensity=lvl, structural=args.structural)
+            for lvl in VALID_INTENSITIES
+        }
         print("Unslop benchmark — all intensities\n")
         print(f"{'intensity':<12}{'before':>10}{'after':>8}{'delta':>8}{'% reduction':>14}")
         for lvl in VALID_INTENSITIES:
@@ -148,7 +172,7 @@ def main() -> int:
                 prev_delta = reports[lvl]["total_delta"]
         return 0
 
-    report = run(fixtures, intensity=args.intensity)
+    report = run(fixtures, intensity=args.intensity, structural=args.structural)
     print_report(report)
 
     out_dir = Path(args.out)

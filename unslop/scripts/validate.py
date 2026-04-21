@@ -108,6 +108,8 @@ class ValidationResult:
     burstiness_before: float = 0.0
     burstiness_after: float = 0.0
     sentence_length_range_after: tuple[int, int] = (0, 0)
+    flat_paragraphs_before: int = 0
+    flat_paragraphs_after: int = 0
 
     def to_dict(self) -> dict:
         return {
@@ -119,6 +121,8 @@ class ValidationResult:
             "burstiness_before": round(self.burstiness_before, 3),
             "burstiness_after": round(self.burstiness_after, 3),
             "sentence_length_range_after": list(self.sentence_length_range_after),
+            "flat_paragraphs_before": self.flat_paragraphs_before,
+            "flat_paragraphs_after": self.flat_paragraphs_after,
         }
 
 
@@ -158,6 +162,28 @@ def _sentence_lengths(text: str) -> list[int]:
     return lengths
 
 
+def _paragraph_sentence_lengths(text: str) -> list[list[int]]:
+    """Per-paragraph sentence-length lists. Empty paragraphs skipped.
+
+    Used for per-paragraph burstiness: uniform-length-within-paragraph is a
+    stronger structural signal than document-wide σ, which can hide flat
+    paragraphs when they average out."""
+    prose = _strip_code_for_prose(text)
+    groups: list[list[int]] = []
+    for paragraph in re.split(r"\n\s*\n", prose):
+        paragraph = paragraph.strip()
+        if not paragraph:
+            continue
+        lengths: list[int] = []
+        for sentence in _SENTENCE_SPLIT.split(paragraph):
+            words = [w for w in re.split(r"\s+", sentence.strip()) if w]
+            if words:
+                lengths.append(len(words))
+        if lengths:
+            groups.append(lengths)
+    return groups
+
+
 def _burstiness(lengths: list[int]) -> float:
     """Standard deviation of sentence lengths. Higher = more human-like rhythm.
     Returns 0.0 if fewer than 2 sentences (not meaningful)."""
@@ -166,6 +192,26 @@ def _burstiness(lengths: list[int]) -> float:
     mean = sum(lengths) / len(lengths)
     variance = sum((x - mean) ** 2 for x in lengths) / len(lengths)
     return math.sqrt(variance)
+
+
+def _count_flat_paragraphs(
+    paragraph_lengths: list[list[int]],
+    *,
+    min_sentences: int = 3,
+    sigma_threshold: float = 3.0,
+) -> int:
+    """Count paragraphs that are structurally flat.
+
+    A paragraph counts as flat when it has >=`min_sentences` sentences and its
+    sentence-length standard deviation is < `sigma_threshold`. Short paragraphs
+    (1-2 sentences) are excluded because σ isn't meaningful there."""
+    flat = 0
+    for lengths in paragraph_lengths:
+        if len(lengths) < min_sentences:
+            continue
+        if _burstiness(lengths) < sigma_threshold:
+            flat += 1
+    return flat
 
 
 def _extract_fenced_blocks(text: str) -> list[str]:
@@ -310,6 +356,18 @@ def validate(original: str, humanized: str) -> ValidationResult:
             "Flat sentence length is the #1 AI-detector signal. Vary rhythm more."
         )
 
+    # Per-paragraph shape — document-wide σ can hide flat paragraphs that average
+    # out with each other. Count paragraphs of >=3 sentences whose internal σ<3.
+    orig_para_lengths = _paragraph_sentence_lengths(original)
+    new_para_lengths = _paragraph_sentence_lengths(humanized)
+    flat_before = _count_flat_paragraphs(orig_para_lengths)
+    flat_after = _count_flat_paragraphs(new_para_lengths)
+    if flat_after > flat_before:
+        warnings.append(
+            f"Flat paragraphs increased: {flat_before} → {flat_after}. "
+            "A paragraph with 3+ sentences at uniform length is a detector tell."
+        )
+
     return ValidationResult(
         ok=len(errors) == 0,
         errors=errors,
@@ -319,6 +377,8 @@ def validate(original: str, humanized: str) -> ValidationResult:
         burstiness_before=burst_before,
         burstiness_after=burst_after,
         sentence_length_range_after=length_range,
+        flat_paragraphs_before=flat_before,
+        flat_paragraphs_after=flat_after,
     )
 
 
@@ -334,6 +394,10 @@ def format_report(result: ValidationResult) -> str:
         parts.append(
             f"  Burstiness σ: {result.burstiness_before:.1f} → {result.burstiness_after:.1f}"
             f" (range {lo}-{hi} words/sentence)"
+        )
+    if result.flat_paragraphs_after or result.flat_paragraphs_before:
+        parts.append(
+            f"  Flat paragraphs: {result.flat_paragraphs_before} → {result.flat_paragraphs_after}"
         )
     for err in result.errors:
         parts.append(f"  ERROR: {err}")

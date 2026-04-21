@@ -139,6 +139,15 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--structural",
+        action="store_true",
+        help=(
+            "Enable the Phase 1 structural pass: split overlong sentences at "
+            "safe boundaries and collapse parallel bullet-soup. Raises sentence-"
+            "length variance (σ), the #1 AI-detector signal. Opt-in for now."
+        ),
+    )
+    parser.add_argument(
         "--quiet",
         "-q",
         action="store_true",
@@ -154,7 +163,9 @@ def _process_stdin(args: argparse.Namespace) -> int:
     text = sys.stdin.read()
 
     if args.deterministic or not _llm_available():
-        humanized, report = humanize_deterministic_with_report(text, intensity=args.mode)
+        humanized, report = humanize_deterministic_with_report(
+            text, intensity=args.mode, structural=args.structural
+        )
     else:
         humanized = humanize_llm(text, intensity=args.mode)
         report = None
@@ -230,6 +241,7 @@ def _process_file(
         intensity=args.mode,
         backup=not args.no_backup,
         write=write,
+        structural=args.structural,
     )
 
     if args.diff:
