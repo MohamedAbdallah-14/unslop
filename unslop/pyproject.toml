@@ -71,5 +71,14 @@ check_untyped_defs = true
 files = ["scripts"]
 
 [[tool.mypy.overrides]]
-module = "anthropic"
+module = [
+  "anthropic",
+  "torch",
+  "torch.nn",
+  "torch.nn.functional",
+  "transformers",
+  "huggingface_hub",
+  "safetensors",
+  "safetensors.torch",
+]
 ignore_missing_imports = true
