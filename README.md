@@ -38,16 +38,21 @@ Same correctness. Different voice.
 
 ### Measured result
 
-Blind LLM-as-judge preference test: Claude Sonnet 4.5 compares each unslop rewrite against the original, without knowing which is which. Seven fixtures, randomized A/B sides, single-run.
+Blind LLM-as-judge preference test: Claude Sonnet 4.5 compares each unslop rewrite against the original, without knowing which is which. Seven fixtures, randomized A/B sides per run, 3 independent runs per fixture = 21 judgments.
 
-| Metric | Baseline | unslop (balanced) |
+| Metric | Baseline | unslop (balanced, 3-run) |
 |---|---|---|
-| Blind humanness preference (win rate) | — | **100% (7/7)** |
+| Blind humanness preference, non-tie | — | **87.5% (14/16)** |
+| Humanized wins | — | 14 |
+| Ties | — | 5 |
+| Original wins | — | 2 |
 | AI-ism reduction (rule-counted) | 0% | **89.1%** |
 | Flat-paragraph count across suite | 14 | 13 |
 | Preservation of code / URLs / headings | — | byte-identical |
 
-Reproduce with `python3 evals/perceived_humanness.py` (requires `ANTHROPIC_API_KEY`). Archived at `benchmarks/results/humanness/first-pass-20260421.json`.
+On 6 of 7 fixtures the judge prefers unslop on every vote that isn't a tie. The two original-wins both fall on the same fixture — a casual technical doc that was already human-ish. The judge's rationale: "uniform contraction rate reads like a single find-replace pass." Deterministic soul contracts every safe instance; humans contract selectively. Use `--no-soul` when formal register is intentional.
+
+Reproduce: `python3 evals/perceived_humanness.py --runs 3` (requires `ANTHROPIC_API_KEY`). Archived at `benchmarks/results/humanness/three-run-post-v0.5.0-20260421.json`.
 
 ---
 

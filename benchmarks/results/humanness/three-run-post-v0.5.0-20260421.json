@@ -1,0 +1,291 @@
+{
+  "timestamp": "20260421T155331Z",
+  "judge_model": "claude-sonnet-4-5",
+  "intensity": "balanced",
+  "structural": null,
+  "soul": null,
+  "runs_per_fixture": 3,
+  "seed": 20260421,
+  "fixtures": [
+    {
+      "fixture": "ai-slop-expanded-categories.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 2,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "ai-slop-expanded-categories.md",
+          "run": 1,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "TIE",
+          "rationale": "Both are clearly AI-generated \u2014 A is slop-heavy, B is slop with the slop words mechanically swapped out.",
+          "humanized_won": false
+        },
+        {
+          "fixture": "ai-slop-expanded-categories.md",
+          "run": 2,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "TIE",
+          "rationale": "Both are clearly AI-generated; A drowns in slop, B is a mechanical word-swap that reads like a thesaurus pass, not human editing.",
+          "humanized_won": false
+        },
+        {
+          "fixture": "ai-slop-expanded-categories.md",
+          "run": 3,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B is pure AI-slop stacked top to bottom; A at least removed most of the hedging stacks and filler openers.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "ai-slop-new-categories.md",
+      "humanized_wins": 2,
+      "original_wins": 0,
+      "ties": 1,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "ai-slop-new-categories.md",
+          "run": 1,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B drowns in slop (\"at its core\", \"intricate interplay\", \"vibrant\", \"buckle up\", \"without further ado\"); A is plainer and more direct.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "ai-slop-new-categories.md",
+          "run": 2,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B is stacked with AI-isms (\"at its core\", \"intricate interplay\", \"vibrant\", \"navigate this landscape\", \"buckle up\") that A mostly strips out.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "ai-slop-new-categories.md",
+          "run": 3,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "TIE",
+          "rationale": "Both are clearly AI-processed \u2014 A drowns in filler stacks, B swaps them for flat synonyms. Neither feels like a person.",
+          "humanized_won": false
+        }
+      ]
+    },
+    {
+      "fixture": "ai-slop-release-notes.md",
+      "humanized_wins": 3,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "ai-slop-release-notes.md",
+          "run": 1,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B is pure AI-ism stacking; A has rough edges and odd word choices that feel like a person typing fast.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "ai-slop-release-notes.md",
+          "run": 2,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B is pure AI-slop; A has the rough edges and awkward word choices (\"making it latest\") that signal a real person.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "ai-slop-release-notes.md",
+          "run": 3,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B is pure AI-slop \u2014 \"pivotal\", \"seamless\", \"testament to\", \"leveraging\", hedging stacks stacked on hedging stacks. A has rough edges that feel real.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "ai-slop-tutorial.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 2,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "ai-slop-tutorial.md",
+          "run": 1,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B is pure AI-slop (\"tapestry\", \"embark on this journey\", \"testament to\", \"holistic\" stacked throughout); A strips most of it.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "ai-slop-tutorial.md",
+          "run": 2,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "TIE",
+          "rationale": "Both are clearly AI-generated \u2014 A is unreformed slop, B is mechanically word-swapped slop. Neither has actual human voice.",
+          "humanized_won": false
+        },
+        {
+          "fixture": "ai-slop-tutorial.md",
+          "run": 3,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "TIE",
+          "rationale": "Both are templates \u2014 A is AI-slop-dense, B is AI-slop scrubbed but equally flat. Neither has an opinion, a concrete detail, or a rough edge.",
+          "humanized_won": false
+        }
+      ]
+    },
+    {
+      "fixture": "direct-address-doc.md",
+      "humanized_wins": 1,
+      "original_wins": 2,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "direct-address-doc.md",
+          "run": 1,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "Contractions (\"We're\", \"won't\", \"it's\") feel natural; B reads like a style guide banned them.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "direct-address-doc.md",
+          "run": 2,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "Passage A's uncontracted \"I am going to walk you through\" and \"We are excited\" feel like deliberate human style choices, not AI output. Passage B's contraction-stuffing reads like a mechanical transfo",
+          "humanized_won": false
+        },
+        {
+          "fixture": "direct-address-doc.md",
+          "run": 3,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "Passage A's expanded contractions (\"I am\", \"We are\") feel like a real person being slightly formal \u2014 not AI polish. B's uniform contraction rate reads like a single find-replace pass.",
+          "humanized_won": false
+        }
+      ]
+    },
+    {
+      "fixture": "flat-paragraph-bait.md",
+      "humanized_wins": 3,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "flat-paragraph-bait.md",
+          "run": 1,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "B",
+          "rationale": "Shorter, varied sentences and deliberate fragments (\"Well-scoped keys.\") signal a human editor's hand.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "flat-paragraph-bait.md",
+          "run": 2,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "B",
+          "rationale": "Shorter, varied sentence lengths and deliberate fragments (\"Well-scoped keys. Allow the system...\") break the uniform rhythm that marks A.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "flat-paragraph-bait.md",
+          "run": 3,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "B",
+          "rationale": "Fragmented sentences (\"Well-scoped keys. Allow the system...\") and mid-paragraph rhythm breaks feel like a human editor's hand, not a template.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "significance-and-notability.md",
+      "humanized_wins": 3,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "significance-and-notability.md",
+          "run": 1,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "B",
+          "rationale": "Passage B strips inflated language (\"pivotal moment\", \"testament to\", \"leverage\") without replacing it with anything warmer \u2014 flatter, yes, but that flatness reads like a tired human editor, not a tem",
+          "humanized_won": true
+        },
+        {
+          "fixture": "significance-and-notability.md",
+          "run": 2,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B stacks \"marks a pivotal moment\", \"testament to\", and \"indelible mark\" in one paragraph; A strips those tells.",
+          "humanized_won": true
+        },
+        {
+          "fixture": "significance-and-notability.md",
+          "run": 3,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "B",
+          "rationale": "A removes obvious AI-isms (\"pivotal\", \"testament to\", \"leverage\") while keeping the structure identical \u2014 that mechanical substitution is itself a tell.",
+          "humanized_won": true
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "humanized_wins": 14,
+    "original_wins": 2,
+    "ties": 5,
+    "invalid": 0,
+    "win_rate_pct": 66.7
+  }
+}
