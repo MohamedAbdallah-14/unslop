@@ -907,11 +907,49 @@ _INTENSITY_PROMPT_GUIDANCE: dict[str, str] = {
 }
 
 
-def _build_humanize_prompt(original: str, intensity: Intensity = "balanced") -> str:
+def _build_voice_block(sample_text: str | None) -> str:
+    """If a voice sample is provided, measure its stylometric profile and
+    return a prompt block with explicit numeric targets. Empty string
+    otherwise. The LLM gets concrete targets instead of "sound like X"
+    intuition — Phase 4 of the humanizer plan."""
+    if not sample_text:
+        return ""
+    from .stylometry import analyze
+
+    profile = analyze(sample_text)
+    if profile.total_words < 50:
+        return (
+            "\nVOICE SAMPLE (too short to extract reliable signals): "
+            "treat as rough tone guidance only.\n"
+        )
+    return f"""
+VOICE SAMPLE TARGETS (measured from the sample below — match these):
+- Sentence-length mean: {profile.sentence_length_mean} words (σ {profile.sentence_length_stdev})
+- Fragments (<5 words): {profile.fragment_rate * 100:.0f}% of sentences
+- Contractions per 1k words: {profile.contraction_rate}
+- Em-dash / semicolon / colon / paren rate per 1k: {profile.em_dash_rate} / {profile.semicolon_rate} / {profile.colon_rate} / {profile.parenthetical_rate}
+- First-person / second-person rate per 1k: {profile.first_person_rate} / {profile.second_person_rate}
+- Starts-with-And/But fraction: {profile.starts_with_and_but * 100:.0f}%
+- Latinate-suffix ratio: {profile.latinate_ratio * 100:.1f}%
+
+Match the numeric profile, not just the surface feel. If the sample is
+fragment-heavy and the input text is long-sentence-heavy, cut sentences.
+If the sample uses 40 contractions per 1k words and the input has none,
+contract where grammatical.
+"""
+
+
+def _build_humanize_prompt(
+    original: str,
+    intensity: Intensity = "balanced",
+    voice_sample: str | None = None,
+) -> str:
     guidance = _INTENSITY_PROMPT_GUIDANCE.get(intensity, _INTENSITY_PROMPT_GUIDANCE["balanced"])
+    voice_block = _build_voice_block(voice_sample)
     return f"""Humanize this markdown so it reads like a careful human wrote it.
 
 {guidance}
+{voice_block}
 
 STRICT RULES (preservation):
 - Do NOT modify anything inside ``` code blocks
@@ -997,8 +1035,13 @@ def _call_claude_cli(prompt: str) -> str | None:
     return proc.stdout.strip()
 
 
-def humanize_llm(text: str, *, intensity: Intensity = "balanced") -> str:
-    prompt = _build_humanize_prompt(text, intensity=intensity)
+def humanize_llm(
+    text: str,
+    *,
+    intensity: Intensity = "balanced",
+    voice_sample: str | None = None,
+) -> str:
+    prompt = _build_humanize_prompt(text, intensity=intensity, voice_sample=voice_sample)
     result = _call_anthropic_sdk(prompt) or _call_claude_cli(prompt)
     if result is None:
         raise RuntimeError(
@@ -1069,6 +1112,7 @@ def humanize_file_ex(
     write: bool = True,
     structural: bool | None = None,
     soul: bool | None = None,
+    voice_sample: str | None = None,
 ) -> HumanizeOutcome:
     """Rich entry point. Returns the full outcome (humanized text, report,
     validation) regardless of whether we actually wrote to disk. The CLI uses
@@ -1078,7 +1122,10 @@ def humanize_file_ex(
     and bullet-soup merging). Opt-in until we default it on for `balanced`
     after benchmark validation.
 
-    `soul=True` enables the Phase 5 soul pass (contraction lift)."""
+    `soul=True` enables the Phase 5 soul pass (contraction lift).
+
+    `voice_sample` (LLM mode only) is a text sample whose stylometric profile
+    the rewrite should match. Ignored in deterministic mode."""
     original_text = path.read_text(encoding="utf-8")
     backup_path = path.with_name(path.stem + ".original.md")
 
@@ -1124,7 +1171,12 @@ def humanize_file_ex(
         backup_path.write_text(original_text, encoding="utf-8")
 
     try:
-        humanized = humanize_llm(original_text, intensity=intensity)
+        # Only pass voice_sample when set so legacy test mocks that don't
+        # accept the kwarg continue to work.
+        llm_kwargs = {"intensity": intensity}
+        if voice_sample is not None:
+            llm_kwargs["voice_sample"] = voice_sample
+        humanized = humanize_llm(original_text, **llm_kwargs)
     except RuntimeError as exc:
         if backup and write:
             backup_path.unlink(missing_ok=True)

@@ -152,6 +152,61 @@ class TestDelta:
         assert "contraction_rate" in out
 
 
+class TestVoiceSamplePromptIntegration:
+    def test_empty_sample_yields_empty_block(self):
+        from unslop.scripts.humanize import _build_voice_block
+
+        assert _build_voice_block(None) == ""
+        assert _build_voice_block("") == ""
+
+    def test_short_sample_uses_rough_guidance(self):
+        from unslop.scripts.humanize import _build_voice_block
+
+        block = _build_voice_block("Short. Too short.")
+        assert "too short" in block.lower()
+        # The numeric targets section should NOT appear for sub-50-word samples.
+        assert "Contractions per 1k words" not in block
+
+    def test_long_sample_yields_numeric_targets(self):
+        from unslop.scripts.humanize import _build_voice_block
+
+        sample = (
+            "You'll find the config in /etc/platform/settings.yaml. It's not "
+            "obvious — I missed it the first time. We use YAML because the "
+            "legacy tooling can't parse JSON5. There's a migration underway "
+            "but I wouldn't hold my breath. We'd prefer TOML honestly. But "
+            "the migration cost is real and nobody has volunteered. So YAML "
+            "it is. If you need to edit it, run the validator first. Don't "
+            "skip it. Every on-call I've had started with a broken YAML edit."
+        )
+        block = _build_voice_block(sample)
+        assert "Sentence-length mean" in block
+        assert "Contractions per 1k words" in block
+        assert "Em-dash / semicolon / colon / paren" in block
+        assert "First-person / second-person" in block
+
+
+class TestHumanizePromptIncludesVoiceBlock:
+    def test_prompt_omits_voice_section_without_sample(self):
+        from unslop.scripts.humanize import _build_humanize_prompt
+
+        prompt = _build_humanize_prompt("Some text.")
+        assert "VOICE SAMPLE TARGETS" not in prompt
+
+    def test_prompt_contains_voice_section_with_sample(self):
+        from unslop.scripts.humanize import _build_humanize_prompt
+
+        sample = (
+            "You'll find the config in /etc/platform/settings.yaml. It's not "
+            "obvious — I missed it the first time. We use YAML because the "
+            "legacy tooling can't parse JSON5. There's a migration underway "
+            "but I wouldn't hold my breath. We'd prefer TOML honestly. But "
+            "the migration cost is real and nobody has volunteered. So YAML."
+        )
+        prompt = _build_humanize_prompt("Some text.", voice_sample=sample)
+        assert "VOICE SAMPLE TARGETS" in prompt
+
+
 class TestProfileShape:
     def test_to_dict_has_all_fields(self):
         p = analyze("We don't ship on Fridays. It's a matter of policy.")

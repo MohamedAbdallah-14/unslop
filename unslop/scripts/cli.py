@@ -159,6 +159,18 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--voice-sample",
+        type=Path,
+        default=None,
+        help=(
+            "Path to a text sample whose stylometric profile the rewrite should "
+            "match. LLM mode only; ignored in --deterministic. The sample's "
+            "sentence-length μ/σ, contraction rate, punctuation rates, and "
+            "pronoun ratios are measured and injected into the rewrite prompt "
+            "as explicit numeric targets."
+        ),
+    )
+    parser.add_argument(
         "--detector-feedback",
         action="store_true",
         help=(
@@ -201,6 +213,9 @@ def _process_stdin(args: argparse.Namespace) -> int:
 
     text = sys.stdin.read()
     feedback = None
+    voice_sample = None
+    if args.voice_sample is not None:
+        voice_sample = args.voice_sample.read_text(encoding="utf-8")
 
     if args.detector_feedback:
         from .detector import DetectorUnavailable, feedback_loop
@@ -223,7 +238,10 @@ def _process_stdin(args: argparse.Namespace) -> int:
             text, intensity=args.mode, structural=args.structural, soul=args.soul
         )
     else:
-        humanized = humanize_llm(text, intensity=args.mode)
+        llm_kwargs = {"intensity": args.mode}
+        if voice_sample is not None:
+            llm_kwargs["voice_sample"] = voice_sample
+        humanized = humanize_llm(text, **llm_kwargs)
         report = None
 
     result = validate(text, humanized)
@@ -365,6 +383,10 @@ def _process_file(
     if args.detector_feedback:
         return _process_file_detector_feedback(path, args, write, report_accumulator)
 
+    voice_sample_text: str | None = None
+    if args.voice_sample is not None:
+        voice_sample_text = args.voice_sample.read_text(encoding="utf-8")
+
     outcome = humanize_file_ex(
         path,
         deterministic=args.deterministic,
@@ -373,6 +395,7 @@ def _process_file(
         write=write,
         structural=args.structural,
         soul=args.soul,
+        voice_sample=voice_sample_text,
     )
 
     if args.diff:
