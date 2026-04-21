@@ -979,7 +979,8 @@ def _format_voice_targets(profile) -> str:
     freshly-measured sample and a persisted profile from style memory."""
     return f"""
 VOICE SAMPLE TARGETS (measured — match these):
-- Sentence-length mean: {profile.sentence_length_mean} words (σ {profile.sentence_length_stdev})
+- Sentence-length mean: {profile.sentence_length_mean} words (σ {profile.sentence_length_stdev}, cv {profile.sentence_length_cv})
+- Word-length σ across sentences: {profile.word_length_stdev} (DivEye-style surprisal-variance proxy)
 - Fragments (<5 words): {profile.fragment_rate * 100:.0f}% of sentences
 - Contractions per 1k words: {profile.contraction_rate}
 - Em-dash / semicolon / colon / paren rate per 1k: {profile.em_dash_rate} / {profile.semicolon_rate} / {profile.colon_rate} / {profile.parenthetical_rate}
@@ -990,7 +991,9 @@ VOICE SAMPLE TARGETS (measured — match these):
 Match the numeric profile, not just the surface feel. If the sample is
 fragment-heavy and the input text is long-sentence-heavy, cut sentences.
 If the sample uses 40 contractions per 1k words and the input has none,
-contract where grammatical.
+contract where grammatical. Higher cv and word-length σ both indicate
+bursty human rhythm — mix short and long sentences, mix Anglo-Saxon
+fragments with longer Latinate clauses.
 """
 
 

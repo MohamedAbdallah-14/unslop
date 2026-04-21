@@ -28,6 +28,25 @@ Research basis: Cat 10 (style transfer, stylometric embeddings), Cat 14
 divergence signal). TinyStyler's extract-then-apply pipeline is the same
 architecture — measure first, then fit.
 
+DivEye proxy (Cat 15 gap). DivEye (arXiv 2509.18880, TMLR 2026) found
+intra-document *surprisal variance* — not absolute perplexity — is the
+primary signal that survives paraphrase attacks. A full DivEye reading
+needs a small local LM to compute per-token log-prob; that isn't in this
+module's scope. Two deterministic proxies are shipped instead:
+
+  sentence_length_cv    coefficient of variation (σ/μ) of sentence
+                        word-counts. Scale-invariant burstiness; robust
+                        across short and long documents.
+  word_length_stdev     per-sentence mean word-length, σ across the
+                        document. Zipf's abbreviation law gives word-
+                        length ≈ inverse rarity, so variance in that
+                        quantity is a cheap surrogate for variance in
+                        per-token surprisal.
+
+Both are imperfect — they correlate with, not equal, DivEye's reading.
+They're priced in as "cheap DivEye proxies" in the field names so a
+voice-match caller doesn't read too much into a single number.
+
 No API calls. No heavy deps. Runs on natural-language prose only (operates
 on protected-stripped text for code-heavy inputs)."""
 
@@ -135,6 +154,8 @@ class StyleProfile:
     sentences: int = 0
     sentence_length_mean: float = 0.0
     sentence_length_stdev: float = 0.0
+    sentence_length_cv: float = 0.0
+    word_length_stdev: float = 0.0
     fragment_rate: float = 0.0
     contraction_rate: float = 0.0
     em_dash_rate: float = 0.0
@@ -200,6 +221,20 @@ def analyze(text: str) -> StyleProfile:
     lengths = [n for n in lengths if n > 0]
     mean = sum(lengths) / len(lengths) if lengths else 0.0
     stdev = _stdev(lengths)
+    # Coefficient of variation — scale-invariant burstiness. Flat AI prose
+    # sits near 0.3; human academic writing typically lands 0.5–0.8.
+    length_cv = (stdev / mean) if mean > 0 else 0.0
+
+    # DivEye proxy: per-sentence mean word-length, σ across the document.
+    # Zipf's abbreviation law makes word-length a crude inverse-rarity
+    # signal; variance of the per-sentence mean captures local lexical
+    # rhythm without needing a language model.
+    per_sentence_mean_wlen: list[float] = []
+    for sent in sentences:
+        toks = _WORD.findall(sent)
+        if toks:
+            per_sentence_mean_wlen.append(sum(len(t) for t in toks) / len(toks))
+    word_len_stdev = _stdev(per_sentence_mean_wlen) if per_sentence_mean_wlen else 0.0
 
     fragments = sum(1 for n in lengths if n < 5)
     fragment_rate = fragments / len(lengths)
@@ -236,6 +271,8 @@ def analyze(text: str) -> StyleProfile:
         sentences=len(sentences),
         sentence_length_mean=round(mean, 2),
         sentence_length_stdev=round(stdev, 2),
+        sentence_length_cv=round(length_cv, 3),
+        word_length_stdev=round(word_len_stdev, 3),
         fragment_rate=round(fragment_rate, 3),
         contraction_rate=round(contraction_count * per_k, 2),
         em_dash_rate=round(em_dash_count * per_k, 2),

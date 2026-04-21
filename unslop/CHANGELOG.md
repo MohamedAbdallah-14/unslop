@@ -1,3 +1,13 @@
+## 0.5.3 — 2026-04-21
+
+DivEye-proxy release. Two deterministic, LM-free proxies for
+intra-document surprisal variance — `sentence_length_cv` (coefficient
+of variation) and `word_length_stdev` (per-sentence mean word-length σ)
+— now ship in `unslop.scripts.stylometry.StyleProfile` and surface in
+the voice-match LLM prompt. Closes the Category 15 gap in
+`docs/research/IMPLEMENTATION_TRACE.md`. No behavioral break; six new
+unit tests; 92.0% AI-ism reduction on the nine-fixture benchmark holds.
+
 ## 0.5.2 — 2026-04-21
 
 CI hot-fix. No functional change; re-tag of 0.5.1 with a mypy config

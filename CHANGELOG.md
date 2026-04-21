@@ -11,6 +11,40 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.5.3] — 2026-04-21
+
+DivEye-proxy release. Closes the Category 15 research gap from
+`docs/research/IMPLEMENTATION_TRACE.md` — the project's "What research
+we are NOT using yet" section previously admitted no surprisal-variance
+signal. Two deterministic, LM-free proxies now ship in stylometry and
+surface in the voice-match LLM prompt. No behavioral break; benchmark
+holds at 92.0% AI-ism reduction.
+
+### Added
+
+- **`sentence_length_cv`** in `unslop/scripts/stylometry.py` `StyleProfile`:
+  coefficient of variation (σ/μ) of sentence word-counts. Scale-invariant
+  burstiness — a ~0.3 reading is AI-flat; 0.5–0.8 is typical human academic.
+- **`word_length_stdev`** in `StyleProfile`: per-sentence mean word-length,
+  σ across the document. Zipf's abbreviation law gives word-length ≈
+  inverse rarity, so variance in that quantity is a cheap surrogate for
+  intra-document surprisal variance (DivEye, arXiv 2509.18880, TMLR 2026).
+- Voice-match LLM prompt block (`_format_voice_targets` in
+  `unslop/scripts/humanize.py`) now reports `cv` and `word_length_stdev`
+  as DivEye-style targets, with explicit rewrite guidance: "Higher cv
+  and word-length σ both indicate bursty human rhythm — mix short and
+  long sentences, mix Anglo-Saxon fragments with longer Latinate clauses."
+- Six new unit tests in `tests/unslop/test_stylometry.py::TestDivEyeProxies`
+  covering uniform/bursty/scale-invariance/monotone/mixed-register/empty.
+
+### Changed
+
+- `docs/research/IMPLEMENTATION_TRACE.md`: new row mapping DivEye
+  research → `sentence_length_cv` + `word_length_stdev` → tests; the
+  Category 15 entry under "What research we are NOT using yet" now
+  reads "partial" and names what is still out of scope (a real local-LM
+  surprisal reading).
+
 ## [0.5.2] — 2026-04-21
 
 CI hot-fix. No functional change; re-tag of 0.5.1 with a mypy config

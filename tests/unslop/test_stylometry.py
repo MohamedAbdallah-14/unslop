@@ -57,6 +57,63 @@ class TestSentenceLength:
         assert p.fragment_rate == pytest.approx(2 / 3, abs=0.01)
 
 
+class TestDivEyeProxies:
+    """Surprisal-variance proxies — cheap stand-ins for a real LM reading."""
+
+    def test_cv_zero_on_uniform_lengths(self):
+        # Three identical-length sentences → stdev 0 → cv 0.
+        text = "The cat sat on mat. The dog sat on log. The bird sat on perch."
+        p = analyze(text)
+        assert p.sentence_length_cv == 0.0
+
+    def test_cv_high_on_bursty_text(self):
+        text = (
+            "Short. "
+            "A medium-length sentence with several words. "
+            "This is a much longer sentence with quite a lot of words in it "
+            "that pulls the coefficient of variation substantially upward."
+        )
+        p = analyze(text)
+        # Bursty human-like text should exceed the flat-AI baseline (~0.3).
+        assert p.sentence_length_cv > 0.4
+
+    def test_cv_scale_invariant(self):
+        # Doubling every sentence length should leave cv unchanged: it's
+        # stdev / mean, so both scale together.
+        short = "One two three. Four five six seven eight nine ten."
+        long = (
+            "One two three four five six. "
+            "Seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen seventeen eighteen nineteen twenty."
+        )
+        p_short = analyze(short)
+        p_long = analyze(long)
+        # Roughly equal — same relative variation, different absolute scale.
+        assert abs(p_short.sentence_length_cv - p_long.sentence_length_cv) < 0.05
+
+    def test_word_length_stdev_zero_when_monotone(self):
+        # Every sentence mean word-length = 3. Variance across sentences = 0.
+        text = "One two the cat. Did sit the mat. His pal the dog."
+        p = analyze(text)
+        assert p.word_length_stdev == 0.0
+
+    def test_word_length_stdev_nonzero_on_mixed_register(self):
+        # Mixing long Latinate words with Anglo-Saxon fragments should
+        # pull per-sentence mean word-length apart.
+        text = (
+            "The implementation of the operationalization constitutes a "
+            "significant development. Ship. We built it. It works. "
+            "The infrastructure administration necessitates reconsideration."
+        )
+        p = analyze(text)
+        assert p.word_length_stdev > 1.0
+
+    def test_cv_empty_input_safe(self):
+        # Empty prose must not divide by zero.
+        p = analyze("")
+        assert p.sentence_length_cv == 0.0
+        assert p.word_length_stdev == 0.0
+
+
 class TestContractionRate:
     def test_no_contractions(self):
         text = "We do not ship. It is a policy we are strict about."
@@ -216,6 +273,8 @@ class TestProfileShape:
             "sentences",
             "sentence_length_mean",
             "sentence_length_stdev",
+            "sentence_length_cv",
+            "word_length_stdev",
             "fragment_rate",
             "contraction_rate",
             "em_dash_rate",
