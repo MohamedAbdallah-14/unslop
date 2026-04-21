@@ -76,6 +76,32 @@ inside its wheel; both files are kept in sync. Edit this one.
   entries was collapsing to one line. Breaks run-scan on placeholder prefix
   now; the fixed empty-run advance guarantees every line gets emitted.
 
+### Added (continued)
+
+- **Phase 4 wire-in**: voice-match mode now accepts `--voice-sample PATH`.
+  The LLM prompt receives explicit numeric targets extracted from the
+  sample: sentence-length μ/σ, fragment rate, contraction rate, em-dash /
+  semicolon / colon / parenthetical rates, first/second-person rates, And/
+  But-opener fraction, Latinate-suffix ratio. Short samples (<50 words)
+  get rough guidance instead.
+- **Phase 7 `unslop-reasoning` sub-skill** (`skills/unslop-reasoning/
+  SKILL.md`). Catalogs six AI-slop reasoning patterns absent from the
+  prose-focused catalog: restating the question, over-hedging the plan,
+  over-decomposing, infinite-loop rationalization, performative
+  exhaustiveness, unmotivated confidence-then-retraction. Targets chain-
+  of-thought / extended-thinking output, not final answers. Added to
+  `scripts/sync-mirrors.sh` and the help card.
+- **Phase 8 style memory** (`unslop/scripts/style_memory.py`). Persists
+  a measured StyleProfile so voice-match stops requiring the sample on
+  every invocation. Storage: `$UNSLOP_STYLE_MEMORY` → `$XDG_CONFIG_HOME/
+  unslop/style-memory.json` → platform default. Mode 0600, symlink-
+  refused, atomic write, schema-versioned. CLI:
+  `--save-voice-profile PATH`, `--clear-voice-profile`, `--voice-memory`.
+  16 new tests.
+- `humanize_llm` / `humanize_file_ex` / `_build_humanize_prompt` accept
+  `voice_profile: StyleProfile` alongside `voice_sample: str`. Profile-
+  only is the memory-driven path; sample-text takes precedence.
+
 ## [0.4.1] — 2026-04-20
 
 ### Added
