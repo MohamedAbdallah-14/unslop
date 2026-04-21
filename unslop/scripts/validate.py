@@ -94,6 +94,55 @@ AI_ISMS = (
     r"(?:^|(?<=[.!?]\s))to summarize\b",
     r"(?:^|(?<=[.!?]\s))(?:firstly|secondly|thirdly|finally)\b",
     r"(?:^[ \t]*(?:[-*+]|\d+\.)[ \t]+)(?:firstly|secondly|thirdly|finally)\b",
+    # Phase 2 (2026-04-21): significance inflation, notability namedropping,
+    # superficial -ing analyses, copula avoidance. Mirrors humanize.py Phase 2
+    # rule families so the validator can detect when a rewrite accidentally
+    # reintroduces them (e.g. an LLM rewrite adds "marks a pivotal moment").
+    # Significance inflation
+    r"\b(?:marks?|represents?|stands?\s+as)\s+(?:a|an|the)\s+(?:pivotal|defining|critical|key|watershed|seminal)\s+(?:moment|turning\s+point|milestone)\b",
+    r"(?:underscor(?:es|ing)|emphasiz(?:es|ing))\s+(?:the|its|their)\s+(?:importance|significance|role)",
+    r"\b(?:enduring|lasting|indelible)\s+legacy\b",
+    r"\bleaves?\s+an?\s+indelible\s+mark\b",
+    r"\bdeeply\s+rooted\s+in\b",
+    r"\b(?:contributing\s+to|shaping)\s+the\s+(?:broader|wider|ongoing)\s+(?:narrative|landscape|conversation|discourse)\b",
+    # Notability namedropping
+    r"\b(?:maintains?|has)\s+an\s+active\s+(?:social\s+media\s+)?presence\b",
+    r"\ba\s+leading\s+(?:expert|voice|authority|figure)\s+(?:in|on)\b",
+    r"\brenowned\s+for\s+(?:his|her|their)\s+work\b",
+    r"\bwidely\s+(?:cited|featured|covered)\s+(?:in|by)\b",
+    r"\b(?:internationally|globally)\s+recogni[sz]ed\s+as\b",
+    # Superficial -ing analyses (matches only the canonical filler forms)
+    r",\s+(?:highlighting|underscoring|emphasizing|illustrating|reflecting|showcasing)\s+(?:the|its|their|his|her|a|an)\s+(?:importance|significance|role|impact|value|need|necessity|relevance|nature)\b",
+    # Copula avoidance (", being a/an/the X,")
+    r",\s+being\s+(?:a|an|the)\s+[a-z]",
+)
+
+# FALSE_RANGES — "from X to Y" clichés where the range is formulaic rather than
+# literal. Wikipedia "Signs of AI writing". Validator-only: regex rewrite risks
+# corrupting literal ranges (dates, versions, measurements). These trigger a
+# warning on match so the user can hand-edit or run LLM mode.
+FALSE_RANGES = tuple(
+    re.compile(p, re.IGNORECASE)
+    for p in (
+        r"\bfrom\s+(?:beginners?|novices?)\s+to\s+(?:experts?|professionals?|veterans?)\b",
+        r"\bfrom\s+(?:humble\s+)?beginnings?\s+to\b",
+        r"\bfrom\s+simple\s+\w+\s+to\s+complex\s+\w+\b",
+        r"\bfrom\s+the\s+mundane\s+to\s+the\s+(?:extraordinary|sublime|profound)\b",
+        r"\bfrom\s+(?:small|tiny)\s+startups?\s+to\s+(?:global|massive)\s+enterprises?\b",
+        r"\bspan(?:s|ning)?\s+the\s+spectrum\s+from\b",
+    )
+)
+
+# SYNONYM_CYCLING — same concept referred to by multiple words in a short span.
+# Wikipedia calls this a sign of AI writing trying to avoid repetition without
+# recognizing that controlled repetition is a valid style choice. Heuristic:
+# detect when 3+ members of a known synonym group appear in the same paragraph.
+_SYNONYM_GROUPS: tuple[frozenset[str], ...] = (
+    frozenset({"utilize", "utilise", "leverage", "employ", "harness"}),
+    frozenset({"showcase", "highlight", "emphasize", "emphasise", "underscore"}),
+    frozenset({"pivotal", "crucial", "vital", "paramount", "essential"}),
+    frozenset({"comprehensive", "thorough", "exhaustive", "holistic"}),
+    frozenset({"robust", "resilient", "reliable", "solid"}),
 )
 AI_ISM_PATTERNS = [re.compile(p, re.IGNORECASE) for p in AI_ISMS]
 
@@ -110,6 +159,10 @@ class ValidationResult:
     sentence_length_range_after: tuple[int, int] = (0, 0)
     flat_paragraphs_before: int = 0
     flat_paragraphs_after: int = 0
+    false_ranges_before: int = 0
+    false_ranges_after: int = 0
+    synonym_cycling_before: int = 0
+    synonym_cycling_after: int = 0
 
     def to_dict(self) -> dict:
         return {
@@ -123,6 +176,10 @@ class ValidationResult:
             "sentence_length_range_after": list(self.sentence_length_range_after),
             "flat_paragraphs_before": self.flat_paragraphs_before,
             "flat_paragraphs_after": self.flat_paragraphs_after,
+            "false_ranges_before": self.false_ranges_before,
+            "false_ranges_after": self.false_ranges_after,
+            "synonym_cycling_before": self.synonym_cycling_before,
+            "synonym_cycling_after": self.synonym_cycling_after,
         }
 
 
@@ -226,6 +283,34 @@ def _extract_indented_blocks(text: str) -> list[str]:
 
 def _count_ai_isms(text: str) -> int:
     return sum(len(p.findall(text)) for p in AI_ISM_PATTERNS)
+
+
+def _count_false_ranges(text: str) -> int:
+    """Count occurrences of AI-cliché `from X to Y` formulations in prose."""
+    prose = _strip_code_for_prose(text)
+    return sum(len(p.findall(prose)) for p in FALSE_RANGES)
+
+
+_WORD_RE = re.compile(r"[A-Za-z]+")
+
+
+def _count_synonym_cycling(text: str) -> int:
+    """Count paragraphs where 3+ members of a known synonym group co-occur.
+
+    Heuristic: true synonym cycling requires semantic similarity (would need
+    embeddings). This catches the lexical subset: a paragraph using "utilize"
+    + "leverage" + "employ" in close proximity. False positives on genuine
+    distinctions are possible; the signal is a warning, not an error."""
+    prose = _strip_code_for_prose(text)
+    paragraphs = re.split(r"\n\s*\n", prose)
+    flagged = 0
+    for para in paragraphs:
+        words = {w.lower() for w in _WORD_RE.findall(para)}
+        for group in _SYNONYM_GROUPS:
+            if len(words & group) >= 3:
+                flagged += 1
+                break  # count once per paragraph
+    return flagged
 
 
 def validate(original: str, humanized: str) -> ValidationResult:
@@ -368,6 +453,23 @@ def validate(original: str, humanized: str) -> ValidationResult:
             "A paragraph with 3+ sentences at uniform length is a detector tell."
         )
 
+    # Phase 2: false-range and synonym-cycling detectors. Informational.
+    fr_before = _count_false_ranges(original)
+    fr_after = _count_false_ranges(humanized)
+    if fr_after > 0:
+        warnings.append(
+            f"False-range clichés present ({fr_after}). "
+            "Formulaic 'from X to Y' patterns read as AI; hand-edit or run --mode full."
+        )
+
+    sc_before = _count_synonym_cycling(original)
+    sc_after = _count_synonym_cycling(humanized)
+    if sc_after > sc_before:
+        warnings.append(
+            f"Synonym cycling in {sc_after} paragraph(s). "
+            "Using 3+ synonyms for one concept in the same paragraph reads as AI."
+        )
+
     return ValidationResult(
         ok=len(errors) == 0,
         errors=errors,
@@ -379,6 +481,10 @@ def validate(original: str, humanized: str) -> ValidationResult:
         sentence_length_range_after=length_range,
         flat_paragraphs_before=flat_before,
         flat_paragraphs_after=flat_after,
+        false_ranges_before=fr_before,
+        false_ranges_after=fr_after,
+        synonym_cycling_before=sc_before,
+        synonym_cycling_after=sc_after,
     )
 
 

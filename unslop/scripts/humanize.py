@@ -380,6 +380,152 @@ PERFORMATIVE = [
     (re.compile(r"(^|(?<=[.!?]\s))However,\s+", re.MULTILINE), r"\1"),
 ]
 
+# --- Phase 2 new lexical families (2026-04-21) ---
+#
+# Source: blader/humanizer taxonomy (MIT) + Wikipedia "Signs of AI writing"
+# maintained by WikiProject AI Cleanup. Each family mirrors a category named in
+# that taxonomy that unslop previously did not cover. Credit due to those
+# sources; original regex implementations here.
+#
+# Conservative stance: each pattern needs a clear semantic bound so we never
+# destroy meaning. Where a pattern is borderline, we only flag in the validator
+# and leave rewrite to LLM mode.
+
+# SIGNIFICANCE_INFLATION: phrases that inflate historical importance without
+# evidence. The Wikipedia article names this the single most common AI-writing
+# tell on encyclopedic content. Strip the inflated framing; leave the fact.
+SIGNIFICANCE_INFLATION = [
+    # "marks a pivotal moment in" / "represents a defining moment in" → "happened in"
+    (
+        re.compile(
+            r"\b(?:marks?|represents?|stands?\s+as)\s+"
+            r"(?:a|an|the)\s+(?:pivotal|defining|critical|key|watershed|seminal)\s+"
+            r"(?:moment|turning\s+point|milestone|chapter)\s+(?:in|for)\s+",
+            re.IGNORECASE,
+        ),
+        "happened in ",
+    ),
+    # "underscores its importance" / "emphasizes the significance of X" →
+    # strip the inflation; the remaining noun stands on its own.
+    (
+        re.compile(
+            r",?\s+(?:underscor(?:es|ing)|emphasiz(?:es|ing)|highlight(?:s|ing))\s+"
+            r"(?:the|its|their|his|her)\s+"
+            r"(?:importance|significance|role|impact|value|relevance|necessity)"
+            r"(?=[,.\s])",
+            re.IGNORECASE,
+        ),
+        "",
+    ),
+    # "an enduring legacy" / "lasting legacy" → "a legacy"
+    (
+        re.compile(r"\b(?:an\s+)?(?:enduring|lasting|indelible)\s+legacy\b", re.IGNORECASE),
+        "a legacy",
+    ),
+    # "leaves an indelible mark on" → "affects"
+    (
+        re.compile(r"\bleaves?\s+an?\s+indelible\s+mark\s+on\b", re.IGNORECASE),
+        "affects",
+    ),
+    # "deeply rooted in" → "rooted in"
+    (re.compile(r"\bdeeply\s+rooted\s+in\b", re.IGNORECASE), "rooted in"),
+    # "contributing to the broader" / "shaping the broader narrative" —
+    # paragraph-inflation clauses. Strip the trailing fragment.
+    (
+        re.compile(
+            r",?\s+(?:contributing\s+to|shaping|influencing)\s+"
+            r"the\s+(?:broader|wider|ongoing)\s+"
+            r"(?:narrative|landscape|conversation|discourse|trajectory|movement)"
+            r"(?=[,.\s])",
+            re.IGNORECASE,
+        ),
+        "",
+    ),
+]
+
+# NOTABILITY_NAMEDROPPING: "cited in <list of outlets>", "leading expert",
+# "active social media presence". Classic encyclopedic puffery. Conservative:
+# only the formulaic phrases, not any mention of a source.
+NOTABILITY_NAMEDROPPING = [
+    # "maintains an active social media presence" → removed (adds nothing)
+    (
+        re.compile(
+            r"\b(?:maintains?|has)\s+an\s+active\s+"
+            r"(?:social\s+media\s+)?presence\b"
+            r"(?:\s+on\s+[A-Z][A-Za-z]+(?:\s+and\s+[A-Z][A-Za-z]+)?)?",
+            re.IGNORECASE,
+        ),
+        "is active online",
+    ),
+    # "a leading expert in X" / "a leading voice on X" → "an expert on X"
+    (
+        re.compile(
+            r"\ba\s+leading\s+(?:expert|voice|authority|figure)\s+(?:in|on)\b",
+            re.IGNORECASE,
+        ),
+        "an expert on",
+    ),
+    # "renowned for his/her/their work on X" → "known for work on X"
+    (
+        re.compile(
+            r"\brenowned\s+for\s+(?:his|her|their)\s+work\s+(?:on|in|with)\b",
+            re.IGNORECASE,
+        ),
+        "known for work on",
+    ),
+    # "has been widely cited in" → "has appeared in"
+    (
+        re.compile(
+            r"\b(?:has\s+been\s+)?widely\s+(?:cited|featured|covered)\s+(?:in|by)\b",
+            re.IGNORECASE,
+        ),
+        "has appeared in",
+    ),
+    # "recognized globally as" / "internationally recognized as" → "known as"
+    (
+        re.compile(
+            r"\b(?:internationally|globally)\s+recogni[sz]ed\s+as\b", re.IGNORECASE
+        ),
+        "known as",
+    ),
+]
+
+# SUPERFICIAL_ING: trailing participle clauses that claim analysis without
+# adding content. Wikipedia: "Superficial -ing analyses." Very conservative:
+# only strip when the participle phrase is clearly filler (, VERBing the/its
+# importance/significance/role/impact/need), i.e. the tail adds no new concrete
+# information. Any tail containing a specific noun is left alone.
+SUPERFICIAL_ING = [
+    (
+        re.compile(
+            r",\s+(?:highlighting|underscoring|emphasizing|illustrating|"
+            r"reflecting|showcasing|demonstrating|revealing)\s+"
+            r"(?:the|its|their|his|her|a|an)\s+"
+            r"(?:importance|significance|role|impact|value|need|necessity|"
+            r"relevance|nature|essence|complexity|depth|breadth)"
+            r"(?:\s+of\s+(?:the|this|that|these|those|its|their|his|her))?"
+            r"(?=[.!?\n])",
+            re.IGNORECASE,
+        ),
+        "",
+    ),
+]
+
+# COPULA_AVOIDANCE: Latinate appositive ", being a/an/the X," used where simple
+# "is" would do. Wikipedia lists this as a sign of AI-generated prose trying
+# to sound formal. Only the appositive comma-bound form; bare "being" (gerund)
+# is untouched.
+COPULA_AVOIDANCE = [
+    # ", being a reliable platform," → ", a reliable platform,"
+    # Drop the "being" word; the remaining appositive is idiomatic English.
+    (
+        re.compile(
+            r",\s+being\s+(?=(?:a|an|the)\s+[a-z])", re.IGNORECASE
+        ),
+        ", ",
+    ),
+]
+
 # Em-dash per-paragraph cap. Research (Cat 04, Cat 05) says em-dash pileups are a
 # top stylometric tell. Skill contract: no more than two em-dashes per paragraph.
 # We implement this in code (`_cap_em_dashes_per_paragraph`) rather than regex,
@@ -559,6 +705,10 @@ def humanize_deterministic_with_report(
     run_authority = intensity in ("balanced", "full")
     run_signposting = intensity in ("balanced", "full")
     run_em_dash_cap = intensity in ("balanced", "full")
+    run_significance_inflation = intensity in ("balanced", "full")
+    run_notability_namedropping = intensity in ("balanced", "full")
+    run_copula_avoidance = intensity in ("balanced", "full")
+    run_superficial_ing = intensity == "full"
     run_filler = intensity == "full"
     run_negative_parallelism = intensity == "full"
 
@@ -591,6 +741,30 @@ def humanize_deterministic_with_report(
     # Stock vocab runs at every intensity, including `subtle`.
     for pattern, repl in STOCK_VOCAB:
         protected = _tracking_sub(pattern, repl, protected, rule="stock_vocab", log=log)
+
+    if run_significance_inflation:
+        for pattern, repl in SIGNIFICANCE_INFLATION:
+            protected = _tracking_sub(
+                pattern, repl, protected, rule="significance_inflation", log=log
+            )
+
+    if run_notability_namedropping:
+        for pattern, repl in NOTABILITY_NAMEDROPPING:
+            protected = _tracking_sub(
+                pattern, repl, protected, rule="notability_namedropping", log=log
+            )
+
+    if run_copula_avoidance:
+        for pattern, repl in COPULA_AVOIDANCE:
+            protected = _tracking_sub(
+                pattern, repl, protected, rule="copula_avoidance", log=log
+            )
+
+    if run_superficial_ing:
+        for pattern, repl in SUPERFICIAL_ING:
+            protected = _tracking_sub(
+                pattern, repl, protected, rule="superficial_ing", log=log
+            )
 
     if run_filler:
         for pattern, repl in FILLER_PHRASES:

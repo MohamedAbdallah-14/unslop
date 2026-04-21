@@ -875,6 +875,183 @@ class TestNegativeParallelism:
         assert "No guesswork" in out or "no guesswork" in out.lower()
 
 
+# ---------- Phase 2 (2026-04-21): new lexical families ----------
+
+
+class TestSignificanceInflation:
+    def test_pivotal_moment_stripped(self) -> None:
+        text = "The release marks a pivotal moment in the project timeline."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "pivotal moment" not in out.lower()
+
+    def test_defining_turning_point_stripped(self) -> None:
+        text = "This represents a defining turning point for the team."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "defining turning point" not in out.lower()
+
+    def test_enduring_legacy_tightened(self) -> None:
+        text = "The framework has an enduring legacy."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "enduring legacy" not in out.lower()
+        assert "legacy" in out.lower()
+
+    def test_indelible_mark_rewritten(self) -> None:
+        text = "This leaves an indelible mark on the industry."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "indelible mark" not in out.lower()
+
+    def test_deeply_rooted_tightened(self) -> None:
+        text = "The tradition is deeply rooted in local practice."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "deeply rooted" not in out.lower()
+        assert "rooted in" in out.lower()
+
+    def test_contributing_to_broader_stripped(self) -> None:
+        text = "This work stands alone, contributing to the broader narrative."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "broader narrative" not in out.lower()
+
+    def test_emphasizing_its_importance_stripped(self) -> None:
+        text = "The team shipped the feature, emphasizing its importance."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "emphasizing its importance" not in out.lower()
+
+    def test_untouched_at_subtle(self) -> None:
+        text = "This marks a pivotal moment in the story."
+        out = humanize_deterministic(text, intensity="subtle")
+        # subtle keeps phrase-level inflation — only stock vocab runs there.
+        assert "pivotal" not in out.lower()  # 'pivotal' is in STOCK_VOCAB
+        # But the full phrase "marks a ... moment" should still be present
+        # (minus the stock-vocab word). subtle should not strip whole phrases.
+        assert "moment" in out.lower()
+
+
+class TestNotabilityNamedropping:
+    def test_active_social_media_rewritten(self) -> None:
+        text = "She maintains an active social media presence on Twitter."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "active social media presence" not in out.lower()
+
+    def test_leading_expert_rewritten(self) -> None:
+        text = "He is a leading expert in distributed systems."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "leading expert" not in out.lower()
+        assert "expert on" in out.lower()
+
+    def test_renowned_for_work_rewritten(self) -> None:
+        text = "She is renowned for her work on type theory."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "renowned for" not in out.lower()
+        assert "known for work on" in out.lower()
+
+    def test_widely_cited_rewritten(self) -> None:
+        text = "Their research has been widely cited in academic journals."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "widely cited" not in out.lower()
+        assert "appeared in" in out.lower()
+
+    def test_internationally_recognized_rewritten(self) -> None:
+        text = "The library is internationally recognized as the gold standard."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "internationally recognized" not in out.lower()
+        assert "known as" in out.lower()
+
+
+class TestSuperficialIng:
+    def test_trailing_filler_stripped_at_full(self) -> None:
+        text = "The team shipped the patch, highlighting the importance of testing."
+        out = humanize_deterministic(text, intensity="full")
+        assert "highlighting the importance" not in out.lower()
+        assert "the team shipped the patch" in out.lower()
+
+    def test_additional_ing_verbs_only_at_full(self) -> None:
+        # "illustrating" / "reflecting" / "showcasing" are covered by
+        # SUPERFICIAL_ING (full only), not by SIGNIFICANCE_INFLATION.
+        # The tail must be pure filler (no concrete noun) for the rule to fire.
+        text = "The result was documented, illustrating the nature."
+        out_balanced = humanize_deterministic(text, intensity="balanced")
+        out_full = humanize_deterministic(text, intensity="full")
+        assert "illustrating the nature" in out_balanced.lower()
+        assert "illustrating the nature" not in out_full.lower()
+
+    def test_content_bearing_tail_preserved(self) -> None:
+        # When the "-ing" tail carries concrete content (specific noun, not
+        # "importance"/"significance"/etc.), it should stay intact.
+        text = "The team shipped the patch, highlighting a new Redis cache bug."
+        out = humanize_deterministic(text, intensity="full")
+        assert "highlighting a new Redis cache bug" in out
+
+
+class TestCopulaAvoidance:
+    def test_being_appositive_dropped(self) -> None:
+        text = "The framework, being a reliable platform, ships weekly."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert ", being a " not in out.lower()
+        assert "a reliable platform" in out.lower()
+
+    def test_being_gerund_preserved(self) -> None:
+        # "being" as a gerund (subject/complement) must survive.
+        text = "Being a pragmatist is sometimes the right call."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "being a pragmatist" in out.lower()
+
+
+class TestFalseRangesValidator:
+    def test_beginners_to_experts_flagged(self) -> None:
+        from unslop.scripts.validate import validate
+
+        text = "This tutorial serves everyone from beginners to experts."
+        result = validate(text, text)
+        assert result.false_ranges_after >= 1
+
+    def test_humble_beginnings_flagged(self) -> None:
+        from unslop.scripts.validate import validate
+
+        text = "The company grew from humble beginnings to a public enterprise."
+        result = validate(text, text)
+        assert result.false_ranges_after >= 1
+
+    def test_literal_range_not_flagged(self) -> None:
+        from unslop.scripts.validate import validate
+
+        # Literal measurement — should NOT match.
+        text = "The temperature ranged from 10 to 25 degrees Celsius."
+        result = validate(text, text)
+        assert result.false_ranges_after == 0
+
+
+class TestSynonymCyclingValidator:
+    def test_triple_synonym_flagged(self) -> None:
+        from unslop.scripts.validate import validate
+
+        text = (
+            "We utilize Redis for caching. We leverage Postgres for durable state. "
+            "We employ Sidekiq for background jobs."
+        )
+        result = validate(text, text)
+        assert result.synonym_cycling_after >= 1
+
+    def test_double_synonym_not_flagged(self) -> None:
+        from unslop.scripts.validate import validate
+
+        # Only 2 synonyms from one group — below threshold.
+        text = "We utilize Redis and leverage Postgres."
+        result = validate(text, text)
+        assert result.synonym_cycling_after == 0
+
+    def test_separate_paragraphs_do_not_cross_count(self) -> None:
+        from unslop.scripts.validate import validate
+
+        # Each paragraph has only one synonym; cycling is paragraph-local.
+        text = (
+            "We utilize Redis.\n\n"
+            "We leverage Postgres.\n\n"
+            "We employ Sidekiq."
+        )
+        result = validate(text, text)
+        assert result.synonym_cycling_after == 0
+
+
 # ---------- intensity modes ----------
 
 
