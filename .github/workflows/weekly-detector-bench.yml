@@ -1,0 +1,80 @@
+name: Weekly detector regression
+
+# Detector-resistance benchmarks decay on a monthly cadence as detectors
+# update (Nicks et al. ICLR 2024; DAMAGE COLING 2025). This workflow runs
+# the TMR detector benchmark and the perceived-humanness benchmark once a
+# week so we notice decay before users do.
+#
+# Artifacts uploaded; nothing auto-committed. Review and manually rotate
+# the baseline under benchmarks/results/baselines/ if the shift is
+# intentional.
+
+on:
+  schedule:
+    # Mondays 09:00 UTC.
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+jobs:
+  detector-bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: |
+          pip install -e unslop[dev]
+          pip install torch transformers huggingface_hub safetensors
+
+      - name: Cache HuggingFace models
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-models-tmr-desklib-v1
+
+      - name: Run detector benchmark
+        run: python3 benchmarks/detector_bench.py --tmr-only
+
+      - name: Upload detector benchmark artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: detector-bench-${{ github.run_id }}
+          path: benchmarks/results/*-detectors.json
+          retention-days: 90
+
+  humanness-eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install deps
+        run: pip install -e unslop[dev] && pip install anthropic
+
+      - name: Run perceived-humanness benchmark
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -z "$ANTHROPIC_API_KEY" ]; then
+            echo "ANTHROPIC_API_KEY not set in repo secrets; skipping."
+            exit 0
+          fi
+          python3 evals/perceived_humanness.py --runs 1
+
+      - name: Upload humanness artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: humanness-${{ github.run_id }}
+          path: benchmarks/results/*-humanness.json
+          retention-days: 90

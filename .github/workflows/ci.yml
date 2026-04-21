@@ -57,3 +57,7 @@ jobs:
 
       - name: Benchmark (all intensities, monotonicity gate)
         run: python3 benchmarks/run.py --all-intensities --strict
+
+      - name: Regression check vs pinned baseline
+        if: matrix.python-version == '3.12'
+        run: python3 benchmarks/check_regression.py
