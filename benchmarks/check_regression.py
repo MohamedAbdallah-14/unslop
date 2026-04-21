@@ -50,14 +50,19 @@ def _load_json(path: Path) -> dict:
 
 
 def _pick_default_baseline() -> Path:
-    """Most recent post-phase*.json baseline by mtime."""
+    """Most recent post-*.json baseline by mtime.
+
+    Matches post-phase*, post-soul-fix*, post-0.5.0*, and any similar
+    maintainer-named baseline. Excludes pre-*.json (which are regression
+    anchors from before a feature shipped, not after-feature baselines)."""
     candidates = sorted(
-        BASELINES.glob("post-phase*.json"), key=lambda p: p.stat().st_mtime
+        BASELINES.glob("post-*.json"), key=lambda p: p.stat().st_mtime
     )
     if not candidates:
         print(
-            f"No post-phase*.json baselines in {BASELINES}. "
-            "Run benchmarks/run.py and `cp latest.json baselines/post-phaseN-YYYYMMDD.json`.",
+            f"No post-*.json baselines in {BASELINES}. "
+            "Run benchmarks/run.py and copy latest.json into baselines/ "
+            "with a post-<label>-YYYYMMDD.json filename.",
             file=sys.stderr,
         )
         raise SystemExit(1)
