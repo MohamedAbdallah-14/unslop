@@ -1,0 +1,151 @@
+{
+  "timestamp": "20260421T113349Z",
+  "judge_model": "claude-sonnet-4-5",
+  "intensity": "balanced",
+  "structural": true,
+  "soul": true,
+  "runs_per_fixture": 1,
+  "seed": 20260421,
+  "fixtures": [
+    {
+      "fixture": "ai-slop-expanded-categories.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "ai-slop-expanded-categories.md",
+          "run": 1,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "B",
+          "rationale": "Passage A piles on AI tells (delve, tapestry-adjacent \"testament\", \"pivotal\", hedging stacks, em-dash overuse) while B reads rougher and less templated.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "ai-slop-new-categories.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "ai-slop-new-categories.md",
+          "run": 1,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "B",
+          "rationale": "B strips the AI filler stacks (\"At its core\", \"Fundamentally\", \"Buckle up\") and reads tighter, though both still carry template residue.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "ai-slop-release-notes.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "ai-slop-release-notes.md",
+          "run": 1,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B is saturated with AI-isms (\"Absolutely!\", \"pivotal\", \"seamless\", \"leverage\", \"testament to\", hedging stacks); A reads rougher but less templated.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "ai-slop-tutorial.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "ai-slop-tutorial.md",
+          "run": 1,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B is drowning in stock vocab (\"delve\", \"tapestry\", \"testament\", \"pivotal\"), hedging stacks, and sycophancy opener \u2014 textbook AI slop.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "direct-address-doc.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "direct-address-doc.md",
+          "run": 1,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "Contractions throughout (\"we're\", \"won't\", \"I've\") and the offhand \"annoying but not dangerous\" feel human; B's uniform expansion reads mechanical.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "flat-paragraph-bait.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "flat-paragraph-bait.md",
+          "run": 1,
+          "a_was": "original",
+          "b_was": "humanized",
+          "judge": "claude-sonnet-4-5",
+          "choice": "B",
+          "rationale": "B has more sentence-length variance, contractions, and rougher edges (a fragment, sentences starting with \"But\"), while A leans on \"pivotal\" and stacked \"however\" hedges.",
+          "humanized_won": true
+        }
+      ]
+    },
+    {
+      "fixture": "significance-and-notability.md",
+      "humanized_wins": 1,
+      "original_wins": 0,
+      "ties": 0,
+      "invalid": 0,
+      "votes": [
+        {
+          "fixture": "significance-and-notability.md",
+          "run": 1,
+          "a_was": "humanized",
+          "b_was": "original",
+          "judge": "claude-sonnet-4-5",
+          "choice": "A",
+          "rationale": "B pileups stock AI phrases: \"pivotal moment\", \"testament\", \"renowned\", \"landscape\", \"leverage\" \u2014 A has rough edges and fewer slop markers.",
+          "humanized_won": true
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "humanized_wins": 7,
+    "original_wins": 0,
+    "ties": 0,
+    "invalid": 0,
+    "win_rate_pct": 100.0
+  }
+}
