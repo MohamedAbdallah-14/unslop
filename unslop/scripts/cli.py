@@ -148,6 +148,34 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--detector-feedback",
+        action="store_true",
+        help=(
+            "Run the output through an AI-text detector and re-humanize with "
+            "escalating intensity until the score falls below target. Opt-in; "
+            "first run downloads ~500MB of HF weights (or run `python3 -m "
+            "unslop.scripts.fetch_detectors` ahead of time)."
+        ),
+    )
+    parser.add_argument(
+        "--detector-target",
+        type=float,
+        default=0.5,
+        help="Stop escalating once the detector score drops below this. Default 0.5.",
+    )
+    parser.add_argument(
+        "--detector-max-iterations",
+        type=int,
+        default=3,
+        help="Cap how many escalation steps to try. Default 3.",
+    )
+    parser.add_argument(
+        "--detector-model",
+        choices=("tmr", "desklib"),
+        default="tmr",
+        help="Which detector to use. TMR (~500MB) is the default.",
+    )
+    parser.add_argument(
         "--quiet",
         "-q",
         action="store_true",
@@ -161,8 +189,25 @@ def _process_stdin(args: argparse.Namespace) -> int:
     from .validate import validate
 
     text = sys.stdin.read()
+    feedback = None
 
-    if args.deterministic or not _llm_available():
+    if args.detector_feedback:
+        from .detector import DetectorUnavailable, feedback_loop
+
+        try:
+            outcome = feedback_loop(
+                text,
+                target_probability=args.detector_target,
+                max_iterations=args.detector_max_iterations,
+                detector=args.detector_model,
+            )
+        except DetectorUnavailable as exc:
+            sys.stderr.write(f"detector feedback disabled: {exc}\n")
+            return 1
+        humanized = outcome.final_text
+        feedback = outcome
+        report = None
+    elif args.deterministic or not _llm_available():
         humanized, report = humanize_deterministic_with_report(
             text, intensity=args.mode, structural=args.structural
         )
@@ -184,7 +229,15 @@ def _process_stdin(args: argparse.Namespace) -> int:
         }
         if report is not None:
             payload["report"] = report.to_dict()
+        if feedback is not None:
+            payload["detector_feedback"] = feedback.to_dict()
         sys.stderr.write(json.dumps(payload, indent=2) + "\n")
+    elif feedback is not None and not args.quiet:
+        sys.stderr.write(
+            f"detector: {feedback.original_probability:.1%} → "
+            f"{feedback.final_probability:.1%} "
+            f"({feedback.reason_stopped})\n"
+        )
 
     return 0 if result.ok else 2
 
@@ -203,6 +256,69 @@ def _emit_diff(out, label: str, before: str, after: str) -> None:
         tofile=f"{label} (humanized)",
     )
     out.writelines(diff)
+
+
+def _process_file_detector_feedback(
+    path: Path,
+    args: argparse.Namespace,
+    write: bool,
+    report_accumulator: list[dict],
+) -> int:
+    """File-mode detector feedback loop. Separate path because the backup +
+    validate + write sequence differs from humanize_file_ex — we validate
+    the FINAL humanized text against the original, not an intermediate."""
+    from .detector import DetectorUnavailable, feedback_loop
+    from .validate import format_report, validate
+
+    original = path.read_text(encoding="utf-8")
+    try:
+        outcome = feedback_loop(
+            original,
+            target_probability=args.detector_target,
+            max_iterations=args.detector_max_iterations,
+            detector=args.detector_model,
+        )
+    except DetectorUnavailable as exc:
+        sys.stderr.write(f"[{path.name}] detector feedback disabled: {exc}\n")
+        return 1
+
+    humanized = outcome.final_text
+    result = validate(original, humanized)
+
+    if args.diff:
+        _emit_diff(sys.stdout, str(path), original, humanized)
+    elif args.output is not None and result.ok:
+        args.output.write_text(humanized, encoding="utf-8")
+        if not args.quiet:
+            sys.stdout.write(f"[{path.name}] wrote humanized text to {args.output}\n")
+    elif write and result.ok:
+        backup = path.with_name(path.stem + ".original.md")
+        if not args.no_backup and not backup.exists():
+            backup.write_text(original, encoding="utf-8")
+        path.write_text(humanized, encoding="utf-8")
+
+    if args.json:
+        payload = {
+            "path": str(path),
+            "ok": result.ok,
+            "validation": result.to_dict(),
+            "detector_feedback": outcome.to_dict(),
+        }
+        sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+    elif not args.quiet:
+        sys.stdout.write(format_report(result) + "\n")
+        sys.stdout.write(
+            f"  detector: {outcome.original_probability:.1%} → "
+            f"{outcome.final_probability:.1%} "
+            f"({outcome.reason_stopped})\n"
+        )
+
+    if args.report is not None:
+        report_accumulator.append(
+            {"path": str(path), "detector_feedback": outcome.to_dict()}
+        )
+
+    return 0 if result.ok else 2
 
 
 def _process_file(
@@ -234,6 +350,9 @@ def _process_file(
     write = not (args.dry_run or args.diff)
     if args.output is not None:
         write = False  # handle --output explicitly below
+
+    if args.detector_feedback:
+        return _process_file_detector_feedback(path, args, write, report_accumulator)
 
     outcome = humanize_file_ex(
         path,
