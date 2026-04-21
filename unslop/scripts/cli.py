@@ -171,6 +171,32 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--voice-memory",
+        action="store_true",
+        help=(
+            "Use the persisted style memory (see --save-voice-profile) as the "
+            "voice sample. Silently ignored if no memory is on file. Explicit "
+            "--voice-sample always wins if both are provided."
+        ),
+    )
+    parser.add_argument(
+        "--save-voice-profile",
+        type=Path,
+        default=None,
+        metavar="PATH",
+        help=(
+            "Measure the stylometric profile of the sample at PATH and persist "
+            "it to the style-memory file ($UNSLOP_STYLE_MEMORY or "
+            "$XDG_CONFIG_HOME/unslop/style-memory.json). One-shot command; "
+            "exits after saving."
+        ),
+    )
+    parser.add_argument(
+        "--clear-voice-profile",
+        action="store_true",
+        help="Delete the persisted style memory. One-shot; exits after.",
+    )
+    parser.add_argument(
         "--detector-feedback",
         action="store_true",
         help=(
@@ -214,8 +240,11 @@ def _process_stdin(args: argparse.Namespace) -> int:
     text = sys.stdin.read()
     feedback = None
     voice_sample = None
+    voice_profile = None
     if args.voice_sample is not None:
         voice_sample = args.voice_sample.read_text(encoding="utf-8")
+    else:
+        voice_profile = _resolve_voice_profile(args)
 
     if args.detector_feedback:
         from .detector import DetectorUnavailable, feedback_loop
@@ -238,9 +267,11 @@ def _process_stdin(args: argparse.Namespace) -> int:
             text, intensity=args.mode, structural=args.structural, soul=args.soul
         )
     else:
-        llm_kwargs = {"intensity": args.mode}
+        llm_kwargs: dict = {"intensity": args.mode}
         if voice_sample is not None:
             llm_kwargs["voice_sample"] = voice_sample
+        if voice_profile is not None:
+            llm_kwargs["voice_profile"] = voice_profile
         humanized = humanize_llm(text, **llm_kwargs)
         report = None
 
@@ -384,8 +415,11 @@ def _process_file(
         return _process_file_detector_feedback(path, args, write, report_accumulator)
 
     voice_sample_text: str | None = None
+    voice_profile = None
     if args.voice_sample is not None:
         voice_sample_text = args.voice_sample.read_text(encoding="utf-8")
+    else:
+        voice_profile = _resolve_voice_profile(args)
 
     outcome = humanize_file_ex(
         path,
@@ -396,6 +430,7 @@ def _process_file(
         structural=args.structural,
         soul=args.soul,
         voice_sample=voice_sample_text,
+        voice_profile=voice_profile,
     )
 
     if args.diff:
@@ -439,9 +474,68 @@ def _process_file(
     return 0
 
 
+def _handle_voice_memory_commands(args: argparse.Namespace) -> int | None:
+    """Run --save-voice-profile / --clear-voice-profile if set. Returns an exit
+    code when a memory command ran, or None when no command applied."""
+    if args.save_voice_profile is not None:
+        from .style_memory import StyleMemoryError, save_profile
+
+        sample_path = args.save_voice_profile
+        if not sample_path.is_file():
+            sys.stderr.write(f"Error: voice sample not found: {sample_path}\n")
+            return 1
+        text = sample_path.read_text(encoding="utf-8")
+        try:
+            target = save_profile(text, source=str(sample_path))
+        except StyleMemoryError as exc:
+            sys.stderr.write(f"Error: {exc}\n")
+            return 1
+        if not args.quiet:
+            sys.stdout.write(f"Saved style memory to {target}\n")
+        return 0
+
+    if args.clear_voice_profile:
+        from .style_memory import StyleMemoryError, clear_profile
+
+        try:
+            removed = clear_profile()
+        except StyleMemoryError as exc:
+            sys.stderr.write(f"Error: {exc}\n")
+            return 1
+        if not args.quiet:
+            msg = "Cleared style memory." if removed else "No style memory on file."
+            sys.stdout.write(msg + "\n")
+        return 0
+
+    return None
+
+
+def _resolve_voice_profile(args: argparse.Namespace):
+    """Return a StyleProfile when --voice-memory is requested and memory
+    exists. Explicit --voice-sample is handled via text in the prompt
+    builder; this path only applies when we only have the persisted
+    numeric profile."""
+    if args.voice_sample is not None:
+        return None
+    if not args.voice_memory:
+        return None
+    from .style_memory import StyleMemoryError, load_profile
+
+    try:
+        return load_profile()
+    except StyleMemoryError as exc:
+        sys.stderr.write(f"warn: style memory unreadable: {exc}\n")
+        return None
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
+
+    # One-shot memory management runs before any humanize work.
+    memory_rc = _handle_voice_memory_commands(args)
+    if memory_rc is not None:
+        return memory_rc
 
     # --diff implies --dry-run. --stdin forces no-backup.
     if args.diff:

@@ -143,6 +143,18 @@ Mode persists for the whole session.
 | `unslop-reasoning` | `/unslop-reasoning` | Strip AI slop from chain-of-thought (over-hedging, over-decomposing, loops) |
 | `unslop-help` | `/unslop-help` | Reference card |
 
+### Voice-match (persist your style)
+
+LLM mode accepts a voice sample and matches its measured profile (sentence length, contraction rate, pronoun ratios, punctuation rates). The profile can be saved once and reused:
+
+```bash
+unslop --save-voice-profile samples/my-writing.md   # one-time
+unslop --voice-memory --mode full document.md       # uses saved profile
+unslop --clear-voice-profile                        # delete
+```
+
+Storage: `$UNSLOP_STYLE_MEMORY`, then `$XDG_CONFIG_HOME/unslop/style-memory.json`, then `~/.config/unslop/style-memory.json`. File is mode-0600; symlinks refused. Profile is numeric metrics only — no prose stored.
+
 ### Configure default mode
 
 Env var:

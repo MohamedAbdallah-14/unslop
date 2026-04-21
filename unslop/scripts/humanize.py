@@ -907,23 +907,12 @@ _INTENSITY_PROMPT_GUIDANCE: dict[str, str] = {
 }
 
 
-def _build_voice_block(sample_text: str | None) -> str:
-    """If a voice sample is provided, measure its stylometric profile and
-    return a prompt block with explicit numeric targets. Empty string
-    otherwise. The LLM gets concrete targets instead of "sound like X"
-    intuition — Phase 4 of the humanizer plan."""
-    if not sample_text:
-        return ""
-    from .stylometry import analyze
-
-    profile = analyze(sample_text)
-    if profile.total_words < 50:
-        return (
-            "\nVOICE SAMPLE (too short to extract reliable signals): "
-            "treat as rough tone guidance only.\n"
-        )
+def _format_voice_targets(profile) -> str:
+    """Render a StyleProfile as the 'VOICE SAMPLE TARGETS' prompt block.
+    Separated from measurement so the same block renders for both a
+    freshly-measured sample and a persisted profile from style memory."""
     return f"""
-VOICE SAMPLE TARGETS (measured from the sample below — match these):
+VOICE SAMPLE TARGETS (measured — match these):
 - Sentence-length mean: {profile.sentence_length_mean} words (σ {profile.sentence_length_stdev})
 - Fragments (<5 words): {profile.fragment_rate * 100:.0f}% of sentences
 - Contractions per 1k words: {profile.contraction_rate}
@@ -939,13 +928,36 @@ contract where grammatical.
 """
 
 
+def _build_voice_block(sample_text: str | None, profile=None) -> str:
+    """If a voice sample or profile is provided, return a prompt block with
+    explicit numeric targets. Empty string otherwise.
+
+    Sample text takes precedence — it's fresh measurement. Profile-only is
+    the style-memory path: the user saved a profile and we rehydrate it
+    without re-reading the original sample."""
+    if profile is not None:
+        return _format_voice_targets(profile)
+    if not sample_text:
+        return ""
+    from .stylometry import analyze
+
+    profile = analyze(sample_text)
+    if profile.total_words < 50:
+        return (
+            "\nVOICE SAMPLE (too short to extract reliable signals): "
+            "treat as rough tone guidance only.\n"
+        )
+    return _format_voice_targets(profile)
+
+
 def _build_humanize_prompt(
     original: str,
     intensity: Intensity = "balanced",
     voice_sample: str | None = None,
+    voice_profile=None,
 ) -> str:
     guidance = _INTENSITY_PROMPT_GUIDANCE.get(intensity, _INTENSITY_PROMPT_GUIDANCE["balanced"])
-    voice_block = _build_voice_block(voice_sample)
+    voice_block = _build_voice_block(voice_sample, profile=voice_profile)
     return f"""Humanize this markdown so it reads like a careful human wrote it.
 
 {guidance}
@@ -1040,8 +1052,14 @@ def humanize_llm(
     *,
     intensity: Intensity = "balanced",
     voice_sample: str | None = None,
+    voice_profile=None,
 ) -> str:
-    prompt = _build_humanize_prompt(text, intensity=intensity, voice_sample=voice_sample)
+    prompt = _build_humanize_prompt(
+        text,
+        intensity=intensity,
+        voice_sample=voice_sample,
+        voice_profile=voice_profile,
+    )
     result = _call_anthropic_sdk(prompt) or _call_claude_cli(prompt)
     if result is None:
         raise RuntimeError(
@@ -1113,6 +1131,7 @@ def humanize_file_ex(
     structural: bool | None = None,
     soul: bool | None = None,
     voice_sample: str | None = None,
+    voice_profile=None,
 ) -> HumanizeOutcome:
     """Rich entry point. Returns the full outcome (humanized text, report,
     validation) regardless of whether we actually wrote to disk. The CLI uses
@@ -1173,9 +1192,11 @@ def humanize_file_ex(
     try:
         # Only pass voice_sample when set so legacy test mocks that don't
         # accept the kwarg continue to work.
-        llm_kwargs = {"intensity": intensity}
+        llm_kwargs: dict = {"intensity": intensity}
         if voice_sample is not None:
             llm_kwargs["voice_sample"] = voice_sample
+        if voice_profile is not None:
+            llm_kwargs["voice_profile"] = voice_profile
         humanized = humanize_llm(original_text, **llm_kwargs)
     except RuntimeError as exc:
         if backup and write:
