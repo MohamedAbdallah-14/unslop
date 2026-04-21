@@ -11,6 +11,18 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.5.0] — 2026-04-21
+
+Humanizer overhaul. Nine-phase plan from the "best open source humanizer"
+goal shipped. Headline: **100% blind LLM-judge humanness win rate** on a
+7-fixture benchmark (Claude Sonnet 4.5 compares unslop rewrite vs original,
+no side metadata). AI-ism reduction at balanced is 89.1% (was 88.0%).
+
+Honest note on detector resistance: deterministic surface rewriting moves
+TMR detector scores by <0.5 pp across all tested fixtures. unslop is a
+polish tool, not a detector-defeat tool. Cross-model paraphrase remains the
+only strong lever and must be executed by the user. See README.
+
 ### Added
 
 - **Phase 1 structural rewriter** (`unslop/scripts/structural.py`). Shape-aware

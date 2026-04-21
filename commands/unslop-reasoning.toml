@@ -1,0 +1,7 @@
+description = "Strip AI-slop reasoning patterns from a chain-of-thought / extended-thinking trace."
+prompt = """Read `skills/unslop-reasoning/SKILL.md` and apply it to the reasoning trace the user pastes.
+
+Identify which of the six patterns appear (restating the question, over-hedging, over-decomposing, infinite-loop rationalization, performative exhaustiveness, unmotivated confidence-then-retraction). Rewrite each marked section as a single sentence that commits to a direction. Preserve every concrete detail (file names, line numbers, errors, numbers). This applies to reasoning, not final answers.
+
+If the user has not pasted a trace yet, ask them to paste one.
+"""
