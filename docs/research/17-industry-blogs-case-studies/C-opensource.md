@@ -2,7 +2,9 @@
 
 **Research value: high** — The OSS humanization landscape is large, fragmented, and mostly outside the flagship vendor cookbooks; real implementation patterns live in a long tail of skill repos, paraphraser research code, and stylometry projects rather than in LangChain/LlamaIndex/OpenAI proper.
 
-Scope: 14 notable repos/notebooks that ship either (a) runnable humanization/style-transfer code or (b) reusable prompt/skill assets directly applicable to humanizing LLM output. Each entry uses the same fields so you can triage fast.
+**Last updated:** April 2026. Repos 1–14 are established as of pre-April 2025. The Additional supporting assets and Gaps sections have been updated to reflect 2025–2026 changes, including the proliferation of detector-bypass repos, the GPT-5 notebook shift, and new Anthropic tooling.
+
+Scope: 14 core repos/notebooks plus new additions, covering (a) runnable humanization/style-transfer code or (b) reusable prompt/skill assets directly applicable to humanizing LLM output. Each entry uses the same fields so you can triage fast.
 
 ---
 
@@ -22,13 +24,13 @@ Scope: 14 notable repos/notebooks that ship either (a) runnable humanization/sty
 - **Humanization relevance:** Closest official OpenAI treatment. Frames "personality" as an operational lever (consistency, drift reduction, brand alignment), not just aesthetic polish. Ships named personalities (Professional, etc.) as reusable system prompts.
 - **Mechanism:** System-prompt-only; explicit note that personalities must not override task output formats.
 - **Strength:** Clean mental model of persona-as-config.
-- **Gap:** Examples skew corporate; no stylometric validation, no adversarial test against detectors.
+- **Gap:** Examples skew corporate; no stylometric validation, no adversarial test against detectors. Updated to GPT-5 (August 2025) — notebooks now reference `reasoning_effort` as a persona-shaping dial in addition to system prompt.
 
 ### 3. `openai/openai-cookbook` — `examples/gpt-5/gpt-5-1_prompting_guide.ipynb`
 - **URL:** https://github.com/openai/openai-cookbook/blob/main/examples/gpt-5/gpt-5-1_prompting_guide.ipynb
 - **Type:** Vendor cookbook notebook
 - **Humanization relevance:** Provides the generic prompt-engineering scaffolding humanization builders build on: instruction placement (top+bottom), verbosity control, avoidance of acknowledgment filler, and `reasoning_effort` tuning.
-- **Strength:** Ground truth on how GPT-5/5.1 actually follows style instructions.
+- **Strength:** Ground truth on how GPT-5/5.1 actually follows style instructions. As of 2025, GPT-5 itself is explicitly less sycophantic than GPT-4o — the model is now a configurable humanization substrate in a way earlier models were not.
 - **Gap:** Generic; humanization is left as an exercise.
 
 ### 4. `langchain-ai/langsmith-cookbook` — `optimization/assisted-prompt-bootstrapping/assisted-prompt-engineering.ipynb`
@@ -116,7 +118,14 @@ Scope: 14 notable repos/notebooks that ship either (a) runnable humanization/sty
 - **Type:** Research code (EMNLP 2025)
 - **Humanization relevance:** Multi-round paraphrasing framework using fine-tuned models; positioned as a stronger successor to DIPPER against modern detectors while preserving semantics.
 - **Strength:** Most recent research baseline (late 2025).
-- **Gap:** Brand-new, ~3 stars, no community adoption yet.
+- **Gap:** As of early 2026, still low community adoption; has not yet been adopted in practitioner workflows as tracked by E-practical posts.
+
+### 2025–2026 notable additions to the OSS landscape
+
+- **`blader/humanizer`** (Claude Code skill, 2025) — Removes signs of AI-generated writing based on Wikipedia's "Signs of AI writing" guide, informed by observations of thousands of instances. Includes an audit pass and a second rewrite to catch lingering patterns. Represents the growing Claude Code skill niche that sidesteps the notebook format entirely.
+- **`OrbitWebTools/Humanize-AI`** (2025) — Browser-based FOSS humanizer targeting Turnitin, ZeroGPT, and Originality.ai. Notable for being fully client-side with no login; illustrates the commoditization floor of browser-side humanizers.
+- **Anthropic Petri (open-sourced 2025)** — Behavioral audit tool for sycophancy across multi-turn conversations. One Claude model (auditor) simulates scenarios; another (judge) grades. Not a humanization tool per se, but the first open-source eval harness explicitly measuring sycophancy as a behavioral property. Closes one of the most-cited gaps in the OSS landscape: absence of shared evaluation infrastructure.
+- **GitHub `text-humanizer` topic** — As of April 2026, 40+ repos are tagged under this GitHub topic, up from fewer than 10 in early 2024. The proliferation reflects the "AI slop" cultural moment (Merriam-Webster Word of the Year 2025); most are low-quality synonym-swap tools, but the signal is that developer interest in the category is mainstream.
 
 ### Additional supporting assets (not counted in the 14 but relevant)
 
@@ -147,13 +156,14 @@ Scope: 14 notable repos/notebooks that ship either (a) runnable humanization/sty
 
 ## Gaps
 
-1. **No official LangChain or LlamaIndex humanization cookbook.** LangSmith/LangChain have the *optimization loop* (4) and the *fine-tune path* (5), but no end-to-end humanization example. LlamaIndex has nothing beyond `Refine`/`TreeSummarize` which aren't humanization tools.
-2. **No shared eval harness.** Every repo claims improvement; almost none ship reproducible before/after scores against the same detector suite on the same corpus. (13)'s evade.py + a current detector is the closest anyone gets.
-3. **Voice-agent humanization is underserved.** Only (7) meaningfully addresses SSML disfluencies / speech-specific humanization. The rest are all text.
-4. **Statistical-fingerprint tooling is ad-hoc.** Perplexity/burstiness/entropy measurement is done inline in each repo; no shared library for "score these three stats and diff against a corpus."
-5. **Brand voice profiles have no interchange format.** Brand-voice JSON schemas exist in 3+ repos but none are compatible; each skill re-invents the fields.
-6. **Rule-based (non-LLM) humanizers are mostly toy.** `ZAYUVALYA` and `TextHumanize` represent the floor — synonym substitution alone doesn't defeat modern detectors and doesn't read well either. Worth knowing so you don't rebuild them.
-7. **Detector drift isn't tracked anywhere.** DIPPER's 2023 numbers against DetectGPT are still cited as if current; detectors have shifted substantially since. `HJJWorks/TempParaphraser` (2025) is the only repo explicitly framed around "detectors moved, so we re-did the experiments."
+1. **No official LangChain or LlamaIndex humanization cookbook.** LangSmith/LangChain have the *optimization loop* (4) and the *fine-tune path* (5), but no end-to-end humanization example. LlamaIndex has nothing beyond `Refine`/`TreeSummarize` which aren't humanization tools. Status as of April 2026: unchanged.
+2. **Eval harness gap is partially addressed.** Anthropic's Petri (open-sourced 2025) provides sycophancy eval across multi-turn conversations. But no shared before/after humanization benchmark corpus exists. (13)'s evade.py + a current detector remains the closest community approximation.
+3. **Voice-agent humanization is still underserved in OSS.** Only (7) (`humanizer-x`) meaningfully addresses SSML disfluencies. Commercial voice humanization has matured (Fin Voice, Sierra), but OSS tooling for voice hasn't followed.
+4. **Statistical-fingerprint tooling is ad-hoc.** Perplexity/burstiness/entropy measurement is done inline in each repo; no shared library for "score these three stats and diff against a corpus." Status: unchanged.
+5. **Brand voice profiles have no interchange format.** Brand-voice JSON schemas exist in 3+ repos but none are compatible; each skill re-invents the fields. Status: unchanged.
+6. **Rule-based (non-LLM) humanizers are mostly toy** and have proliferated. The `text-humanizer` GitHub topic now has 40+ repos as of April 2026, most of which are synonym-swap floor implementations. The signal-to-noise ratio in the topic has fallen substantially since 2024.
+7. **Detector drift is partially tracked by TempParaphraser; DIPPER numbers still widely cited.** DIPPER's 2023 numbers against DetectGPT are still cited as if current in practitioner posts (see E-practical). GPTZero, Originality.ai, and Turnitin all updated substantially through 2025. No public tracker maps how humanized corpora score over time as detectors update. TempParaphraser (EMNLP 2025) benchmarks against updated detectors but hasn't been replicated independently.
+8. **The bypass-via-invisible-characters class (Concealy, unicode/homoglyph substitution) is risky and underexamined.** Several 2025 tools substitute visually-identical but machine-different characters to fool detectors. GPTZero confirmed patching one such bypass within days of discovery in 2025. No OSS repo tracks this class over time or measures how quickly counter-measures ship.
 
 ## Cross-domain analogies worth noting
 
@@ -189,3 +199,8 @@ Scope: 14 notable repos/notebooks that ship either (a) runnable humanization/sty
 - https://github.com/ADEMOLA200/Humanize-AI — T5-based humanization service.
 - https://github.com/ZAYUVALYA/AI-Text-Humanizer — Rule-based client-side humanizer (baseline floor).
 - https://github.com/ksanyok/TextHumanize — Multi-language rule-based humanizer (baseline floor).
+- https://github.com/blader/humanizer — Claude Code skill removing AI-writing signs per Wikipedia guide (2025).
+- https://github.com/OrbitWebTools/Humanize-AI — Browser-based FOSS humanizer targeting Turnitin/ZeroGPT/Originality (2025).
+- https://github.com/topics/text-humanizer — GitHub topic: 40+ repos as of April 2026.
+- https://www.anthropic.com/research/towards-understanding-sycophancy-in-language-models — Anthropic sycophancy research underlying Petri tool.
+- https://gptzero.me/news/gptzero-by-passers/ — GPTZero's greylisting of bypass methods; confirms days-to-patch cadence.

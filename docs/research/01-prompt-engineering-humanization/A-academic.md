@@ -178,6 +178,42 @@
 - **Practical takeaways**: Early precedent for measuring "naturalness" that still underlies today's HumT-style metrics.
 - **Summary**: The historical reference for automated naturalness evaluation. Useful for framing HumT (Cheng et al. 2025) as part of a lineage rather than a novel construct.
 
+### 19. MASH: Evading Black-Box AI-Generated Text Detectors via Style Humanization
+- **URL**: https://arxiv.org/abs/2601.08564
+- **Authors / Org**: Yongtong Gu, Songze Li, Xia Hu
+- **Year / Venue**: arXiv preprint, January 2026
+- **Core claim**: **Multi-stage Alignment for Style Humanization (MASH)** — a framework that sequentially applies style-injection supervised fine-tuning, direct preference optimization (DPO), and inference-time refinement — shapes AI-generated text distributions to resemble human writing, achieving an average Attack Success Rate of **92%** across 6 datasets and 5 detectors, surpassing the strongest prior baselines by an average of 24%.
+- **Techniques mentioned**: Style-injection SFT; DPO for preference alignment; inference-time refinement; black-box detector evasion without white-box assumptions.
+- **Practical takeaways**: Moves beyond prompt-only humanization into a fine-tuning + preference-learning pipeline; demonstrates that training-time humanization now eclipses prompt-only approaches in both evasion rate and linguistic quality. The framework operates under practical black-box constraints, unlike DIPPER and CoPA which assume logit access.
+- **Summary**: MASH is the first major 2026 academic humanizer framework to combine SFT + DPO + inference-time steps into a single pipeline. Its 92% ASR across diverse detectors sets a new benchmark ceiling and represents the leading-edge attack as of Q1 2026.
+
+### 20. HumanLLM: Benchmarking and Improving LLM Anthropomorphism via Human Cognitive Patterns
+- **URL**: https://arxiv.org/abs/2601.10198
+- **Authors / Org**: Multi-institution (China)
+- **Year / Venue**: arXiv preprint, January 2026
+- **Core claim**: Frames LLM anthropomorphism as a function of modeled **psychological patterns** (244 patterns, 11,359 scenarios, grounded in 12,000+ academic papers covering 100 personality traits and 144 social-cognitive patterns). HumanLLM-8B outperforms Qwen3-32B on multi-pattern dynamics, showing that authentic anthropomorphism requires cognitive modeling — simulating not just surface behaviors but the psychological processes that generate them.
+- **Techniques mentioned**: Cognitive genome dataset construction from real-world Reddit/Twitter/Blogger/Amazon logs; dual-level pattern + scenario checklists; fine-tuning for cognitive pattern simulation.
+- **Practical takeaways**: Shifts the humanization frame from vocabulary-level bans to cognitive-process modeling. Suggests that the next frontier in persona and voice humanization is simulating the *reasoning patterns* of a person, not just their word choices.
+- **Summary**: Directly relevant to persona-based humanization research. Provides the first large-scale benchmark for evaluating how well LLMs anthropomorphize at a cognitive level rather than surface stylistic level.
+
+### 21. Humanizing LLMs: A Survey of Psychological Measurements with Tools, Datasets, and Human-Agent Applications
+- **URL**: https://arxiv.org/abs/2505.00049
+- **Authors / Org**: Wenhan Dong et al. (13 co-authors, multi-institution)
+- **Year / Venue**: arXiv preprint, April 2025
+- **Core claim**: Systematic survey covering six dimensions of applying psychological theory to LLMs: (1) assessment tools, (2) LLM-specific datasets, (3) evaluation metrics (consistency and stability), (4) empirical findings, (5) personality simulation methods, and (6) LLM-based behavior simulation. Finds significant variability in personality patterns across tasks even under consistent prompting schemes.
+- **Techniques mentioned**: Big Five personality scoring; theory of mind assessments; emotional intelligence benchmarks; persona-prompting stability analysis.
+- **Practical takeaways**: No single prompting scheme reliably produces stable personality traits across tasks — relevant to any product team relying on persona prompts for voice consistency. The survey identifies datasets and tools that can be repurposed for humanization evals.
+- **Summary**: The most comprehensive 2025 academic review of "humanizing" LLMs from a psychological rather than linguistic angle. Complements HumT/DumT (Cheng et al.) by grounding humanness in psychological theory rather than token probability distributions.
+
+### 22. HumanLLM: Towards Personalized Understanding and Simulation of Human Nature
+- **URL**: https://arxiv.org/abs/2601.15793
+- **Authors / Org**: Multi-institution
+- **Year / Venue**: arXiv preprint, January 2026
+- **Core claim**: A foundation model trained on the **Cognitive Genome Dataset** — over 5.5 million user logs from Reddit, Twitter, Blogger, and Amazon — to model individual writing styles, preferences, and behavioral patterns. Demonstrates superior performance at predicting user actions, mimicking writing styles, and generating authentic user profiles compared to prompted base models.
+- **Techniques mentioned**: Large-scale user-log corpus curation; personalized understanding via behavioral modeling; writing-style imitation via learned user profiles.
+- **Practical takeaways**: Points toward a future where voice calibration is not a prompt trick but a trained capability: a model that has observed your writing at scale can simulate your style with fidelity that few-shot cannot match.
+- **Summary**: Represents the frontier of personalized humanization — where "write like me" transitions from prompt engineering to a learned model capability. Relevant to practitioners trying to exceed the ceiling documented in Wang et al. 2025.
+
 ---
 
 ## Key Techniques / Patterns
@@ -231,11 +267,14 @@ The academic literature converges on a small set of reusable humanization patter
 ## Emerging Trends
 
 - **From single-prompt style to measurement-guided prompt optimization.** HumT/DumT, formulaicness (INLG 2025), and LLM-as-judge naturalness scoring (arXiv 2310.05657) are increasingly used as optimizable targets. Promptomatix (arXiv 2507.14241) exemplifies automatic prompt optimization reaching humanization tasks.
-- **Anti-anthropomorphism backlash.** HumT/DumT and a growing CHI/CSCW literature (e.g., LLM Whisperer, CHI 2025) argue that more-human-like LLMs cause overreliance, deception, and gendered perception. Expect 2026+ academic work to focus on *controlled* humanization — human-like enough to be usable, but disclosing AI identity.
-- **Adversarial paraphrase as de facto humanizer.** DIPPER → RADAR → Adversarial Paraphrasing → CoPA shows an escalating arms race. Training-free, detector-guided paraphrase is now the dominant academic humanizer pattern, eclipsing fine-tuned style-transfer models.
+- **Anti-anthropomorphism backlash.** HumT/DumT and a growing CHI/CSCW literature (e.g., LLM Whisperer, CHI 2025) argue that more-human-like LLMs cause overreliance, deception, and gendered perception. Expect 2026+ academic work to focus on *controlled* humanization — human-like enough to be usable, but disclosing AI identity. The EU AI Act's August 2026 transparency requirements add regulatory urgency to this backlash.
+- **Adversarial paraphrase eclipsed by fine-tuned alignment.** DIPPER (2023) → Adversarial Paraphrasing (2025) → CoPA (2025) → MASH (2026) shows escalation from training-free prompt attacks to full SFT+DPO pipelines. MASH's 92% ASR (January 2026) marks the point where fine-tuned humanization models began outperforming prompt-only approaches on evasion benchmarks.
+- **Detector adaptation forcing arms race upgrade.** Turnitin's February 2026 model update added explicit detection of AI-paraphrased content (not just raw AI text), forcing humanizers up the sophistication stack. Basic prompt-level paraphrase no longer reliably evades institutional detectors.
 - **Fingerprint-aware humanization.** Post-Sun et al. 2025, prompt engineering is shifting from generic "anti-GPTisms" to model-specific fingerprint suppression (lexical distribution flattening, cross-model rewrite chains).
-- **Multi-stage humanization pipelines.** ECN for empathy, Chain-of-Verification for hallucination, SPP for reasoning — the field is converging on *decomposed* humanization prompts rather than monolithic instructions.
+- **Multi-stage humanization pipelines.** ECN for empathy, Chain-of-Verification for hallucination, SPP for reasoning, MASH for detector evasion — the field is converging on *decomposed and chained* humanization prompts rather than monolithic instructions.
+- **Cognitive modeling as the next frontier.** HumanLLM (arXiv 2601.10198, January 2026) and HumanLLM personalization (arXiv 2601.15793) shift the question from "what does this person say?" to "how does this person think?" — simulating cognitive patterns, not just vocabulary.
 - **Authorship-embedding + prompt hybrids.** TinyStyler and subsequent work suggest the next-gen personal-voice humanizer is a small, embedding-conditioned rewriter steered by a natural-language style prompt, rather than a frontier LLM with a long prompt.
+- **Context engineering displacing prompt engineering.** By early 2026, practitioners are framing the relevant skill as *context engineering* — systematically structuring what surrounds the request (retrieved documents, persona schemas, example corpora) rather than crafting individual prompt sentences. Humanization prompts are becoming the smallest component in a larger context pipeline.
 - **HCI / CHI reframing of "humanization" as a design question.** Papers like LLM Whisperer (CHI 2025), HumT/DumT, and Schmidmaier et al. (2025, secondary empathic channel) argue humanization should be evaluated against user tasks and trust dynamics, not just text similarity.
 
 ---
@@ -279,3 +318,7 @@ The academic literature converges on a small set of reusable humanization patter
 22. https://aclanthology.org/2025.inlg-main.21/ — *Incorporating Formulaicness in Naturalness Evaluation* (INLG 2025)
 23. https://arxiv.org/abs/2109.02938 — *Naturalness Evaluation via BERT* (arXiv 2021)
 24. https://dl.acm.org/doi/10.1145/3706598.3714025 — *LLM Whisperer: An Inconspicuous Attack to Bias LLM Responses* (CHI 2025)
+25. https://arxiv.org/abs/2601.08564 — Gu, Li, Hu, *MASH: Evading Black-Box AI-Generated Text Detectors via Style Humanization* (arXiv January 2026)
+26. https://arxiv.org/abs/2601.10198 — *HumanLLM: Benchmarking and Improving LLM Anthropomorphism via Human Cognitive Patterns* (arXiv January 2026)
+27. https://arxiv.org/abs/2505.00049 — Dong et al., *Humanizing LLMs: A Survey of Psychological Measurements with Tools, Datasets, and Human-Agent Applications* (arXiv April 2025)
+28. https://arxiv.org/abs/2601.15793 — *HumanLLM: Towards Personalized Understanding and Simulation of Human Nature* (arXiv January 2026)

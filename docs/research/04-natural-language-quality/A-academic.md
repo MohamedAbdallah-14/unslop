@@ -464,6 +464,64 @@ Five threads matter for a humanization product:
 
 ---
 
+### 17. A Survey on LLM-as-a-Judge
+
+- **Authors:** Various (comprehensive survey, ~90 pages)
+- **Year / Venue:** 2024 preprint → updated through 2025, **arXiv:2411.15594**
+- **URL:** https://arxiv.org/abs/2411.15594
+- **Core claim:** LLM-as-a-judge is now the dominant automatic evaluation paradigm for NLG, but persistent biases — position (~40% GPT-4 inconsistency when A/B order is flipped), verbosity (~15% inflation for longer responses), self-enhancement (5-7% boost for self-generated text), and fabricated-citation susceptibility — make it unreliable without mitigation.
+- **Techniques:** Systematic taxonomy of 12 bias types (CALM framework); strategies for mitigation including calibration, chain-of-thought reasoning, reference-anchored scoring.
+- **Takeaways for humanization:**
+  - EQ-Bench Creative Writing uses Claude-judge, which is itself biased toward longer, more verbose text. Scores inflated ~15% by length need adjustment.
+  - Self-preference bias means Claude judging Claude output is systematically inflated; the EQ-Bench upgrade to Claude Sonnet 4.6 as judge (announced 2025) does not eliminate this.
+  - "LLM assigns significantly higher evaluations to outputs with lower perplexity than human evaluators" — directly relevant to any humanness metric built on LLM-judge.
+- **Summary:** The most complete 2025 survey of LLM-as-judge reliability, covering over 100 judge models and establishing that even frontier models carry systematic biases large enough to reverse apparent quality improvements. Position and verbosity biases alone can change benchmark rankings.
+- **Key quote:** *"Biases (e.g., position, verbosity) and hallucinations persist; even advanced models like GPT-4V display these challenges."*
+
+---
+
+### 18. Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge (CALM)
+
+- **Authors:** Various (CALM Framework paper)
+- **Year / Venue:** 2024 preprint → ICLR 2025 (arXiv:2410.02736)
+- **URL:** https://arxiv.org/abs/2410.02736
+- **Core claim:** 12 named bias types (position, verbosity, self-enhancement, sycophancy, bandwagon, authority, etc.) can be systematically quantified and partially mitigated. Multilingual evaluation is particularly brittle: state-of-the-art judges average Fleiss' Kappa ≈ 0.3 across languages, much worse in low-resource languages.
+- **Takeaways for humanization:**
+  - Any LLM-judge-based humanness eval (EQ-Bench, custom rubrics) inherits all 12 biases unless explicitly mitigated.
+  - Multilingual humanization evals are essentially untrustworthy with current judge models.
+- **Summary:** Establishes the most comprehensive bias taxonomy for LLM-judge evaluation and provides reproducible measurement methodology. The multilingual reliability finding is especially relevant for non-English humanization targets.
+- **Key quote:** *"State-of-the-art judges average Fleiss' Kappa ≈ 0.3 and much poorer performance in low-resource languages."*
+
+---
+
+### 19. LLM-based NLG Evaluation: Current Status and Challenges
+
+- **Authors:** Gao, Hu, Yin, Ruan, Pu, Wan
+- **Year / Venue:** 2025, **Computational Linguistics 51(2):661** (MIT Press)
+- **URL:** https://direct.mit.edu/coli/article/51/2/661/128807/LLM-based-NLG-Evaluation-Current-Status-and
+- **Core claim:** LLM-based evaluation has superseded BLEU/ROUGE as the dominant paradigm for NLG quality assessment. Four approaches now coexist: (a) LLM-derived metrics, (b) prompting LLMs, (c) fine-tuning LLMs as evaluators, and (d) human–LLM collaborative evaluation. Category (d) achieves the strongest results.
+- **Techniques:** Systematic survey of ~200 papers; taxonomy of scoring protocols (continuous, Likert, pairwise); human–LLM checklist collaboration.
+- **Takeaways for humanization:**
+  - Human–LLM collaborative eval (human constructs rubric, LLM scores at scale) is now the best practice; single-model auto-eval is insufficient for a humanness claim.
+  - BLEU and ROUGE are "increasingly ceremonial" — confirmed by this 2025 authoritative survey.
+- **Summary:** The peer-reviewed 2025 definitive survey of LLM-as-judge for NLG. Establishes that reference-free LLM evaluation now dominates but requires human-anchored rubrics and bias mitigation to be reliable.
+- **Key quote:** *"Human–LLM collaborative evaluation… results in the strongest performance."*
+
+---
+
+### 20. Order in the Evaluation Court: A Critical Analysis of NLG Evaluation Trends (2025)
+
+- **Authors:** Various
+- **Year / Venue:** 2025 preprint (arXiv:2601.07648)
+- **URL:** https://arxiv.org/html/2601.07648v1
+- **Core claim:** A meta-analysis of evaluation practices in NLG papers from 2015 to 2025 shows BLEU/ROUGE adoption declining sharply while LLM-as-judge and human eval are ascending. However, reproducibility remains poor: most LLM-judge setups are not standardized, making cross-paper comparisons unreliable.
+- **Takeaways for humanization:**
+  - Reinforces that any humanness claim must specify judge model, prompt template, and bias-mitigation strategy to be reproducible.
+  - "2025 best practice = LLM-judge + human calibration anchor" — not just raw LLM score.
+- **Summary:** Documents the decade-scale shift away from reference-based metrics toward LLM-judge, while flagging that the shift has introduced new reproducibility problems that are not yet solved.
+
+---
+
 ## Key Techniques / Patterns
 
 | Technique | Where it lives | Why it matters for humanization |
@@ -483,6 +541,8 @@ Five threads matter for a humanization product:
 | **Probability-curvature detection** | Adversarial (Mitchell 2023) | Humanized text must escape the LM's log-prob ridge. |
 | **Multi-model probability features** | Adversarial (Verma 2024) | Humanized text must also confuse *proxy* LMs, not just the source. |
 | **Detector-guided paraphrase** | Adversarial humanization (Cheng 2025) | SOTA attack; the baseline any humanizer should match or beat. |
+| **LLM-as-judge bias mitigation** | Evaluation meta (CALM 2025, Gao et al. 2025) | Any humanness claim using LLM-judge must account for position, verbosity, and self-preference biases. |
+| **Human–LLM collaborative evaluation** | Evaluation methodology (Gao et al. 2025) | Human-constructed rubric + LLM scoring = current best practice for NLG quality assessment. |
 
 ## Notable Quotes
 
@@ -540,6 +600,9 @@ Five threads matter for a humanization product:
    search, min-p, η-sampling, adversarial paraphrasing — all *inference-time*
    methods that require zero retraining. Strong signal that decoding /
    paraphrase stacks can reach SOTA without custom model training.
+7. **LLM-as-judge is the new evaluation default — with known bias budget.** BLEU/ROUGE are now ceremonial in NLG papers. LLM-judge dominates but carries quantified, reproducible biases: ~40% GPT-4 position inconsistency, ~15% verbosity inflation, 5-7% self-enhancement. The CALM framework (2025) and the Gao et al. survey (Computational Linguistics, 2025) establish this bias budget as prior art any humanization eval must account for. (A, new)
+8. **Antislop accepted at ICLR 2026.** Paech et al.'s framework was accepted as a conference paper at ICLR 2026 (poster #10008156), upgrading its status from arXiv preprint to peer-reviewed venue. The FTPO fine-tuning method now shows 90% slop suppression across 8,000+ patterns while maintaining or improving GSM8K, MMLU, and creative writing benchmarks. A companion `auto-antislop` repo automates the profiling pipeline. (A, C)
+9. **EU AI Act watermarking obligations land August 2026.** Article 50 of the EU AI Act (effective August 2026) requires GPAI providers to mark all AI-generated text and implement user-facing detectors. The December 2025 first draft Code of Practice recommends a multilayered approach (metadata + watermark + fingerprinting) and explicitly prohibits ToS-level removal of watermarks. This makes the watermark vs. humanization Pareto frontier a compliance question, not just a research question. (A, B, D)
 
 ## Open Questions / Gaps
 
@@ -565,10 +628,9 @@ Five threads matter for a humanization product:
   implications of successful humanization (disinformation, ghost-authored
   academic work, assignment fraud). Unslop should expect this to become a
   required section in top-venue submissions within 1–2 years.
-- **Interaction with watermarking.** Kirchenbauer-style watermarks and
-  humanization are natural adversaries; the trade-off curve between
-  watermark robustness and humanization strength has not been systematically
-  mapped.
+- **Watermark vs. humanization is now a compliance question.** The EU AI Act Article 50 (effective August 2026) mandates machine-readable marking of all AI-generated text. The December 2025 first draft Code of Practice requires multilayered approaches (metadata + watermark + fingerprinting) and prohibits ToS-level removal. The academic trade-off curve between watermark robustness and humanization strength has not been mapped, but the regulatory deadline makes this urgent.
+- **LLM-judge bias is under-addressed in humanization evals.** EQ-Bench, custom rubrics, and detector-evasion claims all rely on LLM judges carrying quantified verbosity and position biases. The CALM framework (2025) provides tools to measure these; no humanization product has yet applied them systematically to its own evaluation pipeline.
+- **2025-class model perplexity narrows the detection gap.** Top 2025-2026 models achieve perplexity as low as 5-10, significantly reducing the gap between AI and human text on the metric classical detectors rely on. Whether burstiness holds as a reliable signal at this perplexity level is under-studied.
 
 ## References
 
@@ -618,3 +680,11 @@ Five threads matter for a humanization product:
     https://arxiv.org/abs/2506.07001
 16. *Make Every Token Count: A Systematic Survey on Decoding Methods for
     Foundation Models* (2024). arXiv:2410.06097. https://arxiv.org/abs/2410.06097
+17. Various. (2025). *A Survey on LLM-as-a-Judge.* arXiv:2411.15594.
+    https://arxiv.org/abs/2411.15594
+18. Various. (2025). *Justice or Prejudice? Quantifying Biases in LLM-as-a-Judge (CALM).* ICLR 2025. arXiv:2410.02736.
+    https://arxiv.org/abs/2410.02736
+19. Gao, et al. (2025). *LLM-based NLG Evaluation: Current Status and Challenges.* Computational Linguistics 51(2):661.
+    https://direct.mit.edu/coli/article/51/2/661/128807/LLM-based-NLG-Evaluation-Current-Status-and
+20. Various. (2025). *Order in the Evaluation Court: A Critical Analysis of NLG Evaluation Trends.* arXiv:2601.07648.
+    https://arxiv.org/html/2601.07648v1

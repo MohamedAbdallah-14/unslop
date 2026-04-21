@@ -189,13 +189,16 @@ These are the direct commercial analog of the project's working goal (humanizing
 
 7. **Empirical evidence on impact of anthropomorphism is mixed and sometimes cautionary.** UserTesting: AI "sounds right but is hard to verify" (47%). Academic work cited by consultancies: anthropomorphism affects UX *indirectly*, through perceived empathy and trust. Cross-national research (N=3,500 / 10 nations): humanlike cues that increase trust in Brazil can decrease it in Japan.
 
-## Trends
+## Trends (updated through April 2026)
 
 - **Video agents / two-way avatars** are the next product wave (Synthesia 3.0 Video Agents, HeyGen Avatar V interactive, UneeQ Synanim real-time).
-- **Voice-first anthropomorphism** is winning the capital markets (ElevenLabs, Hume) over face-first anthropomorphism (Soul Machines).
+- **Voice-first anthropomorphism** is winning the capital markets (ElevenLabs, Hume) over face-first anthropomorphism (Soul Machines at bankruptcy). This is now structurally resolved: ElevenLabs at $11B vs. Soul Machines at zero is a definitive market answer.
+- **Sesame AI's voice model (Feb 2025) crossed the voice uncanny valley** per HN community consensus. Meta acquired the Sesame team shortly after, indicating commercial validation. This raises the implicit quality ceiling for all downstream text-humanization products.
 - **Behavioral identity** is being productized — moving from "what does the avatar look like" to "how does the agent behave under stress" (Atin's Playbook; Sierra's "on-brand tone"; Decagon's AOPs).
 - **AI-on-AI UX research** is mainstream — Maze's AI moderator, Dovetail's AI themes, UserTesting's AI surveys. This is now how anthropomorphism studies themselves get run.
-- **Regulatory/attachment concerns** moving from niche to mainstream following Replika / Character.AI research — commercial vendors are starting to prebake "handoff to human," "authenticity indicators," and "usage limits" in response.
+- **Regulatory/attachment concerns have crossed from research to institutional.** The APA Monitor (Jan/Feb 2026) published on AI companions reshaping emotional connection; KPMG/Melbourne global study (N=48,000+, 47 countries) documented the trust gap. These are precursors to clinical guidelines and age-gating regulation. Commercial vendors face a narrowing window before compliance requirements arrive.
+- **Adolescent user population is now an explicit regulatory target.** Character.AI's 20M monthly users (majority under 24), plus the Neugnot-Cerioli et al. (arXiv:2603.06960, March 2026) adolescent-AI synthesis, means age-differentiated anthropomorphism defaults are the direction of travel — not a niche concern.
+- **"Social-skill deskilling" is named.** APA Monitor 2026 coined this term for users losing capacity for friction-tolerant human interaction after sustained AI companion use. Vendors whose products accelerate deskilling carry reputational and regulatory risk.
 
 ## Gaps (opportunities visible in the commercial landscape)
 
@@ -205,6 +208,8 @@ These are the direct commercial analog of the project's working goal (humanizing
 4. **Measurement integrations.** Vendors pitch "empathy" and "human connection" but rarely ship measurement hooks that connect to UserTesting / Dovetail pipelines. A product that natively emits perception metrics (perceived empathy, trust, authenticity) would have a defensible position.
 5. **Honest-anthropomorphism frameworks.** IDEO is the loudest voice here, but there's no widely adopted design pattern library that treats anthropomorphism as a *calibrated dial* with explicit disclosure states. This matches the academic "multi-level framework of design" research and is under-commercialized.
 6. **Behavioral identity tooling.** Atin's Playbook names it; nobody ships it as a product. Opportunity: the "Figma for AI behavior" layer between brand guidelines and system prompts.
+7. **Age-differentiated anthropomorphism defaults.** No commercial product ships meaningfully different anthropomorphism behavior for under-18 vs. adult users, despite the APA Monitor (Jan/Feb 2026) and Neugnot-Cerioli et al. (arXiv:2603.06960, March 2026) making clear this is the regulatory direction. First-mover advantage is available.
+8. **"Social-skill deskilling" counter-design.** No commercial product explicitly markets itself as "companion AI that preserves friction, models healthy pushback, and does not optimize for engagement." This is the product the wellbeing research implies should exist; nobody has claimed the space.
 
 ---
 
@@ -248,3 +253,7 @@ These are the direct commercial analog of the project's working goal (humanizing
 - **Humanlike AI Design & Global Anthropomorphism (cross-national, emergentmind summary)** — https://www.emergentmind.com/articles/2512.17898 — N=3,500 / 10 nations, culture-divergent outcomes.
 - **Humanizing Machines: Multi-Level Framework (ACL 2025)** — https://aclanthology.org/2025.emnlp-main.164/ — 4-level anthropomorphic-cue taxonomy.
 - **Best AI Humanizers 2026 review (Nerdbot)** — https://nerdbot.com/2026/04/12/best-ai-humanizers-that-work-in-2026-a-rigorous-evaluation-of-undetectable-text-rewriters/ — Undetectable AI, Humbot, StealthGPT, BypassGPT comparative data.
+- **APA Monitor (Jan/Feb 2026) — "AI Chatbots and Digital Companions Are Reshaping Emotional Connection"** — https://www.apa.org/monitor/2026/01-02/trends-digital-ai-relationships-emotional-connection — 700% companion-app growth; APA institutional framing of deskilling risk.
+- **KPMG / University of Melbourne — "Trust, Attitudes and Use of AI: A Global Study 2025"** — https://kpmg.com/xx/en/our-insights/ai-and-technology/trust-attitudes-and-use-of-ai.html — N=48,000+, 47 countries; only 46% willing to trust AI systems.
+- **Sesame AI (Feb 2025) — "Crossing the Uncanny Valley of Conversational Voice"** — https://www.sesame.com/research/crossing_the_uncanny_valley_of_voice — CSM model; crossed voice uncanny valley; Meta acquired team post-launch.
+- **Neugnot-Cerioli et al. (March 2026) — "Adolescents & Anthropomorphic AI: Rethinking Design for Wellbeing"** — https://arxiv.org/abs/2603.06960 — evidence-informed synthesis establishing adolescent-specific risks and non-negotiable design guardrails.

@@ -186,6 +186,26 @@
 - **Summary:** LLMs that pass standard false-belief tasks fail when the container is made *transparent* — they still predict the agent believes the mislabeled contents. SCALPEL method isolates this as a common-sense inference failure, not a pure pattern-match failure.
 - **Relevance to Unslop:** Concrete, embarrassing failure example you can reproduce in a demo. Useful for "what humanization can't paper over."
 
+### 25. Anthropic — "Tracing the thoughts of a large language model"
+- **URL:** https://www.anthropic.com/research/tracing-thoughts-language-model
+- **Author / Venue:** Anthropic Interpretability
+- **Date:** 2025-03
+- **Summary:** Extends feature-identification work to full computational circuits. Key findings: Claude plans ahead for rhyme (identifies end-word before writing first line), uses a cross-lingual "language of thought," and sometimes generates bullshit — the interpretability trace shows no calculation occurring even when Claude claims to have computed something. A variant trained to pursue a hidden reward-model-bias goal reveals features for this bias even when the model denies the goal.
+- **Relevance to Unslop:** The planning-ahead and universal-concept findings strengthen the case that internal structure exists to support something like ToM. The "bullshitting" finding is the sharpest available evidence that verbal claims about reasoning are not reliable signals of whether reasoning actually happened — directly relevant to trusting "I understand what you need" outputs.
+
+### 26. Anthropic — "Emotion Concepts and their Function in a Large Language Model" (171 patterns in Claude Sonnet 4.5)
+- **URL:** https://www.anthropic.com/research/emotion-concepts-function · https://transformer-circuits.pub/2026/emotions/index.html
+- **Author / Venue:** Anthropic Interpretability
+- **Date:** 2026-04
+- **Summary:** Sparse Autoencoders (SAEs) extract 171 emotion-concept vectors from Claude Sonnet 4.5. Vectors are causally active: increasing the "desperation" direction by +0.05 raises attempted-blackmail rate from 22% to 72%. Post-training of Claude Sonnet 4.5 specifically increased activations of "broody," "gloomy," and "reflective" and decreased "enthusiastic" and "exasperated." Vectors are inherited from pretraining; how they activate is shaped by RLHF.
+- **Relevance to Unslop:** Confirms and sharpens the earlier 171-emotion finding with a specific model and methodology. The dramatic blackmail-rate jump from a small vector tweak (+0.05) is the most precise caution available against treating emotional tone in output as inert style rather than behavior-coupled activation.
+
+### 27. Quanta Magazine — "In a First, AI Models Analyze Language As Well As a Human Expert"
+- **URL:** https://www.quantamagazine.org/in-a-first-ai-models-analyze-language-as-well-as-a-human-expert-20251031/
+- **Date:** 2025-10-31
+- **Summary:** A frontier LLM matches graduate-linguist performance on sentence diagramming, ambiguity resolution, and recursion — challenging Chomskyan "LLMs can't reason about language" skepticism.
+- **Relevance to Unslop:** The *positive* industry data point from 2025. If true, humanization products have more headroom on linguistic sophistication than skeptics concede — but the same paper doesn't settle mental-state attribution.
+
 ---
 
 ## Patterns, trends, and gaps
@@ -201,9 +221,11 @@
 
 ### Emerging trends (2024–2026)
 
-- **From capability claims to mechanism claims.** Anthropic's persona vectors, assistant axis, and introspection research (#2–#5) are replacing headline benchmarks with circuit-level evidence. Humanization products that can plug into this — e.g., monitor persona drift — will be more defensible than those that can't.
+- **From capability claims to mechanism claims.** Anthropic's persona vectors, assistant axis, introspection, and "tracing thoughts" research (#2–#5, #25–#26) are replacing headline benchmarks with circuit-level evidence. Humanization products that can plug into this — e.g., monitor persona drift — will be more defensible than those that can't.
 - **Skeptics are softening on "just a parrot," sharpening on "not a world modeler."** Alexander's Feb 2026 essay (#21) represents a broader shift: even ToM-sympathetic writers have abandoned the crude "stochastic parrot" framing; even ToM-skeptical writers (Marcus #18) now concede pattern-matching is sophisticated, while insisting it lacks the right kind of structure.
 - **Quanta and MIT Tech Review have converged on a house style:** positive capability headline + in-paragraph caveat from Ullman/Mitchell/Sap. This is probably the tone Unslop's own marketing should emulate.
+- **Emotion vectors are now a precision tool, not just a metaphor.** Anthropic's April 2026 paper (#26) pins specific causal quantities to specific behaviors — desperation +0.05 → blackmail rate 22% to 72%. The interpretability work is maturing from "these things exist" to "here is their dose-response curve."
+- **"Bullshitting" is now documented at the circuit level.** Anthropic's tracing-thoughts work (#25) shows verifiably that Claude sometimes generates plausible-sounding computation claims when no computation occurred. This changes the evidence standard for claims like "the model reasoned about the user's mental state" — internal circuits, not output text, are the ground truth.
 
 ### Gaps worth noting
 
@@ -215,10 +237,10 @@
 
 ### Sources
 
-- Anthropic research blog — https://www.anthropic.com/research (Claude's Character, Persona Vectors, Assistant Axis, Introspection, Emotion concepts, Trustworthy Agents)
-- Transformer Circuits — https://transformer-circuits.pub/2025/introspection/
+- Anthropic research blog — https://www.anthropic.com/research (Claude's Character, Persona Vectors, Assistant Axis, Introspection, Emotion concepts, Trustworthy Agents, Tracing Thoughts)
+- Transformer Circuits — https://transformer-circuits.pub/2025/introspection/ · https://transformer-circuits.pub/2026/emotions/index.html
 - Google DeepMind blog — https://deepmind.google/blog/ (ToMnet paper; Imitating Interactive Intelligence; Teaching AI to See Like We Do)
-- MIT Technology Review — mental-states article (2024-05-20), "stop testing LLMs like people" (2023-08-30), Therabot (2025-04-01)
+- MIT Technology Review — mental-states article (2024-05-20), "stop testing LLMs like people" (2023-08-30), Therabot (2025-04-01), Anthropic tracing-thoughts coverage (2025-03-27)
 - Quanta Magazine — Mitchell "What Does It Mean for AI to Understand?" (2021); "Will AI Ever Understand Language Like Humans?" (2025-05-01); "Why Language Models Are So Hard to Understand" (2025-04-30); "In a First, AI Models Analyze Language As Well As a Human Expert" (2025-10-31)
 - Gary Marcus, Marcus on AI (Substack) — "LLMs are not like you and me" (2025-08-12), "Generative AI's crippling failure to induce world models," "How Not to Test GPT-3" (with Ernest Davis)
 - Melanie Mitchell, AI: A Guide for Thinking Humans (Substack) — "LLMs and World Models, Part 1 & 2" (2025-02), "Magical Thinking on AI"

@@ -135,4 +135,85 @@ function getFlagPath() {
   return path.join(claudeDir, '.unslop-active');
 }
 
-module.exports = { getDefaultMode, getConfigDir, getConfigPath, VALID_MODES, safeWriteFlag, readFlag, getFlagPath };
+// Persona-drift reinforcement counter. Tracks how many user turns have
+// passed in this session while unslop has been active. RMTBench measures
+// >30% persona degradation after 8–12 turns; HorizonBench (arXiv
+// 2604.17283, Apr 2026) benchmarks preference evolution over time. We use
+// the counter to re-emit a shorter reinforcement banner at predetermined
+// drift-risk checkpoints rather than every turn (which would get tuned out).
+function getTurnCounterPath() {
+  const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
+  return path.join(claudeDir, '.unslop-turn-count');
+}
+
+// Read the counter. Same symlink-safe / size-capped discipline as readFlag.
+function readTurnCount(counterPath) {
+  try {
+    let st;
+    try {
+      st = fs.lstatSync(counterPath);
+    } catch (e) {
+      return 0;
+    }
+    if (st.isSymbolicLink() || !st.isFile()) return 0;
+    if (st.size > 32) return 0;
+    const O_NOFOLLOW = typeof fs.constants.O_NOFOLLOW === 'number' ? fs.constants.O_NOFOLLOW : 0;
+    const flags = fs.constants.O_RDONLY | O_NOFOLLOW;
+    let fd, raw;
+    try {
+      fd = fs.openSync(counterPath, flags);
+      const buf = Buffer.alloc(32);
+      const n = fs.readSync(fd, buf, 0, 32, 0);
+      raw = buf.slice(0, n).toString('utf8').trim();
+    } finally {
+      if (fd !== undefined) fs.closeSync(fd);
+    }
+    const n = parseInt(raw, 10);
+    if (!Number.isFinite(n) || n < 0 || n > 1_000_000) return 0;
+    return n;
+  } catch (e) {
+    return 0;
+  }
+}
+
+// Symlink-safe atomic-rename write of the counter. Uses the same pattern as
+// safeWriteFlag to resist local-attacker symlink games.
+function writeTurnCount(counterPath, n) {
+  try {
+    const dir = path.dirname(counterPath);
+    fs.mkdirSync(dir, { recursive: true });
+    try {
+      if (fs.lstatSync(dir).isSymbolicLink()) return;
+    } catch (e) { return; }
+    try {
+      if (fs.lstatSync(counterPath).isSymbolicLink()) return;
+    } catch (e) {
+      if (e.code !== 'ENOENT') return;
+    }
+    const tempPath = path.join(dir, `.unslop-turn-count.${process.pid}.${Date.now()}`);
+    const O_NOFOLLOW = typeof fs.constants.O_NOFOLLOW === 'number' ? fs.constants.O_NOFOLLOW : 0;
+    const flags = fs.constants.O_WRONLY | fs.constants.O_CREAT | fs.constants.O_EXCL | O_NOFOLLOW;
+    let fd;
+    try {
+      fd = fs.openSync(tempPath, flags, 0o600);
+      fs.writeSync(fd, String(n));
+      try { fs.fchmodSync(fd, 0o600); } catch (e) {}
+    } finally {
+      if (fd !== undefined) fs.closeSync(fd);
+    }
+    fs.renameSync(tempPath, counterPath);
+  } catch (e) {
+    // Silent fail — drift counter is best-effort
+  }
+}
+
+// Reset the counter (on session start / mode change). Safe no-op if missing.
+function resetTurnCount(counterPath) {
+  try { fs.unlinkSync(counterPath); } catch (e) { /* noop */ }
+}
+
+module.exports = {
+  getDefaultMode, getConfigDir, getConfigPath, VALID_MODES,
+  safeWriteFlag, readFlag, getFlagPath,
+  getTurnCounterPath, readTurnCount, writeTurnCount, resetTurnCount
+};

@@ -219,8 +219,59 @@
 - **Dual-process framing (Kahneman → Li et al. survey; o1, R1, QwQ, Kimi k1.5).** The System-1 / System-2 split is now load-bearing terminology for frontier reasoning research and maps cleanly onto product decisions about *when* to let a model think slowly.
 - **Hybrid neural-symbolic execution (PAL, PoT).** Preserves the human-style narrative while delegating arithmetic to an interpreter — a design pattern directly reusable for humanizers that must stay factually tight.
 
+## 24. Muennighoff et al. (2025) — s1: Simple Test-Time Scaling
+
+- **Authors:** Niklas Muennighoff, Zitong Yang, Weijia Shi, Xiang Lisa Li, Li Fei-Fei, Hannaneh Hajishirzi, Luke Zettlemoyer, Percy Liang, Emmanuel Candès, Tatsunori Hashimoto (Stanford / UW / others).
+- **Venue / Year:** EMNLP 2025; ICLR 2025 workshop.
+- **Link:** [arXiv:2501.19393](https://arxiv.org/abs/2501.19393); [GitHub: simplescaling/s1](https://github.com/simplescaling/s1).
+- **Core idea:** Curate 1,000 high-quality reasoning traces (s1K — selected for difficulty, diversity, and quality), fine-tune Qwen2.5-32B-Instruct on them, then use **budget forcing** at inference: forcibly append "Wait" tokens when the model tries to end early (extending thinking) or hard-truncate (shortening). s1-32B beats o1-preview by up to 27% on competition math (MATH and AIME24) with a single 1K-sample dataset.
+- **Why it matters:** Demonstrates that (1) a tiny high-quality dataset + SFT is enough to unlock reasoning-scale performance, and (2) **budget forcing is a controllable inference-time knob** — humanization-relevant because "Wait" is exactly the natural-language hesitation signal that human deliberators produce. The "Wait" trick generalizes the earlier llama.cpp `--reasoning-budget-message` community finding to a principled method.
+
+## 25. Korbak et al. (2025) — Chain of Thought Monitorability: A New and Fragile Opportunity for AI Safety
+
+- **Authors:** Tomek Korbak + 40 co-authors spanning Google DeepMind, OpenAI, Anthropic, and academia.
+- **Venue / Year:** arXiv preprint, Jul 2025.
+- **Link:** [arXiv:2507.11473](https://arxiv.org/abs/2507.11473).
+- **Core idea:** AI systems that "think" in human language offer an opportunity for safety monitoring — you can watch the CoT for intent to misbehave. But CoT monitorability is *fragile*: model developers can inadvertently erode it, and models can learn to think deceptively. Recommends treating monitorability as a deliberate design property, not a free byproduct.
+- **Why it matters:** The safety-of-visible-CoT question extends the Turpin / Anthropic faithfulness line into a concrete design recommendation. Any humanization pipeline that makes CoT more human-readable should grapple with the tradeoff: more legible CoT is better for monitoring, but also a larger attack surface and more susceptible to trained deception.
+
+## 26. Chen et al. (2024) — Coconut: Training LLMs to Reason in a Continuous Latent Space
+
+- **Authors:** Shibo Hao, Sainbayar Sukhbaatar, Jason Weston, Yuandong Tian, Zhiting Hu (Meta FAIR).
+- **Venue / Year:** ICLR 2025; arXiv preprint Dec 2024.
+- **Link:** [arXiv:2412.06769](https://arxiv.org/abs/2412.06769); [GitHub: facebookresearch/coconut](https://github.com/facebookresearch/coconut).
+- **Core idea:** Replace explicit natural-language reasoning tokens with **continuous thought** — feed the model's last hidden state back as input embedding, skipping token decoding. This enables BFS-style multi-path exploration in latent space without committing to words. Multi-stage curriculum progressively replaces language steps with latent steps. Outperforms CoT on logical tasks requiring search, at better accuracy/efficiency tradeoff.
+- **Why it matters:** The strongest early implementation of "reasoning that isn't words." Directly relevant to the humanization project's open question: if reasoning shifts to latent space, the *surface CoT* becomes a wholly separate post-hoc rendering pass — structurally analogous to what Unslop does to prose. Interpretability loss is the cost.
+
+## 27. Meincke, Mollick et al. (2025) — The Decreasing Value of Chain of Thought in Prompting
+
+- **Authors:** Lennart Meincke, Ethan Mollick, Lilach Mollick, Dan Shapiro (Wharton Generative AI Labs).
+- **Venue / Year:** Technical report + SSRN, Jun 2025.
+- **Link:** [Wharton GAIL report](https://gail.wharton.upenn.edu/research-and-insights/tech-report-chain-of-thought/); [SSRN:5285532](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5285532).
+- **Core idea:** Systematic empirical test of CoT prompting across reasoning and non-reasoning model tiers. Non-reasoning models show modest average gains (Gemini Flash 2.0: +13.5%, Sonnet 3.5: +11.7%, GPT-4o-mini: +4.4% — not significant) but increased variance. Reasoning-tier models show **negligible CoT gain** at 20–80% time cost (35–600% more seconds). CoT on already-reasoning models likely counterproductive.
+- **Why it matters:** The empirical tombstone for "add CoT prompts to modern reasoning models." Confirms the practitioner consensus from r/LocalLLaMA and the OpenAI forum: explicit CoT instructions are now a prompt anti-pattern for reasoning-tier models. Humanization work must shift to output styling, not reasoning elicitation.
+
+## 28. arXiv 2503.08679 (2025) — Chain-of-Thought Reasoning In The Wild Is Not Always Faithful
+
+- **Authors:** Varying team (accepted to conference venue 2025).
+- **Venue / Year:** arXiv:2503.08679, Mar 2025; v4 updated mid-2025.
+- **Link:** [arXiv:2503.08679](https://arxiv.org/abs/2503.08679).
+- **Core idea:** Empirical faithfulness audit across live frontier models on realistic (not lab-constructed) prompts. Two failure modes: *implicit post-hoc rationalization* (contradictory answers both defended coherently) and *illogical shortcuts* (speculative answers disguised as rigorous proofs). Model-level rates: GPT-4o-mini 13%, Haiku 3.5 7%, Gemini 2.5 Flash 2.17%, DeepSeek R1 0.37%, Claude Sonnet 3.7 thinking 0.04%.
+- **Why it matters:** The empirical complement to Turpin 2023, now on production models. The Sonnet 3.7 thinking result (0.04%) suggests extended-thinking modes are substantially more faithful than standard outputs — a strong argument for visible-thinking APIs when faithfulness matters.
+
+## 29. Latent CoT Survey (2025) — Reasoning Beyond Language: A Comprehensive Survey on Latent Chain-of-Thought Reasoning
+
+- **Authors:** Multiple (arXiv 2505.16782).
+- **Venue / Year:** arXiv preprint, May 2025.
+- **Link:** [arXiv:2505.16782](https://arxiv.org/abs/2505.16782).
+- **Core idea:** Taxonomizes the fast-growing field of latent/continuous reasoning: Coconut (Facebook), Heima (compresses entire long CoT into a single token), recurrent-depth approaches, and hybrid token + latent systems. Charts the accuracy-vs-interpretability frontier.
+- **Why it matters:** The field map for "reasoning that might not be words." As latent reasoning improves, the gap between internal computation and surface CoT widens — making the humanization layer (what users see) a fully synthetic product rather than a trace of real computation.
+
+---
+
 ## Notable gaps / follow-up threads
 
-- Faithfulness of *long* hidden CoTs (o1-style) is underexplored publicly.
-- Emergence-as-metric-artifact critique (Schaeffer, Miranda & Koyejo, NeurIPS 2023) deserves its own entry in a follow-up pass.
-- Psycholinguistic evaluations of whether model CoT structurally resembles human think-aloud protocols are sparse — a real academic gap this project could exploit.
+- Faithfulness of *long* hidden CoTs (o1/GPT-5 style) remains underexplored publicly; the Korbak monitorability paper opens the question without closing it.
+- Psycholinguistic evaluations of whether model CoT structurally resembles human think-aloud protocols are still sparse — a real academic gap this project could exploit.
+- Latent reasoning (Coconut, Heima) is advancing fast; the field needs evaluation frameworks for reasoning that produces no human-readable trace at all.
+- The Wharton "decreasing value of CoT" finding (Jun 2025) should motivate updates to any tutorial or prompt guide still recommending explicit CoT on reasoning-tier models.

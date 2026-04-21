@@ -4,7 +4,7 @@
 
 **Scope:** curated lists, "best OSS humanizer" roundups, tutorials that build a humanizer end‑to‑end, critical reviews, and meta-coverage of OSS humanizer skills.
 
-**As of:** 2026-04 (all dates approximate from source timestamps; treat market claims >12 months old as stale).
+**As of:** 2026-04 (all dates approximate from source timestamps; treat market claims >12 months old as stale). Key new development since last review: Turnitin launched anti-humanizer detection in August 2025, invalidating all bypass numbers benchmarked against pre-August-2025 Turnitin. Walter Writes surged 517% YoY in search interest in early 2026 before Turnitin's update partially neutralized it. AuraWrite emerged as a top-rated alternative.
 
 ---
 
@@ -28,6 +28,10 @@ Fields: **Title · Source / Author · Date · Type · Subjects covered · Takeaw
 9. **"Best AI Humanizers That Work in 2026: A Rigorous Evaluation"** — *nerdbot.com* · Apr 2026 · *Evaluation-style review* · Undetectable.ai, Deceptioner, StealthWriter, BypassGPT, Humbot; explicitly notes detector-paraphraser arms race. · The most honest commercial roundup; still omits OSS.
 10. **"Clever AI Humanizer Review (2026): Tested & Failed"** — *aixradar.com* · 2026 · *Critical review* · Scores 100% AI on GPTZero despite claims; evidence that synonym-swap humanizers don't move statistical signature. · Useful as a failure case study for any OSS repo relying on lookup tables.
 11. **"Why AI Humanizers Don't Work (And the One Thing That Does)"** — *thehumanizeai.pro blog* · 2026 · *Critical analysis* · 14 tools tested; 12 "did almost nothing"; QuillBot only moved GPTZero 97% → 91%. Only tools that restructure (perplexity/burstiness/token-distribution) move the needle. · Best framing piece for why most OSS humanizers under-deliver.
+12. **"AI Humanizers EXPOSED! Turnitin's 2025 Update Changes Everything"** — *scientificpakistan.com* · Aug 2025 · *Critical analysis* · Turnitin's August 2025 update adds a new detection category: "AI-generated text that was AI-paraphrased." Cheap synonym-swap humanizers now add a second AI signature on top of the original. · The most consequential single event in the commercial humanizer market for 2025; invalidates all pre-August bypass numbers for Turnitin-facing use cases.
+13. **"Walter Writes AI Humanizer Review 2026"** — *thehumanizeai.pro, aurawriteai.com* · 2026 · *Review roundup* · Walter Writes surged 517% YoY in search interest Q1 2026; described as best at structural sentence restructuring. Post-Turnitin-update, now leaves 38% flagged on Turnitin and 45% on Originality.ai — performance gap exposed. · Shows how fast commercial rankings shift around detector updates.
+14. **"10 Best AI Humanizer Tools 2026"** — *aurawriteai.com* · 2026 · *Commercial review* · AuraWrite positions itself as the top alternative to Walter Writes, claiming <5% detection across Turnitin, Originality, GPTZero, Copyleaks, ZeroGPT. Self-reported, unverified. · Signals AuraWrite as a new commercial entrant that did not exist in the 2024 scan.
+15. **"Turnitin launches AI bypasser detection"** — *turnitin.com/press* · Aug 2025 · *Official announcement* · Turnitin explicitly states its model now targets "AI humanizer tools" and trains on known humanizer outputs. · First major institutional platform publicly committing to humanizer-aware detection as a product category. The academic-integrity defender has now matched the attacker's framing.
 
 ### Tutorials / build-your-own
 
@@ -59,6 +63,9 @@ Fields: **Title · Source / Author · Date · Type · Subjects covered · Takeaw
 - **The honest bloggers converge on the same verdict:** synonym-swap humanizers fail; only structural rewriters move detector scores; and bloggers who ship their own tools openly admit "humanization has a ceiling, detection is the real value" (fafa_ai).
 - **Model-family awareness is just emerging.** Claude-specific detection pattern posts are showing up (humanizertech, clawhub); nobody is shipping a truly model-aware humanizer yet.
 - **Listicle SEO is polluting the GitHub Topic pages** — many "humanizer" repos on `github.com/topics/ai-humanizer` are one-page README promos linking to paid SaaS; the repo is the SEO artifact.
+- **Turnitin's August 2025 update is the single biggest market event.** The "does this bypass Turnitin?" question now requires a "before or after August 2025?" qualifier. Commercial tools that built reputations on Turnitin bypass (Walter Writes, QuillBot) saw immediate performance degradation in third-party tests. AuraWrite emerged as the top-ranked alternative in post-update benchmarks. No OSS repo yet publishes post-August-2025 Turnitin numbers.
+- **Walter Writes peaked and partially fell in 2026.** Massive TikTok/YouTube-driven growth (517% YoY search interest) then Turnitin's targeted update reduced its bypass rate from near-universal to 38% flagged. Demonstrates how fast organic growth can be disrupted by a single detector update.
+- **ANTISLOP crossed from practitioner to academic.** The ICLR 2026 paper (arXiv 2510.15061) means inference-time backtracking is now a citable technique — expect blog coverage to follow and for the LocalLLaMA community's inference-layer approach to appear in more mainstream tutorials by mid-2026.
 
 ## 3. Gaps worth exploiting
 
@@ -103,3 +110,8 @@ Fields: **Title · Source / Author · Date · Type · Subjects covered · Takeaw
 - https://github.com/itsjwill/humanizer-x
 - https://github.com/rudra496/StealthHumanizer
 - https://github.com/dannwaneri/voice-humanizer
+- https://www.turnitin.com/press/turnitin-expands-capabilities-amid-rising-threats-posed-by-ai-bypassers — Turnitin anti-humanizer announcement (Aug 2025).
+- https://www.plagiarismtoday.com/2025/08/27/turnitin-launches-anti-ai-humanizer-feature/ — independent coverage of Turnitin update.
+- https://walterwrites.ai/ — Walter Writes pricing and positioning.
+- https://aurawriteai.com/blog/best-ai-humanizer-tools-2026 — 2026 humanizer rankings post-Turnitin-update.
+- https://openreview.net/pdf/6916f45661bf884811be66da937b7467b97a9114.pdf — ANTISLOP ICLR 2026 paper.

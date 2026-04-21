@@ -41,6 +41,12 @@
 - **What it does:** RL-trained paraphraser that uses GPTZero / Originality.ai / WinstonAI scores as the reward signal.
 - **Headline:** 78.6%–96.2% attack success against individual commercial detectors while keeping semantic similarity >0.94. *(Note: paper code not publicly released at time of writing; only the model artifact and paper are open.)*
 
+### 5b. TempParaphraser — `HJJWorks/TempParaphraser`
+- **Paper:** Huang et al., *TempParaphraser: "Heating Up" Text to Evade AI-Text Detection through Paraphrasing*, EMNLP 2025 — [aclanthology.org/2025.emnlp-main.1607](https://aclanthology.org/2025.emnlp-main.1607/)
+- **Repo:** https://github.com/HJJWorks/TempParaphraser
+- **What it does:** Simulates high-temperature sampling by generating multiple normal-temperature paraphrases and selecting the most diverse. Evades curvature-based detectors (which rely on low-entropy regions) without needing access to source model logits.
+- **Headline:** Average 82.5% reduction in detector accuracy while preserving text quality across tested detectors.
+
 ### 6. TH-Bench — `DrenfongWong/TH-Bench`
 - **Paper:** *TH-Bench: Evaluating Evading Attacks via Humanizing AI Text on Machine-Generated Text Detectors*, 2025 — [arXiv 2503.08708](https://arxiv.org/abs/2503.08708)
 - **Repo:** https://github.com/DrenfongWong/TH-Bench (fork of MGTBench-2.0)
@@ -168,6 +174,13 @@
 ### 26. human_detectors — `jenna-russell/human_detectors`
 - Repo bundling *human* detector annotations (expert labels, confidence scores, explanations) alongside machine-detector outputs. Rare dataset: what do humans themselves notice when they correctly flag AI text?
 
+### 27. DivEye — `IBM/diveye`
+- **Paper:** Basani, Chen et al., *Diversity Boosts AI-Generated Text Detection*, arXiv:2509.18880, TMLR 2026 — [arxiv.org/abs/2509.18880](https://arxiv.org/abs/2509.18880)
+- **Repo:** https://github.com/IBM/diveye + HF demo at `pinyuchen/Diveye_AI_text_detector`
+- **What it does:** Surprisal-variance detector. Measures how intra-document unpredictability fluctuates; LLM text has lower rhythmic variance than human text. Zero-shot; no fine-tuning required.
+- **Headline:** Outperforms existing zero-shot detectors by up to 33.2%; improves fine-tuned baselines by up to 18.7% as auxiliary signal; robust to paraphrasing attacks.
+- **Humanizer implication:** a humanizer that explicitly widens its per-sentence surprisal variance will evade DivEye. The repo ships interpretability hooks showing *where* in the text the flag fires — useful for targeted rewriting.
+
 ---
 
 ## Patterns, Trends, and Gaps
@@ -179,19 +192,22 @@
 4. **Detection and humanization share the same infrastructure.** TH-Bench, APT-Eval, M4GT-Bench, and MGTBench2 are forks or extensions of each other. Building on these saves weeks and is now the community default.
 5. **Zero-shot, training-free methods win disproportionately.** Binoculars (zero-shot detector) and Adversarial Paraphrasing (training-free attack) are the two most talked-about 2024–2025 results. Infrastructure cost is a competitive moat.
 
-### Trends (2023 → 2025)
+### Trends (2023 → 2026)
 - Early work (2023): direct paraphrase attacks (DIPPER) and curvature-based detectors (DetectGPT).
 - Mid (2024): adversarially-trained detectors (RADAR), zero-shot contrastive detectors (Binoculars), rewriting-based detectors (Raidar), and feature-search detectors (Ghostbuster).
-- Late (2024–2025): RL-trained humanizers (AuthorMist), detector-guided paraphrasers (Adversarial Paraphrasing), and benchmarks that explicitly measure the *three-way* trade-off between evasion, fluency, and compute (TH-Bench).
-- The "AI-polished" framing (APT-Eval, 2025) is the newest and arguably most product-relevant: users don't want full machine-generated text rewritten — they want their *own* draft lightly edited without being flagged.
+- Late (2024–2025): RL-trained humanizers (AuthorMist, StealthRL), detector-guided paraphrasers (Adversarial Paraphrasing), and benchmarks that explicitly measure the *three-way* trade-off between evasion, fluency, and compute (TH-Bench). TempParaphraser (EMNLP 2025) adds temperature-simulation as a new evasion axis.
+- 2025–2026: surprisal-variance detectors (DivEye, TMLR 2026) and hardness-aware benchmarks (SHIELD, arXiv:2507.15286) shift the goalposts; multi-axis stylistic analysis (Rallapalli et al., 2026) confirms decoding strategy itself is a stylistic signal.
+- The "AI-polished" framing (APT-Eval, 2025) remains the most product-relevant: users don't want full machine-generated text rewritten — they want their *own* draft lightly edited without being flagged.
 
 ### Gaps (opportunity surface for the Unslop project)
 1. **No strong "think like a human" work** — every open-source artifact targets *surface text*. No paper-with-code tackles humanizing the underlying *reasoning trace* or chain-of-thought. This is a genuine whitespace.
 2. **Metrics still measure distributional match, not perceived humanness.** MAUVE and HUSE both operate at distribution/classification level. No widely-adopted open metric measures *subjective humanness* from a lay reader (vs. expert annotators in `human_detectors`).
 3. **No released code for AuthorMist itself** (only the HF model). An open RL-humanizer with detector-API rewards would immediately become a reference implementation.
 4. **Commercial humanizers are ahead of papers.** HumanWrite, Pangram, Originality.ai, Undetectable.AI have product maturity that academic repos do not match. The TH-Bench paper is the first to systematically compare against them, and it finds no dominant attack — there is room for a well-engineered open-source humanizer that wins on the three-axis trade-off.
-5. **Multi-detector ensembles are under-attacked.** Most papers evade one detector at a time. StealthRL (arXiv 2602.08934, cited in AuthorMist results) is the only work explicitly targeting multi-detector ensembles — this is probably the next frontier.
+5. **Multi-detector ensembles are under-attacked.** Most papers evade one detector at a time. StealthRL (arXiv:2602.08934) is the clearest example targeting multi-detector ensembles and confirms transferability — this is now the expected threat model rather than an edge case.
 6. **Human-likeness on non-English text is thin.** M4 covers multilingual detection, but humanization work is overwhelmingly English-first; cross-lingual humanization is essentially unstudied in open source.
+7. **No open humanizer targets surprisal-variance.** DivEye (`IBM/diveye`, TMLR 2026) identifies intra-document rhythmic unpredictability as the next key detection signal, but no humanizer paper or repo yet explicitly optimizes for this. First-mover opportunity.
+8. **SHIELD hardness benchmark is unused by humanizer papers.** The SHIELD framework (arXiv:2507.15286) enables hardness-stratified evaluation, but existing humanizer repos all report against flat benchmarks. Adopting SHIELD would surface which attacks work only on easy cases.
 
 ---
 
@@ -222,3 +238,6 @@
 - AuthorMist paper — https://arxiv.org/abs/2503.08716
 - Papers with Code: *Are AI-Generated Text Detectors Robust to Adversarial Perturbations?* — https://paperswithcode.com/paper/are-ai-generated-text-detectors-robust-to
 - jenna-russell/human_detectors — https://github.com/jenna-russell/human_detectors
+- HJJWorks/TempParaphraser — https://github.com/HJJWorks/TempParaphraser (EMNLP 2025)
+- IBM/diveye — https://github.com/IBM/diveye (TMLR 2026, arXiv:2509.18880)
+- SHIELD benchmark paper — https://arxiv.org/abs/2507.15286

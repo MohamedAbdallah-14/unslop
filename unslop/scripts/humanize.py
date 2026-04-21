@@ -323,6 +323,59 @@ STOCK_VOCAB = [
     (re.compile(r"\bever[- ]changing\b", re.IGNORECASE), "changing"),
     (re.compile(r"\bin today'?s (?:digital )?(?:world|age|landscape|era)\b", re.IGNORECASE), "today"),
     (re.compile(r"\bdynamic landscape\b", re.IGNORECASE), "world"),
+    # 2026-04 additions (Wikipedia:Signs_of_AI_writing + blader taxonomy
+    # follow-up). These are the classic "purple AI" vocabulary tells that
+    # routinely survive a first humanization pass.
+    #
+    # `meticulous(ly)` — almost never justified; "careful" or plain omission
+    # reads human.
+    (re.compile(r"\bmeticulously\b", re.IGNORECASE), "carefully"),
+    (re.compile(r"\bmeticulous\b", re.IGNORECASE), "careful"),
+    # `bustling` as a setting adjective ("bustling city", "bustling market").
+    # Always AI-purple; "busy" is the human word.
+    (re.compile(r"\bbustling\b", re.IGNORECASE), "busy"),
+    # `paradigm shift` — dead metaphor since the 1990s; shorten to "shift".
+    (re.compile(r"\bparadigm\s+shift\b", re.IGNORECASE), "shift"),
+    # `game-changer` / `game-changing` — cliché. Drop to "important change"
+    # or "major". Guard: only when used as noun/adj phrase, not in literal
+    # game contexts (`a game-changing play in the final quarter`).
+    (re.compile(r"\bgame[- ]?changers?\b(?!\s+(?:play|move|goal|call))", re.IGNORECASE), "major change"),
+    (re.compile(r"\bgame[- ]?changing\b(?!\s+(?:play|move|goal|call))", re.IGNORECASE), "major"),
+    # `revolutionize/s/d/ing` — verb-level hype. "change" carries the actual
+    # claim; the reader can judge magnitude from the surrounding facts.
+    (re.compile(r"\brevolutioniz(?:es|ed|ing)\b", re.IGNORECASE),
+     lambda m: {"revolutionizes": "changes", "revolutionized": "changed", "revolutionizing": "changing"}.get(m.group(0).lower(), "changes")),
+    (re.compile(r"\brevolutionize\b", re.IGNORECASE), "change"),
+    # `transformative` — the adjective form of the same hype; "big" or
+    # "major" conveys the same magnitude without the brochure tone.
+    (re.compile(r"\btransformative\b", re.IGNORECASE), "major"),
+    # `unprecedented` — flagged by AP, Reuters, and Wikipedia style. Guard:
+    # keep the word in strict factual context (e.g. "unprecedented
+    # {scale,levels,volume,rate,drought,heat wave}") where it genuinely
+    # quantifies. Strip only the generic adjective-before-noun form in
+    # connective prose.
+    (re.compile(r"\bunprecedented(?=\s+(?:opportunity|opportunities|challenge|challenges|growth|success|impact|change)\b)", re.IGNORECASE), "major"),
+    # `myriad (of)` / `plethora of` — dress-up words for "many" / "lots of".
+    # Two forms of `myriad`: noun ("a myriad of X") and adjective
+    # ("myriad X"). Both collapse to "many X".
+    (re.compile(r"\ba\s+myriad\s+of\b", re.IGNORECASE), "many"),
+    (re.compile(r"\bmyriad\s+(?=\w)", re.IGNORECASE), "many "),
+    (re.compile(r"\ba\s+plethora\s+of\b", re.IGNORECASE), "many"),
+    # `uncharted territory/waters/ground` — cliché. Prefer "new ground" or
+    # plain "new {territory/area}".
+    (re.compile(r"\buncharted\s+territory\b", re.IGNORECASE), "new ground"),
+    (re.compile(r"\buncharted\s+waters\b", re.IGNORECASE), "new territory"),
+    (re.compile(r"\buncharted\s+(?=ground|area|domain)\b", re.IGNORECASE), "new "),
+    # `nuanced` as a connective adjective ("nuanced understanding",
+    # "nuanced view"). Collapse to "detailed" which claims less.
+    (re.compile(r"\bnuanced\b(?=\s+(?:understanding|view|perspective|approach|analysis|take))", re.IGNORECASE), "detailed"),
+    # `synergy` / `synergies` / `synergize(s/d/ing)` — McKinsey-deck hype.
+    # Collapse to neutral replacements.
+    (re.compile(r"\bsynergies\b", re.IGNORECASE), "shared benefits"),
+    (re.compile(r"\bsynergy\b", re.IGNORECASE), "shared benefit"),
+    (re.compile(r"\bsynergiz(?:es|ed|ing)\b", re.IGNORECASE),
+     lambda m: {"synergizes": "works well with", "synergized": "worked well with", "synergizing": "working well with"}.get(m.group(0).lower(), "works well with")),
+    (re.compile(r"\bsynergize\b", re.IGNORECASE), "work well with"),
 ]
 
 # Authority tropes (blader/unslop #27). Persuasive framing that signals
@@ -998,8 +1051,12 @@ HUMANIZATION RULES (only on natural-language prose between code regions):
 - Vary paragraph length — no tidy five-paragraph essay shape
 - Prefer active voice; avoid subjectless AI fragments ("Works great." by itself — add a subject)
 
+ANTI-BLANDIFICATION (critical):
+- Do NOT neutralize distinctive claims, opinions, or stylistic choices from the original. LLM-assisted rewrites neutralize ~70% of author voice on average (arXiv 2603.18161). Your job is to remove AI-isms, not to sand down the original's personality.
+- If the original has a strong stance, keep it. If it has an unusual metaphor, keep it. Strip the slop; preserve the signal.
+
 TWO-PASS SELF-AUDIT (required):
-1. After your first rewrite, silently ask yourself: "What in the draft above still reads as obviously AI-generated?"
+1. After your first rewrite, silently ask yourself: "What in the draft above still reads as obviously AI-generated? Did I accidentally neutralize the original's voice or opinions?"
 2. Revise in place, then return the revised version only.
 Do NOT include the audit in the output. Return the final text directly.
 

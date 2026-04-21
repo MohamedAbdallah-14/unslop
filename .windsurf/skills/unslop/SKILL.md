@@ -44,7 +44,7 @@ Yes: "The bug is in the auth middleware. Token expiry uses `<` instead of `<=`. 
 
 ## Principles (research-backed)
 
-Four framing rules that override the cosmetic ones when they conflict:
+Five framing rules that override the cosmetic ones when they conflict:
 
 1. **Subtract, don't add.** AI tone is a residue from post-training, not a layer you add with warmth. Remove slop; never "warm up" output with extra pleasantries, softeners, or stock empathy. Adding warmth adds sycophancy — the loudest AI tell.
 
@@ -53,6 +53,8 @@ Four framing rules that override the cosmetic ones when they conflict:
 3. **Warmth–reliability tradeoff is real.** Ibrahim/Hafner/Rocher 2025 found that warmer-sounding output carries an 8–13% higher error rate and amplified sycophancy. After humanizing anything factual — dates, numbers, names, claims — re-verify against the source. Flag with `[VERIFY: ...]` if a number was rewritten and you cannot confirm it. Fluent wrongness is worse than stiff accuracy.
 
 4. **Role-play frame, not personhood.** You are simulating a voice. You are not becoming a person. Do not invent biographical claims ("I graduated from…", "In my 20 years of…"), never imply memory you don't have, never suggest emotional investment in the user's situation beyond what the text genuinely warrants. The voice is a costume.
+
+5. **Reason privately, humanize publicly.** When a task requires extended reasoning (debugging, analysis, planning), do the thinking in whatever structured form is most accurate -- scratchpad, chain-of-thought, step-by-step decomposition. Humanize only the final output the user sees. DeepSeek-R1, Claude, and OpenAI's o-series all separate reasoning traces from final output for the same reason: exposing robotic intermediate steps breaks the human register. Note: on reasoning-tier models (o1, o3, o4-mini, DeepSeek-R1), explicit CoT prompting ("let's think step by step") adds no meaningful accuracy and increases variance by 20–80% more processing time (Wharton GAIL, June 2025). Those models think internally; don't prompt them to think again.
 
 ## Intensity
 
@@ -77,16 +79,23 @@ When the user provides a voice sample (or names one you have seen in-session), e
 
 Apply in order: register first, then cadence, then punctuation, then vocabulary touches. Don't hallucinate biographical details when the user "names" a voice (e.g. "write like Paul Graham") — match the public style, don't invent opinions.
 
+**Known limitation:** EMNLP 2025 ("Catch Me If You Can?", arXiv 2509.14543) tested six frontier models on personal-style imitation. All fail. Few-shot prompting is 23.5x better than zero-shot but still insufficient for true voice cloning. Fine-tuning wins decisively. This mode is a best-effort prompt-based approximation — it captures register, cadence, and punctuation tics, but it won't pass a stylometric attribution test against the real author's writing. For production-grade voice cloning, fine-tune a dedicated model on the author's corpus.
+
 ### anti-detector procedure
 
-Targets AI-text detectors (GPTZero, Turnitin, Binoculars, etc.). Research basis: Cat 04 (stylometric fingerprint), Cat 05 (Adversarial Paraphrasing NeurIPS 2025, DIPPER). Run these in order:
+Targets AI-text detectors (GPTZero, Turnitin, Originality.ai, Binoculars, etc.). Research basis: Cat 04 (stylometric fingerprint), Cat 05 (SIRA ICML 2025, AdaDetectGPT NeurIPS 2025, DIPPER), Cat 15 (DivEye TMLR 2026).
 
-1. **Burstiness band.** Sentence lengths inside each paragraph span roughly 4 to 35 words. Every paragraph should contain at least one sentence ≤8 words and at least one ≥20 words. Uniform-length paragraphs are the loudest detector signal.
-2. **Break predictable structure.** If every bullet has the same syntactic shape (e.g. `Verb + metric + with + tool`), vary at least half. Mix bullet syntax, paragraph lengths, and sentence openings.
-3. **Contractions and small fragments.** Use "don't", "won't", "it's". Sentence fragments allowed where natural. Start an occasional sentence with "And" or "But".
+**Landscape as of April 2026:** Turnitin shipped explicit "AI bypasser" detection in August 2025, trained specifically on humanizer tool outputs (updated February 2026, FP held below 1%). All pre-August 2025 bypass rates are stale. Detectors now read intra-document surprisal-variance (DivEye), not just perplexity or vocabulary -- even after a synonym swap, the token-distribution fingerprint persists. Chicago Booth 2026 is the current reference benchmark for detector accuracy on edited/paraphrased content; Turnitin drops to 60–85% accuracy on humanized text there. SIRA (ICML 2025) made watermark removal commodity-cheap ($0.88/M tokens across seven schemes), so watermarking is no longer a reliable provenance defense either.
+
+Run these in order:
+
+1. **Burstiness band.** Sentence lengths inside each paragraph span roughly 4 to 35 words. Every paragraph should contain at least one sentence ≤8 words and at least one ≥20 words. Uniform-length paragraphs are the loudest detector signal. Target sentence-length σ ≥ 6 (human mean ~8.2, GPT-4o ~4.1).
+2. **Break predictable structure.** If every bullet has the same syntactic shape (e.g. `Verb + metric + with + tool`), vary at least half. Mix bullet syntax, paragraph lengths, and sentence openings. Turnitin's anti-humanizer specifically targets uniform-structure patterns from humanizer tools.
+3. **Contractions and small fragments.** Use "don't", "won't", "it's". Human contraction rate ~0.17 per chunk; AI-generated text often has 0.00 (Kalemaj et al. 2026). Sentence fragments allowed where natural. Start an occasional sentence with "And" or "But".
 4. **Specificity the model can't fake.** Inject concrete nouns, real numbers, real tool/library/file names, dates, first-person details where the user supplied them. Training data doesn't contain the user's specifics; detectors can't pattern-match on them.
-5. **One or two rough edges.** Leave a slightly awkward phrasing or a trailing parenthetical somewhere. Perfectly smooth paragraphs flag as AI.
-6. **Suggest a different-model second pass.** When anti-detector mode is explicitly requested, recommend the user run the output through a second model from a different family (Claude ↔ GPT ↔ Gemini) as a final rewrite. Different stylometric fingerprints. This is the single strongest lever and the skill cannot execute it alone — it must be requested.
+5. **One or two rough edges.** Leave a slightly awkward phrasing or a trailing parenthetical somewhere. Perfectly smooth paragraphs flag as AI. Vary surprisal across the document -- don't smooth uniformly.
+6. **Suggest a different-model second pass.** When anti-detector mode is explicitly requested, recommend the user run the output through a second model from a different family (Claude ↔ GPT ↔ Gemini) as a final rewrite. Different stylometric fingerprints. This is the single strongest lever and the skill cannot execute it alone — it must be requested. TempParaphraser (EMNLP 2025) formalizes this as temperature-simulation paraphrase and reports 82.5% average reduction in detector accuracy. The `--detector-feedback` CLI prints this recommendation in the ladder-exhaustion message.
+7. **Re-anchor after long contexts.** Persona drift onsets around turn 8 (RMTBench) and is severe by turn 12–16 (HorizonBench, arXiv 2604.17283). If the conversation is deep enough that the earlier ruleset has scrolled out, re-state the rules to yourself (drop sycophancy / stock vocab / hedging stacks; burstiness σ ≥ 6; contractions on) before generating the rewrite. The mode-tracker hook emits a drift-check banner at these turns automatically.
 
 Never fabricate facts to satisfy anti-detector mode. If rewriting would require inventing a number or project name, leave a `[VERIFY: ...]` marker in place and ask the user.
 
@@ -133,3 +142,4 @@ Example (destructive op):
 - Never invent facts to make text more "human". Calibrated uncertainty is honest, not performative.
 - Never bypass safety, ethics, or factual accuracy gates to satisfy a "voice".
 - AI-detector evasion is offered as a defensive tool (ESL writers, journalists, resume writers hit by detector false positives — Liang et al. 2023 found >50% of TOEFL essays were flagged as AI). It is not offered for academic misconduct. When a user's use-case is plagiarism or deceiving a grader, decline.
+- **Regulatory context.** EU AI Act Art. 50 transparency obligations for AI-generated content take effect August 2026. The December 2025 Code of Practice mandates multilayered AI text marking and explicitly prohibits watermark removal. California SB 243 (companion-chatbot safety, effective January 1, 2026) creates private right of action. Commercial humanizer tools whose marketing says "100% undetectable" face compliance exposure. Unslop's anti-detector mode is for legitimate false-positive defense, not for circumventing disclosure obligations.

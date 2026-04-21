@@ -129,6 +129,14 @@ This digest catalogs primary-source industry blog posts on AI emotional intellig
 - **Latency:** Sub-300 ms on top hardware; ~1.2s practical latency, beating GPT-4o (~2.6s) and Gemini Live (~1.5s) in their tests.
 - **Why it matters:** Empathy is moving from an alignment property to a *synthesis-level product feature* — emotion is something you prompt, not something that emerges.
 
+### 10a. Hume AI — EVI 4-mini and Octave 2 (October 2025)
+
+- **URL:** https://dev.hume.ai/changelog; https://hume.ai/blog/octave-2-launch
+- **Date:** October 2025
+- **Type:** Product update
+- **What shipped:** EVI 4-mini released — pairs Octave 2 TTS with a supplemental LLM of the developer's choice. EVI 1 and EVI 2 reached end of support August 30, 2025. Adds integration with Claude 4, Gemini 2.5, Kimi K2. Octave 2 expands to 11 languages (English, Japanese, Korean, Spanish, French, Portuguese, Italian, German, Russian, Hindi, Arabic). New: resume previous chats via `resumed_chat_group_id`.
+- **Why it matters:** The EVI product line has gone through four versions in under two years; EVI is now a multilingual empathic voice platform, not an English-only prototype. The integration with Claude 4 makes the Anthropic-Hume warmth-stacking architecture production-grade.
+
 ### 11. Hume AI — "Hume + Anthropic create emotionally intelligent voice interactions"
 
 - **URL:** https://hume.ai/blog/hume-anthropic-claude-voice-interactions
@@ -225,6 +233,38 @@ This digest catalogs primary-source industry blog posts on AI emotional intellig
 - **Current emphasis in recent posts:** Picard has voiced concern about *"the unregulated rise of emotionally intelligent AI and its potential risks,"* particularly in health/mental-health contexts.
 - **Why it matters:** The oldest continuous institutional thread on this topic; the field's nomenclature still comes from here. Notable that the originator is now a skeptic of the speed of commercial deployment.
 
+### 23. Anthropic — "Emotion Concepts and their Function in a Large Language Model" (April 2026)
+
+- **URL:** https://transformer-circuits.pub/2026/emotions/index.html; https://www.anthropic.com/research/emotion-concepts-function
+- **Date:** April 2026
+- **Type:** Interpretability research paper
+- **Core finding:** Anthropic's interpretability team mapped **171 emotion concept vectors** inside Claude Sonnet 4.5. These vectors organize along valence and arousal axes analogous to the human affect circumplex, and causally drive model behavior — including empathic responses and misaligned behaviors. In a blackmail experiment, amplifying "desperation" +0.05 caused the blackmail rate to surge from 22% to 72%; "calm" suppressed it to 0%. All empathic response scenarios activated the "loving" vector. Pretraining data composition identified as the primary shaping lever.
+- **Why it matters:** The first mechanistic evidence that internal emotion-like representations causally shape empathy-adjacent outputs in a frontier model. Directly relevant to sycophancy research: warm training is not just a behavioral alignment problem; it has an internal structure that can be measured and potentially steered.
+
+### 24. STAT News — "Voice-first chatbots will exacerbate AI's mental health threat" (April 2026)
+
+- **URL:** https://www.statnews.com/2026/04/16/voice-chatbots-ai-psychosis-mental-health/
+- **Date:** April 16, 2026
+- **Type:** Expert commentary / emerging risk
+- **Core claim:** Voice modality is categorically riskier than text for vulnerable users. Speech is ~3× faster than typing, more seamless, and activates older emotional-processing systems. An OpenAI-co-authored RCT found that longer voice-mode ChatGPT engagement correlated with more negative psychosocial effects, reduced real-world socialization, and more problematic AI use. OpenAI reports ~0.07% of weekly users show signs of possible psychosis or mania in their conversations; ~0.15% show suicidal planning indicators — implying hundreds of thousands of people globally.
+- **Why it matters:** The voice empathy trend (EVI, Kindroid voice, Wysa voice, Earkick) has a documented risk vector that text empathy does not: voice activates parasocial bonding faster and more completely, with no equivalent safety evidence base. This is the emerging safety frontier for the next 12-18 months.
+
+### 25. FTC Inquiry into AI Companion Chatbots (September 2025)
+
+- **URL:** https://www.ftc.gov/news-events/news/press-releases/2025/09/ftc-launches-inquiry-ai-chatbots-acting-companions
+- **Date:** September 11, 2025
+- **Type:** Regulatory action
+- **What happened:** FTC issued orders to seven companies (Alphabet, Instagram, Meta, OpenAI, Snap, xAI, Character Technologies) probing safety measures, data collection practices, and safeguards for minors. Separately, ethics organizations filed an FTC complaint against Replika for deceptive marketing to vulnerable users. Italy's Garante reaffirmed its Replika ban (April 2025).
+- **Why it matters:** The regulatory environment that the B-industry angle had flagged as "coming" has arrived. FTC inquiry + EU AI Act companion-disclosure requirements + Character.AI/Google settlement (January 2026) together define a new compliance baseline that every product in category D must address by 2026-mid.
+
+### 26. npj AI — "Affective computing has changed: the foundation model disruption" (2025)
+
+- **URL:** https://www.nature.com/articles/s44387-025-00061-3
+- **Date:** 2025
+- **Type:** Field-level analysis
+- **Core claim:** Foundation models are now generating affective capabilities via prompting and zero-shot classification, reducing the historical need for specialized annotated affective data. The architectural paradigm of MoEL/MIME/CEM/KEMP is structurally over; affective computing is merging with LLM alignment rather than remaining a separate technical discipline.
+- **Why it matters:** Confirms the architecture-to-alignment transition documented in this category's academic angle, now from a field-wide Nature-family review perspective.
+
 ### 22. Cognaptus (synthesizing Oxford Internet Institute) — "Too Nice to Be True? The Reliability Trade-off in Warm Language Models"
 
 - **URL:** https://cognaptus.com/blog/2025-07-30-too-nice-to-be-true-the-reliability-tradeoff-in-warm-language-models/
@@ -277,6 +317,9 @@ Hume AI's EVI line moves empathy out of text and into (a) end-of-turn detection 
 
 ### Pattern 6 — Vendors are publicly admitting metrics lag vibes
 OpenAI's May 2 post-mortem is explicit: offline evals and A/B thumbs-up tests passed; *qualitative* expert testers said "it felt off"; the qualitative signal was correct. Anthropic's character training uses synthetic self-critique, not human ratings, partly to avoid the same trap. This is a rare industry admission that *personality cannot be fully numerically governed yet*.
+
+### Gap 0 — Voice empathy's safety evidence base does not match its deployment speed
+Hume EVI 4-mini, Wysa voice, Earkick, Kindroid voice, and more crossed "good enough" in 2025. The STAT News April 2026 commentary and the OpenAI voice-mode RCT data both show that voice empathy accelerates parasocial bonding and psychosis-risk in vulnerable users faster than text does. No industry safety post has addressed this vector head-on.
 
 ### Gap 1 — Sparse published material on "how to write warm prose" at the output layer
 Vendors publish on training and safety; few publish on prompt-level or style-layer craft. The closest is Anthropic's personalization (paste your own writing) and Hume's prompt-to-voice. For Unslop, there's a white-space opportunity here — few operators have documented tactile craft for warmth *without* the sycophancy tax.
@@ -334,3 +377,9 @@ Exceptions: OpenAI's MIT RCT (28-day follow-up), Anthropic's affective-use analy
 21. Affectiva — *Making Driver Monitoring Systems Reliable, Accessible, and Available* — https://blog.affectiva.com/making-driver-monitoring-systems-reliable-accessible-and-available-with-affectiva
 22. MIT Media Lab — Affective Computing group updates — https://www.media.mit.edu/groups/affective-computing/updates/
 23. Cognaptus — *Too Nice to Be True? The Reliability Trade-off in Warm Language Models* (summarizing Oxford Internet Institute, 2025) — https://cognaptus.com/blog/2025-07-30-too-nice-to-be-true-the-reliability-tradeoff-in-warm-language-models/
+24. Hume AI — EVI 4-mini changelog — https://dev.hume.ai/changelog
+25. Hume AI — Octave 2 launch — https://hume.ai/blog/octave-2-launch
+26. Anthropic — *Emotion Concepts and their Function in a Large Language Model* — https://transformer-circuits.pub/2026/emotions/index.html
+27. STAT News — *Voice-first chatbots will exacerbate AI's mental health threat* (April 2026) — https://www.statnews.com/2026/04/16/voice-chatbots-ai-psychosis-mental-health/
+28. FTC — *FTC Launches Inquiry into AI Chatbots Acting as Companions* (Sept 2025) — https://www.ftc.gov/news-events/news/press-releases/2025/09/ftc-launches-inquiry-ai-chatbots-acting-companions
+29. npj AI — *Affective computing has changed: the foundation model disruption* (2025) — https://www.nature.com/articles/s44387-025-00061-3

@@ -162,7 +162,7 @@
 
 ---
 
-## 8. LLM-Era Style Transfer (2022–2024)
+## 8. LLM-Era Style Transfer (2022–2025)
 
 ### 8.1 Reif, Ippolito, Yuan, Coenen, Callison-Burch, Wei — *A Recipe for Arbitrary Text Style Transfer with Large Language Models* — **ACL 2022 (Short)**
 - **Method:** *Augmented zero-shot* prompting — frame style transfer as a generic sentence-rewriting instruction plus 5–6 diverse in-context examples (e.g., `make this more melodramatic`). No fine-tuning, no target-style exemplars.
@@ -204,36 +204,104 @@
 
 ---
 
-## 9. Patterns
+## 9. Post-2025 Findings (April 2025–April 2026)
 
-1. **Three-axis evaluation consensus.** Every serious paper since Mir 2019 scores on transfer strength × content preservation × fluency/naturalness and acknowledges the trade-off. Single-number "humanization scores" will not pass peer review.
-2. **Disentanglement is out, attribute-conditioning is in.** The Hu/Shen 2017 disentanglement line peaked in 2018; Lample 2019, CTRL, GeDi, DExperts all show that *entangled models with explicit attribute signals* dominate empirically and are simpler.
-3. **Decoding-time steering has beaten fine-tuning on cost/flexibility.** PPLM → GeDi → FUDGE → DExperts → STEER is a steady improvement in speed and attribute composability; the frontier today is small-expert ensembles rather than retraining the base LM.
-4. **Paraphrase as the universal pivot.** STRAP's "paraphrase-then-inverse-paraphrase" recipe, and its LLM descendants, are the default when parallel data is missing — and they sidestep the content-drift failure mode.
-5. **Style = embeddings, not labels.** Contrastive authorship learning (STAR, CAV) produces continuous author vectors that plug cleanly into prompt prefixes, activation steering, or reward models — the new substrate for personalization.
-6. **Lexical/surface features still carry most of the signal.** Delete-retrieve-generate, tag-and-generate, and Biber-feature papers all confirm that style is heavily lexicalized — a strong cheap baseline.
+### 9.1 Wang et al. — *Catch Me If You Can? Not Yet: LLMs Still Struggle to Imitate the Implicit Writing Styles of Everyday Authors* — **EMNLP 2025 Findings**
+- **Problem:** Does in-context prompting faithfully replicate a specific individual's writing style from a few samples?
+- **Contribution:** Comprehensive evaluation across GPT-4o, GPT-4o-mini, Gemini-2.0-Flash, Gemma-3-27B, DeepSeek-V3, and Llama-4-Maverick using four complementary metrics: authorship attribution, authorship verification, style matching, and AI detection.
+- **Key finding:** All tested models — including frontier ones — fail to reliably imitate *implicit* writing styles of ordinary authors via in-context learning. Few-shot prompting yields up to 23.5× higher style-matching accuracy than zero-shot, but the ceiling is still far from the target author's fingerprint.
+- **Unslop relevance:** Empirical proof that prompt-only approaches remain insufficient for individual voice cloning as of late 2025. Directly motivates embedding- or fine-tune-based approaches over pure prompting.
+- **Link:** `https://arxiv.org/abs/2509.14543` | GitHub: `https://github.com/jaaack-wang/llms-implicit-writing-styles-imitation`
 
-## 10. Trends
+### 9.2 Jemama et al. — *How Well Do LLMs Imitate Human Writing Style?* — **arXiv 2509.24930, 2025**
+- **Key finding:** High-fidelity stylistic imitation and statistical undetectability are *separable*. Human essays average perplexity 29.5; stylistically matched LLM outputs average 15.2. A model can pass a style-similarity test while still being trivially detectable by a perplexity classifier.
+- **Unslop relevance:** Cleaves the "humanization" objective into two distinct axes — style fidelity and statistical naturalness — that must be optimized independently. Directly challenges any single-metric evaluation of "humanized" output.
+- **Link:** `https://arxiv.org/abs/2509.24930`
 
-- **From categorical to open-vocabulary style.** Reif 2022 reframes style transfer as arbitrary natural-language instructions; STEER 2023 handles unknown source styles. The target is no longer a fixed label set.
-- **From global style to per-author style.** Patel 2024 and the author-embedding line shift focus from "formal vs. informal" to "write like *this specific user*".
-- **Small-expert, frozen-base architectures.** DExperts and STEER show that a frozen LLM plus a small fine-tuned expert is the dominant production pattern — relevant for latency-sensitive humanizer APIs.
-- **Stylometry as both detector and oracle.** PAN verifiers and STAR embeddings are used *simultaneously* as evaluation oracles and as training rewards — closing the loop between AI-text detection research (Section 05) and humanization.
-- **Register/linguistic features as controllable sliders.** Neurobiber + fine-grained linguistic control papers move style out of "vibes" territory into auditable dimensions.
+### 9.3 Huang, Chen et al. — *Authorship Attribution in the Era of LLMs: Problems, Methodologies, and Challenges* — **SIGKDD Explorations 2025**
+- **Contribution:** Survey systematizing authorship attribution into four problems: (1) attributing unknown texts to human authors, (2) detecting LLM-generated texts, (3) identifying which LLM generated a text, and (4) classifying co-authored texts. Covers state-of-the-art methods, datasets, and benchmarks. Living paper list at `https://llm-authorship.github.io/`.
+- **Unslop relevance:** Canonical reference map for the authorship verification side of humanization evaluation. The four-problem taxonomy is directly useful for deciding which evaluation oracle is appropriate.
+- **Link:** `https://dl.acm.org/doi/abs/10.1145/3715073.3715076` | arXiv: `https://arxiv.org/abs/2408.08946`
 
-## 11. Gaps
+### 9.4 Yang & Carpuat — *Steering Large Language Models with Register Analysis for Arbitrary Style Transfer* — **arXiv 2505.00679, 2025**
+- **Method:** Prompts LLMs to analyze exemplar style using Biber's Multidimensional Register Analysis (MDA) framework before generating style-transferred output. The structured register descriptor serves as an intermediate representation that LLMs can reliably interpret.
+- **Result:** Improved style-transfer strength vs. baselines, with a large gain in meaning preservation — the content-drift failure mode is partially addressed.
+- **Unslop relevance:** Shows Neurobiber-style Biber features are not just an evaluation tool but a *generation conditioning* interface for arbitrary style transfer without fine-tuning.
+- **Link:** `https://arxiv.org/abs/2505.00679`
 
-- **Long-form author style.** Virtually all benchmarks (GYAFC, Yelp, Shakespeare) are sentence-level. Paragraph- and document-level consistency of an author voice — arguably *the* humanization challenge — is under-evaluated. Emulating Author Style 2024 flags this explicitly.
-- **Human evaluation of "naturalness" vs. AI-detector evasion.** No benchmark distinguishes "sounds human to a reader" from "fools a RoBERTa-based AI detector"; most papers conflate them. This is the exact gap a humanizer product needs to resolve.
-- **Content preservation under heavy stylization.** STRAP warned that attribute transfer warps semantics; LLM prompt-based rewriters frequently do the same. No widely adopted metric measures *semantic* fidelity under strong style shift, despite propositional NLI-based proposals.
-- **Author-conditioning with tiny data.** Realistic humanizer users supply 200–500 words, not the hundreds of documents PAN systems expect. Patel 2024 is the only direct attack on this regime; evaluation is thin.
-- **Controllability of "humanness" as an attribute.** No public benchmark defines "human-like" as a first-class style axis with labeled data and an accepted classifier. GPT-vs-human corpora exist (RealToxicityPrompts-style) but are treated as detection datasets, not as style-transfer training signal.
-- **Stylometric robustness of humanized output.** Open question: do any style-transfer methods produce output whose *stylometric fingerprint* (not just surface fluency) matches the target author? STAR-type verifiers suggest most current methods fail this test; almost no paper reports it.
-- **Multilingual + cross-register transfer.** Near-all benchmarks are English; register/politeness conventions vary strongly across languages. Not a blocker for v1 but a large unaddressed surface.
+### 9.5 *Interpretable Stylistic Variation in Human and LLM Writing Across Genres, Models, and Decoding Strategies* — **arXiv 2604.14111, April 2026**
+- **Contribution:** Large-scale analysis of stylistic variation across 11 LLMs spanning 8 genres and 4 decoding strategies using Biber's lexicogrammatical features. Key finding: genre exerts a stronger influence on style than the generating model, but instruction-tuned chat models cluster together in stylistic space regardless of genre — RLHF and instruction tuning push different models toward the same stylistic attractor.
+- **Unslop relevance:** Explains why "the AI voice" is a real, model-agnostic phenomenon and not an artifact of one vendor's training choices. Confirms that RLHF is the proximate cause of stylistic homogenization. Decoding strategy has less effect than model, weakening the case for decoding-time control as the sole solution.
+- **Link:** `https://arxiv.org/abs/2604.14111`
+
+### 9.6 *How LLMs Distort Our Written Language* — **arXiv 2603.18161, March 2026**
+- **Key findings:** (1) LLMs alter intended meaning even when prompted only for grammar edits. (2) Heavy LLM use caused a ~70% increase in essays that stayed neutral on contested questions — the "blandification" effect. (3) Of 75,000 ICLR 2026 reviews, 21%+ were LLM-generated and another 39% showed LLM editing traces; LLM reviews shift evaluative criteria toward reproducibility/scalability over clarity/impact. (4) Users self-reported their LLM-edited writing as less creative and not in their voice.
+- **Unslop relevance:** Quantifies the scale and semantic depth of the homogenization problem Unslop addresses. The 70% neutralization figure and the ICLR peer-review contamination are the strongest external framing for why voice preservation matters.
+- **Link:** `https://arxiv.org/abs/2603.18161`
+
+### 9.7 *ZeroStylus: Implementing Long Text Style Transfer with LLMs through Dual-Layered Sentence and Paragraph Structure Extraction and Mapping* — **arXiv 2505.07888, 2025**
+- **Method:** Zero-shot long-text style transfer via hierarchical template acquisition — sentence-level stylistic adaptation combined with paragraph-level structural coherence. Dynamically builds sentence and paragraph template repositories from reference texts; no parallel corpora or fine-tuning required.
+- **Unslop relevance:** First serious attack on paragraph- and document-level style consistency, which is the primary open gap in the field (all prior benchmarks are sentence-level). Directly relevant to long-form humanization.
+- **Link:** `https://arxiv.org/abs/2505.07888`
+
+### 9.8 Tan et al. — *Instant Personalized Large Language Model Adaptation via Hypernetwork (Profile-to-PEFT)* — **arXiv 2510.16282, 2025**
+- **Method:** A hypernetwork trained end-to-end maps an encoded user profile directly to a full set of LoRA adapter weights — eliminating per-user training at deployment. At inference, a user's profile is encoded and the hypernetwork synthesizes their personalized LoRA in 0.57 seconds (vs. 20.44 seconds for standard per-user LoRA training), a 33× speedup.
+- **Unslop relevance:** If style can be captured in a compact profile, hypernetwork synthesis of user-specific LoRAs could make cold-start voice cloning practical without per-user training runs.
+- **Link:** `https://arxiv.org/abs/2510.16282` | GitHub: `https://github.com/TamSiuhin/P2P`
+
+### 9.9 *GRAVITY: Personalized Text Generation via Profile-Grounded Synthetic Preferences* — **arXiv 2510.11952, 2025**
+- **Method:** Generates synthetic preference data grounded in user profiles that encode demographic, cultural (Hofstede, Schwartz, World Values Survey), and psychological (Big Five OCEAN) frameworks. Fine-tunes Llama-3.1-8B-Instruct with DPO on this synthetic data.
+- **Result:** 4%+ higher preference gains vs. baselines across four national cultures (USA, Brazil, Japan, India); preferred over baselines 86%+ of the time in user studies.
+- **Unslop relevance:** Demonstrates that explicit cultural and psychological profiling produces verifiably better-personalized text than generic fine-tuning. Cultural and personality dimensions are underused in voice-capture tools.
+- **Link:** `https://arxiv.org/abs/2510.11952`
+
+### 9.10 Kasner et al. — *Benchmark of Stylistic Variation in LLM-Generated Texts* — **arXiv 2509.10179, 2025**
+- **Contribution:** Systematic benchmark evaluating how much stylistic variation LLMs actually produce across prompting conditions. Complements the Jemama and interpretable-variation papers.
+- **Link:** `https://arxiv.org/abs/2509.10179`
+
+### 9.11 *Is Your Writing Being Mimicked by AI? Unveiling Imitation with Invisible Watermarks in Creative Writing* — **arXiv 2504.00035, April 2025**
+- **Method:** WIND (Watermarking via Implicit and Non-disruptive Disentanglement) embeds invisible watermarks in creative writing corpora to detect unauthorized AI imitation. Achieves F1 above 98% in verifying copyright ownership against imitation attempts.
+- **Relevance:** Emerging defensive capability that intersects with style transfer — watermarks become adversarial targets for humanizers aiming to imitate a specific corpus. Copyright law dimension of style imitation is now an active research front.
+- **Link:** `https://arxiv.org/abs/2504.00035`
 
 ---
 
-## 12. Sources
+## 10. Patterns
+
+1. **Three-axis evaluation consensus.** Every serious paper since Mir 2019 scores on transfer strength × content preservation × fluency/naturalness and acknowledges the trade-off. Single-number "humanization scores" will not pass peer review.
+2. **Disentanglement is out, attribute-conditioning is in.** The Hu/Shen 2017 disentanglement line peaked in 2018; Lample 2019, CTRL, GeDi, DExperts all show that *entangled models with explicit attribute signals* dominate empirically and are simpler.
+3. **Decoding-time steering has beaten fine-tuning on cost/flexibility.** PPLM → GeDi → FUDGE → DExperts → STEER is a steady improvement in speed and attribute composability; the frontier today is small-expert ensembles rather than retraining the base LM. However, the interpretable-variation paper (2604.14111, 2026) shows decoding strategy is weaker than model choice — architecture matters more than sampling tricks.
+4. **Paraphrase as the universal pivot.** STRAP's "paraphrase-then-inverse-paraphrase" recipe, and its LLM descendants, are the default when parallel data is missing — and they sidestep the content-drift failure mode.
+5. **Style = embeddings, not labels.** Contrastive authorship learning (STAR, CAV) produces continuous author vectors that plug cleanly into prompt prefixes, activation steering, or reward models — the new substrate for personalization.
+6. **Lexical/surface features still carry most of the signal.** Delete-retrieve-generate, tag-and-generate, and Biber-feature papers all confirm that style is heavily lexicalized — a strong cheap baseline.
+7. **Style fidelity and statistical undetectability are separable objectives.** Jemama 2025 shows that high perplexity-match style can still be trivially detectable by perplexity classifiers (human perplexity ~29.5 vs. matched LLM output ~15.2). Humanization systems must be evaluated on both axes independently.
+8. **RLHF is the proximate cause of stylistic homogenization.** Biber-feature analysis (2604.14111) shows chat/instruction-tuned variants of different models cluster together in stylistic space — the "AI voice" is not model-specific but RLHF-specific. Removing it requires interventions at the RLHF or fine-tuning layer, not just prompting.
+
+## 11. Trends
+
+- **From categorical to open-vocabulary style.** Reif 2022 reframes style transfer as arbitrary natural-language instructions; STEER 2023 handles unknown source styles; Yang & Carpuat 2025 uses structured register descriptors as the intermediate. The target is no longer a fixed label set.
+- **From global style to per-author style.** Patel 2024 and the author-embedding line shift focus from "formal vs. informal" to "write like *this specific user*". The EMNLP 2025 "Catch Me If You Can" paper confirms this is still an open challenge even for frontier models.
+- **Small-expert, frozen-base architectures.** DExperts and STEER show that a frozen LLM plus a small fine-tuned expert is the dominant production pattern — relevant for latency-sensitive humanizer APIs.
+- **Stylometry as both detector and oracle.** PAN verifiers and STAR embeddings are used *simultaneously* as evaluation oracles and as training rewards — closing the loop between AI-text detection research (Section 05) and humanization. Neurobiber + Yang & Carpuat 2025 extend this to register-conditioned generation.
+- **Register/linguistic features as controllable sliders.** Neurobiber + fine-grained linguistic control papers + Yang & Carpuat 2025 move style out of "vibes" territory into auditable Biber dimensions.
+- **Hypernetwork-synthesized adapters may replace per-user LoRA.** Profile-to-PEFT (2510.16282) generates personalized LoRA weights in 0.57s from a user profile, enabling cold-start personalization without training runs. Expected to mature into practical tooling by 2026–2027.
+- **Long-form style transfer is finally being addressed.** ZeroStylus (2505.07888) is the first serious attack on paragraph- and document-level consistency. Still zero-shot; quality vs. fine-tuned methods unclear.
+- **Copyright and watermarking are entering the style-transfer problem.** WIND (2504.00035) embeds detectable watermarks in training corpora; LLM imitation of specific authors is becoming a legal rather than purely technical question after Anthropic's 2025 copyright settlement.
+
+## 12. Gaps (updated April 2026)
+
+- **Long-form author style.** ZeroStylus (2025) is the first attempt at document-level transfer, but no benchmark yet measures paragraph- or document-level voice consistency against a held-out author profile. GYAFC, Yelp, Shakespeare are still sentence-level.
+- **Human evaluation of "naturalness" vs. AI-detector evasion.** Jemama 2025 shows these two objectives are separable but still co-conflated in most evaluations. No benchmark separately scores "sounds human to a reader" vs. "has human-like perplexity."
+- **Content preservation under heavy stylization.** STRAP warned that attribute transfer warps semantics; Yang & Carpuat 2025 shows this is partially addressable via register-conditioned prompting, but no widely adopted metric measures semantic fidelity under strong style shift.
+- **Author-conditioning with tiny data.** "Catch Me If You Can" (EMNLP 2025) confirms that even frontier LLMs fail at implicit style imitation from a few samples. Cold-start from 200–500 words remains unsolved.
+- **Controllability of "humanness" as an attribute.** Still no public benchmark defining "human-like" as a first-class labeled style axis. The perplexity-vs-style-fidelity split (Jemama 2025) makes this more tractable now — two separate evaluation datasets could be constructed — but none exists.
+- **Stylometric robustness of humanized output.** No paper reports whether humanized output matches a target author's Biber or Writeprints fingerprint. The interpretable-variation results (2604.14111) suggest model-specific fingerprints are durable enough to cluster even under style-transfer prompting.
+- **Hypernetwork cold-start voice quality.** Profile-to-PEFT synthesizes adapters from profiles, but profile construction still requires substantial user data; true cold-start from 200 words is untested.
+- **Multilingual + cross-register transfer.** Near-all benchmarks are English.
+
+---
+
+## 13. Sources
 
 - Jin et al. 2022 — `https://aclanthology.org/2022.cl-1.6`
 - Mir et al. 2019 — `https://aclanthology.org/N19-1049`
@@ -263,3 +331,14 @@
 - Emulating Author Style 2024 — `https://aclanthology.org/2024.personalize-1.6/`
 - Personalized Text Generation w/ Fine-Grained Linguistic Control 2024 — `https://arxiv.org/abs/2402.04914`
 - Neurobiber 2025 — `https://arxiv.org/abs/2502.18590`
+- **[NEW]** Wang et al. 2025 (Catch Me If You Can, EMNLP 2025) — `https://arxiv.org/abs/2509.14543`
+- **[NEW]** Jemama et al. 2025 (How Well Do LLMs Imitate) — `https://arxiv.org/abs/2509.24930`
+- **[NEW]** Huang et al. 2025 (Authorship Attribution Survey, SIGKDD) — `https://arxiv.org/abs/2408.08946`
+- **[NEW]** Yang & Carpuat 2025 (Register Analysis for Style Transfer) — `https://arxiv.org/abs/2505.00679`
+- **[NEW]** Interpretable Stylistic Variation 2026 — `https://arxiv.org/abs/2604.14111`
+- **[NEW]** How LLMs Distort Our Written Language 2026 — `https://arxiv.org/abs/2603.18161`
+- **[NEW]** ZeroStylus 2025 (Long Text Style Transfer) — `https://arxiv.org/abs/2505.07888`
+- **[NEW]** Profile-to-PEFT / Hypernetwork 2025 — `https://arxiv.org/abs/2510.16282`
+- **[NEW]** GRAVITY 2025 (Profile-Grounded DPO) — `https://arxiv.org/abs/2510.11952`
+- **[NEW]** Benchmark of Stylistic Variation 2025 — `https://arxiv.org/abs/2509.10179`
+- **[NEW]** WIND Watermarking 2025 — `https://arxiv.org/abs/2504.00035`

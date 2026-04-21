@@ -1,6 +1,8 @@
 # Creative Writing & Storytelling — Academic
 
-**Research value: high** — The academic corpus on LLM creative writing is dense and convergent: a canonical set of co-writing interfaces (Wordcraft, CoAuthor, Dramatron, TaleBrush), a well-mapped story-generation pipeline lineage (Fan→Re3→DOC→CritiCS→Weaver), a coherent set of evaluation frameworks adapted from creativity psychology (TTCW, CAT, AUT), and a growing, empirically-robust literature on *collective* homogenization that directly constrains what "humanizing" AI output can mean at scale.
+**Research value: high** — The academic corpus on LLM creative writing is dense and convergent: a canonical set of co-writing interfaces (Wordcraft, CoAuthor, Dramatron, TaleBrush), a well-mapped story-generation pipeline lineage (Fan→Re3→DOC→CritiCS→Weaver→StoryWriter→DOME), a coherent set of evaluation frameworks adapted from creativity psychology (TTCW, CAT, AUT), and a growing, empirically-robust literature on *collective* homogenization that directly constrains what "humanizing" AI output can mean at scale.
+
+**Last updated: April 2026.**
 
 ## Executive Summary
 
@@ -84,6 +86,18 @@ The central academic finding, which cuts across all five clusters, is that LLMs 
 - Venue: EMNLP 2024 · arXiv:2410.02428
 - Summary: Two-stage multi-critic framework (CrPlan for plan refinement, CrText for generation) where a council of LLM critics plus a leader iteratively revise drafts. Human eval shows significant gains on creativity and engagement while holding coherence.
 - Humanization relevance: Generalizes agentic revision loops to creativity; complementary to Re3/DOC which target coherence.
+
+**11a. StoryWriter: A Multi-Agent Framework for Long Story Generation**
+- Authors: (team, CIKM 2025) · arXiv:2506.16445
+- Venue: CIKM 2025 (34th ACM International Conference on Information and Knowledge Management)
+- Summary: Modular open-source multi-agent framework for controllable long story generation. Three components: (1) outline agent generating event-based outlines with character/event relationships; (2) planning agent mapping events to chapters; (3) writing agent dynamically compressing story history to maintain coherence. Generates ~8,000-word stories on average. Released a training dataset of ~6,000 high-quality long stories; fine-tuned Llama3.1-8B and GLM4-9B variants (StoryWriterLLAMA, StoryWriterGLM) both outperform prior baselines.
+- Humanization relevance: The clearest 2025 refinement of the multi-agent pipeline pattern; the LongStory dataset is a new open resource for fine-tuning long-form generation.
+
+**11b. DOME: Generating Long-form Story Using Dynamic Hierarchical Outlining with Memory-Enhancement**
+- Authors: (team, NAACL 2025) · arXiv:2412.13575
+- Venue: NAACL 2025
+- Summary: Two-module system: DHO (Dynamic Hierarchical Outline) alternates detailed outline and prose generation in stages; MEM (KG-based Memory Enhancement) maintains a knowledge graph of characters/events that is queried at each outline-expansion step to keep long stories consistent. The alternating outline-then-prose pattern allows the outline to adapt to narrative uncertainty introduced by prior generation.
+- Humanization relevance: Addresses the specific failure mode where rigid outlines make generated fiction feel mechanical — DOME's KG memory allows the outline to flex while preserving coherence.
 
 ### Evaluation frameworks and benchmarks
 
@@ -170,6 +184,30 @@ The central academic finding, which cuts across all five clusters, is that LLMs 
 - Venue: arXiv 2025 · arXiv:2501.19361
 - Summary: Shows LLM creative outputs are more similar to *other LLM outputs* than human outputs are to each other, controlling for structure. Effect persists across models → points at architecture-/training-data-level convergence, not a single-model quirk.
 
+**25a. AI Suggestions Homogenize Writing Toward Western Styles and Diminish Cultural Nuances**
+- Authors: (team, CHI 2025) · arXiv:2409.11360
+- Venue: CHI 2025
+- Summary: Cross-cultural experiment (118 participants, India and US). AI suggestions led Indian participants to adopt Western writing styles; Western-centric LLMs systematically diminish cultural expression. Described as one of the first studies to document cultural stereotyping and language homogenization as direct effects of AI writing assistance.
+- Humanization relevance: Expands the homogenization problem from "sounds like ChatGPT" to "sounds like Western media." A humanization product that ignores cultural register will flatten more than vocabulary.
+
+**25b. Echoes in AI: Quantifying Lack of Plot Diversity in LLM Outputs**
+- Authors: Xu et al.
+- Venue: PNAS 2025 · doi:10.1073/pnas.2504966122
+- Summary: Introduces an automatic metric for plot diversity. LLM-generated short stories repeatedly reuse the same combinations of plot elements; human-written stories maintain higher uniqueness. Introduces the "Semantic Space Collapse" framing: LLM generation converges on high-probability plot regions, producing over-smoothed stories.
+- Humanization relevance: Confirms homogenization operates at plot structure, not only vocabulary — a structural problem that word-ban lists cannot fix.
+
+**25c. Diverse AI Personas Can Mitigate the Homogenization Effect in Human-AI Collaborative Ideation**
+- Authors: (team, 2026)
+- Venue: ScienceDirect 2026
+- Summary: Uses 10 diverse AI personas to generate story plots; finds that diverse AI inputs can preserve story diversity comparable to a human-only baseline. First empirically tested mitigation for the Doshi & Hauser homogenization finding.
+- Humanization relevance: Persona rotation is now an empirically supported anti-homogenization technique — a concrete intervention, not just a hypothesis.
+
+**25d. HAMLET: Hyperadaptive Agent-based Modeling for Live Embodied Theatrics**
+- Authors: Shufan Jiang, Sizhou Chen, Chi Zhang, Xiao-Lei Zhang, Xuelong Li et al.
+- Venue: ICLR 2026 · arXiv:2507.15518
+- Summary: Hierarchical adaptive multi-agent framework for live theatrical performance. Generates a narrative blueprint from a topic; each actor agent carries adaptive reasoning (persona, memory, goals, emotional state) for improvisational group-chat performance. Actors can physically interact with scene props (opening a letter, picking up a weapon), broadcast to a global environmental context. Introduces HAMLETJudge, a specialized critic model for automated theatrical evaluation.
+- Humanization relevance: Extends multi-agent story pipelines to real-time embodied performance; HAMLETJudge is a new domain-specific judge model that may generalize to fiction dialogue evaluation.
+
 ### HCI design and agency
 
 **26. A Design Space for Intelligent and Interactive Writing Assistants**
@@ -181,6 +219,30 @@ The central academic finding, which cuts across all five clusters, is that LLMs 
 - Authors: Jeb Thomas-Mitchell et al.
 - Venue: arXiv 2025 · arXiv:2509.15440
 - Summary: n=18 professional + non-professional writers try three functionally identical co-writing systems differing only in interface metaphor (agentic / tool-like / magical). Metaphors shape *where users feel control* and *whether they feel like authors*, not just system usability.
+
+**28. Rethinking Creativity Evaluation: A Critical Analysis of Existing Creativity Evaluations**
+- Authors: Li-Chun Lu, Miri Liu, Pin Chun Lu, Yufei Tian, Shao-Hua Sun, Nanyun Peng
+- Venue: EACL 2026 · arXiv:2508.05470 · [ACL Anthology](https://aclanthology.org/2026.eacl-long.297/)
+- Summary: Compares four creativity measures — perplexity, LLM-as-a-Judge, Creativity Index (n-gram web-corpus overlap), and syntactic templates — across creative writing, unconventional problem-solving, and research ideation. Finds limited consistency: metrics that separate creativity in one domain fail in others. Perplexity measures fluency not novelty; LLM-as-a-Judge is inconsistent under minor prompt variations and biased toward particular labels; CI is highly implementation-sensitive; syntactic templates fail in formulaic-language settings.
+- Humanization relevance: Directly invalidates using any single existing metric as a creativity gate for humanization pipelines. Confirms the "no consensus humanness metric" gap documented in the open questions section.
+
+**29. Human Creativity in the Age of LLMs: Randomized Experiments on Divergent and Convergent Thinking**
+- Authors: (team)
+- Venue: CHI 2025 · ACM
+- Summary: Randomized experiments on both divergent (open-ended, generative) and convergent (solution-focused) thinking tasks. AI assistance increases idea quantity but can reduce collective diversity; negative effects on creativity are most pronounced when AI is used early in ideation.
+- Humanization relevance: Extends Doshi & Hauser beyond story writing to general creative cognition; the "use AI late, not early" prescription is becoming empirically supported.
+
+**30. A Survey on LLMs for Story Generation**
+- Authors: (team, EMNLP 2025 Findings) · ACL Anthology
+- Venue: Findings of EMNLP 2025
+- Summary: Comprehensive survey of the story-generation literature through 2025. Organizes papers across planning/decomposition, multi-agent collaboration, long-context coherence, refinement methods, and evaluation. Identifies open challenges in narrative diversity, character consistency, and evaluation reliability.
+- Humanization relevance: The best single-paper map of the full academic pipeline lineage. Use as a reading-list starting point before designing a long-form humanization system.
+
+**31. CAFES: Human-LLM Co-Authorship Framework**
+- Authors: (team, 2025) · ScienceDirect
+- Venue: Procedia Computer Science 2026
+- Summary: Framework allowing authors to direct narrative, tone, and character development with LLMs acting as co-authors via adaptive prompt engineering and iterative human-in-the-loop editing. Experimental writers using CAFES reported better story inspiration, fewer instances of writer's block, and improved narrative flow.
+- Humanization relevance: Formalizes the "author-as-director, LLM-as-actor" collaboration model that fiction tools are converging on commercially.
 
 ---
 
@@ -198,23 +260,27 @@ The central academic finding, which cuts across all five clusters, is that LLMs 
 
 ## Trends
 
-- **Creativity psychology is becoming the lingua franca of evaluation.** Since ~2023 almost every serious creative-writing evaluation paper either (a) re-uses TTCW, (b) re-uses CAT with LLM judges, or (c) builds on AUT. N-gram-only creative-writing evaluations are increasingly rejected at top venues.
-- **The long-form story pipeline is stabilizing.** Plan → detailed outline → draft → multi-critic revision is now the dominant architecture (DOC, CritiCS, DOME, SWAG). Debate is over critic composition and memory, not the overall shape.
+- **Creativity psychology is becoming the lingua franca of evaluation.** Since ~2023 almost every serious creative-writing evaluation paper either (a) re-uses TTCW, (b) re-uses CAT with LLM judges, or (c) builds on AUT. N-gram-only creative-writing evaluations are increasingly rejected at top venues. EACL 2026's "Rethinking Creativity Evaluation" now challenges the reliability of all four dominant metrics, accelerating the push toward human-grounded rubrics.
+- **The long-form story pipeline is maturing.** Plan → detailed outline → draft → multi-critic revision is the dominant architecture (DOC, CritiCS, DOME, StoryWriter, SWAG). The 2025 additions (StoryWriter's event-based outline with relationship graphs; DOME's KG memory alternating with outline expansion) address the specific failure where fixed outlines make prose feel mechanical. The debate has shifted from "should we outline?" to "how rigid should the outline be and how should memory work?"
 - **Instruction-tuning is the current humanness bottleneck.** Reinhart et al. (PNAS 2025), stylometry papers, and homogenization studies converge: post-training pushes models toward a shared "ChatGPT voice" that base models don't have. Humanization research is shifting from prompts to post-training recipes.
-- **Specialist writing models.** Weaver 2024 is the first of a likely wave — curated pre-training + writer-preference alignment + native RAG/tools. Generalist models may lose creative-writing SOTA to domain specialists.
-- **From individual to collective evaluation.** Doshi & Hauser's *Science Advances* paper moved the conversation from "is this story good?" to "what happens to literature if everyone uses this tool?" Follow-up work (Anderson 2025, NoveltyBench) treats collective homogenization as a primary failure mode.
+- **Specialist writing models.** Weaver 2024 was the first serious attempt; the 2025 community ecosystem (Sao10K Llama 3.3 Euryale, Sudowrite Muse 1.5, NovelAI Xialong) shows specialist fine-tuning beating generalist RLHF on prose benchmarks. The pattern is no longer a curiosity.
+- **Homogenization is expanding beyond vocabulary to plot structure and culture.** CHI 2025 ("Western styles"), PNAS 2025 ("Echoes in AI"), and the 2026 "Homogenizing Engine" paper all establish that LLM homogenization operates at cultural, structural, and lexical levels simultaneously. The Doshi & Hauser individual-vs-collective finding now has three independent replications.
+- **Mitigation for homogenization is being empirically tested.** Persona rotation (diverse AI personas, 2026 ScienceDirect) is the first empirically tested intervention. This moves the field from describing the problem to solving it.
 - **HCI-side focus on metaphor and agency.** "Where Do I Add the Egg?" signals that *interface framing* (agentic vs tool-like vs magical) now receives the same empirical attention as prompts or models.
+- **CAFES-style co-authorship is formalizing the author-as-director frame.** CHI 2025 and CAFES both operationalize "human directs, LLM acts" as the correct collaboration model, replacing the earlier "LLM generates, human edits" frame. This has product implications for how humanization tools should present AI assistance.
 
 ## Gaps / Open Questions
 
-- **No consensus humanness metric.** TTCW measures creativity; BooookScore measures coherence; NoveltyBench measures diversity; stylometry measures distinguishability; CAT measures expert preference. No unified scalar or vector reliably captures "sounds human, reads as authored."
+- **No consensus humanness metric.** TTCW measures creativity; BooookScore measures coherence; NoveltyBench measures diversity; stylometry measures distinguishability; CAT measures expert preference; lechmazur's Writing Benchmark uses pairwise story-element incorporation. EACL 2026's "Rethinking Creativity Evaluation" confirmed that no single metric generalizes across domains. No unified scalar or vector reliably captures "sounds human, reads as authored."
 - **Professional-writer evaluations are sparse and small.** Ippolito et al. used 13; Chakrabarty used 10 raters / 30 emerging writers. Replication power is limited, and results may not generalize to amateur use, which is where most LLM-assisted writing actually happens.
 - **The voice-preservation problem is unsolved.** Every professional-writer study reports the same complaint: LLMs cannot hold the author's voice across a long draft. Style-transfer work (STYLL, author-style steering vectors) is promising but not integrated into long-form pipelines.
-- **Collective homogenization mitigation is early.** Doshi/Hauser's result is widely cited but interventions (diverse personas, sampler-level diversity promotion, persona rotation) are only beginning to be empirically tested.
-- **LLM-as-judge reliability is domain-specific.** Rethinking Creativity Evaluation (EACL 2026) shows metrics that separate creative writing fail on problem-solving and vice versa. Cross-domain creativity evaluation remains unsolved.
-- **Evaluation-leakage risk.** Most creative benchmarks use public web-sourced reference stories; newer LLMs likely saw them in pre-training, inflating scores without corresponding creativity.
-- **Multilingual and non-English creative writing is drastically under-represented.** Almost all major benchmarks (CoAuthor, TTCW, BooookScore, LongLaMP) are English-only; non-English literary naturalness is largely unstudied.
+- **Collective homogenization mitigation is beginning empirical testing.** Doshi/Hauser's result is widely cited; diverse AI personas (2026) is the first empirically tested intervention. But controlled ablations of other interventions (sampler-level diversity, persona rotation schedules, culturally-diverse fine-tuning) remain minimal.
+- **LLM-as-judge reliability is domain-specific.** EACL 2026 "Rethinking Creativity Evaluation" shows metrics that separate creative writing fail on problem-solving and vice versa. Cross-domain creativity evaluation remains unsolved, and LLM-as-judge produces inconsistent judgments under minor prompt variations.
+- **Cultural homogenization is an underexplored humanization dimension.** CHI 2025 established that AI suggestions push non-Western writers toward Western styles. Humanization research has not grappled with *which* human's norms are the reference.
+- **Evaluation-leakage risk.** Most creative benchmarks use public web-sourced reference stories; newer LLMs likely saw them in pre-training, inflating scores without corresponding creativity. The lechmazur benchmark's constrained-element design partially mitigates this by requiring novel element combinations.
+- **Multilingual and non-English creative writing is drastically under-represented.** Almost all major benchmarks (CoAuthor, TTCW, BooookScore, LongLaMP) are English-only; non-English literary naturalness is largely unstudied. The Weaver WriteBench was initially released in Chinese only — no English equivalent exists.
 - **Detection vs authorial voice are conflated.** Stylometric work shows 93–98% classifier accuracy, but that is a statistical-tell question, not a literary-quality question. Humanization research often slides between the two.
+- **Early vs late AI use in ideation.** CHI 2025 found that AI introduced early in the creative process is most harmful to diversity, but no study has mapped the optimal intervention timing across the full plan → outline → draft → revise pipeline.
 
 ## Sources
 
@@ -245,5 +311,14 @@ The central academic finding, which cuts across all five clusters, is that LLMs 
 - Anderson et al. *We're Different, We're the Same: Creative Homogeneity Across LLMs*. 2025. [arXiv:2501.19361](https://arxiv.org/abs/2501.19361)
 - Lee, Shen, Gero, Chung, Young et al. *A Design Space for Intelligent and Interactive Writing Assistants*. CHI 2024. [ACM](https://dl.acm.org/doi/10.1145/3613904.3642697) · [project](https://writing-assistant.github.io/)
 - Thomas-Mitchell et al. *Where Do I 'Add the Egg'? Exploring Agency and Ownership in AI Creative Co-Writing Systems*. 2025. [arXiv:2509.15440](https://arxiv.org/abs/2509.15440)
-- *Rethinking Creativity Evaluation: A Critical Analysis of Existing Creativity Evaluations*. EACL 2026. [ACL](https://aclanthology.org/2026.eacl-long.297/)
-- EQ-Bench Creative Writing Benchmark v3 / Longform / Judgemark-v2 (Sam Paech). [eqbench.com](https://eqbench.com/creative_writing_v2.html)
+- *Rethinking Creativity Evaluation: A Critical Analysis of Existing Creativity Evaluations*. EACL 2026. [ACL](https://aclanthology.org/2026.eacl-long.297/) [arXiv:2508.05470](https://arxiv.org/abs/2508.05470)
+- EQ-Bench Creative Writing Benchmark v3 / Longform / Judgemark-v2 (Sam Paech). [eqbench.com](https://eqbench.com/creative_writing.html)
+- StoryWriter: A Multi-Agent Framework for Long Story Generation. CIKM 2025. [arXiv:2506.16445](https://arxiv.org/abs/2506.16445) [ACM](https://dl.acm.org/doi/10.1145/3746252.3761616)
+- DOME: Generating Long-form Story Using Dynamic Hierarchical Outlining with Memory-Enhancement. NAACL 2025. [arXiv:2412.13575](https://arxiv.org/html/2412.13575) [ACL](https://aclanthology.org/2025.naacl-long.63.pdf)
+- HAMLET: Hyperadaptive Agent-based Modeling for Live Embodied Theatrics. ICLR 2026. [arXiv:2507.15518](https://arxiv.org/abs/2507.15518) [OpenReview](https://openreview.net/forum?id=MKwW04UHW1)
+- AI Suggestions Homogenize Writing Toward Western Styles and Diminish Cultural Nuances. CHI 2025. [arXiv:2409.11360](https://arxiv.org/abs/2409.11360) [ACM](https://dl.acm.org/doi/10.1145/3706598.3713564)
+- Echoes in AI: Quantifying Lack of Plot Diversity in LLM Outputs. PNAS 2025. [doi:10.1073/pnas.2504966122](https://www.pnas.org/doi/10.1073/pnas.2504966122)
+- Human Creativity in the Age of LLMs: Randomized Experiments on Divergent and Convergent Thinking. CHI 2025. [ACM](https://dl.acm.org/doi/10.1145/3706598.3714198)
+- A Survey on LLMs for Story Generation. Findings of EMNLP 2025. [ACL](https://aclanthology.org/2025.findings-emnlp.750.pdf)
+- Diverse AI Personas Can Mitigate the Homogenization Effect in Human-AI Collaborative Ideation. 2026. [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S294988212600040X)
+- lechmazur/writing: LLM Creative Story-Writing Benchmark (V3 Sep 2025, V4 Nov 2025). [GitHub](https://github.com/lechmazur/writing)

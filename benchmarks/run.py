@@ -25,7 +25,6 @@ sys.path.insert(0, str(ROOT / "unslop"))
 
 from scripts.humanize import (  # noqa: E402
     VALID_INTENSITIES,
-    humanize_deterministic,
     humanize_deterministic_with_report,
 )
 from scripts.validate import AI_ISM_PATTERNS, _sentence_lengths, validate  # noqa: E402

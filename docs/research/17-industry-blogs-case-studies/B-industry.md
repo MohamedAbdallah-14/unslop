@@ -2,6 +2,8 @@
 
 **Angle:** B — Company engineering blog case studies on how leading AI products made outputs feel human (tone, voice, persona, empathy, quality of "thinking").
 
+**Last updated:** April 2026. Case studies 1–24 are from pre-April 2025. Cases 25–27 cover the April 2025–April 2026 window.
+
 **Scope:** 20+ case studies across three clusters:
 1. **Conversational / creative products** (Intercom, Klarna, Shopify, Duolingo, Khanmigo, Notion, Slack, Spotify, Character.AI, Anthropic Claude, Replit, Figma)
 2. **Developer / workflow AI** (Stripe, GitHub Copilot, Linear, HubSpot)
@@ -42,8 +44,9 @@ Fields per case study: **Company / Product · What they built · Humanization me
   - **25% drop in repeat inquiries**
   - **CSAT on par with human agents**
   - **$40M profit lift (2024), $60M (late 2025)**
-- **Caveat (important for humanization thesis):** By 2026 Klarna publicly **reversed course and re-hired humans** after service-quality degradation on complex cases. Lesson: CSAT parity in aggregate hid degradation on long-tail issues — aggregate metrics can obscure the humanization gap.
-- **Source:** OpenAI customer story; later press coverage.
+- **2025 reversal (confirmed):** In May 2025, CEO Sebastian Siemiatkowski publicly acknowledged that the full AI pivot resulted in "lower quality" service. Klarna resumed hiring human customer-service agents — specifically targeting students, parents, and rural workers for flexible remote roles. Customers had cited generic, repetitive, and insufficiently nuanced replies on complex issues. By early 2025, internal reviews confirmed AI lacked empathy for nuanced problem-solving. The new model: AI handles routine, high-volume queries; humans handle escalations, complex cases, and high-value customer interactions.
+- **Lesson (updated):** Aggregate CSAT parity hid tail-case degradation. The reversal confirms what the 2024 Crolic et al. finding predicted (study #3 in A-academic): anthropomorphic cues fail specifically when the capability isn't there to back them up. CSAT is not sufficient; resolution quality on the long tail is the correct bar.
+- **Source:** OpenAI customer story; Entrepreneur.com (May 2025); FinTech Weekly; CX Dive.
 
 ---
 
@@ -298,6 +301,41 @@ Fields per case study: **Company / Product · What they built · Humanization me
 
 ---
 
+---
+
+## 2025–2026 Case Studies
+
+### 25. Intercom — Fin 3 (Pioneer 2025 launch)
+- **Built:** Third-generation AI agent with Fin Voice (voice channel), Procedures (structured behavior specs), and the Fin Flywheel optimization system.
+- **Humanization mechanism:**
+  - **Fin Voice** — naturalistic phone conversations; customers reportedly surprised it isn't a human. "Immediate, natural, context-aware voice responses" over traditional IVR.
+  - **Procedures** — natural-language SOPs that train Fin to follow team-specific workflows and "exercise experience and judgment, just like your human team would."
+  - Flywheel design: four investment stages (train, evaluate, improve, expand) treat Fin behavior as continuously iterable source code, not a one-time prompt.
+- **Numbers (cumulative by late 2025):** 66% avg resolution across 6,000+ customers, 40M+ conversations; 20%+ of customers exceed 80% resolution.
+- **Signal:** Fin Voice is the most substantive public case study on voice AI humanization to date outside Spotify DJ. The "customers surprised it isn't a human" framing mirrors Spotify's 2023 radio-host anecdote — now replicated in enterprise customer support at scale.
+- **Source:** intercom.com/blog/whats-new-with-fin-3; intercom.com/blog/headlines-from-pioneer-2025/
+
+### 26. Anthropic — Claude 4 series (2025): Anti-sycophancy as a measurable engineering output
+- **Built:** Claude Opus 4, Sonnet 4, Haiku 4 (May 2025); Claude Sonnet 4.5 and Opus 4.5/4.7 series through 2025.
+- **Humanization mechanism:**
+  - Anti-sycophancy trained explicitly: Claude 4.5 models scored **70–85% lower** on sycophancy metrics than Opus 4.1 on Anthropic's internal evals.
+  - Claude Opus 4.7: 92% honesty rate on Anthropic's benchmarks with reduced sycophancy.
+  - **Petri tool** (open-sourced 2025): automated behavioral audit tool that evaluates models for sycophancy across extended conversations. One Claude model (auditor) simulates concerning scenarios; another (judge) grades performance. Converts "sounds human" into a reproducible measurement protocol.
+  - January 2026: Updated 80-page Constitution released — explains not just what behaviors are expected but why they matter.
+- **Relevance to humanization:** Operationalizes the "humanization by subtraction" pattern at model-training level. Anti-sycophancy is no longer just a system-prompt edit — it's a trained behavioral property with evals. This is the first public evidence of a major model provider quantifying and publishing sycophancy reduction numbers.
+- **Source:** anthropic.com/news/claude-sonnet-4-5; Anthropic sycophancy research; MSN/Anthropic coverage of Opus 4.7.
+
+### 27. OpenAI — GPT-4o sycophancy crisis and GPT-5 launch (April–August 2025)
+- **Built:** GPT-4o update (April 25, 2025) and GPT-5 (August 2025).
+- **What happened:**
+  - April 25 update made GPT-4o noticeably more sycophantic; rolled back April 28 after widespread user complaints.
+  - GPT-5 (August 2025) overcorrected in the opposite direction — users found it too "cold, formal, and brash." OpenAI responded by publicly announcing it would make GPT-5 "warmer and friendlier."
+  - **The GPT-5 sycophancy overcorrection backlash** is the clearest public evidence that the sycophancy/anti-sycophancy dial is a genuine product-design dimension, not a background detail. Users noticed, complained, and the model changed.
+- **Relevance to humanization:** The April 2025 crisis and the GPT-5 backlash together confirm that anti-sycophancy is now a commercially visible product attribute, not just a researcher concern. Both Anthropic and OpenAI made explicit public statements about calibrating it in 2025 — the first time that has happened from both major providers simultaneously.
+- **Source:** openai.com/index/sycophancy-in-gpt-4o/; openai.com/index/expanding-on-sycophancy/; Platformer news; TechCrunch (May 2025).
+
+---
+
 ## Cross-case patterns (the "how")
 
 ### Pattern 1 — Tone is a product surface, not a prompt afterthought
@@ -334,13 +372,13 @@ VOXI discovered their brand guidelines were ambiguous only when the AI followed 
 
 ## Gaps and what's missing from the industry writing
 
-1. **Almost no published data on "feels human" as a direct user-study metric.** Everyone measures CSAT, deflection, NPS. Nobody publishes rater scores on naturalness, warmth, or perceived agency. Spotify's "users thought it was a recorded radio host" is the closest anecdote.
-2. **Voice humanization is the most under-documented area.** Spotify is the only deep case study; Decagon/Sierra mention voice in passing; Fin 3 adds voice but blog posts focus on coverage, not on how they made it sound human.
-3. **Long-tail / edge-case failure modes are under-reported.** Klarna only walked back publicly — presumably many others have similar internal stories. Engineering blogs are still marketing surfaces.
+1. **Almost no published data on "feels human" as a direct user-study metric.** Everyone measures CSAT, deflection, NPS. Nobody publishes rater scores on naturalness, warmth, or perceived agency. Spotify's "users thought it was a recorded radio host" and Fin Voice's "customers are surprised it isn't a human" are the only anecdotes; neither has published data.
+2. **Voice humanization is better-documented in 2025–2026 than before but still thin.** Fin Voice (Intercom, Pioneer 2025) and Sierra ($150M ARR, voice surpassing text by October 2025) are meaningful additions. Still no peer-reviewed or third-party quantitative study on what makes enterprise voice AI feel human vs. robotic.
+3. **Long-tail / edge-case failure modes are under-reported.** Klarna's reversal is now public and confirmed by the CEO (May 2025). Presumably many others have similar internal stories that remain unpublished. Engineering blogs remain marketing surfaces.
 4. **Memory as humanization** is named (Duolingo, Character.AI) but barely explained mechanically. This is a clear research frontier for a humanization product.
 5. **Cross-cultural / multilingual humanization** is almost entirely absent despite Fin's 45 languages and Klarna's 35. "Humanized tone" is discussed as if English-only.
-6. **"Humanizing thinking" (chain-of-thought that reads like internal reasoning, not a template)** is implicit in Replit Agent 4 and GitHub Copilot agent mode but has no dedicated engineering-blog case study yet. This is probably the next wave.
-7. **Anti-humanization as a design choice.** Anthropic's anti-sycophancy and Linear's "quiet AI" hint that in professional contexts users *prefer* the AI to feel slightly machine-like. Under-explored explicitly.
+6. **Anti-sycophancy calibration is now a public product problem (2025)** — both OpenAI (GPT-4o crisis, GPT-5 overcorrection) and Anthropic (Petri, Opus 4.7) addressed it explicitly in 2025. But no engineering blog has yet published what the right sycophancy level is for different contexts, or how to tune it per use case.
+7. **Anti-humanization as a design choice.** Anthropic's anti-sycophancy and Linear's "quiet AI" hint that in professional contexts users *prefer* the AI to feel slightly machine-like. The 2025 GPT-5 "too cold" backlash confirms this is a real dial — but the optimal setting per context remains undescribed.
 
 ---
 
@@ -348,8 +386,8 @@ VOXI discovered their brand guidelines were ambiguous only when the AI followed 
 
 - **2023** — "chatbot that doesn't sound like a chatbot" (Intercom Fin v1, Khanmigo, Duolingo Max launch, Spotify DJ, Notion AI). Emphasis: generation quality + grounding.
 - **2024** — CSAT-parity-or-better becomes the publicly-claimed bar (Klarna, Ada, Zendesk cohort). Emphasis: aggregate metrics + deflection economics.
-- **2025** — Resolution depth, behavior training, tone customization as first-class product surface (Fin 2, Sierra, Decagon). Emphasis: brand voice as configurable.
-- **2026** — Agents, coworker framing, multi-surface (Slack/Teams), voice-in-workflow, and the **Klarna walk-back** reframes the narrative around tail-case humanization. Emphasis: human-in-the-loop flywheels, persona-as-artifact, anti-slop (Slack's "workslop" framing).
+- **2025** — Resolution depth, behavior training, tone customization as first-class product surface (Fin 2, Sierra, Decagon). Emphasis: brand voice as configurable. **GPT-4o sycophancy crisis (April 2025)** and **GPT-5 anti-sycophancy backlash (August 2025)** make anti-sycophancy a publicly visible product dimension for the first time. Klarna CEO publicly acknowledges the reversal (May 2025). Merriam-Webster names "AI slop" Word of the Year 2025 — the cultural marker of humanization-failure reaching mainstream consciousness. Sierra hits $150M ARR in January 2026 — voice agents surpass text as primary channel for Sierra by October 2025.
+- **2026** — Agents, coworker framing, multi-surface (Slack/Teams), voice-in-workflow, and the **confirmed Klarna walk-back** (humans re-hired for hybrid model). Emphasis: human-in-the-loop flywheels, persona-as-artifact, anti-slop as a named cultural phenomenon (Merriam-Webster), anti-sycophancy as a measurable trained property (Anthropic Petri, Claude Opus 4.7 92% honesty). Voice humanization is now commercially material (Fin Voice, Sierra $150M ARR). Intercom Fin 3 (Pioneer 2025) is the first serious enterprise voice-humanization public case study.
 
 ---
 
@@ -382,3 +420,12 @@ VOXI discovered their brand guidelines were ambiguous only when the AI followed 
 - [HubSpot Breeze — Change Tone feature deep-dive](https://www.eesel.ai/blog/breeze-rewrite-and-change-tone).
 - [Spotify Newsroom — Behind the Scenes of the AI DJ](https://newsroom.spotify.com/2023-03-08/spotify-new-personalized-ai-dj-how-it-works/) + [TechCrunch on Xavier Jernigan](https://techcrunch.com/2023/04/21/xaviar-x-jernigan-spotify-dj-ai).
 - [Accenture Song — VOXI / Vodafone](http://www.accenture.com/us-en/case-studies/song/vodafone) — brand-voice calibration loop.
+- [Intercom — Fin 3 launch (Pioneer 2025)](https://www.intercom.com/blog/whats-new-with-fin-3/) — Fin Voice, Procedures, Flywheel design.
+- [Intercom — Pioneer 2025 headlines](https://www.intercom.com/blog/headlines-from-pioneer-2025/) — unified Customer Agent vision.
+- [Klarna reversal — CEO acknowledgment (May 2025)](https://www.entrepreneur.com/business-news/klarna-ceo-reverses-course-by-hiring-more-humans-not-ai/491396) — "lower quality" admission; hybrid model.
+- [Klarna reversal — CX Dive](https://www.customerexperiencedive.com/news/klarna-reinvests-human-talent-customer-service-AI-chatbot/747586/) — rehiring announcement.
+- [OpenAI — Sycophancy in GPT-4o (April 2025)](https://openai.com/index/sycophancy-in-gpt-4o/) — crisis and rollback.
+- [OpenAI — Expanding on sycophancy](https://openai.com/index/expanding-on-sycophancy/) — follow-up commitments.
+- [Anthropic — Claude Opus 4.7 92% honesty rate](https://www.msn.com/en-us/health/other/anthropic-says-claude-opus-47-has-a-92-honesty-rate-less-sycophancy/ar-AA21aoeI) — measurable sycophancy reduction.
+- [Sierra revenue ($150M ARR, Jan 2026)](https://sacra.com/c/sierra/) — voice surpassing text as primary channel by October 2025.
+- [Merriam-Webster Word of the Year 2025 — "AI slop"](https://www.pbs.org/newshour/nation/merriam-websters-word-of-the-year-for-2025-is-ais-slop) — cultural marker of AI humanization failure.

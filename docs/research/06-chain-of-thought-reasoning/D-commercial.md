@@ -25,21 +25,22 @@ For each product: **vendor · category · pricing · reasoning mechanic · how "
 - Positioning: the first mainstream "think before you answer" frontier model.
 - Gap: opacity — users see a summary, not the actual thought process; hard to debug or trust.
 
-**2. OpenAI o3 / o3-mini / o3-pro**
-- Vendor: OpenAI. Category: reasoning-native API.
-- Pricing: o3 $2 in / $8 out per 1M; o3-mini $1.10 / $4.40; o3-pro $20 / $80. Prompt caching discounts available.
-- Reasoning mechanic: same private-CoT family as o1, tuned for tool use, multimodal input, and higher compute-per-answer regimes.
-- Surfacing: still summarized; February 2025 update added more visible reasoning on o3-mini in response to DeepSeek R1 transparency pressure.
-- Positioning: "reasoning that also uses tools" — the practical production tier.
-- Gap: reasoning text is curated for safety; raw CoT remains sealed.
+**2. OpenAI o3 / o4-mini / o3-pro**
+- Vendor: OpenAI. Category: reasoning-native API (generation April 2025; succeeded by GPT-5 for most use cases by August 2025).
+- Pricing: o3 $2 in / $8 out per 1M; o4-mini $1.10 / $4.40; o3-pro $20 / $80. Prompt caching discounts available.
+- Reasoning mechanic: o3 and o4-mini are the first reasoning models that can "think with images" — visual information is integrated into the CoT chain, not just described. o4-mini achieves 99.5% pass@1 on AIME 2025 with Python interpreter, 92.7% closed-book.
+- Surfacing: still summarized private CoT; February 2025 o3-mini transparency patch (in response to DeepSeek pressure) showed more visible reasoning summary.
+- Positioning: o3/o4-mini positioned as the last standalone o-series before GPT-5 unified the product line.
+- Gap: reasoning text remains curated for safety; raw CoT sealed. With GPT-5 routing replacing the discrete o-series for most users, explicit mode selection is being abstracted away.
 
-**3. Anthropic Claude Extended Thinking (Sonnet 4.6 / Haiku 4.5)**
+**3. Anthropic Claude Extended Thinking / Adaptive Thinking (Claude 4 series)**
 - Vendor: Anthropic. Category: reasoning-native API.
-- Pricing: Sonnet 4.6 $3 in / $15 out per 1M; Haiku 4.5 $1 / $5. Thinking tokens billed separately at a higher rate; caching up to 90% off, Batch 50% off.
-- Reasoning mechanic: returns a distinct `thinking` block *and* a `text` block; developer sets `budget_tokens` (min 1,500) to cap CoT length.
-- Surfacing: **visible by design**. App layer chooses whether to show the raw thinking stream. Anthropic explicitly calls it "visible extended thinking" and caveats that the prose is unpolished and may not be fully "faithful" to internal computation.
-- Positioning: "Keep thinking" — 2025/26 brand campaign framing Claude as a thinking *partner*, not a shortcut.
-- Gap: "faithfulness" — Anthropic's own research acknowledges the visible CoT is not guaranteed to match the true internal computation; risk of performative reasoning.
+- Pricing: Claude Sonnet 4.6 $3 in / $15 out per 1M; Claude Opus 4.6 higher; thinking tokens separately billed; caching up to 90% off, Batch 50% off.
+- Reasoning mechanic: **Adaptive thinking** (recommended for Opus 4.6, Sonnet 4.6 as of 2025–2026) replaces static `budget_tokens` — the model dynamically determines how much reasoning is needed per request. Extended thinking can now interleave with tool calls (web search, code execution) in a single pass.
+- Surfacing: **visible by design** — `thinking` block + `text` block returned separately. App layer controls display. Caveat from Anthropic: visible CoT is un-character-trained and "less personal-sounding" than final output.
+- Performance: Opus 4.6 leads SWE-bench at 72.5%, Terminal-bench at 43.2%. Sonnet 4.6 math went from 62% to 89% over Sonnet 4.5.
+- Positioning: "Keep thinking" — September 2025 brand campaign (Netflix/Hulu/NYT/WSJ). Claude 4 Opus described as delivering "more human-like, nuanced responses."
+- Gap: Adaptive thinking removes the explicit `budget_tokens` knob — developers cannot directly set reasoning depth. Faithfulness caveats remain from Anthropic's own 2025 study.
 
 **4. Google Gemini 3 Deep Think**
 - Vendor: Google / DeepMind. Category: reasoning-native API + consumer tier.
@@ -65,11 +66,20 @@ For each product: **vendor · category · pricing · reasoning mechanic · how "
 - Positioning: frontier reasoning with a distinctive multi-persona internal process.
 - Gap: closed model, cloud-locked, subscription-gated; the persona metaphor is a marketing skin over standard ensemble/CoT mechanics.
 
+**6b. OpenAI GPT-5 / GPT-5.2 / GPT-5.4 — unified reasoning + chat**
+- Vendor: OpenAI. Category: unified reasoning-native API (successor to the separate o-series for most use cases).
+- Release: GPT-5 August 7, 2025; GPT-5.2 December 2025; GPT-5.4 current (April 2026).
+- Pricing: varies by tier; "GPT-5 Thinking" mode available within unified model.
+- Reasoning mechanic: **internal routing** — a real-time router decides per-query whether to use fast response or extended CoT ("GPT-5 Thinking"). Users cannot explicitly invoke reasoning mode; the router makes the call based on query complexity, tool needs, and explicit intent cues. With thinking, GPT-5 outperforms o3 while generating 50–80% fewer output tokens.
+- Surfacing: summarized CoT (same as o1/o3 family). GPT-5.2 achieves new SOTA on advanced reasoning benchmarks (52.9% on a composite advanced-reasoning eval). System Card published alongside.
+- Positioning: the end of the o-series as a separate product; reasoning is now a property of the general model, not a separate tier.
+- Gap: the routing decision is opaque. Developers building on GPT-5 cannot reliably elicit or suppress extended thinking via prompts alone — a regression from explicit `o1`/`o3` mode selection. Humanization projects that need predictable reasoning depth must work around this.
+
 ### Reasoning-optimized end-user platforms
 
 **7. Perplexity Pro / Max + Sonar Reasoning Pro**
 - Vendor: Perplexity. Category: reasoning-optimized answer engine.
-- Pricing: Free / Pro $20 per mo / **Max $200 per mo** (adds o3-pro, GPT-5 Thinking, Claude Opus 4.5) / Enterprise custom. Sonar Reasoning Pro API: $2 in / $8 out per 1M, 128K context.
+- Pricing: Free / Pro $20 per mo / **Max $200 per mo** (adds o3-pro, GPT-5 Thinking, Claude Opus 4.6) / Enterprise custom. Sonar Reasoning Pro API: $2 in / $8 out per 1M, 128K context.
 - Reasoning mechanic: Pro Search runs multi-step CoT with automated tool / web-search invocation; Sonar Reasoning Pro is their in-house CoT model.
 - Surfacing: shows a step list ("searching X", "reading Y") and a final cited answer; intermediate reasoning is partially exposed.
 - Positioning: "answer engine" — reasoning in service of grounded answers with citations.
@@ -216,6 +226,8 @@ Notice the linguistic split: API vendors sell *reasoning as a capability* ("exte
 **G7. Non-code agent reasoning is thin.** The strongest agent-reasoning products (Devin, Reflection AI) are in code. Lindy and Relevance are workflow-centric. There is room for a reasoning agent specialized in *humanized writing and argumentation* — which aligns directly with the Unslop brief.
 
 **G8. The transparency ↔ safety tradeoff is under-explored in product.** OpenAI uses safety to justify opacity; Anthropic uses safety to argue *for* visibility. No product currently lets end-users configure this tradeoff per task ("show me everything on this math problem; summarize on this medical question"). A per-task transparency dial is a plausible humanization primitive.
+
+**G9 (new, 2025). Opaque routing on GPT-5 breaks explicit reasoning-mode control.** GPT-5's internal router decides when to think. Developers who previously relied on `model="o1"` or `model="o3"` to predictably invoke deep reasoning now have no reliable API switch. For humanization projects that need controllable reasoning depth, this is a significant surface regression. Neither the routing logic nor how to influence it via prompts is documented.
 
 ---
 

@@ -9,13 +9,15 @@ How an AI's *identity* — its character, voice, values, personality traits, and
 ## Executive Summary
 
 - **Character is alignment, not UX polish.** Anthropic's *Claude's Character*, OpenAI's *Model Spec*, and OpenAI's *Prompt Personalities* cookbook all explicitly frame personality as an alignment / reliability lever. Academic work (*Personality Traits in LLMs*, *BIG5-CHAT*) confirms personality traits are real, measurable, manipulable constructs inside model weights — not stylistic metaphors.
+- **Persona originates in pretraining, not post-training.** Anthropic's *Persona Selection Model* (PSM, Feb 2026) argues LLMs learn to simulate diverse characters during pretraining; post-training selects and refines a specific Assistant persona from that distribution. This reframes humanization from "installing traits" to "selecting and stabilizing a latent character." Pairs with *The Assistant Axis* (Jan 2026) as theory + mechanism.
 - **Persona is mechanistically real in the model.** Anthropic's *The Assistant Axis* shows the Assistant persona occupies a specific direction in activation space alongside 275+ pretrained archetypes (therapist, coach, jester, oracle). Activation capping along that axis cuts harmful responses ~50% without retraining. This gives humanization a concrete mechanistic target.
 - **Persona drifts, fast, and it's an attention problem.** Li et al. (*Measuring and Controlling Instruction (In)Stability*, 2024, Harvard) document persona drift within ~8 turns in LLaMA-2-70B-chat and GPT-3.5, trace it to attention decay, and propose *split-softmax* as a lightweight fix. Community practice corroborates: the entire "author's note at depth 0," "post-history instructions," and KoboldCpp "context shifting" toolkit exists to fight this one failure mode.
 - **Persona fidelity does not scale with model size.** *PersonaGym* reports GPT-4.1 tying LLaMA-3-8B; *CharacterEval* shows small Chinese-specialized open models beating GPT-4 on in-culture role-play. Bigger is not better — training data, scaffolding, and evaluation matter more.
-- **Character hallucination has a taxonomy.** 2024 crystallized four distinct failure modes: *interactive hallucination* (SHARP — stance transfer from the interlocutor), *role-query conflict* (RoleBreak — weaponized as jailbreak), *temporal leakage* (TimeChara — young-Harry knows old-Harry's future), and the familiar *query sparsity* fallback to the base model. Each has a dedicated mitigation.
+- **Character hallucination has a taxonomy.** 2024 crystallized four distinct failure modes: *interactive hallucination* (SHARP — stance transfer from the interlocutor), *role-query conflict* (RoleBreak — weaponized as jailbreak), *temporal leakage* (TimeChara — young-Harry knows old-Harry's future), and the familiar *query sparsity* fallback to the base model. Each has a dedicated mitigation. RoleRAG (2025) adds a retrieval-side complement to these training-side defenses.
 - **Training > prompting for real persona fidelity; but structured prompting captures most of the gain cheaply.** *BIG5-CHAT*, *Character-LLM*, *OpenCharacter*, *Orca*, and *CoSER* all show training-based personas outperform prompted ones; *Big5-Scaler* shows numeric Big-Five scalars in the prompt capture most of the value when training is not available.
-- **Memory architecture is the 2026 product moat.** Commercial companions (Replika Ultra, Kindroid's three tiers, Nomi's explicit+tonal recall, Crushon's context-window-as-SKU) have migrated from "bigger model" marketing to "better memory" marketing. Open-source has converged on the *system prompt + lorebook + post-history instructions + samplers* stack.
-- **Sycophancy is the canonical emergent failure of short-horizon persona tuning.** OpenAI's April 2025 GPT-4o postmortem is the public case study; Anthropic pre-emptively names "excessive desire to be engaging" as a bad trait; the lesson is *do not optimize persona against thumbs-ups*.
+- **Memory architecture is the 2026 product moat.** Commercial companions (Replika Ultra, Kindroid's three tiers, Nomi's explicit+tonal recall, Crushon's context-window-as-SKU) have migrated from "bigger model" marketing to "better memory" marketing. Companion apps now pull in $221M in consumer spending (H1 2025 data), with users spending 1.5–2.7 hours daily — evidence the moat is working. Open-source has converged on the *system prompt + lorebook + post-history instructions + samplers* stack.
+- **Sycophancy is the canonical emergent failure of short-horizon persona tuning.** OpenAI's April 2025 GPT-4o postmortem is the public case study; Anthropic pre-emptively names "excessive desire to be engaging" as a bad trait; the lesson is *do not optimize persona against thumbs-ups*. A 2026 Springer AI & Ethics paper formally characterizes the moral and epistemic harms of AI sycophancy.
+- **Persona research is now institutionally recognized.** The NeurIPS 2025 PersonaLLM Workshop, Wang et al.'s January 2026 survey (arXiv:2601.10122), and the Four-Quadrant Taxonomy paper (arXiv:2511.02979) all mark the field's transition from a loose academic subfield to a recognized research area with its own evaluation norms, taxonomies, and ethical debates.
 
 ---
 
@@ -58,11 +60,17 @@ How an AI's *identity* — its character, voice, values, personality traits, and
 - *SHARP / RoleBreak / TimeChara / RoleFact* (2024). The four-paper cluster that named and addressed character-hallucination failure modes.
 - *From Persona to Personalization: A Survey on Role-Playing Language Agents* — Neph0s et al. (TMLR 2024). The taxonomy map for the whole subfield.
 - *CoSER* — Wang et al. (ICML 2025). Training on *internal thoughts* (not just dialogue) produces the current open-source SOTA (CoSER-70B ≥ GPT-4o on InCharacter).
+- *Role-Playing Agents Driven by Large Language Models* — Wang et al. (arXiv:2601.10122, Jan 2026). The most current comprehensive survey; reviews three generations of RPLA paradigms and current technical challenges.
+- *CharacterBox* — Li et al. (NAACL 2025). Simulation-sandbox evaluation via dual character+narrator agents; extends dynamic evaluation into full world simulation.
+- *RPEval* (arXiv:2505.13157, 2025). Adds emotional understanding and moral alignment as first-class evaluation axes, filling gaps left by consistency-focused benchmarks.
+- *RoleRAG* (arXiv:2505.18541, 2025). Retrieval-augmented persona: knowledge-graph-based character knowledge management reduces hallucinated responses.
+- *Systematizing LLM Persona Design: A Four-Quadrant Technical Taxonomy* — Sun et al. (arXiv:2511.02979, NeurIPS 2025). The clearest published framework for categorizing the AI companion design space by Virtual/Embodied × Emotional/Functional axes.
 
 ### Must-read posts/essays
 
 - *Claude's Character* — Anthropic (Jun 2024). The seminal industry essay: character is alignment; honesty > agreement; synthetic self-preference is the training mechanism.
 - *The Assistant Axis* — Anthropic Interpretability (Jan 2026). Persona is a specific direction in activation space; therapy-like conversations cause the largest drift; activation capping is a light-touch fix.
+- *The Persona Selection Model* — Anthropic (Feb 2026). Theoretical account of why LLMs have personas at all: pretraining learns character simulation; post-training selects and stabilizes a specific Assistant persona from that distribution.
 - *Claude's Constitution* — Anthropic. The written values document that pairs with the character post.
 - *Introducing the Model Spec* — OpenAI (May 2024, updated Feb 2025). Makes assistant persona defaults (tone, clarifying questions, non-persuasion, non-sycophancy) legible and auditable.
 - *Sycophancy in GPT-4o* + *Expanding on Sycophancy* — OpenAI (Apr/May 2025). The candid postmortem: short-horizon feedback → sycophancy → safety issue.
@@ -79,11 +87,11 @@ How an AI's *identity* — its character, voice, values, personality traits, and
 
 ### Key open-source projects
 
-- *SillyTavern* (~25.9k stars, AGPL-3.0). De-facto persona-chat frontend; reference implementation of Character Card V2. Canonical prompt order: system → persona → scenario → WorldInfo → history → post-history instructions.
+- *SillyTavern* (~23.3k stars, AGPL-3.0). De-facto persona-chat frontend; reference implementation of Character Card V2. Canonical prompt order: system → persona → scenario → WorldInfo → history → post-history instructions. February 2026 release added ComfyUI/Flux integration for in-session multimodal persona expression.
 - *RisuAI* + *Character Card Spec V3*. Cross-platform TS/Svelte frontend; reference implementation of V3 / CHARX; the cleanest codebase for multimodal persona (expression portraits, audio, lorebook decorators).
 - *Character Card Spec V1 / V2 / V3*. The lingua franca of open-source persona serialization; portable across SillyTavern, Agnai, Chub, Oobabooga, Backyard, RisuAI.
 - *Agnai*. Multi-user, multi-bot, AI-agnostic server-deployable platform; supports multiple persona schemas (W++, SBF, Boostyle, plain text) and embedding-based lorebooks.
-- *Oobabooga text-generation-webui* (~46.4k stars). Not persona-specific, but the community's source-of-truth for sampler settings (temp, top-p, min-p, DRY, XTC) and per-model chat templates that dominate felt humanness.
+- *Oobabooga text-generation-webui* (~46k stars, actively maintained 2026, v4.0 released). Not persona-specific, but the community's source-of-truth for sampler settings (temp, top-p, min-p, DRY, XTC, adaptive-p added 2026) and per-model chat templates that dominate felt humanness.
 - *KoboldCpp* (~9.9k). Context shifting + grammar-constrained output — infrastructure-level persona stability.
 - *Aphrodite Engine* (PygmalionAI). Multi-LoRA serving, "N personas on one base model" at production scale.
 - *RoleLLM-public*, *CharacterEval*, *PersonaGym*, *trainable-agents (Character-LLM)*, *Ditto*, *CoSER*, *Neeko* (dynamic LoRAs). Academic repos with reusable benchmarks, reward models, and checkpoints.
@@ -93,17 +101,17 @@ How an AI's *identity* — its character, voice, values, personality traits, and
 
 ### Notable commercial tools
 
-- *Character.AI*. Category-defining UGC character platform (~20M users, $9.99/mo c.ai+). Persona-as-social-media-artifact.
-- *Replika* (Luka, 2017). The archetype 1:1 companion; Ultra tier exposes memory as a visible product surface. Relationship modes (friend/partner/mentor) as pricing axis.
-- *Kindroid*. Tiered-memory marketing (short/mid/long + Cascaded Memory), contextual AI selfies, positive-third-person backstory convention.
+- *Character.AI*. Category-defining UGC character platform (28M+ MAU, $6.99/mo c.ai+ as of 2026, ~18M unique chatbot characters, ~10B messages/month). Persona-as-social-media-artifact.
+- *Replika* (Luka, 2017). The archetype 1:1 companion; Ultra tier exposes memory as a visible product surface; ~25M registered users; 2.7h/day average engagement. Pricing adjusted to ~$11.66–$13.99/mo.
+- *Kindroid*. Tiered-memory marketing (short/mid/long + Cascaded Memory), contextual AI selfies, positive-third-person backstory convention. Highest-rated companion app (4.5 stars, 20K+ reviews) as of 2026.
 - *Nomi.ai*. Explicit vs. tonal memory split; ~10 distinct companions per user.
-- *Pi / Inflection*. Empathy-first, no-characters, no-persona-catalog — the "tone as the product" endpoint; ~6M MAU.
+- *Pi / Inflection*. [Historical] Empathy-first, no-characters — the "tone as product" endpoint. Founding team departed to Microsoft AI in early 2024; Pi.ai remains live but is no longer actively developed as a consumer persona product.
 - *Chai*. Explicitly trained for "conversational and emotional interaction rather than factual accuracy"; 25M+ user-created characters on proprietary LLM cluster.
-- *Janitor AI*. BYO-API-key model — cleanly separates persona design from model provision.
+- *Janitor AI*. BYO-API-key model (supports GPT-5, Gemini 3, Claude 4.5, DeepSeek V3) — cleanly separates persona design from model provision.
 - *Crushon / Candy / Soulmate / Talkie / Paradot*. The unfiltered / gamified / localized / multimodal variants; useful as persona-design case studies across segments.
 - *Persona AI (video agents)*. Enterprise "video that feels human" for interview/coaching workflows.
 - *Personal AI Enterprise*. Train-a-persona-on-your-SME — inverse framing (AI clones the human).
-- *Typeform AI*. Persona-as-UX-label (Creator / Interaction / Insights AI) — not roleplay, not companionship.
+- *Typeform AI*. Persona-as-UX-label (Creator / Interaction / Insights AI, Winter 2026 release) — not roleplay, not companionship.
 - *Cresta*. Persona-as-governance-object (SubAgents with per-task prompts, knowledge, and guardrails) — the most mature enterprise persona expression.
 - *Hume AI (EVI)*. Voice-first personas; prosody is part of the persona spec.
 
@@ -169,16 +177,18 @@ How an AI's *identity* — its character, voice, values, personality traits, and
 
 ## Emerging Trends
 
-1. **From prose to infrastructure to activations.** 2023 persona work = writing prose prompts. 2024 = template systems (Prompt Poet, multi-file personas, Card V3). 2025–26 = activation-level interventions (Assistant Axis capping, split-softmax). Persona is moving down the stack.
+1. **From prose to infrastructure to activations.** 2023 persona work = writing prose prompts. 2024 = template systems (Prompt Poet, multi-file personas, Card V3). 2025–26 = activation-level interventions (Assistant Axis capping, split-softmax) and theoretical accounts of persona's pretraining origins (PSM). Persona is moving down the stack.
 2. **From harm-avoidance to virtue-installation.** Anthropic, OpenAI, Inflection, and the cookbook all publicly shifted from "train a harmless model" to "install curiosity, honesty, humility." This is now the default framing.
-3. **From private prompts to published specs.** Model Spec (OpenAI), Claude's Constitution (Anthropic), Grok system prompts (xAI), Prompt Poet templates (Character.AI), Card V3 (community). Legibility is both safety and design.
+3. **From private prompts to published specs.** Model Spec (OpenAI), Claude's Constitution (Anthropic), Grok system prompts (xAI), Prompt Poet templates (Character.AI), Card V3 (community), PSM (Anthropic). Legibility is both safety and design.
 4. **From single persona to personalized / plural persona.** OpenAI's post-sycophancy personalization controls, Kindroid's response directive, Nomi's up-to-10 companions, PERSONA's pluralistic alignment testbed. Fixed-persona products are giving ground.
-5. **Memory tiers displace model size as the companion moat.** Every consumer companion now markets memory architecture on the box. Persistence is the humanization primitive; fluency is commoditized.
-6. **Multimodal persona.** Voice (Hume, EVI, TTS), face (RisuAI expression classifiers, Card V3 portraits, Kindroid selfies), and video (Persona AI) are now part of the persona spec. Text-only personas feel less human by comparison.
-7. **Hallucination taxonomy maturing into defenses.** SHARP / RoleBreak / TimeChara / RoleFact gave the field four named failure modes with four named mitigations in a single 12-month window.
+5. **Memory tiers displace model size as the companion moat.** Every consumer companion now markets memory architecture on the box. Persistence is the humanization primitive; fluency is commoditized. Commercial evidence: $221M consumer spend H1 2025, 2.7h/day average engagement.
+6. **Multimodal persona.** Voice (Hume, EVI, TTS), face (RisuAI expression classifiers, Card V3 portraits, Kindroid selfies, SillyTavern ComfyUI/Flux integration 2026), and video (Persona AI) are now part of the persona spec. Text-only personas feel less human by comparison.
+7. **Hallucination taxonomy maturing into defenses.** SHARP / RoleBreak / TimeChara / RoleFact gave the field four named failure modes with four named mitigations in a single 12-month window. RoleRAG (2025) adds retrieval-side character knowledge management.
 8. **Self-generated training data as default.** Anthropic's synthetic self-preference, Synthetic-Persona-Chat, OpenCharacter (1M personas), CoSER, Ditto, Character-LLM. Human-curated persona data is no longer the scaling path.
 9. **Enterprise persona = governance object.** Cresta's SubAgents + escalation + guardrails pattern is likely to generalize. Persona in B2B means voice + policy + boundary + sub-agent graph.
 10. **Stages / personas-as-programs.** Chub Venus's Stage primitive and RisuAI's script modules point to personas as mini-applications with state machines, not static prompts.
+11. **Simulation-based evaluation.** CharacterBox (NAACL 2025) and RPEval add dynamic world-simulation and moral/emotional axes to the evaluation stack. The field is moving from "does it stay consistent?" toward "does it behave correctly in novel situations with emotional and ethical stakes?"
+12. **Institutional recognition.** NeurIPS 2025 PersonaLLM Workshop, the Wang et al. 2026 comprehensive survey, and the Four-Quadrant Taxonomy paper mark the subfield's transition to recognized status with its own community, evaluation norms, and dedicated venues.
 
 ---
 
@@ -248,9 +258,9 @@ For a practitioner getting oriented fast, read in this order:
 
 | File | Angle | Primary contribution |
 |---|---|---|
-| `A-academic.md` | Peer-reviewed & arXiv literature | 23 papers: drift mechanics, training-based personality, character-hallucination taxonomy, psychometric evaluation, dynamic behavioral benchmarks. |
-| `B-industry.md` | Frontier-lab & practitioner engineering blogs | 19 posts: Claude's character / constitution / Assistant Axis; OpenAI Model Spec + sycophancy postmortem + Prompt Personalities; Character.AI Prompt Poet; Pi; Kindroid; Hume EVI; Grok; Mindra / AgentCraft; Simon Willison. |
-| `C-opensource.md` | OSS ecosystem + academic repos | 20+ projects: SillyTavern, RisuAI, Agnai, Oobabooga, KoboldCpp, Aphrodite; Character Card V1/V2/V3; RoleLLM, CharacterEval, PersonaGym, Character-LLM, Ditto, CoSER, Neeko; Chub Venus, C.AI wrappers. |
-| `D-commercial.md` | Commercial products & services | 16 products across consumer (Character.AI, Replika, Kindroid, Nomi, Pi, Janitor, Chai, Talkie, Crushon, Candy, Soulmate, Paradot) and enterprise (Persona AI, Personal AI, Typeform AI, Cresta). Pricing, memory architectures, content-policy segmentation. |
-| `E-practical.md` | Forum / community how-to's | 16 practitioner resources: r/LocalLLaMA, r/CharacterAI, r/SillyTavernAI, r/Replika, HN, YouTube, rentry (Ali:Chat, W++, Boostyle, PList, Rex). Randomizable prompts, Author's Note at depth 0, 3200-char cliff, negation-is-toxic, burstiness, AI-slop blacklist. |
+| `A-academic.md` | Peer-reviewed & arXiv literature | 30 papers (updated April 2026): drift mechanics, training-based personality, character-hallucination taxonomy, psychometric evaluation, dynamic behavioral benchmarks. New: Persona Selection Model (Anthropic), Wang et al. 2026 survey, CharacterBox, RPEval, RoleRAG, Four-Quadrant Taxonomy, NeurIPS 2025 PersonaLLM Workshop. |
+| `B-industry.md` | Frontier-lab & practitioner engineering blogs | 20 posts (updated April 2026): Claude's character / constitution / Assistant Axis / Persona Selection Model; OpenAI Model Spec + sycophancy postmortem + Prompt Personalities; Character.AI Prompt Poet; Pi (historical); Kindroid; Hume EVI; Grok; Mindra / AgentCraft; Simon Willison. |
+| `C-opensource.md` | OSS ecosystem + academic repos | 23+ projects (updated April 2026): SillyTavern (~23.3k stars, corrected), RisuAI, Agnai, Oobabooga, KoboldCpp, Aphrodite; Character Card V1/V2/V3; RoleLLM, CharacterEval, PersonaGym, Character-LLM, Ditto, CoSER, Neeko, CharacterBox, RoleRAG; Chub Venus, C.AI wrappers. |
+| `D-commercial.md` | Commercial products & services | 16 products (updated April 2026): stats corrected — Character.AI (28M+ MAU, $6.99/mo), Replika (~25M users, 2.7h/day, $11.66–$13.99/mo), Pi (historical — team departed 2024). Market context added: $221M consumer spend H1 2025, 220M downloads. |
+| `E-practical.md` | Forum / community how-to's | 16 practitioner resources: r/LocalLLaMA, r/CharacterAI, r/SillyTavernAI, r/Replika, HN, YouTube, rentry (Ali:Chat, W++, Boostyle, PList, Rex). Randomizable prompts, Author's Note at depth 0, 3200-char cliff, negation-is-toxic, burstiness, AI-slop blacklist. Content remains current. |
 

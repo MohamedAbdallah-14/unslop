@@ -104,12 +104,24 @@ Each entry: **Venue · Paper · Date · Core community take · Top counter-argum
 - **Counter:** Falls to the same chained-rewrite attacks as every other detector; fingerprinting inherits all the "models converge stylistically" problems from (6).
 - **Signal:** Second-order threat model: humanizers may also need to avoid *provider* attribution, not just AI/human attribution.
 
+### 16b. Groundy/Practitioners — "Detecting AI Content in 2026: The Arms Race Nobody Is Winning"
+- URL: `groundy.com/articles/detecting-ai-content-2026-arms-race-nobody/`
+- **Take:** Documents the current practitioner consensus as of early 2026: over a dozen elite universities have disabled AI detection entirely; OpenAI's own detector was shut down (26% true-positive rate). Turnitin added "bypasser detection" in 2025 — ~70% of traditional humanizers now fail against it, ~30% still pass.
+- **Counter:** The "30% still pass" figure is a moving target; every detector update changes the split. The actual detection arms race timescale is weeks, not years.
+- **Signal:** The commercial humanizer ecosystem has stratified into a top tier (30%) that adapts quickly to detector updates and a bottom tier (70%) that doesn't. This stratification is not captured in any academic benchmark and represents the most current ground truth on product effectiveness.
+
 ### 16. Oxen.ai "arXiv Dives" Discord paper club (weekly)
 - URL: `oxen.ai/community/arxiv-dives`
 - **Format:** Live Zoom walkthrough + Discord discussion; past sessions archived as YouTube + blog recaps. Topic-relevant sessions: Llama-2 internals, DeepSeek-R1/GRPO, RWKV-7 (with author), code-LLM evaluation.
 - **Signal:** The dive format produces accessible paper recaps but shallow text-threads; for this angle, the HN/Reddit mirrors of the same papers are richer.
 
 ---
+
+## Patterns & trends (updated Apr 2026)
+
+7. **Detection has institutionally retreated.** The Groundy practitioner report (early 2026) confirms what HN threads predicted from 2023 onward: formal institutions have given up on detector-based enforcement. OpenAI's classifier is dead; multiple university networks have disabled Turnitin AI detection. The academic arms-race literature continues, but deployment has stalled.
+
+8. **Surprisal-variance is entering the practitioner vocabulary.** DivEye's finding — that LLM text has narrower rhythmic unpredictability than human text — maps cleanly onto the "register-averaging" framing from HN thread #5. It gives practitioners a measurable target: vary sentence-level entropy within a passage, not just word-level choice.
 
 ## Patterns & trends
 
@@ -134,6 +146,7 @@ Each entry: **Venue · Paper · Date · Core community take · Top counter-argum
 
 ## Sources
 
+- `groundy.com/articles/detecting-ai-content-2026-arms-race-nobody/` — Detecting AI Content in 2026: The Arms Race Nobody Is Winning (practitioner report, 2026)
 - `news.ycombinator.com/item?id=34514345` — HN thread, Kirchenbauer watermark paper (author participated).
 - `news.ycombinator.com/item?id=36160591` — HN, "Undetectable Watermarks" paper; contains the emoji-attack cite (`eprint.iacr.org/2023/763`).
 - `news.ycombinator.com/item?id=34557189` — HN, DetectGPT paper; includes chained-pipeline evasion.

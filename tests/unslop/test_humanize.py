@@ -283,6 +283,60 @@ class TestDeterministicStockVocab:
         out = humanize_deterministic("Use the keyboard to navigate to the next page.")
         assert "navigate" in out.lower()
 
+    def test_strips_meticulous_and_bustling(self) -> None:
+        out = humanize_deterministic(
+            "The meticulously crafted interface lives in a bustling marketplace."
+        )
+        low = out.lower()
+        assert "meticulous" not in low
+        assert "bustling" not in low
+        assert "carefully" in low
+        assert "busy" in low
+
+    def test_strips_paradigm_shift_and_game_changer(self) -> None:
+        out = humanize_deterministic(
+            "It's a paradigm shift. The tool was a real game-changer for us."
+        )
+        low = out.lower()
+        assert "paradigm shift" not in low
+        assert "game-changer" not in low
+        assert "shift" in low
+        assert "major change" in low
+
+    def test_strips_revolutionize_and_transformative(self) -> None:
+        out = humanize_deterministic(
+            "This will revolutionize workflows. The revolutionizing effect is transformative."
+        )
+        low = out.lower()
+        assert "revolutioniz" not in low
+        assert "transformative" not in low
+
+    def test_strips_myriad_and_plethora(self) -> None:
+        out = humanize_deterministic(
+            "There are a myriad of options. A plethora of tools exist. Myriad choices."
+        )
+        low = out.lower()
+        assert "myriad" not in low
+        assert "plethora" not in low
+        assert "many" in low
+
+    def test_strips_uncharted_and_synergy(self) -> None:
+        out = humanize_deterministic(
+            "We entered uncharted territory. The synergies were clear. Teams synergize well."
+        )
+        low = out.lower()
+        assert "uncharted territory" not in low
+        assert "synergies" not in low
+        assert "synergize" not in low
+
+    def test_unprecedented_kept_in_factual_context(self) -> None:
+        """Factual use ("unprecedented drought") should survive; the purple
+        noun-connective form ("unprecedented opportunity") should not."""
+        out1 = humanize_deterministic("The 2026 drought reached unprecedented levels.")
+        assert "unprecedented" in out1.lower()
+        out2 = humanize_deterministic("This creates an unprecedented opportunity for growth.")
+        assert "unprecedented opportunity" not in out2.lower()
+
     def test_navigate_replaced_when_figurative(self) -> None:
         out = humanize_deterministic("We navigate the complex regulatory landscape.")
         assert "navigate the" not in out.lower()

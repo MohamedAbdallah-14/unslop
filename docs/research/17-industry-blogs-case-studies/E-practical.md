@@ -4,6 +4,8 @@
 
 **Scope of this note.** Practitioner forum posts — founders, freelancers, SaaS content teams, and indie hackers — sharing real-world deployments of humanized-AI systems. Focus on outcomes (revenue, detection scores, conversion, rankings) and the tactical moves behind them, not on marketing landing pages. 2025–2026 posts weighted heaviest; older posts included only when they established a pattern.
 
+**Last updated:** April 2026. Posts 1–17 are from the 2024–early 2026 window and remain current. Patterns section updated with 2025–2026 developments: the GPT-4o sycophancy crisis, the "AI slop" cultural moment, and the detector arms-race cadence.
+
 ---
 
 ## Cataloged Posts
@@ -186,17 +188,22 @@
 
 9. **Training-cost parity with a human hire keeps recurring.** Lemkin's "spend the same time training AI as a human" (#11), Phipps's transcript-seeding (#13), and the Ali Abdaal team's editorial layer (#15) all arrive at the same conclusion from different angles: voice is cheap to model only if you already have ground-truth samples.
 
-10. **Cultural backlash is live and concentrated in HN / r/copywriting.** Posts #4 and #16 show the pushback isn't abstract ethics — it's senior practitioners and technical readers saying "the category exists to fool people." Any product in this space needs an answer for this, not just a privacy policy.
+10. **Cultural backlash is live, has intensified, and is now mainstream.** Posts #4 and #16 show the practitioner-level pushback; but "AI slop" being named Merriam-Webster's Word of the Year 2025 and search volume increasing 9× from 2024 marks a cultural inflection. Pinterest and YouTube introduced user controls to limit AI-generated content. The HN/r/copywriting sentiment documented in 2024 is now consumer mainstream in 2026. Any product in this space needs an answer for this, not just a privacy policy.
+
+11. **The sycophancy axis is now a practitioner-visible product dimension.** OpenAI's April 2025 GPT-4o update made sycophancy noticeably worse; practitioners noticed and complained; it was rolled back within days. GPT-5 (August 2025) overcorrected; OpenAI announced it would make it "warmer and friendlier." Practitioners are now aware that sycophancy level is a dial, and they are opinionated about where it should be set. For humanization products, this means that "sound warm and human" and "avoid sycophancy" are in tension and practitioners now explicitly identify both as desiderata.
+
+12. **Detector arms-race decay rate is faster than practitioners assume.** GPTZero confirmed patching a popular bypass technique within days of discovery in 2025. The 84–89% bypass rates claimed in posts #5 and #6 are single-point-in-time measurements; the same stack will score worse 3–6 months later as detectors update. No practitioner post has followed up with decay tracking. This is the corpus's most significant empirical gap.
 
 ## Gaps (things the practitioner corpus does not say)
 
-- **No durable-ranking study from a practitioner.** Neil Patel's 5.54× number (#14) is vendor-adjacent; no indie hacker has published a 12-month organic ranking cohort for humanized vs. raw AI vs. human content with traffic charts. This is an open research slot.
-- **Sparse data on detector arms-race decay.** Claimed bypass rates (84–89%) are single-point-in-time. Nobody tracks how the same humanized corpus scores 3, 6, 12 months later as Originality.ai updates. Practitioners implicitly assume bypass holds; the literature (outside this corpus) says it doesn't.
-- **Almost no enterprise deployment stories.** Everything public is founder-scale, agency-scale, or SaaStr's mid-market. How Fortune 500 content teams humanize at editorial scale is not in practitioner channels — likely NDA'd.
-- **"Preserve the original word-for-word" approaches (Concealy, #7) are under-examined on risk.** If the bypass mechanism is invisible unicode or structural markers, detectors and plagiarism tools will ship counter-measures quickly. No practitioner post I found has tested this class over time.
-- **Little rigorous work on voice-preservation quality metrics.** Everyone claims they preserve voice; nobody (outside of the GPTZero GPT review in #6, which is self-reported) has an independent evaluation framework. "Sounds like me" is asserted, not measured.
-- **No cross-cultural / non-English deployment data.** All 17 posts are English-only. Detection and humanization dynamics in Arabic, Japanese, German, etc. are absent from this corpus.
-- **Thin on failure modes in long-form.** BypassGPT (#5) is cited as the "long-form champion" past 1,500 words, but the specifics of *how* other humanizers fail at length (repetitive phrasing, tone drift, meaning loss) are stated without side-by-side evidence.
+- **No durable-ranking study from a practitioner.** Neil Patel's 5.54× number (#14) is vendor-adjacent and was published in late 2024; no indie hacker has published a 12-month organic ranking cohort for humanized vs. raw AI vs. human content with traffic charts. A mid-2025 analysis cited elsewhere puts the gap at 5.44× traffic for human content — broadly consistent with Patel but still not practitioner-owned data.
+- **Detector arms-race decay is confirmed fast but untracked.** GPTZero patched a popular bypass within days in 2025. Claimed bypass rates (84–89% in posts #5 and #6) are single-point-in-time. Nobody has published a 6-month follow-up on the same corpus. The gap is now larger than it was — the arms-race cadence is confirmed faster than practitioners assume.
+- **Almost no enterprise deployment stories.** Everything public is founder-scale, agency-scale, or SaaStr's mid-market. How Fortune 500 content teams humanize at editorial scale is not in practitioner channels — likely NDA'd. Status: unchanged as of April 2026.
+- **"Preserve the original word-for-word" approaches (Concealy, #7) are confirmed risky.** GPTZero patched similar approaches in 2025 within days. No practitioner post has tested this class longitudinally.
+- **Little rigorous work on voice-preservation quality metrics.** Everyone claims they preserve voice; nobody (outside of the GPTZero GPT review in #6, which is self-reported) has an independent evaluation framework. "Sounds like me" is asserted, not measured. Status: unchanged.
+- **No cross-cultural / non-English deployment data.** All 17 posts are English-only. Detection and humanization dynamics in Arabic, Japanese, German, etc. are absent from this corpus. Status: unchanged.
+- **Sycophancy calibration is absent from practitioner discourse.** The GPT-4o sycophancy crisis and GPT-5 overcorrection (April–August 2025) are not discussed in the IH/Reddit/HN practitioner corpus at all. Practitioners are picking model outputs that feel right, but they are not explicitly measuring or tuning sycophancy level. This is a blind spot.
+- **"AI slop" as a qualitative failure mode is widely discussed but not instrumented.** Practitioner posts diagnose AI slop (post #16 does this well) but no post has published a before/after rubric for measuring slop reduction that ties back to a conversion or ranking delta.
 
 ## Implications for Unslop
 
@@ -226,3 +233,11 @@
 15. Stormy AI + YouTube — Ali Abdaal team / Ines Lee interview — voice-to-text → AI refinement → Notion edit workflow; "cover band, no jazz" quote
 16. Reddit r/copywriting — `reddit.com/r/copywriting/comments/1r0t9w6/` — senior-copywriter diagnosis of AI-slop tells and non-accusatory correction method
 17. Devpost / Raptors.dev hackathon — `evaluate.aihumanizehack.raptors.dev` + Devpost project pages — Linguify, HumanAIze, Sanjay Sah's humanizer (Gemini+Markov+HF), HumanizerGPT, TextHumanizer Pro
+
+**2025–2026 supplementary sources:**
+- GPTZero — gptzero.me/news/gptzero-by-passers/ — confirmation that bypass methods are patched within days; days-to-patch cadence.
+- Merriam-Webster Word of the Year 2025 — pbs.org/newshour/nation/merriam-websters-word-of-the-year-for-2025-is-ais-slop — "AI slop" mainstream.
+- WebProNews — webpronews.com/ai-slop-floods-social-media-in-2025-backlash-spurs-2026-reforms/ — platform responses (Pinterest, YouTube).
+- OpenAI — openai.com/index/sycophancy-in-gpt-4o/ — April 2025 GPT-4o sycophancy crisis.
+- TechCrunch — techcrunch.com/2025/08/25/ai-sycophancy-isnt-just-a-quirk-experts-consider-it-a-dark-pattern — sycophancy as intentional dark pattern framing.
+- Meltwater — meltwater.com/en/blog/ai-slop-consumer-sentiment-social-listening-analysis — consumer sentiment tracking on AI slop.

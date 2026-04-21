@@ -137,37 +137,79 @@ Each entry: title, authors, venue/year, URL, core contribution, humanization rel
 
 ### Full-duplex spoken LLMs (2022–2026)
 
-17. **Generative Spoken Dialogue Language Modeling** (dGSLM)
+17. **Beyond Turn-Based Interfaces: Synchronous LLMs as Full-Duplex Dialogue Agents** (SyncLLM)
+    - Défossez, A., Liang, X., et al. (Meta AI + UW)
+    - *EMNLP*, **2024**. arXiv:2409.15594.
+    - https://arxiv.org/abs/2409.15594
+    - Proposes integrating real-world time into Llama3-8b via a synchronous clock mechanism, training on 212k hours of synthetic + 2k hours of real-world spoken dialogue. Enables genuine full-duplex interaction with interruptions and backchannels at Internet-scale latencies (≤240 ms).
+    - **Humanization relevance:** Provides a tractable training recipe for injecting temporal awareness into off-the-shelf LLMs — a bridge between the Moshi-style end-to-end approach and the cascaded-pipeline world. Published at EMNLP 2024, widely cited in 2025 as the canonical "synchronous LLM" reference.
+
+19. **Generative Spoken Dialogue Language Modeling** (dGSLM)
     - Nguyen, T. A., Kharitonov, E., Copet, J., Adi, Y., Hsu, W.-N., Elkahky, A., Tomasello, P., Algayres, R., Sagot, B., Mohamed, A., & Dupoux, E.
     - *TACL*, **2023**. arXiv:2203.16502.
     - https://arxiv.org/abs/2203.16502
     - First textless full-duplex spoken dialogue model. Trained on 2000 h of stereo Fisher telephone audio without transcripts; dual-tower Transformer with cross-attention produces parallel discrete-unit streams that reproduce natural turn-taking, overlaps, and laughter.
     - **Humanization relevance:** Demonstrates that paralinguistics (laughter, breaths, simultaneous-talk) are learnable without text — a direct challenge to text-centric humanization pipelines that strip exactly these signals.
 
-18. **Moshi: A Speech-Text Foundation Model for Real-Time Dialogue**
+20. **Moshi: A Speech-Text Foundation Model for Real-Time Dialogue**
     - Défossez, A., Mazaré, L., Orsini, M., Royer, A., Pérez, P., Jégou, H., Grave, E., & Kyutai team.
     - Kyutai tech report, **2024**. arXiv:2410.00037.
     - https://arxiv.org/abs/2410.00037
     - 7B Temporal Transformer + Depth Transformer over the Mimi neural audio codec (24 kHz at 1.1 kbps). Two parallel audio streams (user + system) remove explicit turn structure; *Inner Monologue* conditions audio generation on time-aligned text. 160 ms theoretical / 200 ms practical latency. Open-source.
     - **Humanization relevance:** The current reference architecture for human-like voice AI. The "two streams + inner monologue" design is the first neural system that is architecturally incapable of treating dialogue as turn-based — and therefore the first that can genuinely implement Sacks-style overlapping talk, interruptions, and continuous backchanneling.
 
+21. **From Turn-Taking to Synchronous Dialogue: A Survey of Full-Duplex Spoken Language Models**
+    - Multiple authors (academic consortium)
+    - arXiv:2509.14515, **September 2025**.
+    - https://arxiv.org/abs/2509.14515
+    - First comprehensive survey of FD-SLMs in the LLM era. Establishes a taxonomy distinguishing *Engineered Synchronization* (modular, explicit turn-control) from *Learned Synchronization* (end-to-end audio-token architectures). Proposes a four-pillar evaluation framework: Temporal Dynamics, Behavioral Arbitration, Semantic Coherence, Acoustic Performance. Identifies three fundamental blockers: synchronous data scarcity, architectural divergence, and evaluation gaps.
+    - **Humanization relevance:** The authoritative 2025 reference for anyone building full-duplex voice AI. Codifies the landscape that Moshi, SyncLLM, NVIDIA PersonaPlex, and DuplexCascade inhabit, and frames the evaluation gap that FLEXI and Full-DuplexBench are beginning to fill.
+
+22. **FLEXI: Benchmarking Full-Duplex Human-LLM Speech Interaction**
+    - Multiple authors
+    - arXiv:2509.22243, **September 2025**.
+    - https://arxiv.org/abs/2509.22243
+    - First benchmark covering six distinct full-duplex interaction scenarios: turn-taking, pause handling, user interrupt, model interrupt, backchannel, and emergency model interrupt. Key finding: for Level 1–2 full-duplex interaction, an end-to-end next-token-pair-prediction architecture is *essential* — modular cascades top out at lower benchmark levels.
+    - **Humanization relevance:** Operationalizes CA categories (Schegloff repair types, Yngve backchannels) as measurable benchmark tasks. The first public tool for comparing human-like interactional naturalness across open-source speech models.
+
+23. **LLaMA-Omni 2: LLM-based Real-time Spoken Chatbot with Autoregressive Streaming Speech Synthesis**
+    - ICT/NLP group (ACL 2025 main)
+    - arXiv:2505.02625, **May 2025**. ACL 2025.
+    - https://arxiv.org/abs/2505.02625
+    - Extends LLaMA-Omni to a series from 0.5B to 32B parameters built on Qwen2.5. Adds an autoregressive streaming speech decoder enabling simultaneous text + speech generation. Trained on only 200K multi-turn speech samples yet surpasses GLM-4-Voice (trained on millions of hours). Released April 2025.
+    - **Humanization relevance:** Demonstrates the scalability path for audio-in/audio-out humanization models. The 0.5B checkpoint enables on-device deployment; the 32B sets a new quality ceiling for open-weight speech interaction.
+
+24. **HAL: Inducing Human-likeness in LLMs with Alignment**
+    - Hasan, M., Zhao, J., et al.
+    - arXiv:2601.02813, **January 2026**.
+    - https://arxiv.org/abs/2601.02813
+    - Analyzes 557 Turing test game transcripts; extracts recurring human-likeness cues; compresses into an interpretable trait set and a scalar reward signal; uses DPO to align models of varying sizes. Produces transparent reward signals (named traits, not a black-box score) without degrading general task performance.
+    - **Humanization relevance:** Provides the first publicly reproducible alignment method with *interpretable* human-likeness traits derived from Turing test data. Direct complement to LLMs-Get-Lost: where Laban et al. diagnose the multi-turn gap, HAL offers an alignment path that doesn't require a separate naturalness judge.
+
 ### Evaluation and naturalness benchmarks
 
-19. **USR: An Unsupervised and Reference-Free Evaluation Metric for Dialog Generation**
+25. **USR: An Unsupervised and Reference-Free Evaluation Metric for Dialog Generation**
     - Mehri, S., & Eskenazi, M.
     - *ACL*, **2020**. arXiv:2005.00456.
     - https://arxiv.org/abs/2005.00456
     - Composite of interpretable sub-metrics (understandable, natural, maintains context, interesting, uses knowledge) trained unsupervised on MLM + retrieval objectives. Turn-level correlation 0.42 (Topical-Chat) / 0.48 (PersonaChat); system-level correlation 1.0.
     - **Humanization relevance:** Decomposes "naturalness" into operational sub-qualities that map cleanly onto humanization axes — the template most later dialogue-evaluation metrics follow.
 
-20. **ACUTE-EVAL: Improved Dialogue Evaluation with Optimized Questions and Multi-Turn Comparisons**
+26. **ACUTE-EVAL: Improved Dialogue Evaluation with Optimized Questions and Multi-Turn Comparisons**
     - Li, M., Weston, J., & Roller, S.
     - NeurIPS CAI workshop, **2019**. arXiv:1909.03087.
     - https://arxiv.org/abs/1909.03087
     - Side-by-side multi-turn pairwise human evaluation with empirically optimized question wording; robust across annotators, supports self-chat. ParlAI open source.
     - **Humanization relevance:** The standard protocol for claiming "more human-like than baseline." Self-chat variant is particularly useful because humanization work rarely has paired human conversations.
 
-21. **LLMs Get Lost in Multi-Turn Conversation**
+27. **Beyond Single-Turn: A Survey on Multi-Turn Interactions with Large Language Models**
+    - Li, Y., et al.
+    - arXiv:2504.04717, **April 2025**.
+    - https://arxiv.org/abs/2504.04717
+    - Comprehensive survey of multi-turn LLM evaluation and enhancement, organized around a task-oriented taxonomy spanning mathematics, coding, role-playing, healthcare, education, and adversarial jailbreak settings. Reviews model-centric strategies (ICL, SFT, RL, architecture) and external integration approaches (memory augmentation, RAG, knowledge graphs). Covers NeurIPS 2025 Workshop on Multi-Turn Interactions in LLMs.
+    - **Humanization relevance:** Provides the most current landscape map of the multi-turn reliability problem. Confirms that the 39% single→multi-turn drop from LLMs-Get-Lost is not an anomaly — it is the field's consensus open problem.
+
+28. **LLMs Get Lost in Multi-Turn Conversation**
     - Laban, P., Hilleli, B., Kamoi, R., Wang, Y., Rosé, C. P., Shwartz, V., et al. (Microsoft Research + collaborators)
     - **2025**. arXiv:2505.06120.
     - https://www.microsoft.com/en-us/research/publication/llms-get-lost-in-multi-turn-conversation/
@@ -224,7 +266,13 @@ Each entry: title, authors, venue/year, URL, core contribution, humanization rel
 - arXiv:2401.04868 — Inoue et al., VAP real-time turn-taking (2024)
 - arXiv:2410.00037 — Défossez et al., Moshi (2024)
 - arXiv:2410.15929 — Inoue et al., VAP backchannel fine-tuning (2024, NAACL 2025)
+- arXiv:2409.15594 — Défossez et al. / Meta AI, SyncLLM: Synchronous LLMs as Full-Duplex Dialogue Agents (EMNLP 2024)
+- arXiv:2504.04717 — Li et al., Beyond Single-Turn: Survey on Multi-Turn LLM Interactions (2025)
+- arXiv:2505.02625 — ICTNLP, LLaMA-Omni 2: Autoregressive Streaming Speech Synthesis (ACL 2025)
 - arXiv:2505.06120 — Laban et al., LLMs Get Lost in Multi-Turn Conversation (2025)
+- arXiv:2509.14515 — Full-Duplex SLM Survey: From Turn-Taking to Synchronous Dialogue (2025)
+- arXiv:2509.22243 — FLEXI: Benchmarking Full-Duplex Human-LLM Speech Interaction (2025)
+- arXiv:2601.02813 — Hasan et al., HAL: Inducing Human-likeness in LLMs with Alignment (2026)
 - ACL Anthology E09-1081 — Schlangen & Skantze, Incremental Dialogue Processing (2009)
 - ACL Anthology W17-5527 — Skantze, LSTM turn-taking (SIGDIAL 2017)
 - *Language* 50(4), 1974 — Sacks, Schegloff & Jefferson, Turn-Taking

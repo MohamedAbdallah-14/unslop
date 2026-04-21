@@ -66,10 +66,12 @@ The OSS ecosystem has converged on a pipeline shape: `penalties → repetition-a
 
 ## Adjacent Solutions — Humanization-Specific Tooling
 
-### 9. `sam-paech/antislop-sampler` (342★) & `sam-paech/antislop-vllm`
+### 9. `sam-paech/antislop-sampler` + `sam-paech/auto-antislop` — **ICLR 2026 accepted**
 - **What:** Backtracking sampler that detects disallowed words/phrases during inference, rewinds to the problem token, and resamples with adjusted probabilities. Ships `slop_phrase_prob_adjustments.json` (over-represented LLM-isms like "tapestry," "testament," "voice barely above a whisper"). `antislop-vllm` variant does this via OpenAI-compatible APIs using cached logprobs — no custom kernel needed.
-- **FTPO (Final Token Preference Optimization) method referenced in the repo reports 90% slop reduction with preserved benchmark performance.** ([arxiv 2510.15061](https://arxiv.org/pdf/2510.15061))
-- **Why it matters:** This is the single OSS project most directly targeted at the humanization problem — not just "creative sampling" but *explicitly* "de-AI-ify the token stream." The backtracking architecture is a pattern a Humanizer product can reuse.
+- **Status update (2026):** The Antislop paper (arXiv:2510.15061) was **accepted at ICLR 2026** (poster #10008156), upgrading from arXiv preprint to peer-reviewed venue. FTPO now reports suppressing 8,000+ patterns with 90% slop reduction while maintaining or *improving* GSM8K, MMLU, and creative writing benchmark scores.
+- **`auto-antislop`** is a new companion repo (2025) providing an end-to-end automated pipeline: profile a model's output against human baselines, automatically generate a model-specific slop list, and produce FTPO training data. Available at https://github.com/sam-paech/auto-antislop (MIT license).
+- **Published fine-tuned models:** Paech released `sam-paech/gemma-3-27b-it-antislop` and `sam-paech/gemma-3-12b-it-antislop` on HuggingFace — the first publicly available antislop-fine-tuned models.
+- **Why it matters:** This is the single OSS project most directly targeted at the humanization problem — not just "creative sampling" but *explicitly* "de-AI-ify the token stream." The ICLR 2026 acceptance and the auto-antislop pipeline make it the most production-ready academic humanization tool available.
 
 ### 10. `blader/humanizer` (~14k★) and siblings (`lguz/humanize-writing-skill`, `puneethkotha/humanizer-workbench`, `brandonwise/humanizer`)
 - **What:** Claude-Code-era prompt/skill packages — not samplers but prompt-layer rewriters. blader/humanizer is based on Wikipedia's "Signs of AI Writing" guide and detects 29 patterns (significance inflation, AI vocabulary, negative parallelisms, rule-of-three). brandonwise/humanizer adds statistical scoring (burstiness, type-token ratio, readability). lguz/humanize-writing-skill runs a 3-pass pipeline (36+ banned words → 10 structural patterns → human texture).
@@ -88,10 +90,14 @@ The OSS ecosystem has converged on a pipeline shape: `penalties → repetition-a
 - **How:** KL-divergence in a quantized embedding space; captures Type I error (text that doesn't look human) and Type II (lack of diversity). Single-scalar score, also exposed via HuggingFace Evaluate, 16k+ downloads/month on PyPI.
 - **Humanizer fit:** Gold-standard distributional metric. Needs "a few thousand generations" per side — so useful as an offline evaluation harness, not a per-request score.
 
-### 13. `EQ-bench/creative-writing-bench` (EQ-Bench Creative Writing v3)
-- **What:** 32 prompts × 3 iterations (96 items) at temp 0.7, judged by Claude Sonnet 4, combining isolated rubric scoring with pairwise Elo via Glicko-2. Explicit bias-mitigation for length/position/verbosity/poetic-incoherence.
+### 13. `EQ-bench/creative-writing-bench` (EQ-Bench Creative Writing v3) — Updated 2025
+- **What:** 32 prompts × 3 iterations (96 items) at temp 0.7. As of 2025, the judge has been **upgraded to Claude Sonnet 4.6** (from Sonnet 4), with sharper judging and structural safeguards for more reliable longform evaluations. Combining isolated rubric scoring with pairwise Elo via Glicko-2. Explicit bias-mitigation for length/position/verbosity/poetic-incoherence.
+- **New: Repetition and Slop columns.** The leaderboard now includes a Repetition column (summed frequencies of top common words, bigrams, trigrams) and a Slop column (frequency of GPT-isms). These directly quantify what humanization must remove.
+- **New: Longform Writing benchmark.** A separate longform leaderboard is now live at [eqbench.com/creative_writing_longform.html](https://eqbench.com/creative_writing_longform.html), addressing the gap in long-form coherence evaluation past ~2,000 tokens.
+- **Current leaderboard leader (Apr 2026):** Grok-4.1 Thinking (xAI) with score 1721.900.
 - **Public leaderboard:** [eqbench.com/creative_writing.html](https://eqbench.com/creative_writing.html).
-- **Humanizer fit:** Best-fit external benchmark for *creative* prose quality, not just fluency. A humanizer should be A/B-tested through it.
+- **Humanizer fit:** Best-fit external benchmark for *creative* prose quality, not just fluency. A humanizer should be A/B-tested through it. The Slop column is now a direct, standardized measure of what humanization must minimize.
+- **Caveat:** Judge was upgraded to Claude Sonnet 4.6, which has known self-preference bias (~5-7% per CALM framework). Cross-vendor comparisons (Claude vs. GPT) should apply a bias correction.
 
 ### 14. Burstiness/statistical-fingerprint libraries — `lmscan` and `BurhanUlTayyab/GPTZero`
 - **`lmscan`** (pip-installable): computes 12 statistical features — burstiness, entropy, Zipf deviation, vocabulary richness, slop-word density, etc. Fingerprints 9 LLM families (GPT-4, Claude, Gemini, Llama, Mistral, Qwen, DeepSeek, Cohere, Phi). No neural model, no API key, <50 ms. Ideal as an **inner-loop guard / reward signal** during humanization.
@@ -106,7 +112,8 @@ The OSS ecosystem has converged on a pipeline shape: `penalties → repetition-a
 ## Market and Competitor Signals
 
 - **Sampler convergence is essentially complete.** Every major OSS inference engine (llama.cpp, exllamav2, vLLM/aphrodite, sglang, textgen-webui, koboldcpp, MLX) ships ~the same 8–12 samplers with the same names. Differentiation is now in (a) sampler *ordering* UX, (b) creativity samplers (DRY/XTC) mainline support, and (c) constrained decoding.
-- **The DRY/XTC split is a market tell.** Enterprise-serving stacks (vLLM, SGLang) hesitated to merge DRY/XTC; creative-writing stacks (textgen-webui, exllamav2, aphrodite, koboldcpp, llama.cpp) shipped them. A humanizer sits squarely on the creative-writing side and should assume these are table stakes.
+- **The DRY/XTC split remains.** As of April 2026, vLLM and SGLang have still not merged DRY or XTC into mainline. The GitHub issue (#8581) requesting DRY in vLLM remains open. llama.cpp, ExLlamaV2, Aphrodite, KoboldCPP, and text-generation-webui all ship them. This is a deliberate product split, not an oversight.
+- **Top-nσ is disabled-by-default in llama.cpp.** The sampler is merged but defaults to `-1` (disabled); users must explicitly set `n` to activate. This means the "best general-purpose sampler" (per min-p author) requires manual activation across every deployment.
 - **"Slop" has a shared vocabulary now.** The existence of `antislop-sampler`, `lmscan`'s slop-density feature, `blader/humanizer`'s 29-pattern list, and the "Signs of AI Writing" Wikipedia article means there's a convergent community definition of what humanization must remove. A humanizer that does not explicitly filter this corpus will be trivially detectable.
 - **Pricing/packaging:** Everything above is MIT/Apache/permissive. The commoditization of samplers means a humanizer cannot defensibly sell "we have a better sampler"; differentiation must come from **combination, measurement, and UX**, not sampler invention.
 
@@ -155,3 +162,8 @@ The OSS ecosystem has converged on a pipeline shape: `penalties → repetition-a
 - [BurhanUlTayyab/GPTZero](https://github.com/burhanultayyab/gptzero) — OSS GPTZero implementation.
 - [openai/human-eval](https://github.com/openai/human-eval/) — HumanEval (code-only) for naming clarity.
 - [blader/humanizer](https://github.com/blader/humanizer), [lguz/humanize-writing-skill](https://github.com/lguz/humanize-writing-skill) — prompt-layer humanization reference implementations.
+- [sam-paech/auto-antislop](https://github.com/sam-paech/auto-antislop) — end-to-end pipeline for profiling and eliminating model-specific slop (2025).
+- [sam-paech/gemma-3-27b-it-antislop](https://huggingface.co/sam-paech/gemma-3-27b-it-antislop) — publicly available antislop-FTPO-fine-tuned model.
+- [Antislop ICLR 2026 paper](https://openreview.net/pdf/6916f45661bf884811be66da937b7467b97a9114.pdf) — peer-reviewed conference version (poster #10008156).
+- [EQ-Bench Longform Creative Writing Leaderboard](https://eqbench.com/creative_writing_longform.html) — new longform benchmark added 2025.
+- [EQ-Bench Judgemark v2](https://github.com/EQ-bench/Judgemark-v2) — updated judge calibration benchmark.

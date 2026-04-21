@@ -191,6 +191,24 @@ Research dispatch: surface 10–15+ **industry / whitepaper summaries** of acade
 - **Quote:** "AIs simulate human-like 'Assistant' characters during conversation generation as an emergent property of learning from vast text data."
 - **Relevance:** Industry-side theoretical scaffolding that reframes humanization as *persona selection over pretrained latents*, not personality authoring.
 
+### 20b. Paneru & Xiao, *Humanizing Machines: Rethinking LLM Anthropomorphism Through a Multi-Level Framework of Design* (EMNLP 2025, arXiv:2508.17573)
+- **Source / Author:** Yunze Xiao, Lynnette Hui Xian Ng, Jiarui Liu, Mona T. Diab
+- **Type:** EMNLP 2025 paper; surfaced via ACL Anthology + X announcement
+- **Date:** Aug 2025 (arXiv), Nov 2025 (EMNLP)
+- **URL:** https://arxiv.org/abs/2508.17573 · https://aclanthology.org/2025.emnlp-main.164/
+- **Summary:** Proposes a four-dimension cue taxonomy for anthropomorphism in LLM artifacts: perceptive (appearance, avatar), linguistic (word choice, syntax, style), behavioral (response patterns, hedging), and cognitive (reasoning transparency, metacognition). Argues current research over-indexes on risk framing (over-trust, deception) and neglects actionable design guidance for practitioners who *want* to tune anthropomorphism intentionally.
+- **Quote:** "Anthropomorphism should be treated as a concept of design that can be intentionally tuned to support user goals."
+- **Relevance:** Provides a structured vocabulary for what "humanization" actually touches; the four-cue decomposition maps cleanly onto the Unslop intervention surface.
+
+### 20c. Dong et al., *Humanizing LLMs: A Survey of Psychological Measurements* (arXiv:2505.00049, Apr 2025)
+- **Source / Author:** Wenhan Dong et al. (13 authors)
+- **Type:** arXiv survey
+- **Date:** Apr 30, 2025
+- **URL:** https://arxiv.org/abs/2505.00049
+- **Summary:** Systematic review of psychological trait assessment in LLMs across six dimensions: assessment tools (MBTI, Big-Five, ToM), LLM-specific datasets, evaluation metrics (consistency and stability across prompts), empirical findings, personality simulation methods, and LLM-based behavioral applications (social experiment simulations, game theory, interactive negotiation). Most complete academic catalogue of open-source persona conditioning approaches published to date.
+- **Quote (abstract):** "Assessing [LLMs'] psychological traits is crucial for understanding their social impact and ensuring trustworthy AI alignment."
+- **Relevance:** The psychological-alignment survey counterpart to the detection-evasion literature; covers the Big-Five conditioning, genetic-algorithm persona evolution (arXiv:2502.14155), and HumanLLM (arXiv:2601.10198) work that the industry-summary layer under-documents.
+
 ### 20. "AI Slop" and the Em-Dash Discourse
 - **Source / Author:** Multiple (Engora Data Blog, Kunz Gehrmann, Eric Mann, Front Porch Republic, Edward Sturm's humanizer guides)
 - **Type:** Industry/practitioner blog summaries of surface-level humanization
@@ -211,6 +229,12 @@ Research dispatch: surface 10–15+ **industry / whitepaper summaries** of acade
 5. **Capability ≠ humanlikeness.** HLB, HumanLLM, and the Big-Five/Personality paper all report that stronger benchmark scores do not mean more humanlike outputs; they are separate axes.
 6. **Humanization-as-evasion.** A parallel literature (Adversarial Paraphrasing, TH-Bench, DAMAGE, StealthRL) treats "humanize" as the adversarial objective against AI-text detectors — and is winning.
 7. **Style tells have leaked into culture.** The em-dash discourse and "AI slop" critiques show the humanization loop is now closed: readers have internalized LLM rhythms, which feeds back into what "human" even means for text.
+
+## Patterns and trends (updated Apr 2026)
+
+8. **Hardness-aware evaluation entering mainstream.** SHIELD (arXiv:2507.15286) and the XAI-based detection failure analysis (arXiv:2603.23146) both signal that high-AUROC benchmark numbers are increasingly distrusted by the research community. Industry blogs haven't caught up — they still cite single-number performance claims from papers that don't separate easy/hard examples.
+9. **Surprisal variance as detection signal.** DivEye (TMLR 2026) shifts the field from token-probability to intra-document rhythmic unpredictability. No industry blog yet covers this; it's the clearest technical gap between academic and practitioner discourse as of Apr 2026.
+10. **Psychological-alignment and detection-evasion tracks still siloed.** Dong et al.'s psychological survey (arXiv:2505.00049) and Xiao et al.'s anthropomorphism framework (arXiv:2508.17573) are not cited in any detection-evasion paper and vice versa. These are complementary but separate research communities.
 
 ## Gaps (what the industry-summary layer is *not* covering)
 
@@ -263,3 +287,5 @@ Research dispatch: surface 10–15+ **industry / whitepaper summaries** of acade
 - Engora — Em dash = AI slop? — https://blog.engora.com/2025/09/em-dash-ai-slop.html
 - Kunz Gehrmann — ChatGPT Em Dash — https://kunzgehrmann.com/2025/07/07/chatgpt-em-dash-writing-style/
 - Front Porch Republic — Against AI Slop — https://www.frontporchrepublic.com/2026/04/against-ai-slop-for-feelable-thought/
+- Humanizing Machines / Multi-Level Anthropomorphism Framework — https://arxiv.org/abs/2508.17573 · https://aclanthology.org/2025.emnlp-main.164/
+- Humanizing LLMs: A Survey of Psychological Measurements — https://arxiv.org/abs/2505.00049

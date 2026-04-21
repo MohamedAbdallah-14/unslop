@@ -12,6 +12,7 @@
 - **Stars / License / Lang:** ~1,733 ⭐ · MIT · Python
 - **Tagline (from repo):** *"心理健康大模型 (LLM x Mental Health), Pre & Post-training & Dataset & Evaluation & Deploy & RAG, with InternLM / Qwen / Baichuan / DeepSeek / Mixtral / LLaMA / GLM series models."*
 - **What it gives you:** An end-to-end empathy-fine-tune cookbook — SFT data pipelines, RAG over counseling knowledge, evaluation harness, and deployment recipes across every major open base model. Training loop targets the "understand user → support user → help user" flow rather than classification.
+- **2025 updates:** May 2025 — Caryou (AI psychological assistant, deep-thinking variant) merged into EmoLLM with RAG, web search, and TTS. February 2025 — first psychological health R1 distillation dataset released. March 2025 — full fine-tune on InternLM2.5-7B-chat (GGUF fp16) published.
 - **Use for humanization:** Closest thing to a turnkey reference implementation if you want to port empathy behaviors onto any open base model. The evaluation harness is reusable even if you keep your own base model.
 
 ## 2. lzw108/EmoLLMs — Affective Analysis LLM Family
@@ -23,10 +24,10 @@
 
 ## 3. scutcyr/SoulChat — Multi-Turn Empathy Fine-Tune (ZH)
 
-- **URL:** https://github.com/scutcyr/SoulChat
+- **URL:** https://github.com/scutcyr/SoulChat; SoulChat2.0: https://github.com/scutcyr/SoulChat2.0
 - **Stars / License / Lang:** ~728 ⭐ · Apache-2.0 · Python
 - **Tagline:** *"中文领域心理健康对话大模型 SoulChat"* (Chinese mental-health dialogue LLM).
-- **What it gives you:** SoulChatCorpus — ~1.2M mixed single-turn + multi-turn empathetic conversations, plus a ChatGLM-6B SFT recipe explicitly tuned so the model stops rushing to advice and instead performs *questioning, comfort, affirmation, listening, trust-building.* Paper: Findings of EMNLP 2023.
+- **What it gives you:** SoulChatCorpus — 258,354 multi-turn dialogues / 1,517,344 turns (open-sourced June 2024), plus a ChatGLM-6B SFT recipe explicitly tuned so the model stops rushing to advice and instead performs *questioning, comfort, affirmation, listening, trust-building.* Paper: Findings of EMNLP 2023. SoulChat2.0 launched as the "first digital twin LLM for psychological counselors."
 - **Use for humanization:** The corpus is the most-cited artifact in the "LLMs jump to solutions too fast" critique. Fine-tuning signal here directly counteracts the "assistant voice" failure mode.
 
 ## 4. morecry/CharacterChat — MBTI-Matched Persona Support
@@ -177,9 +178,40 @@ Grouped here: a thread of papers from CUHK-ARISE and collaborators (EmotionBench
 - **What it gives you:** In-context empathetic dialogue generation with GPT-3, evaluated with EPITOME + EmoAcc + IntentAcc metrics. Includes EPITOME checkpoint setup.
 - **Use for humanization:** Shows the *prompting-only* baseline — useful lower bound before you commit to fine-tuning anything.
 
+## 26. FunAudioLLM/MME-Emotion — Multimodal EI Benchmark (Aug 2025)
+
+- **URL:** https://github.com/FunAudioLLM/MME-Emotion; paper: [arXiv:2508.09210](https://arxiv.org/abs/2508.09210)
+- **Stars / Venue:** Arxiv Aug 2025, updated Feb 2026 · Python
+- **What it gives you:** 6,500 video clips with QA pairs across 27 scenario types and 8 emotional tasks. Evaluated 20 frontier MLLMs. Best model scores only 39.3% recognition / 56% CoT — the hardest open multimodal EI eval in the field. Generalist models (Gemini-2.5-Pro) and specialist models (R1-Omni) are profiled.
+- **Use for humanization:** New standard for multimodal empathy evaluation, replacing EmoBench-M as the quantitative reference for claims about voice/video empathy capability.
+
+## 27. JhCircle/Awesome-LLM-Empathy — Living Paper Registry (2025–2026)
+
+- **URL:** https://github.com/JhCircle/Awesome-LLM-Empathy
+- **What it gives you:** A curated, maintained list of papers on empathy in LMs covering theory, modeling, systems, emotion, and evaluation. Includes Kardia-R1 (WWW 2026), ReflectDiffu (ACL 2025), and HEART (2026). The fastest way to track new work without running a manual arXiv search.
+- **Use for humanization:** Reference index to keep A-academic.md current. Check monthly.
+
+## 28. NEU-DataMining/awesome-affective-computing — Affective Computing in the LLM Era (2025)
+
+- **URL:** https://github.com/NEU-DataMining/awesome-affective-computing
+- **What it gives you:** Overview of affective computing research as it intersects with LLMs — a bridge between the traditional sensing-focused affective computing literature and the new generation alignment-focused literature.
+- **Use for humanization:** Useful background for any team trying to connect the openSMILE/SpeechBrain sensing stack with LLM-based empathy generation.
+
+## 29. PERM (arXiv:2601.10532) — Psychology-grounded Empathetic Reward Model (Jan 2026)
+
+- **URL:** https://arxiv.org/abs/2601.10532; code and dataset released via the paper
+- **What it gives you:** An open RL reward model for empathy grounded in Empathy Cycle theory. Evaluates from three perspectives (supporter / seeker / bystander). Outperforms SOTA baselines by >10%; 70% preference in blind user study. Code and dataset publicly released.
+- **Use for humanization:** Directly addresses the "no open DPO-against-empathy-benchmark pipeline" gap. First open resource to couple an empathy classifier with RL training for a generator in a principled way.
+
+## 30. Kardia-R1 / KardiaBench (arXiv:2512.01282, WWW 2026)
+
+- **URL:** https://arxiv.org/abs/2512.01282
+- **What it gives you:** Rubric-as-Judge RL training framework for empathic dialogue, plus KardiaBench — 178,080 QA pairs across 22,080 multi-turn conversations anchored to 671 real user profiles. The largest purpose-built empathic support benchmark.
+- **Use for humanization:** KardiaBench is currently the largest open multi-turn empathy eval. GRPO-based rubric reward approach is the 2025 replacement for EmPO/DPO SFT approaches.
+
 ---
 
-## Patterns & Trends
+## Patterns & Trends (updated April 2026)
 
 1. **Chinese-language repos lead on volume, depth, and active maintenance.** SmartFlowAI/EmoLLM, SoulChat, MeChat/SMILE, PsyChat, MindChat, PsyQA, ChatPsychiatrist — the Chinese mental-health-LLM community has shipped more real fine-tunes, bigger corpora, and more variants than the English-language side. Any serious empathy work should mine these even if the target language is English.
 
@@ -195,13 +227,14 @@ Grouped here: a thread of papers from CUHK-ARISE and collaborators (EmotionBench
 
 7. **Voice affect is underused in LLM humanization.** openSMILE, pyAudioAnalysis, SpeechBrain, Emotion-LLaMA are mature, but almost no "humanizer" products pipe through them. Open whitespace.
 
-## Gaps
+## Gaps (updated April 2026)
 
-- **No open post-training loop that couples an empathy *classifier* with an empathy *generator* in an RLHF/DPO-style optimization.** Everyone does SFT on empathy corpora; nobody has published an open DPO-against-EmoBench pipeline.
+- **Open DPO-against-empathy pipeline now exists, but is RL-only.** PERM (arXiv:2601.10532) and Kardia-R1 (arXiv:2512.01282) both publish open reward models for RL training. A pure DPO pipeline against EmoBench remains unpublished, but the RL path is now well-trodden.
 - **Underserved tones.** Caregiver burnout and grief are covered only by MentalChat16K; anger/rage, awkwardness, embarrassment, and joy-without-sycophancy are largely absent from the empathy corpora — they're all tuned for distress support.
-- **Strategy taxonomy drift.** ESConv, PsyQA, PsyChat, MeChat all use *slightly different* strategy labels. No one has published a crosswalk. A standardized taxonomy would make cross-repo transfer much easier.
+- **Strategy taxonomy drift.** ESConv, PsyQA, PsyChat, MeChat all use *slightly different* strategy labels. No crosswalk has been published. HEART (2026) introduces five new dimensions (H/E/A/R/T) that partially overlap with ESConv's 8-strategy taxonomy without aligning them.
 - **No open repo explicitly targets "make generic assistant output sound more human."** All the empathy repos target mental-health support as the application. For a humanization product, the correct move is to borrow the *corpora and strategies* but build your own smaller, broader tone dataset.
-- **Evaluation trust gap.** llm-empathy-evaluation shows LLM judges partly agree with humans on empathy but diverge on subtler dimensions — implying "GPT-4 as judge" evals should always be paired with at least one deterministic lexicon or classifier anchor.
+- **Evaluation trust gap.** llm-empathy-evaluation shows LLM judges partly agree with humans on empathy but diverge on subtler dimensions — implying "GPT-4 as judge" evals should always be paired with at least one deterministic anchor. MME-Emotion adds a new finding: multimodal LLMs are far weaker than text-only models at EI in video contexts (best = 39.3%), so multimodal claims require specifically multimodal eval.
+- **Multimodal empathy gap.** Emotion-LLaMA (NeurIPS 2024) was the best open reference for multimodal emotion grounding. MME-Emotion (Aug 2025) shows that even frontier models score poorly on video-based EI. The gap between text empathy and multimodal empathy in open models is large and largely unaddressed.
 
 ## Sources
 
@@ -229,3 +262,9 @@ Grouped here: a thread of papers from CUHK-ARISE and collaborators (EmotionBench
 - https://github.com/DemetersSon83/NRCLex — NRC-lexicon Python emotion scorer.
 - https://github.com/anuradha1992/llm-empathy-evaluation — Human↔LLM empathy-annotation agreement study.
 - https://github.com/passing2961/EmpGPT-3 — In-context empathetic dialogue baseline w/ EPITOME.
+- https://github.com/FunAudioLLM/MME-Emotion — Multimodal EI benchmark, 6,500 clips, 8 tasks (arXiv:2508.09210).
+- https://github.com/JhCircle/Awesome-LLM-Empathy — Living registry of empathy-in-LMs papers.
+- https://github.com/NEU-DataMining/awesome-affective-computing — Affective computing in the LLM era overview.
+- https://arxiv.org/abs/2601.10532 — PERM: Psychology-grounded Empathetic Reward Modeling.
+- https://arxiv.org/abs/2512.01282 — Kardia-R1 + KardiaBench, RL-based empathic support framework (WWW 2026).
+- https://github.com/scutcyr/SoulChat2.0 — SoulChat2.0: digital twin for psychological counselors.

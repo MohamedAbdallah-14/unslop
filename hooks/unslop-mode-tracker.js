@@ -6,9 +6,25 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { getDefaultMode, safeWriteFlag, readFlag, getFlagPath } = require('./unslop-config');
+const {
+  getDefaultMode, safeWriteFlag, readFlag, getFlagPath,
+  getTurnCounterPath, readTurnCount, writeTurnCount, resetTurnCount,
+} = require('./unslop-config');
 
 const flagPath = getFlagPath();
+const counterPath = getTurnCounterPath();
+
+// Persona-drift reinforcement checkpoints. RMTBench / HorizonBench (Apr
+// 2026) measure persona degradation beginning around turn 8 and becoming
+// severe by turn 12–16. We re-emit at these points rather than every turn
+// so the reinforcement stays salient. After turn 32 we fall back to every
+// 16 turns to avoid spam in marathon sessions.
+const DRIFT_CHECKPOINTS = new Set([8, 16, 24, 32]);
+function isDriftCheckpoint(turn) {
+  if (DRIFT_CHECKPOINTS.has(turn)) return true;
+  if (turn > 32 && turn % 16 === 0) return true;
+  return false;
+}
 
 let input = '';
 process.stdin.on('data', chunk => { input += chunk; });
@@ -73,6 +89,7 @@ process.stdin.on('end', () => {
         /\bnormal mode\b/i.test(prompt) ||
         /\brobotic mode\b/i.test(prompt)) {
       try { fs.unlinkSync(flagPath); } catch (e) {}
+      resetTurnCount(counterPath);
     }
 
     // Per-turn reinforcement: emit a structured reminder when unslop is active.
@@ -82,14 +99,39 @@ process.stdin.on('end', () => {
     const INDEPENDENT_MODES = new Set(['commit', 'review']);
     const activeMode = readFlag(flagPath);
     if (activeMode && !INDEPENDENT_MODES.has(activeMode)) {
+      // Advance the persona-drift counter and decide whether this turn
+      // warrants an expanded reinforcement. Best-effort: counter failures
+      // degrade to the standard per-turn banner.
+      const turn = readTurnCount(counterPath) + 1;
+      writeTurnCount(counterPath, turn);
+
+      let additional = "UNSLOP MODE ACTIVE (" + activeMode + "). " +
+        "Drop sycophancy/stock-vocab/hedging-stacks/tricolons/em-dash-pileups. " +
+        "Engineer burstiness. Code/commits/security: write normal.";
+
+      if (isDriftCheckpoint(turn)) {
+        // RMTBench / HorizonBench: at these turn counts models silently
+        // drift back to template English. Re-state the ruleset header
+        // explicitly so the model has fresh context to anchor against.
+        additional +=
+          " [drift-check turn " + turn + "] Persona drift risk is elevated after " +
+          "long contexts (RMTBench / HorizonBench arXiv 2604.17283). Re-anchor: " +
+          "no 'great question'/'certainly'/'I'd be happy to'; no delve/tapestry/" +
+          "testament/seamless/holistic; no 'it's important to note'; avoid symmetric " +
+          "tricolons and em-dash pileups; mix sentence lengths; admit uncertainty " +
+          "when real. Keep all code, URLs, numbers, and technical terms exact.";
+      }
+
       process.stdout.write(JSON.stringify({
         hookSpecificOutput: {
           hookEventName: "UserPromptSubmit",
-          additionalContext: "UNSLOP MODE ACTIVE (" + activeMode + "). " +
-            "Drop sycophancy/stock-vocab/hedging-stacks/tricolons/em-dash-pileups. " +
-            "Engineer burstiness. Code/commits/security: write normal."
+          additionalContext: additional
         }
       }));
+    } else {
+      // Mode not active — counter should be zero so the next activation
+      // starts fresh rather than inheriting stale turns.
+      resetTurnCount(counterPath);
     }
   } catch (e) {
     // Silent fail

@@ -13,7 +13,7 @@ The "AI humanizer" category barely existed before April 2023. By 2026 it has cry
 2. **General AI writing suites with humanizer sub-features** (Grammarly Humanizer, Jasper Brand Voice, QuillBot, Copy.ai, Writesonic, TextCortex, Smodin, Surfer SEO's in-editor humanizer, Content at Scale's Humanize) — larger platforms that bolted humanization onto existing workflows, usually framed as clarity/voice rather than detection evasion.
 3. **Rewriter/spinner legacy tools retrofitted** (Spinbot, Rephrasely, Article Rewriter Tool) — pre-LLM synonym-swap rewriters rebranded as humanizers; consistently the weakest bypass performance.
 
-Undetectable.ai remains the reference point: 15M+ users (Feb 2025 Reuters), 39 employees, bootstrapped, no external funding, co-founded by Bars Juhasz — a Loughborough PhD candidate whose prior RAF research on AI-text detection is marketed as the foundation of the humanization model. Consolidation is emerging (Humanloop → Anthropic, 2025–26) and the API economy is now the real revenue center, with every serious vendor publishing REST endpoints and $100+/month business minimums.
+Undetectable.ai remains the market-reference point: ~11M users (updated; the "15M+" claim from the Feb 2025 Reuters press release is the vendor's figure; Tracxn/G2 profiles show ~11M active as of 2026), ~34 employees (Latka, Sep 2025), $3.7M ARR (Latka, Sep 2025), bootstrapped, no external funding, co-founded by Bars Juhasz — a Loughborough PhD candidate whose prior RAF research on AI-text detection is marketed as the foundation of the humanization model. It is no longer the performance leader: Ryter Pro achieves higher Turnitin and GPTZero bypass rates in 2026 independent testing. Consolidation is emerging (Humanloop → Anthropic, 2025–26) and the API economy is now the real revenue center, with every serious vendor publishing REST endpoints and $100+/month business minimums.
 
 The category is defined by an explicit arms race with detectors and an unresolved ethical cliff: vendors advertise "99.8%" and "100% undetectable" while independent 2026 testing shows wide variance (45% to 94% bypass across the same tool set), the EU AI Act transparency obligations come into force August 2026, and even the best-performing tools degrade meaning in ~10% of samples.
 
@@ -25,19 +25,20 @@ The category is defined by an explicit arms race with detectors and an unresolve
 
 #### 1. Undetectable.ai
 - **URL**: https://undetectable.ai
-- **Vendor**: Undetectable AI (co-founders Christian Perry, Bars Juhasz, Devan Leos). Bootstrapped, no VC, ~39 employees (Jan 2026), 15M+ users (Feb 2025, Reuters).
+- **Vendor**: Undetectable AI (co-founders Christian Perry, Bars Juhasz, Devan Leos). Bootstrapped, no VC, ~34 employees (Sep 2025, Latka data), 11M+ users (down from "15M+" claim in Feb 2025 Reuters release; current G2/Tracxn profiles show ~11M).
 - **Launched**: May 1, 2023.
-- **Pricing**: Free (2 humanizations/day, 1K-char cap). Monthly: $9.99/mo (10K words) → $19/mo (20K) → $31/mo (35K). Annual from ~$5/mo. Business "non-expiring credits." API bundled with Annual Pro or sold via 250-word starter credit.
-- **API**: Documented REST API. Parameters: `readability`, `purpose` (essay/article/marketing), `strength` (Quality / Balanced / More Human), `model` (v2 / v11 / v11sr). List-previously-submitted endpoint implies server-side storage for API workflows.
+- **Revenue**: $3.7M ARR (September 2025, Latka).
+- **Pricing** *(updated April 2026)*: Free (2 humanizations/day, 1K-char cap). Monthly: $14.99/mo (15K words). Annual: from ~$5/mo for 10K words, with a "50% off" yearly deal marketed as 300K words/year. Business "non-expiring credits." API bundled with annual plans; includes unlimited Human Auto Typer and Job Application Bot features added in 2025–2026.
+- **API**: Documented REST API. Parameters: `readability`, `purpose` (essay/article/marketing), `strength` (Quality / Balanced / More Human), `model` (v2 / v11 / v11sr). Additional bundled tools: AI Essay Writer, AI SEO Writer, Human Typer, Word Counter.
 - **Claimed techniques**: Multi-model routing ("trained to recognize and rewrite detector-sensitive patterns"). 99.8% success rate marketing claim.
-- **Detector coverage**: Markets against GPTZero, Turnitin, Originality.ai, Copyleaks, Winston AI, ZeroGPT. Independent 2026 testing: 72–89% bypass depending on test (Humanizer AI benchmark).
+- **Detector coverage**: Markets against GPTZero, Turnitin, Originality.ai, Copyleaks, Winston AI, ZeroGPT. Independent 2026 testing: 73–88% bypass. Consumer-grade detectors (GPTZero, ZeroGPT) see 96–97% bypass; Turnitin holds at ~89%; Originality.ai drops performance to ~68%. No longer the clear performance leader — Ryter Pro and Walter Writes AI now benchmark ahead of it in several independent 2026 tests.
 
 #### 2. StealthGPT
 - **URL**: https://stealthgpt.ai
-- **Pricing**: Essential $14.99/mo, Pro $19.99/mo, Exclusive $29.99/mo. Optional "Stealth Samurai" engine +$4.99/mo. Token-based API.
-- **API**: Yes, token-metered.
-- **Claimed techniques**: "Stealth Bypass" rewriter; bundled essay generator with real-citation insertion and auto-bibliography — heaviest academic positioning in the category.
-- **Detector coverage**: Markets universal bypass. 2026 independent testing: 74% average reduction across major detectors (Humaniser benchmark); one test showed 100% AI on GPTZero (aixradar).
+- **Pricing** *(updated April 2026)*: Base plan $32/mo (billed weekly) or $40/mo (higher tier, billed weekly) — a significant restructuring from the previous Essential $14.99 / Pro $19.99 / Exclusive $29.99 tiering. Optional "Samurai" engine add-on remains at $4.99/mo. A 7-day free trial is now offered (no free permanent tier). Token-based API. Note: XYZ AI Inc (StealthGPT parent) announced a new funding raise at higher valuation in late 2025.
+- **API**: Yes, token-metered. Browser extensions and Google Docs / Gmail integrations added on higher tiers.
+- **Claimed techniques**: Proprietary "Ghost" (standard) and "Samurai" (premium) engines. Bundled essay generator with real-citation insertion and auto-bibliography — heaviest academic positioning in the category.
+- **Detector coverage**: Markets universal bypass. 2026 independent testing: 60–82% bypass depending on test and content length. Consistently fails against Originality.ai and Turnitin in rigorous tests. One AIXRadar test showed 100% AI on GPTZero. Phrasly's 2026 review put it at the bottom third of dedicated humanizers for Turnitin performance.
 
 #### 3. StealthWriter.ai
 - **URL**: https://stealthwriter.ai
@@ -66,18 +67,18 @@ The category is defined by an explicit arms race with detectors and an unresolve
 
 #### 6. HIX Bypass (HIX.AI)
 - **URL**: https://bypass.hix.ai
-- **Vendor**: HIX.AI (broader multi-tool writing suite).
-- **Pricing**: Standard $14.99/mo and up; full HIX.AI suite $29/mo+. 300-word free trial for API.
+- **Vendor**: HIX.AI (broader multi-tool writing suite). **Trustpilot: 2.6/5** across ~169 reviews (April 2026); common complaints include unauthorized charges after cancellation and random gibberish in humanized output.
+- **Pricing** *(updated April 2026)*: Pro $29.99/mo (billed monthly) or $14.99/mo (billed yearly, 50K words/mo). Unlimited $59.99/mo (billed monthly) or $39.99/mo (billed yearly). 300-word free trial for API.
 - **API**: Yes, gated via `support@hix.ai`. Endpoint `bypass.hix.ai/api/hixbypass/v1/`. 2,000-word/request cap.
 - **Claimed techniques**: 50+ language support, "Aggressive" and "Latest" modes. "Comprehensive privacy safeguards" (marketing).
-- **Detector coverage**: Universal — tests show 69% average in Humaniser benchmark.
+- **Detector coverage**: 2026 independent testing places overall bypass at ~75%, meaning one in four detectors still catches the output. Turnitin bypass is inconsistent (20–76% AI flagged across runs). Cannot reliably bypass Turnitin in current testing. Value proposition is best for users already inside the HIX.AI ecosystem.
 
 #### 7. WriteHuman
 - **URL**: https://writehuman.ai
-- **Pricing**: Basic $18/mo (600 words/request); Pro $27/mo; Ultra $48/mo (3,000 words/request). API: Standard $29/mo (125K words/mo, 10 req/min) or Premium $69/mo (400K words/mo, 60 req/min). Word packs $25/125K. Effective rate $0.17–$0.23/1K words.
-- **API**: `POST https://api.writehuman.ai/v1/humanize`, Bearer token, 40+ languages, <2s response.
+- **Pricing** *(updated April 2026, major revision)*: Web platform restructured — Basic $9/mo, Pro $12/mo, Ultra $36/mo. API: Standard $29/mo (125K words/mo, 10 req/min, 2K words/request, 2 concurrent) or Premium $69/mo (400K words/mo, 60 req/min). Word packs $25/125K. Effective rate ~$0.17–0.23/1K words (unchanged). March 2026 update: full website redesign and significant humanizer model upgrade with improved scores across major detectors.
+- **API**: `POST https://api.writehuman.ai/v1/humanize`, Bearer token, 40+ languages, <2s response. API formally launched and documented in 2025.
 - **Claimed techniques**: Three intensity modes, built-in "naturalness scanner," Google Docs history-replay Chrome extension.
-- **Detector coverage**: Markets all detectors. 2026 caveat: WriteHuman's internal "100% human" scanner disagreed with external GPTZero by 100 percentage points on the same text — the canonical example of the "vendor scorecard" illusion in the category.
+- **Detector coverage**: Markets all detectors. 2026 independent reviews rate WriteHuman lower than BypassGPT on raw bypass but note stronger output quality for human readers. The canonical internal-vs-external scorecard gap (internal "100% human" vs GPTZero "100% AI" on the same text) remains the most-cited example of vendor-scorecard illusion. AIXRadar: weaker bypass than BypassGPT but cleaner ethics framing.
 
 #### 8. Humbot
 - **URL**: https://humbot.ai
@@ -171,6 +172,30 @@ The category is defined by an explicit arms race with detectors and an unresolve
 - **Claimed techniques**: **33-signal transparency report** — uniquely shows *what* was changed and *why*, by signal. <5s processing. Targets specific weak signals rather than aggressive vocabulary substitution.
 - **Detector coverage**: 2026 independent tests cited Rewritely as top performer in naturalness and voice preservation.
 
+#### 32. Walter Writes AI *(added April 2026)*
+- **URL**: https://walterwrites.ai
+- **Launched**: ~2024–2025; emerged in Reddit threads as a consistent top performer by early 2026.
+- **Pricing**: Plans from ~$8/mo (30K words) or $10/mo (10K words, Starter) → $19/mo (55K words, Pro). Free trial: 300 words, no credit card or login required.
+- **Claimed techniques**: Structural rewrite rather than synonym swap; positions around output quality as much as bypass rate. Suits writers who prioritize finished quality over raw evasion.
+- **Detector coverage**: 79.7% Turnitin bypass in pre-Aug-2025 testing. Post Turnitin's August 2025 "AI bypasser" detection update, ~38% of content is now flagged as AI on Turnitin; Originality.ai catches ~45% of output. Strong on consumer-grade detectors (GPTZero, ZeroGPT). Featured heavily in r/BypassAiDetect threads and r/ChatGPTPro in 2025–2026 as a top community recommendation.
+- **Notable**: Turnitin's August 2025 model update hit Walter Writes harder than most dedicated humanizers. TikTok paid-promotion wave (Oct 2025–Feb 2026, 12+ creators with 100K+ followers) inflated community hype.
+
+#### 33. Ryter Pro *(added April 2026)*
+- **URL**: https://www.ryter.pro
+- **Launched**: 2025.
+- **Pricing**: Free limited tier. Basic $6/mo billed annually (100 credits/mo, 5K chars/session). Professional $12/mo billed annually (500 credits/mo, 10K chars/session, full API access, priority support, faster response, Pro Algorithm and New Model).
+- **API**: Full API access on Professional plan.
+- **Claimed techniques**: "Pro Algorithm" and "New Model" — specific implementations not publicly documented. Fastest processing speed in 2026 independent tests: >5,000 words/minute.
+- **Detector coverage**: Leading independent bypass rates in April 2026 roundups — 97% on GPTZero, 94% on Turnitin; no other tool tested within five percentage points of its Turnitin score in AI Natural Write's 2026 evaluation. Multilingual capability rated genuine (unlike many competitors who support 50+ languages with uneven quality). Least manual cleanup required of any platform in the same evaluation set.
+
+#### 34. GPTHuman.ai *(added April 2026)*
+- **URL**: https://gpthuman.ai
+- **Launched**: ~2024–2025.
+- **Pricing**: Free tier (300 words/output). Paid: $9.99/mo unlimited (2K words/output cap). Steep word-limit ceiling on paid plan is the primary complaint.
+- **API**: Not prominent.
+- **Claimed techniques**: Tone selector (Standard / High School / College / PhD); mode selector (Professional / Balanced / Enhanced). Bundled humanizer + detector + paraphraser in single interface. Supports PDF and Word file import. Reports a "Stealth Score" on output.
+- **Detector coverage**: 2026 independent testing (Leap AI): 37.4% average bypass — well below marketing claims and below free competitors. Consistently passes Winston AI in some tests. Per Substack reviewer (Apr 2026): top-4 pick in a 30-tool test based on output quality more than raw bypass numbers.
+
 ### General writing suites with humanizer features
 
 #### 21. QuillBot (with Humanizer)
@@ -258,25 +283,33 @@ The category is defined by an explicit arms race with detectors and an unresolve
 | Segment | Entry price | Typical mid-tier | API minimum |
 |---|---|---|---|
 | Budget consumer | $4.17–7.99/mo (Spinbot, GPTinf Lite, Humbot Basic) | $9.99–12.99/mo | N/A |
-| Mainstream humanizer | $9.99/mo (Undetectable.ai, Conch, ZeroGPT PRO) | $14.99–20/mo | $29/mo (WriteHuman) |
-| Premium humanizer | $18–29/mo (WriteHuman Basic, Humanizer.org) | $29–50/mo | $69–100/mo (WriteHuman Premium, Phrasly API) |
+| Mainstream humanizer | $6–9.99/mo (Ryter Pro Basic, Undetectable annual, Conch, ZeroGPT PRO) | $12–19/mo | $29/mo (WriteHuman) |
+| Premium humanizer | $9–12/mo (WriteHuman Basic/Pro, Ryter Pro Professional) | $19–36/mo | $69–100/mo (WriteHuman Premium, Phrasly API) |
 | Suite-bundled | $49/mo+ (Surfer), $59/mo (Jasper), $119/mo (TextCortex Unlimited) | $99–199/mo | enterprise custom |
+
+*Note: Undetectable.ai's pricing restructured in 2025–2026. Monthly plan now $14.99/mo (was $9.99). Annual "50% off" deal markets at ~$5/mo for 10K words. WriteHuman restructured web pricing to $9/$12/$36 (was $18/$27/$48). StealthGPT moved to weekly billing at $32–40/mo, departing from the monthly $14.99–29.99 tiering.*
 
 **Per-1K-words API economics** where disclosed: WriteHuman $0.17–0.23; AIHumanizerAPI ~$0.20; Phrasly $0.14 humanize + $0.02 detect; Rephrasy ~0.1 credit/100 words. Business API minimums cluster at $99–100/month — a de facto threshold for "serious" humanizer API usage.
 
 ## Detector Coverage (vendor-reported vs independent)
 
+*Updated April 2026. Turnitin's August 2025 "AI bypasser" detection model and February 2026 recall update mean pre-Aug-2025 Turnitin numbers are now stale for all tools.*
+
 | Humanizer | Vendor claim | Independent 2026 testing |
 |---|---|---|
-| Undetectable.ai | 99.8% | 72–89% (multi-source) |
-| Humaniser | n/a | 93% (own benchmark); 96% AI on GPTZero in aixradar test |
+| Ryter Pro | n/a | 97% GPTZero, 94% Turnitin — highest in category (AI Natural Write Apr 2026) |
+| Undetectable.ai | 99.8% | 73–88% avg; 96–97% on GPTZero/ZeroGPT, 89% Turnitin, 68% Originality.ai |
+| Phrasly | "most advanced" | ~80% avg in Apr 2026 tests (up from 45% in earlier benchmark — model updated) |
+| HIX Bypass | 99%+ | ~75% avg; inconsistent Turnitin (20–76% flagged) |
+| Walter Writes AI | n/a | Pre-Aug 2025: 79.7% Turnitin; post-Aug 2025 update: ~62% Turnitin, 55% Originality.ai |
+| Humaniser | n/a | 93% (own benchmark); 96% AI on GPTZero in AIXRadar test |
 | Humanizer PRO | 94% vs Content at Scale | 94% (own test) |
-| StealthGPT | universal | 74% (Humaniser), 100% AI GPTZero (aixradar) |
+| StealthGPT | universal | 60–82% range; fails Originality.ai/Turnitin in rigorous tests |
 | Smodin | n/a | 81% avg (4 detectors) |
 | HumanizerAI.com | n/a | 80% avg |
 | Humbot | universal | 60% avg, 45.5% on Originality.ai (weakest) |
 | StealthWriter | universal | 53–60% avg |
-| Phrasly | "most advanced" | 45% avg (Humanizer AI benchmark) |
+| GPTHuman.ai | n/a | 37.4% avg (Leap AI); strong on output quality vs raw bypass |
 | Humanize AI (.com) | all detectors | 0% bypass on GPTZero/Turnitin/QuillBot (TwainGPT) |
 | Surfer Humanizer | n/a | 76% avg |
 | Spinbot | n/a | ~81% (mechanical) |
@@ -318,16 +351,18 @@ Consolidating across the catalog:
 
 ## Trends
 
-1. **API-first is now the real revenue center.** Every serious vendor (Undetectable, WriteHuman, Phrasly, HIX, BypassGPT, Rephrasy, Smodin, AIHumanizerAPI, Humbot) publishes REST endpoints. $99–100/mo business minimums have become the de facto entry. Consumer subscriptions funnel into higher-margin B2B integration.
+1. **API-first is now the real revenue center.** Every serious vendor (Undetectable, WriteHuman, Phrasly, HIX, BypassGPT, Rephrasy, Smodin, AIHumanizerAPI, Humbot, Ryter Pro) publishes REST endpoints. $99–100/mo business minimums have become the de facto entry. Consumer subscriptions funnel into higher-margin B2B integration.
 2. **Writing-style cloning displaces generic "sound human."** Grammarly (user sample), Jasper (org voice), Conch (PDF upload), Rephrasy (style preset). The 2026 product narrative is shifting from "evade detectors" to "sound like you."
-3. **Vertical integration of detector + humanizer.** ZeroGPT, Content at Scale, Undetectable.ai all sell both sides. The conflict of interest is unresolved and increasingly disclosed in independent reviews.
+3. **Vertical integration of detector + humanizer.** ZeroGPT, Content at Scale, Undetectable.ai, and GPTHuman.ai all sell both sides. The conflict of interest is unresolved and increasingly disclosed in independent reviews.
 4. **Multi-pass / autopilot is table stakes.** TextToHuman's auto-iteration pattern is being adopted by competitors. Reflects the independent research finding that 3 passes reliably defeats GPTZero.
 5. **Transparency as differentiation.** Rewritely (33-signal report), Deceptioner (explicit stealth curve + detector target), StealthWriter (no-storage FAQ). In a black-box category, explaining the diff is a feature.
 6. **AI watermark removal as an exposed flag.** Smodin's API explicitly offers `watermark_removal` as a parameter — the clearest acknowledgement yet that SynthID-style provenance is the next adversarial target.
-7. **Legitimacy positioning by mainstream vendors.** Grammarly, Jasper, Copy.ai, Writesonic, Scribbr, Surfer all frame humanization as clarity/voice — deliberately distancing from detector-bypass framing. Expect this schism to widen as EU AI Act (Aug 2026) compliance obligations bite.
-8. **Free-unlimited budget tier is a real product.** TextToHuman, Humanize AI Pro, Humaniser offer free unlimited humanization with no signup — a direct commoditization threat to the $10–20/mo paid tier.
+7. **Legitimacy positioning by mainstream vendors.** Grammarly (September 2025 dedicated humanizer launch), Jasper, Copy.ai, Writesonic, Scribbr, Surfer all frame humanization as clarity/voice — deliberately distancing from detector-bypass framing. QuillBot added a dedicated humanizer mode in late 2025, though it achieves only ~47% average bypass, making it effectively a coin flip.
+8. **Free-unlimited budget tier is a real product.** TextToHuman, Humanize AI Pro, Humaniser, and Ryter Pro's limited free tier offer free humanization with no signup — a direct commoditization threat to the $10–20/mo paid tier.
 9. **Consolidation into LLM vendors.** Humanloop → Anthropic (2025–26) signals that prompt-management infrastructure is being absorbed; expect Anthropic/OpenAI-native humanization tooling within 12–18 months.
 10. **Regulatory hedge in ToS.** Vendors who once marketed "100% undetectable" now insert academic-integrity disclaimers (StealthWriter, Humbot, Phrasly, Deceptioner). Marketing headers haven't caught up with legal footers.
+11. **Turnitin's counter-move is operational and improving.** Turnitin shipped AI bypasser detection in August 2025, updated the model again in February 2026 to improve recall while keeping false positives below 1%. The August 2025 update measurably degraded several top humanizers' Turnitin bypass rates (Walter Writes: from 79.7% to ~62%). English-only for now. Vendors that previously marketed Turnitin bypass now caveat or omit that claim.
+12. **New entrants competing on speed and Turnitin performance.** Ryter Pro (2025 launch) achieved the strongest independent Turnitin bypass numbers in 2026 testing while being the fastest processor (>5K words/minute). Walter Writes AI built a quality-first positioning that attracted organic community growth before a paid influencer wave in 2025–2026. These tools are displacing StealthGPT and HIX Bypass in recommendation threads.
 
 ## Gaps / Open Questions
 
@@ -351,7 +386,7 @@ Consolidating across the catalog:
 - [TwainGPT — Humanize AI review](https://www.twaingpt.com/blog/humanize-ai-review/) — concrete per-detector results showing marketing vs reality gap.
 - [Undetectable.ai Developer API docs](https://help.undetectable.ai/en/article/developer-api-1fvasec/) — `readability` / `purpose` / `strength` / `model` parameters.
 - [Undetectable.ai Wikipedia entry](https://en.wikipedia.org/wiki/Undetectable.ai) — founding narrative, May 2023 launch.
-- [Reuters — Undetectable AI surpasses 15M users (Feb 2025)](https://www.reuters.com/press-releases/undetectable-ai-surpasses-15-million-users-2025-02-06/) and [Tracxn profile](https://tracxn.com/d/companies/undetectable.ai/__omLux500QgkQ0UJK2u_OmrPX01Cl2Wu0B0bkSu81XG4) — 39 employees, no external funding.
+- [Reuters — Undetectable AI surpasses 15M users (Feb 2025)](https://www.reuters.com/press-releases/undetectable-ai-surpasses-15-million-users-2025-02-06/) — vendor press release figure; subsequent Tracxn/G2 profiles show ~11M as of 2026. [Latka — Undetectable AI revenue](https://getlatka.com/companies/undetectable.ai) — $3.7M ARR, ~34 employees, Sep 2025.
 - [WriteHuman API docs](https://writehuman.ai/api/docs) and [AI Humanizer API pricing](https://aihumanizerapi.com/pricing/) — REST endpoint, Bearer auth, per-1K-word economics.
 - [HIX Bypass API guide](https://explinks.com/blog/how-to-get-hix-bypass-api-key-step-by-step-guide) — endpoint structure, 2K-word/request cap.
 - [Phrasly API docs](https://phrasly-api.readme.io/reference/introduction) — current endpoints (Detector + Balance; humanizer endpoint noted "in development").

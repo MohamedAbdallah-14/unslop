@@ -60,6 +60,22 @@ AI_ISMS = (
     r"\bever[- ](?:evolving|changing)\b",
     r"\bin today'?s (?:digital )?(?:world|age|landscape|era)\b",
     r"\bdynamic landscape\b",
+    # 2026-04 additions — mirror humanize.py's vocabulary extension. Each
+    # entry has a corresponding STOCK_VOCAB rewrite; the validator refuses
+    # to let an LLM rewrite reintroduce them.
+    r"\bmeticulous(?:ly)?\b",
+    r"\bbustling\b",
+    r"\bparadigm\s+shift\b",
+    r"\bgame[- ]?chang(?:er|ers|ing)\b",
+    r"\brevolutioniz(?:e|es|ed|ing)\b",
+    r"\btransformative\b",
+    r"\bunprecedented(?=\s+(?:opportunity|opportunities|challenge|challenges|growth|success|impact|change)\b)",
+    r"\ba\s+myriad\s+of\b",
+    r"\bmyriad\s+(?=\w)",
+    r"\ba\s+plethora\s+of\b",
+    r"\buncharted\s+(?:territory|waters|ground|area|domain)\b",
+    r"\bnuanced\b(?=\s+(?:understanding|view|perspective|approach|analysis|take))",
+    r"\bsynerg(?:y|ies|ize|izes|ized|izing)\b",
     # Hedging stacks
     r"\bit'?s important to note that\b",
     r"\bit'?s worth (?:mentioning|noting|pointing out) that\b",
@@ -94,6 +110,55 @@ AI_ISMS = (
     r"(?:^|(?<=[.!?]\s))to summarize\b",
     r"(?:^|(?<=[.!?]\s))(?:firstly|secondly|thirdly|finally)\b",
     r"(?:^[ \t]*(?:[-*+]|\d+\.)[ \t]+)(?:firstly|secondly|thirdly|finally)\b",
+    # Phase 2 (2026-04-21): significance inflation, notability namedropping,
+    # superficial -ing analyses, copula avoidance. Mirrors humanize.py Phase 2
+    # rule families so the validator can detect when a rewrite accidentally
+    # reintroduces them (e.g. an LLM rewrite adds "marks a pivotal moment").
+    # Significance inflation
+    r"\b(?:marks?|represents?|stands?\s+as)\s+(?:a|an|the)\s+(?:pivotal|defining|critical|key|watershed|seminal)\s+(?:moment|turning\s+point|milestone)\b",
+    r"(?:underscor(?:es|ing)|emphasiz(?:es|ing))\s+(?:the|its|their)\s+(?:importance|significance|role)",
+    r"\b(?:enduring|lasting|indelible)\s+legacy\b",
+    r"\bleaves?\s+an?\s+indelible\s+mark\b",
+    r"\bdeeply\s+rooted\s+in\b",
+    r"\b(?:contributing\s+to|shaping)\s+the\s+(?:broader|wider|ongoing)\s+(?:narrative|landscape|conversation|discourse)\b",
+    # Notability namedropping
+    r"\b(?:maintains?|has)\s+an\s+active\s+(?:social\s+media\s+)?presence\b",
+    r"\ba\s+leading\s+(?:expert|voice|authority|figure)\s+(?:in|on)\b",
+    r"\brenowned\s+for\s+(?:his|her|their)\s+work\b",
+    r"\bwidely\s+(?:cited|featured|covered)\s+(?:in|by)\b",
+    r"\b(?:internationally|globally)\s+recogni[sz]ed\s+as\b",
+    # Superficial -ing analyses (matches only the canonical filler forms)
+    r",\s+(?:highlighting|underscoring|emphasizing|illustrating|reflecting|showcasing)\s+(?:the|its|their|his|her|a|an)\s+(?:importance|significance|role|impact|value|need|necessity|relevance|nature)\b",
+    # Copula avoidance (", being a/an/the X,")
+    r",\s+being\s+(?:a|an|the)\s+[a-z]",
+)
+
+# FALSE_RANGES — "from X to Y" clichés where the range is formulaic rather than
+# literal. Wikipedia "Signs of AI writing". Validator-only: regex rewrite risks
+# corrupting literal ranges (dates, versions, measurements). These trigger a
+# warning on match so the user can hand-edit or run LLM mode.
+FALSE_RANGES = tuple(
+    re.compile(p, re.IGNORECASE)
+    for p in (
+        r"\bfrom\s+(?:beginners?|novices?)\s+to\s+(?:experts?|professionals?|veterans?)\b",
+        r"\bfrom\s+(?:humble\s+)?beginnings?\s+to\b",
+        r"\bfrom\s+simple\s+\w+\s+to\s+complex\s+\w+\b",
+        r"\bfrom\s+the\s+mundane\s+to\s+the\s+(?:extraordinary|sublime|profound)\b",
+        r"\bfrom\s+(?:small|tiny)\s+startups?\s+to\s+(?:global|massive)\s+enterprises?\b",
+        r"\bspan(?:s|ning)?\s+the\s+spectrum\s+from\b",
+    )
+)
+
+# SYNONYM_CYCLING — same concept referred to by multiple words in a short span.
+# Wikipedia calls this a sign of AI writing trying to avoid repetition without
+# recognizing that controlled repetition is a valid style choice. Heuristic:
+# detect when 3+ members of a known synonym group appear in the same paragraph.
+_SYNONYM_GROUPS: tuple[frozenset[str], ...] = (
+    frozenset({"utilize", "utilise", "leverage", "employ", "harness"}),
+    frozenset({"showcase", "highlight", "emphasize", "emphasise", "underscore"}),
+    frozenset({"pivotal", "crucial", "vital", "paramount", "essential"}),
+    frozenset({"comprehensive", "thorough", "exhaustive", "holistic"}),
+    frozenset({"robust", "resilient", "reliable", "solid"}),
 )
 AI_ISM_PATTERNS = [re.compile(p, re.IGNORECASE) for p in AI_ISMS]
 
@@ -108,6 +173,14 @@ class ValidationResult:
     burstiness_before: float = 0.0
     burstiness_after: float = 0.0
     sentence_length_range_after: tuple[int, int] = (0, 0)
+    flat_paragraphs_before: int = 0
+    flat_paragraphs_after: int = 0
+    false_ranges_before: int = 0
+    false_ranges_after: int = 0
+    synonym_cycling_before: int = 0
+    synonym_cycling_after: int = 0
+    contraction_rate_before: float = 0.0
+    contraction_rate_after: float = 0.0
 
     def to_dict(self) -> dict:
         return {
@@ -119,6 +192,14 @@ class ValidationResult:
             "burstiness_before": round(self.burstiness_before, 3),
             "burstiness_after": round(self.burstiness_after, 3),
             "sentence_length_range_after": list(self.sentence_length_range_after),
+            "flat_paragraphs_before": self.flat_paragraphs_before,
+            "flat_paragraphs_after": self.flat_paragraphs_after,
+            "false_ranges_before": self.false_ranges_before,
+            "false_ranges_after": self.false_ranges_after,
+            "synonym_cycling_before": self.synonym_cycling_before,
+            "synonym_cycling_after": self.synonym_cycling_after,
+            "contraction_rate_before": round(self.contraction_rate_before, 3),
+            "contraction_rate_after": round(self.contraction_rate_after, 3),
         }
 
 
@@ -158,6 +239,28 @@ def _sentence_lengths(text: str) -> list[int]:
     return lengths
 
 
+def _paragraph_sentence_lengths(text: str) -> list[list[int]]:
+    """Per-paragraph sentence-length lists. Empty paragraphs skipped.
+
+    Used for per-paragraph burstiness: uniform-length-within-paragraph is a
+    stronger structural signal than document-wide σ, which can hide flat
+    paragraphs when they average out."""
+    prose = _strip_code_for_prose(text)
+    groups: list[list[int]] = []
+    for paragraph in re.split(r"\n\s*\n", prose):
+        paragraph = paragraph.strip()
+        if not paragraph:
+            continue
+        lengths: list[int] = []
+        for sentence in _SENTENCE_SPLIT.split(paragraph):
+            words = [w for w in re.split(r"\s+", sentence.strip()) if w]
+            if words:
+                lengths.append(len(words))
+        if lengths:
+            groups.append(lengths)
+    return groups
+
+
 def _burstiness(lengths: list[int]) -> float:
     """Standard deviation of sentence lengths. Higher = more human-like rhythm.
     Returns 0.0 if fewer than 2 sentences (not meaningful)."""
@@ -166,6 +269,26 @@ def _burstiness(lengths: list[int]) -> float:
     mean = sum(lengths) / len(lengths)
     variance = sum((x - mean) ** 2 for x in lengths) / len(lengths)
     return math.sqrt(variance)
+
+
+def _count_flat_paragraphs(
+    paragraph_lengths: list[list[int]],
+    *,
+    min_sentences: int = 3,
+    sigma_threshold: float = 3.0,
+) -> int:
+    """Count paragraphs that are structurally flat.
+
+    A paragraph counts as flat when it has >=`min_sentences` sentences and its
+    sentence-length standard deviation is < `sigma_threshold`. Short paragraphs
+    (1-2 sentences) are excluded because σ isn't meaningful there."""
+    flat = 0
+    for lengths in paragraph_lengths:
+        if len(lengths) < min_sentences:
+            continue
+        if _burstiness(lengths) < sigma_threshold:
+            flat += 1
+    return flat
 
 
 def _extract_fenced_blocks(text: str) -> list[str]:
@@ -180,6 +303,57 @@ def _extract_indented_blocks(text: str) -> list[str]:
 
 def _count_ai_isms(text: str) -> int:
     return sum(len(p.findall(text)) for p in AI_ISM_PATTERNS)
+
+
+def _count_false_ranges(text: str) -> int:
+    """Count occurrences of AI-cliché `from X to Y` formulations in prose."""
+    prose = _strip_code_for_prose(text)
+    return sum(len(p.findall(prose)) for p in FALSE_RANGES)
+
+
+_WORD_RE = re.compile(r"[A-Za-z]+")
+
+# Contraction detection — AI text typically has 0.00 contractions per chunk
+# vs human ~0.17 (Kalemaj et al. arXiv 2604.11687). Low contraction rate is
+# a distributional fingerprint that token-level detectors read.
+_CONTRACTION_RE = re.compile(
+    r"\b(?:don|doesn|didn|won|wouldn|shouldn|couldn|mightn|mustn|isn|aren|"
+    r"wasn|weren|hasn|haven|hadn|can)'t\b|"
+    r"\b(?:it|that|there|what|where|who|he|she|we|you|they|"
+    r"I)'(?:s|re|ve|ll|d|m)\b|"
+    r"\bI'm\b",
+    re.IGNORECASE,
+)
+
+
+def _contraction_rate(text: str) -> float:
+    """Contractions per 1000 words in prose-only text. Human baseline ~17 per
+    1k words; AI-generated text often has 0."""
+    prose = _strip_code_for_prose(text)
+    words = len(_WORD_RE.findall(prose))
+    if words < 20:
+        return 0.0
+    contractions = len(_CONTRACTION_RE.findall(prose))
+    return (contractions / words) * 1000
+
+
+def _count_synonym_cycling(text: str) -> int:
+    """Count paragraphs where 3+ members of a known synonym group co-occur.
+
+    Heuristic: true synonym cycling requires semantic similarity (would need
+    embeddings). This catches the lexical subset: a paragraph using "utilize"
+    + "leverage" + "employ" in close proximity. False positives on genuine
+    distinctions are possible; the signal is a warning, not an error."""
+    prose = _strip_code_for_prose(text)
+    paragraphs = re.split(r"\n\s*\n", prose)
+    flagged = 0
+    for para in paragraphs:
+        words = {w.lower() for w in _WORD_RE.findall(para)}
+        for group in _SYNONYM_GROUPS:
+            if len(words & group) >= 3:
+                flagged += 1
+                break  # count once per paragraph
+    return flagged
 
 
 def validate(original: str, humanized: str) -> ValidationResult:
@@ -310,6 +484,44 @@ def validate(original: str, humanized: str) -> ValidationResult:
             "Flat sentence length is the #1 AI-detector signal. Vary rhythm more."
         )
 
+    # Per-paragraph shape — document-wide σ can hide flat paragraphs that average
+    # out with each other. Count paragraphs of >=3 sentences whose internal σ<3.
+    orig_para_lengths = _paragraph_sentence_lengths(original)
+    new_para_lengths = _paragraph_sentence_lengths(humanized)
+    flat_before = _count_flat_paragraphs(orig_para_lengths)
+    flat_after = _count_flat_paragraphs(new_para_lengths)
+    if flat_after > flat_before:
+        warnings.append(
+            f"Flat paragraphs increased: {flat_before} → {flat_after}. "
+            "A paragraph with 3+ sentences at uniform length is a detector tell."
+        )
+
+    # Phase 2: false-range and synonym-cycling detectors. Informational.
+    fr_before = _count_false_ranges(original)
+    fr_after = _count_false_ranges(humanized)
+    if fr_after > 0:
+        warnings.append(
+            f"False-range clichés present ({fr_after}). "
+            "Formulaic 'from X to Y' patterns read as AI; hand-edit or run --mode full."
+        )
+
+    sc_before = _count_synonym_cycling(original)
+    sc_after = _count_synonym_cycling(humanized)
+    if sc_after > sc_before:
+        warnings.append(
+            f"Synonym cycling in {sc_after} paragraph(s). "
+            "Using 3+ synonyms for one concept in the same paragraph reads as AI."
+        )
+
+    # Contraction rate — AI text often has 0 contractions; human baseline ~17/1k words.
+    cr_before = _contraction_rate(original)
+    cr_after = _contraction_rate(humanized)
+    if len(new_lengths) >= 8 and cr_after < 2.0:
+        warnings.append(
+            f"Contraction rate low ({cr_after:.1f}/1k words). "
+            "Human writing uses ~17 contractions per 1k words; zero contractions is a detector signal."
+        )
+
     return ValidationResult(
         ok=len(errors) == 0,
         errors=errors,
@@ -319,6 +531,14 @@ def validate(original: str, humanized: str) -> ValidationResult:
         burstiness_before=burst_before,
         burstiness_after=burst_after,
         sentence_length_range_after=length_range,
+        flat_paragraphs_before=flat_before,
+        flat_paragraphs_after=flat_after,
+        false_ranges_before=fr_before,
+        false_ranges_after=fr_after,
+        synonym_cycling_before=sc_before,
+        synonym_cycling_after=sc_after,
+        contraction_rate_before=cr_before,
+        contraction_rate_after=cr_after,
     )
 
 
@@ -334,6 +554,14 @@ def format_report(result: ValidationResult) -> str:
         parts.append(
             f"  Burstiness σ: {result.burstiness_before:.1f} → {result.burstiness_after:.1f}"
             f" (range {lo}-{hi} words/sentence)"
+        )
+    if result.flat_paragraphs_after or result.flat_paragraphs_before:
+        parts.append(
+            f"  Flat paragraphs: {result.flat_paragraphs_before} → {result.flat_paragraphs_after}"
+        )
+    if result.contraction_rate_after > 0 or result.contraction_rate_before > 0:
+        parts.append(
+            f"  Contractions/1k: {result.contraction_rate_before:.1f} → {result.contraction_rate_after:.1f}"
         )
     for err in result.errors:
         parts.append(f"  ERROR: {err}")

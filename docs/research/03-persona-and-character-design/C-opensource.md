@@ -2,7 +2,7 @@
 
 > **Project:** Humanizing AI output and thinking
 > **Angle:** Survey of open-source projects, community specs, and academic repos that shape how AI personas are authored, stored, played, and evaluated.
-> **Research value:** high — a mature open-source stack exists with de-facto standards (character cards V2/V3), multiple production UIs with hundreds of thousands of users, and an active academic sub-field (RoleLLM, CharacterEval, PersonaGym, CoSER) producing datasets, benchmarks, and reward models specifically for persona fidelity.
+> **Research value:** high — a mature open-source stack exists with de-facto standards (character cards V2/V3), multiple production UIs with hundreds of thousands of users, and an active academic sub-field (RoleLLM, CharacterEval, PersonaGym, CoSER, CharacterBox, RoleRAG) producing datasets, benchmarks, and reward models specifically for persona fidelity. Last updated: April 2026.
 
 ## Scope
 
@@ -13,8 +13,8 @@ This angle indexes the projects that teach us how open-source communities alread
 ## 1. SillyTavern
 
 - **URL:** https://github.com/SillyTavern/SillyTavern
-- **Author:** SillyTavern org (fork of TavernAI, ~300 contributors)
-- **Stars:** ~25,900
+- **Author:** SillyTavern org (fork of TavernAI, ~200+ contributors)
+- **Stars:** ~23,300 (corrected April 2026; prior entries overstated at ~25,900)
 - **Updated:** Actively maintained (2026)
 - **License:** AGPL-3.0
 - **Description:** Locally-installed LLM frontend positioned as "LLM Frontend for Power Users." De-facto standard UI for character-based roleplay across dozens of LLM APIs.
@@ -24,7 +24,7 @@ This angle indexes the projects that teach us how open-source communities alread
   - Prompt macros (`{{char}}`, `{{user}}`, `{{random}}`, `{{pick}}`) for reusable persona templates.
   - Author's Note, post-history instructions, jailbreak slots, and group chats with turn-taking logic.
   - Extensions API (TTS, image gen via A1111/ComfyUI, expression sprites, translate, summarize).
-- **Takeaways for humanization:** SillyTavern's prompt order (system → persona → scenario → WorldInfo → history → post-history instructions) is the community-hardened recipe for keeping a persona stable across long chats. The Lorebook pattern is the most battle-tested "soft memory" technique in the open-source world and directly addresses context-window-induced persona drift.
+- **Takeaways for humanization:** SillyTavern's prompt order (system → persona → scenario → WorldInfo → history → post-history instructions) is the community-hardened recipe for keeping a persona stable across long chats. The Lorebook pattern is the most battle-tested "soft memory" technique in the open-source world and directly addresses context-window-induced persona drift. February 2026 release added ComfyUI/Flux integration for multimodal persona image generation; persona avatar aspect ratio preservation added to UI.
 - **Summary:** SillyTavern is the dominant open-source chat UI for persona roleplay, the reference implementation for the character card spec, and the main testbed where community prompt engineering gets hardened. Any serious "humanizing AI" work should study its prompt template, macro system, and WorldInfo triggering before re-inventing.
 - **README quote:** "SillyTavern is a locally installed user interface that allows you to interact with text generation LLMs, image generation engines, and TTS voice models."
 
@@ -251,6 +251,36 @@ This angle indexes the projects that teach us how open-source communities alread
 - **Xtr4F/PyCharacterAI** — https://github.com/Xtr4F/PyCharacterAI — ~95 stars, MIT, async wrapper with structured `persona` methods (`fetch_my_persona`, `create_persona`).
 - **Takeaway:** Character.AI itself is closed, but these reverse-engineered clients expose the data model that made C.AI's personas sticky — persona text, greeting, definitions, and *user-level* personas distinct from character-level. The split between a user's persona and the character's persona is a humanization primitive worth copying into any new system.
 
+## 21. CharacterBox (NAACL 2025)
+
+- **URL:** https://aclanthology.org/2025.naacl-long.323/ (paper: arXiv:2412.05631)
+- **Author:** Haoxuan Li et al. (Peking University)
+- **Stars:** Research release
+- **Updated:** 2025
+- **Description:** A simulation sandbox for generating fine-grained character behavior trajectories. Two-agent architecture: a character agent grounded in psychological and behavioral science, and a narrator agent that coordinates character interactions and environmental changes.
+- **Techniques:** Text-world simulation; dynamic trajectory generation; dual-agent (character + narrator) evaluation framework.
+- **Takeaways:** Extends evaluation past static QA into dynamic world-simulation. Useful as a benchmark when evaluating persona designs for open-ended interactive agents and games, not just chat.
+- **Summary:** State-of-the-art simulation-based evaluation for role-playing capability in text-world contexts. Complements PersonaGym and CharacterEval in the evaluation stack.
+
+## 22. RoleRAG
+
+- **URL:** https://arxiv.org/abs/2505.18541
+- **Author:** Multiple institutions
+- **Stars:** Research release (2025)
+- **Description:** Retrieval-Augmented Generation applied specifically to character knowledge management. Combines entity disambiguation for knowledge indexing with a boundary-aware retriever that extracts contextually appropriate information from a structured knowledge graph.
+- **Techniques:** Knowledge graph construction; entity disambiguation; boundary-aware retrieval; calibrated retrieval to reduce character knowledge hallucination.
+- **Takeaways:** The retrieval-side complement to confidence-gating (RoleFact) for managing character knowledge boundaries. Applicable wherever persona has a bounded, verifiable knowledge domain (historical figures, IP characters, enterprise personas).
+- **Summary:** Addresses character knowledge hallucination from the retrieval rather than the training side. Benchmarks show improved character knowledge accuracy and fewer hallucinated responses for both general-purpose and role-specific LLMs.
+
+## 23. nuochenpku/Awesome-Role-Play-Papers
+
+- **URL:** https://github.com/nuochenpku/Awesome-Role-Play-Papers
+- **Author:** nuochenpku et al.
+- **Stars:** Active curation (2025–2026)
+- **Description:** Curated reading list of role-playing papers, complementary to Neph0s/awesome-llm-role-playing-with-persona. Organized around the Wang et al. (2026) survey (arXiv:2601.10122) categorization: cognitive simulation, language-style imitation, and rule-based paradigms.
+- **Takeaways:** A second useful entry-point for the academic literature, with different curation priorities from the Neph0s list. Cross-referencing both gives the broadest coverage.
+- **Summary:** Secondary canonical reading list; useful for papers published after the TMLR 2024 survey cutoff.
+
 ---
 
 ## Patterns
@@ -270,6 +300,9 @@ This angle indexes the projects that teach us how open-source communities alread
 - **Reward-model-as-judge** — CharacterEval's CharacterRM, PersonaGym's PersonaScore, and Ditto's WikiRoleEval signal a move away from GPT-4-as-judge toward purpose-built persona evaluators. Cheaper and more aligned with human ratings.
 - **Stages / runtime personas** — Chub's Stage primitive and RisuAI's script modules point to personas-as-programs: state machines and mini-UIs wrapped around a card rather than static prompts.
 - **Small models with persona-specific LoRAs** are catching up to frontier models on in-character metrics, especially outside English (RoleGLM, CharacterEval Chinese).
+- **Simulation-based evaluation** — CharacterBox and RPEval signal a third evaluation paradigm after static benchmarks and dynamic QA environments: full narrative world simulation with a narrator agent. Relevant for game NPCs, interactive fiction, and agent personas.
+- **Retrieval-augmented persona (RAP)** — RoleRAG formalizes RAG-based character knowledge management as a research area. Expect more RAP work as knowledge-boundary hallucination remains a top failure mode.
+- **SillyTavern ComfyUI/Flux integration** (Feb 2026) marks multimodal persona going mainstream in open-source: expression images generated in-session as part of persona expression, not as a bolt-on.
 
 ## Gaps
 

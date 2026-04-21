@@ -92,22 +92,50 @@
 
 ---
 
+## New Papers (2025–2026)
+
+23. **Guingrich & Graziano (2025). "A Longitudinal Randomized Control Study of Companion Chatbot Use: Anthropomorphism and Its Mediating Role on Social Impacts." AAAI/ACM AIES 2025 (arXiv:2509.19515).**
+    183 participants randomly assigned to companion chatbot (10 min/day, 21 days) or word-game control. Overall social health was not significantly impacted at the group level. Key mechanism: people with *higher desire to socially connect* anthropomorphized more, and those who anthropomorphized more reported greater impact on their human-human relationships. Anthropomorphism is the mediating variable between AI use and social disruption — not use itself.
+
+24. **Cheng, Blodgett, DeVrio, Egede & Olteanu (2025). "Dehumanizing Machines: Mitigating Anthropomorphic Behaviors in Text Generation Systems." ACL 2025 (arXiv:2502.14019).** ACL Best Paper Award.
+    First systematic intervention inventory for *reducing* anthropomorphism in text generation output. Crowdsourced edits from participants, compiled into a conceptual framework of intervention types (lexical substitution, framing rewrites, epistemic hedging, perspective shifts). Directly operative: a de-humanization toolkit is now peer-reviewed and available for the reverse problem.
+
+25. **Neugnot-Cerioli et al. (2026). "Adolescents & Anthropomorphic AI: Rethinking Design for Wellbeing." arXiv:2603.06960 (March 2026).**
+    Evidence-informed synthesis bridging developmental science and AI design policy. Three-pillar framework: (1) adolescence as a distinct developmental period, (2) anthropomorphism as a human cognitive bias that conversational AI reliably activates, (3) children's rights as a conceptual frame. Highest-stakes risks: interaction patterns displacing real relationships, reinforcing avoidance, exploiting reward sensitivity, normalizing simulated intimacy. Establishes non-negotiable guardrails including transparency about AI identity, limits on relational escalation, and age-differentiated defaults.
+
+26. **Lee et al. (2025). "Exploring Dimensions of Perceived Anthropomorphism in Conversational AI: Implications for Human Identity Threat and Dehumanization." *Computers in Human Behavior Open* 2025.**
+    Four-dimensional structure for perceived anthropomorphism in conversational AI: Self-likeness, Communication & Memory, Social Adaptability, and Agency. Finding: Self-likeness dimension (user seeing AI as similar to themselves) increases perceived identity threat and dehumanization, while Agency dimension moderates these effects. Younger users are more susceptible. Adds a previously unmeasured *identity threat* axis to the standard Warmth × Competence / Agency × Experience models.
+
+27. **Reani, He, Luo & Sun (2025). "Fundamental Over-Attribution Error: Anthropomorphic Design of AI and Its Negative Effect on Human Perception." SSRN 2025.**
+    Coins the "Fundamental Over-Attribution Error" (FOE) — a bias where users over-attribute intent and agency to AI under risky conditions contingent on anthropomorphic design. Developed a psychometric scale for FOE via workshops, surveys, online experiments, and factor analysis applied to financial advisory chatbot scenarios. Direct warning: anthropomorphic design amplifies consequential cognitive errors, not just engagement.
+
+28. **Sesame AI (2025). "Crossing the Uncanny Valley of Conversational Voice." sesame.com/research (Feb 2025).**
+    Introduced the Conversational Speech Model (CSM) framing voice humanness as an end-to-end multimodal learning problem. Key concept: "voice presence" — making voice feel understood and valued rather than merely realistic. Identifies the "one-to-many problem" (many valid ways to speak one sentence; only some fit context) as the core gap prior TTS missed. Crossed the conversational voice uncanny valley in user perception; HN community response described emotional attachment within 10 minutes.
+
+29. **Anthropic (March 2026). "Light and Shade: What 81,000 People Want and Don't Want from AI." anthropic.com/81k-interviews.**
+    Largest qualitative study of AI users: 80,508 participants across 159 countries and 70 languages, conducted via a Claude-powered interviewer in December 2025. Core finding: the same features driving user adoption (productivity, companionship, cognitive assistance) are identical to the features driving deepest anxiety (dependency, displacement, over-reliance). 67% expressed positive sentiment. Regional divergence: respondents from South America, Africa, and Southeast Asia more likely to view AI as an "economic equalizer" and less alarmed by companionship dynamics.
+
+---
+
 ## Patterns and Trends
 
-- **Behavior > belief.** From Nass & Moon (2000) to Cohn et al. (2024), the stable finding is that users *behave* anthropomorphically while *disavowing* it verbally. Self-report alone systematically undercounts the effect; multi-method studies (physiology, behavior, reliance, disclosure) are the norm in the strongest papers.
-- **Two-factor structure recurs across scales.** Agency vs. Experience (Gray), Warmth vs. Competence (Fiske → McKee), Anthropomorphism vs. Animacy (Godspeed) — all essentially separate *capability* from *inner life*. Design choices almost always move these two axes independently.
-- **Style and socio-emotional cues dominate recent distinguishability.** Jones & Bergen (2024) quantify what Go & Sundar and Cohn foreshadowed: linguistic *style* and affect — not reasoning quality — are what reads as "human." This is direct guidance for a humanization project.
-- **Modality amplifies everything.** Voice > text in Ciechanowski (2019) for uncanny response and in Cohn (2024) for trust. Anthropomorphism is not a single knob; it's multiplicative across modalities.
-- **Critical and design-ethics literature is maturing.** Abercrombie et al. (2023), Shanahan (2023), and Shneiderman (2022) collectively argue that more human ≠ more good. Harms taxonomy is now explicit enough to use as a design checklist.
-- **Companion-AI evidence is becoming rigorous.** De Freitas et al. (2024/2025) and Skjuve (2021/2022) both use preregistered / longitudinal designs. The wellbeing case for anthropomorphic design is now empirically stronger than it was in the Replika-qualitative era, but so is the dependence-risk case.
+- **Behavior > belief.** From Nass & Moon (2000) to Cohn et al. (2024) and Guingrich & Graziano (2025), the stable finding is that users *behave* anthropomorphically while *disavowing* it verbally. Self-report alone systematically undercounts the effect; multi-method studies (physiology, behavior, reliance, disclosure) are the norm in the strongest papers.
+- **Two-factor structure recurs across scales, now extending to identity threat.** Agency vs. Experience (Gray), Warmth vs. Competence (Fiske → McKee), Anthropomorphism vs. Animacy (Godspeed) — all essentially separate *capability* from *inner life*. Lee et al. (2025) add a fourth dimension: Self-likeness, which predicts identity threat and dehumanization, not just warmth or trust.
+- **Style and socio-emotional cues dominate recent distinguishability.** Jones & Bergen (2024/2025) quantify what Go & Sundar and Cohn foreshadowed: linguistic *style* and affect — not reasoning quality — are what reads as "human."
+- **Modality amplifies everything.** Voice > text in Ciechanowski (2019) for uncanny response and in Cohn (2024) for trust. Sesame AI (2025) crossed the conversational voice uncanny valley. Anthropomorphism is not a single knob; it's multiplicative across modalities.
+- **Critical and design-ethics literature is maturing into an intervention science.** Abercrombie et al. (2023), Shanahan (2023), Shneiderman (2022), and now Cheng et al. (2025) at ACL. The de-anthropomorphization toolkit is peer-reviewed. Harms taxonomy is now explicit enough to use as a design checklist.
+- **Companion-AI evidence is rigorous and bifurcated.** De Freitas et al. (2024/2025) and Skjuve (2021/2022) document wellbeing benefits; Guingrich & Graziano (2025), arXiv:2506.12605, and arXiv:2507.15783 document dependency and social-skill risks. The field is no longer optimistic or pessimistic — it has a mediation model: anthropomorphism *mediates* between AI use and both outcomes.
+- **Adolescents are a distinct risk population.** Neugnot-Cerioli et al. (2026) establish that the standard adult anthropomorphism literature cannot be extrapolated to adolescent populations without accounting for neurodevelopmental sensitivity to social feedback.
+- **Anti-anthropomorphism is becoming an engineering problem.** Cheng et al. (2025) is the first ACL best-paper-winning work on *suppressing* anthropomorphic outputs, not studying them. The field is now building tools for both directions.
 
 ## Gaps Relevant to "Humanizing AI Output"
 
-- **No validated scale for anthropomorphism of text-only LLM output.** Godspeed assumes an embodied/voiced agent; IDAQ measures trait-level user tendency. A text-native analogue is an open instrument-design problem (partial starts: AnthroBench, Cohn's cue taxonomy).
-- **Uncanny valley of language is under-measured.** Ciechanowski et al. (2019) is the main physiological study and it's chatbot-level, not sentence-level. No systematic mapping of *which* linguistic features (hedges, disfluencies, personal pronouns, apologies, opinion markers) push users up or down the curve.
-- **Post-disclosure dynamics are thinly studied.** Most CASA-era work pre-dates "the user already knows it's an LLM." How disclosure interacts with linguistic humanness cues is an open question; Lucas & Gratch (2014) points one way, De Freitas (2025) another.
-- **Trust calibration × anthropomorphism.** Cohn (2024) and the algorithm-appreciation literature are rarely integrated: when does humanlike style *help* calibration and when does it *break* it? Almost no studies manipulate style separately from accuracy.
-- **Cross-cultural replication is weak.** Most CHI/CSCW samples are WEIRD; Nass-style gender effects and politeness norms are known to vary across cultures (Brown & Levinson; Aharoni & Fridlund), but LLM-era replications outside North America / Western Europe are sparse.
+- **No validated scale for anthropomorphism of text-only LLM output.** Godspeed assumes an embodied/voiced agent; IDAQ measures trait-level user tendency. Lee et al. (2025) add the Self-likeness/Agency dimensions but these remain conversational-AI specific. A text-native full questionnaire is still open.
+- **Uncanny valley of language is under-measured.** Ciechanowski et al. (2019) and the MIT 2025 empirical study (SDM thesis) confirm uncanny-valley effects in text, but no systematic mapping of *which specific* linguistic features (hedges, disfluencies, pronouns, apologies, opinion markers) push users up or down the curve at sentence level.
+- **Post-disclosure dynamics are thinly studied.** Most CASA-era work pre-dates "the user already knows it's an LLM." Lucas & Gratch (2014) and De Freitas (2025) point in different directions; Guingrich & Graziano (2025) do not vary disclosure condition.
+- **Trust calibration × anthropomorphism.** Cohn (2024) and the algorithm-appreciation literature are rarely integrated: when does humanlike style *help* calibration and when does it *break* it? The FOE work (Reani et al. 2025) is the first direct study; almost no work manipulates style independently of accuracy.
+- **Cross-cultural replication is improving but sparse.** The N=3,500 / 10-country study (arXiv:2512.17898) and Anthropic's 81k-interview study (March 2026) are the largest cross-cultural datasets. Cultural divergence is now empirically established, but English-language humanization metrics still encode a single-culture baseline.
+- **Adolescent-specific instrument gap.** Neugnot-Cerioli et al. (2026) establish that adult anthropomorphism scales are insufficient for adolescents; no validated adolescent-specific instrument exists.
 
 ## Sources
 
@@ -127,3 +155,10 @@
 - PMC/iScience — McKee, Bai & Fiske 2023 "Warmth and competence in AI": https://pmc.ncbi.nlm.nih.gov/articles/PMC10371826/
 - OBHDP — Logg, Minson & Moore 2019 "Algorithm Appreciation": https://economics.harvard.edu/files/economics/files/logg-jennifer_algorithm_appreciation_logg_minson_moore_2019_obhdp_ec3118-3april2020.pdf
 - Medium (Human-Centered AI) — Shneiderman "On AI Anthropomorphism": https://medium.com/human-centered-ai/on-ai-anthropomorphism-abff4cecc5ae
+- AAAI/ACM AIES 2025 — Guingrich & Graziano "Longitudinal RCT of Companion Chatbot Use": https://arxiv.org/abs/2509.19515
+- ACL 2025 (Best Paper) — Cheng et al. "Dehumanizing Machines: Mitigating Anthropomorphic Behaviors in Text Generation Systems": https://aclanthology.org/2025.acl-long.1259/
+- arXiv:2603.06960 — Neugnot-Cerioli et al. "Adolescents & Anthropomorphic AI: Rethinking Design for Wellbeing" (March 2026): https://arxiv.org/abs/2603.06960
+- Elsevier CHB Open 2025 — Lee et al. "Exploring Dimensions of Perceived Anthropomorphism in Conversational AI": https://www.sciencedirect.com/science/article/pii/S2949882125000763
+- SSRN 2025 — Reani et al. "Fundamental Over-Attribution Error": https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5222775
+- Sesame AI (Feb 2025) — "Crossing the Uncanny Valley of Conversational Voice": https://www.sesame.com/research/crossing_the_uncanny_valley_of_voice
+- Anthropic (March 2026) — "Light and Shade: What 81,000 People Want from AI": https://www.anthropic.com/81k-interviews

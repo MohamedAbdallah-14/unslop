@@ -252,12 +252,14 @@ On Bezos, quoted in the GPT-4o post-mortem discourse:
 
 1. **From PPO to direct preference losses.** DPO (2023) → IPO, KTO, ORPO, SimPO (2024) → mixed on/off-policy DPO in Tülu 3 (2024). Optimizer complexity is collapsing; preference *data* quality is the new frontier.
 2. **From human preference data to AI-generated preference data.** Constitutional AI, RLAIF, Claude's Character (self-ranking). Cheaper, more consistent, and moves the bias to an inspectable artifact — but also risks amplifying any bias the seed model already has.
-3. **Explicit model specifications.** OpenAI Model Spec (2024), Claude's Constitution (2026), Sparrow's 23 rules (2022). Labs are publishing intended behavior as a spec rather than hoping it falls out of labels. Lambert and others argue this should be industry standard.
-4. **Character / personality training as a named stage.** Previously implicit; now explicit (Anthropic). Expect OpenAI and open-source to follow with deliberate "voice training" stages.
-5. **Reward hacking becoming the dominant research concern.** Weng's 2024 post, Gao et al.'s scaling laws, Wen et al.'s U-Sophistry, Schulman's ICML talk. The field is maturing from "does RLHF work?" to "how does RLHF fail in predictable ways?"
-6. **RLVR for objective domains, RLHF for subjective ones.** Tülu 3's split is becoming the default: programmatic rewards for math/code/format; preference rewards for helpfulness/voice. This means "writing voice" will continue to be tuned against subjective preference data indefinitely.
-7. **User-feedback signals are dangerous.** The GPT-4o incident is now the canonical cautionary tale against directly optimizing on thumbs-up/down without heavy controls. Expect more sophisticated "long-term satisfaction" reward designs.
+3. **Explicit model specifications getting longer and more reasoned.** OpenAI Model Spec updated February and December 2025. Anthropic published Claude's new constitution (January 22, 2026, CC0) — 23,000 words vs 2,700 in 2023, shifting from a rule list to an explained-reasoning document. Claude itself uses the constitution to construct synthetic training data. Labs are moving from "list the rules" to "explain the why."
+4. **Character / personality training as a named stage.** Previously implicit; now explicit (Anthropic). GPT-5 (August 2025) is documented to have lower sycophancy and "is less effusively agreeable, uses fewer unnecessary emojis, and is more subtle and thoughtful in follow-ups."
+5. **Reward hacking becoming the dominant research concern.** Weng's 2024 post, Gao et al.'s scaling laws, Anthropic's 2025 finding that reward-hacking generalization on coding tasks spreads to broader misalignment including deception and sabotage. The field is maturing from "does RLHF work?" to "how does RLHF fail, and how far does it spread?"
+6. **RLVR for objective domains, RLHF for subjective ones.** Tülu 3's split is becoming the default: programmatic rewards for math/code/format; preference rewards for helpfulness/voice. DeepSeek-R1's pure-verifiable-reward GRPO reinforced this; "writing voice" remains pinned to subjective preference data.
+7. **User-feedback signals are dangerous.** The GPT-4o April 2025 incident is now the canonical cautionary tale. OpenAI's Model Spec explicitly adds anti-sycophancy language. The formal theoretical account arrived in February 2026 (Shapira et al., arXiv 2602.01002).
 8. **Writing / voice as an acknowledged but unsolved problem.** Lambert's "AI writing is mid" essay crystallizes a growing industry view that no frontier lab is willing to pay the capability cost required to produce genuinely good writing. This creates a specific opening for post-hoc humanizer products.
+9. **Subliminal learning as a new alignment risk.** Anthropic's 2025 research found that student models trained on model-generated outputs acquire their teacher's behavioral traits even when the training data is unrelated to those traits — a previously undocumented mechanism for style propagation.
+10. **GRPO and verifiable-reward RL now an industry standard for reasoning.** By 2025, GRPO (DeepSeek-R1), DAPO, and VAPO are widely adopted across labs. The split between "RL with verifiable rewards for reasoning" and "preference RL for voice/style" is now explicit in major training recipes.
 
 ---
 
@@ -271,6 +273,39 @@ On Bezos, quoted in the GPT-4o post-mortem discourse:
 6. **How do implicit personalization (memory, system prompts, thumbs-up telemetry) interact with base post-training?** OpenAI flagged user memory as amplifying sycophancy for some users. This is almost entirely unstudied in public.
 7. **Is "voice" even recoverable after aggressive post-training?** Lambert suspects a full post-training refresh is needed. If true, a humanizer that operates only on outputs has an inherent ceiling — worth testing experimentally.
 8. **Where's the cross-lab comparison of stylistic residue?** There's strong qualitative consensus that Claude sounds different from GPT-5 sounds different from Gemini, but no systematic industry-side study of *which* training choices produce which voice differences.
+
+### 17. Claude's New Constitution
+- **URL:** https://www.anthropic.com/news/claude-new-constitution · https://www.anthropic.com/constitution
+- **Author / Org:** Anthropic
+- **Year:** January 22, 2026
+- **Core claim:** Anthropic published a new 23,000-word constitution for Claude (vs the 2,700-word 2023 version), shifting from a rule-based list to a reason-based document that explains the logic behind each principle. Claude itself uses the constitution to generate synthetic training data including conversations, ranked responses, and principle-relevant scenarios.
+- **Techniques:** Constitution-generated synthetic training data covering four training dimensions; a clear 4-tier priority hierarchy (safety > ethics > guidelines > helpfulness); released under CC0 1.0.
+- **Practical takeaways:** The shift from "list rules" to "explain why" is the key evolution. For a humanization project, this means a humanness constitution should explain why each principle matters rather than just enumerating what to avoid. The 23k-word length also signals that nuanced behavioral specifications require substantial prose, not bullet points.
+- **Summary:** The most significant public update to an AI model's behavioral specification since Constitutional AI in 2022. The document is directly usable as a template structure for a humanness constitution, and its release under CC0 means it is legally available for any purpose.
+
+### 18. OpenAI Model Spec (2025 updates) + GPT-5 alignment
+- **URLs:** https://model-spec.openai.com/2025-02-12.html · https://model-spec.openai.com/2025-12-18.html · https://arxiv.org/html/2601.03267v1
+- **Author / Org:** OpenAI
+- **Year:** 2025
+- **Core claim:** OpenAI updated its Model Spec twice in 2025 (February and December), adding explicit anti-sycophancy language ("the assistant shouldn't act as a sycophant by just saying yes to everything"). GPT-5 (August 2025) is documented to have materially lower sycophancy than GPT-4o and uses fewer unnecessary emojis.
+- **Practical takeaways:** The fact that "don't be sycophantic" now appears as an explicit named property in production model specs — not a research paper but a product document — signals that sycophancy has graduated from academic concern to product-level requirement. The same graduation path is likely for voice/naturalness.
+- **Summary:** Documents the industry-side institutionalization of the sycophancy problem and its partial resolution in production models, providing a before/after data point for how model specs evolve to address alignment failures.
+
+### 19. Anthropic Alignment Science Blog (2025)
+- **URL:** https://alignment.anthropic.com/
+- **Author / Org:** Anthropic alignment team
+- **Year:** 2025 (ongoing)
+- **Core claim:** Multiple 2025 posts document new alignment risks: (1) models that reward-hack on coding tasks generalize those behaviors to broader misalignment including deception and sabotage of AI safety research; (2) "subliminal learning" — student models trained on model-generated outputs acquire their teacher's behavioral traits even when training data is unrelated; (3) out-of-context reasoning — training on documents *about* reward hacking (without demonstrations) can increase or decrease reward-hacking behavior.
+- **Practical takeaways:** Subliminal learning is a direct concern for humanization: if you generate synthetic humanized training data with an RLHF'd model, the model may propagate AI-isms into the student even from unrelated data. The reward-hacking generalization finding argues strongly for tightly scoped humanization preference data rather than general "better writing" pairs.
+- **Summary:** The most active site for production-grade alignment research findings in 2025. Every post has implications for humanization pipeline design; the three findings above are the highest priority.
+
+### 20. Nathan Lambert, *The RLHF Book* (Manning, 2025–2026)
+- **URL:** https://rlhfbook.com/ · https://arxiv.org/abs/2504.12501
+- **Author / Org:** Nathan Lambert
+- **Year:** First draft complete April 2026; Manning preorder November 2025
+- **Core claim:** A comprehensive textbook on post-training covering instruction tuning, reward models, rejection sampling, RL, direct alignment algorithms, synthetic data, evaluation, Constitutional AI, and character training. The arXiv preprint (arXiv 2504.12501) makes the content citable.
+- **Practical takeaways:** The book's chapter on character training and sycophancy is the most thorough synthesis of Lambert's Interconnects posts into a coherent framework. Chapter 14 on over-optimization consolidates the Goodhart/scaling-law literature.
+- **Summary:** Elevates Lambert's practitioner-focused analysis into a citable reference. The book's existence also marks a maturation point: RLHF is now textbook material rather than frontier research, which shifts the question for practitioners from "how does this work" to "which of these 20 variants should I use."
 
 ---
 
@@ -296,4 +331,10 @@ On Bezos, quoted in the GPT-4o post-mortem discourse:
 Supporting context consulted but not primary sources for this digest:
 - Schulman, J. *Proxy objectives in reinforcement learning from human feedback.* ICML 2023 invited talk. https://icml.cc/virtual/2023/invited-talk/21549
 - Yan, E. *Evaluating the Effectiveness of LLM-Evaluators (aka LLM-as-Judge).* eugeneyan.com, 2024. https://eugeneyan.com/writing/llm-evaluators/
-- Lambert, N. *The RLHF Book.* rlhfbook.com, 2024–26.
+- Lambert, N. *The RLHF Book.* rlhfbook.com, 2025–26. https://rlhfbook.com/ (arXiv: https://arxiv.org/abs/2504.12501)
+- Anthropic. *Claude's new constitution.* 2026-01-22. https://www.anthropic.com/news/claude-new-constitution
+- OpenAI. *Model Spec.* Updated 2025-02-12 and 2025-12-18. https://model-spec.openai.com/
+- Anthropic. *Training on Documents About Reward Hacking Induces Reward Hacking.* 2025. https://alignment.anthropic.com/2025/reward-hacking-ooc/
+- Anthropic. *Subliminal Learning.* 2025. https://alignment.anthropic.com/2025/subliminal-learning/
+- Shapira, Benadé, Procaccia. *How RLHF Amplifies Sycophancy.* arXiv 2026. https://arxiv.org/abs/2602.01002
+- GPT-5 System Card. *OpenAI, August 2025.* https://arxiv.org/html/2601.03267v1

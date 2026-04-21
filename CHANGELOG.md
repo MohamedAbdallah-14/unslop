@@ -11,6 +11,97 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.5.1] — 2026-04-21
+
+Research sync release. Follows the April 2026 update to
+`docs/research/` (20 categories refreshed, 20 new synthesis files, 14
+implementation-trace rows added) and ports the new findings into code,
+rules, and documentation. No behavioral break: every previously working
+CLI flag, hook, and skill still works identically. AI-ism reduction at
+balanced moves from 89.1% to **92.0%** on the nine-fixture benchmark.
+
+### Added
+
+- **Persona-drift reinforcement** in `hooks/unslop-mode-tracker.js`. A
+  per-session turn counter at `$CLAUDE_CONFIG_DIR/.unslop-turn-count`
+  (symlink-safe, size-capped, whitelist-validated) fires an expanded
+  drift-check banner at turns 8, 16, 24, 32, then every 16 turns
+  thereafter. Calibrated against RMTBench (>30% persona degradation at
+  turns 8–12) and HorizonBench (arXiv 2604.17283, Apr 2026).
+  `hooks/unslop-activate.js` resets the counter on session start, and
+  "stop unslop" also clears it. Three new integration tests in
+  `tests/test_hooks.py` lock the turn-8 banner, the session-start reset,
+  and the stop-phrase reset.
+- **AI-ism vocabulary expansion** in `unslop/scripts/humanize.py`
+  `STOCK_VOCAB` and `unslop/scripts/validate.py` `AI_ISMS`: `meticulous(ly)`,
+  `bustling`, `paradigm shift`, `game-changer/changing`,
+  `revolutionize(s/d/ing)`, `transformative`, `unprecedented` in
+  connective-adjective contexts, `a myriad of` / `myriad`,
+  `a plethora of`, `uncharted territory/waters/ground/area/domain`,
+  `nuanced` as connective filler, `synergy/synergies/synergize(s/d/ing)`.
+  Each has a corresponding validator pattern so a rewrite cannot silently
+  reintroduce them. Six new tests cover the rewrites, including the
+  factual-context guard for `unprecedented` (e.g. "unprecedented drought"
+  survives; "unprecedented opportunity" does not).
+- **LLM-as-judge bias mitigations** in `evals/perceived_humanness.py`.
+  `--judges` accepts a comma-separated multi-model jury (Claude + OpenAI)
+  to counter self-enhancement bias; `--counterbalance` (default on)
+  runs each fixture in both A/B orientations to average out position bias
+  (~40% position inconsistency baseline per arXiv 2411.15594);
+  `length_delta_chars` is tracked and reported to surface verbosity
+  inflation (~15% per arXiv 2410.02736); per-judge win rates are broken
+  out in the summary. Four new tests cover counterbalancing, multi-judge
+  juries, all-judges-unavailable, and bias-note reporting.
+- **Detector-feedback ladder exhaustion recommendation** in
+  `unslop/scripts/detector.py`. When the escalation ladder (balanced →
+  full → full+structural+soul) can't reach the target AI probability,
+  `reason_stopped` now prints a structured cross-model-paraphrase
+  recommendation, names TempParaphraser (EMNLP 2025) and Adversarial
+  Paraphrasing (NeurIPS 2025) as the research basis, and explicitly warns
+  against watermark removal (EU AI Act Article 50).
+- **Style-memory security hardening** in `unslop/scripts/style_memory.py`.
+  File-size cap at 64 KB on load (StyleProfile JSON is ~1 KB; anything
+  larger is either corrupt or adversarial). Expanded module docstring
+  documents the OWASP Top 10 for Agentic Applications 2026 memory-risk
+  class (InjecMEM, memory control flow, semantic drift), and cites MIT /
+  Penn State CHI 2026 for the sycophancy × memory link that drives the
+  design constraint of persisting only numerically measured signals (no
+  free-text preferences).
+- **Commercial humanizer tool coverage** in README's detector section:
+  names Ryter Pro, Walter Writes AI, and GPTHuman.ai alongside the
+  existing list; cites Turnitin's August 2025 anti-humanizer update and
+  Chicago Booth 2026's audit of twelve services (median ~6-point drop
+  vs. claimed 40+). README also positions Anthropic Custom Styles (Nov
+  2025) and OpenAI's style-steering as the real first-party comparison,
+  and references Antislop (ICLR 2026) as the learned per-pattern framework
+  this repo implements.
+- **SKILL anti-detector step 7**: "re-anchor after long contexts". Cites
+  RMTBench and HorizonBench directly and lists the re-anchor checklist
+  so agents that miss the hook output still self-correct.
+- **IMPLEMENTATION_TRACE.md rows** for every change above, each linking
+  the research file, the code location, and (where applicable) the tests.
+- **Benchmark baseline** `benchmarks/results/baselines/post-v050-vocab-expansion-20260421.json`
+  pinned at 92.0% reduction.
+
+### Fixed
+
+- Type-check failures in `unslop/scripts/structural.py` (`_SplitCandidate`
+  now uses `collections.abc.Callable` instead of a string literal) and
+  `unslop/scripts/detector.py` (explicit `str()` cast on `tokenizer.decode()`
+  results to satisfy mypy's inferred `str | list[str]` union).
+- Lint failures (ruff) across `unslop/scripts` and `benchmarks` from
+  earlier mixed-ordering imports and redundant `__future__` annotations.
+  `ruff check unslop/scripts benchmarks` and `mypy --config-file unslop/pyproject.toml unslop/scripts` both clean.
+
+### Changed
+
+- `evals/perceived_humanness.py` `--judge-model` is deprecated in favor
+  of `--judges`. Backward compatibility is retained for the duration of
+  the 0.5.x line; a deprecation warning points to the new flag.
+- `tests/unslop/test_perceived_humanness.py` migrated to the new API;
+  tests that assert exact vote counts now pass `counterbalance=False`
+  to keep the prior one-vote-per-fixture accounting.
+
 ## [0.5.0] — 2026-04-21
 
 Humanizer overhaul. Nine-phase plan from the "best open source humanizer"

@@ -4,6 +4,8 @@
 
 **Scope note.** All sources below are vendor-published (or close partners/resellers referencing vendor collateral). Treat numbers as marketing-grade unless independently corroborated. Where a metric comes from a third-party aggregator, that is flagged.
 
+**Last updated:** April 2026. Case studies 1–39 are from pre-April 2025 sources. The Patterns & Trends and Gaps sections are updated to reflect the April 2025–April 2026 period, including Salesforce Agentforce's 500K/2M conversation milestones, Fin 3, Sierra's $150M ARR, and the post-Klarna metric-shift to resolution depth.
+
 ---
 
 ## Case Studies
@@ -40,6 +42,14 @@
 - Metrics: 90% of chats resolved by Hallie without live-agent transfer; 50%+ fewer chat exchanges per answer; 40% improvement in digital contact efficiency.
 - Source: salesforce.com/customer-stories/heathrow-airport.
 
+**Salesforce Agentforce 2025–2026 milestones (platform-level, not single customer):**
+- Salesforce's own deployment on help.salesforce.com (Customer Zero): 500,000 conversations by mid-2025, 2M+ by early 2026. 84%+ resolution; 4% human handoff rate.
+- Reddit: 46% support case deflection; resolution time –84% (8.9 min → 1.4 min).
+- SDR agent on 43,000+ leads; $1.7M new pipeline from dormant accounts.
+- "Empathy at scale" framing: Agentforce learned that "delivering the right answer doesn't matter if it lands the wrong way" — empathetic acknowledgment before resolution became a required behavioral spec, not a nice-to-have. Teaching bots to say "I'm sorry" and recognize frustration drove higher CSAT than raw automation.
+- Harvard Business School published Agentforce case study (April 2025): "Salesforce Agentforce: The Limitless Workforce" — examines workforce disruption, human-AI partnership, ethical oversight.
+- Source: salesforce.com/news/stories/agentforce-customer-support-lessons-learned/; salesforce.com/blog/support-requests-agentforce/; HBS case #67220.
+
 ---
 
 ### Intercom (Fin AI Agent)
@@ -72,6 +82,8 @@
 - Source: virtualassistantva.com aggregator citing Intercom data (2026).
 
 **Fin aggregate benchmark** (useful context, not a single case): 66% avg resolution across 6,000+ customers and 40M conversations; 20%+ of customers exceed 80% resolution; claim of "human-quality service" anchored on knowledge, brand-voice behavior, action-taking, and insights. Source: intercom.com/blog/whats-new-with-fin-3.
+
+**Fin 3 / Pioneer 2025 update (April 2025–April 2026):** Fin Voice launched as enterprise voice humanization feature; customers report being "surprised it isn't a human." Procedures feature allows natural-language SOP training. "Fin Flywheel" positions the product as continuously improving via human-AI feedback loops — directly responsive to the Klarna lesson. Source: intercom.com/blog/headlines-from-pioneer-2025/
 
 ---
 
@@ -246,7 +258,9 @@
 
 ## Patterns & Trends
 
-1. **"Resolution rate" is the master metric.** Across every vendor, the single most-cited number is % conversations resolved without human handoff. Anchored ranges vendors publish as typical:
+*Patterns updated April 2026 to reflect post-Klarna narrative shift and 2025 data.*
+
+1. **"Resolution rate" is the master metric — but the definition is shifting.** Across every vendor, the single most-cited number is % conversations resolved without human handoff. Anchored ranges vendors publish as typical:
    - Fin: 51% out-of-box → 66% avg → 80%+ for top customers.
    - Ada: 60% avg post-GPT-4, >80% for top performers.
    - Breeze: 65% avg, 90% top.
@@ -272,6 +286,10 @@
 
 10. **Hyperscaler stories lean infrastructure-first; SaaS stories lean outcome-first.** Microsoft + Google Cloud cases emphasize platform capabilities (Vertex AI, Copilot Studio, MCP) with fewer discrete conversion metrics; Intercom/Ada/Drift/HubSpot lead with conversion/resolution/ROI. The former are courting builders; the latter are courting buyers.
 
+11. **Empathy is becoming an explicit product metric (2025–2026).** Salesforce Agentforce's published "lessons from 500,000 conversations" frames empathetic acknowledgment as the single biggest CSAT lever — above raw resolution speed. This is convergent with Cresta's empathy pipeline (B-industry, study #12) and with the academic literature (A-academic, study #3 Crolic et al., study #11 Ayers et al.). A pattern that was anecdotal in 2024 is now appearing in vendor data at scale.
+
+12. **Voice humanization is commercially material but evidentially thin.** Sierra ($150M ARR, January 2026; voice surpassing text as primary channel by October 2025), Decagon (voice positioned for mortgage servicing), and Fin Voice (Intercom Pioneer 2025) represent commercial traction in voice humanization at scale. None has published peer-reviewed or A/B-test data on what specifically makes voice feel human.
+
 ---
 
 ## Gaps in the Commercial Record
@@ -288,9 +306,11 @@
 
 6. **Cross-vendor comparability is zero.** "Resolution" means different things at Fin (full auto-close), Zendesk (AI-completed without handoff), Ada (reasoning-engine decided), and Breeze (confidence-gated auto-send). Vendors have not adopted a shared definition, so the 51–90% spread is not directly comparable.
 
-7. **Failed or abandoned deployments are invisible.** Vendor libraries are selection-biased to successes. No case study describes a pulled-back rollout, a fallback to humans, or the "feels robotic" complaints that trigger redesigns (the Salesforce Einstein redesign case study is the rare acknowledgment, and even it is positioned as a success arc).
+7. **Failed or abandoned deployments are now partly visible — but only Klarna went public.** Klarna's CEO acknowledged the reversal publicly in May 2025 (see B-industry, case study #2). But the vendor library as a whole remains selection-biased to successes. The Klarna case is the exception, not the norm.
 
 8. **Absent from the corpus where you'd expect them.** Drift has gone quiet on pure conversational-intelligence claims post-Salesloft acquisition — more pipeline language, less "chatbot feels human" language. HubSpot Breeze cases skew SMB with few enterprise names. No major LLM-era case study from a top-tier consumer bank, airline, or telecom has a "feels human" public metric — possibly a trust/regulatory chilling effect.
+
+9. **"AI slop" backlash is not reflected in vendor literature at all.** Merriam-Webster named "AI slop" Word of the Year 2025. Search volume for "AI slop" increased 9× from 2024. Pinterest and YouTube introduced user controls to limit AI-generated content. None of this consumer/platform sentiment appears in the vendor case-study corpus — vendors are not publishing data on how they detect or address slop-like output from their own systems.
 
 ---
 
@@ -335,3 +355,10 @@
 - medium.com/oscar-tech — Oscar Clinical Intake Bot.
 - nebius.com/customer-stories/revolut — Revolut AI agents.
 - cloud.google.com/blog/products/ai-machine-learning/introducing-conversational-commerce-agent-on-vertex-ai — Albertsons conversational commerce agent.
+- salesforce.com/news/stories/agentforce-customer-support-lessons-learned/ — 500,000 Agentforce conversations; empathy as explicit product spec.
+- salesforce.com/blog/support-requests-agentforce/ — 2M+ Agentforce conversations milestone.
+- hbs.edu/faculty/Pages/item.aspx?num=67220 — HBS Agentforce "Limitless Workforce" case (April 2025).
+- intercom.com/blog/headlines-from-pioneer-2025/ — Fin 3, Fin Voice, Procedures launch.
+- sacra.com/c/sierra/ — Sierra $150M ARR (January 2026); voice surpasses text by October 2025.
+- pbs.org/newshour/nation/merriam-websters-word-of-the-year-for-2025-is-ais-slop — "AI slop" Word of the Year 2025.
+- webpronews.com/ai-slop-floods-social-media-in-2025-backlash-spurs-2026-reforms/ — Platform responses to AI slop.

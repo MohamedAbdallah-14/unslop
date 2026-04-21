@@ -1,6 +1,7 @@
 # Memory & Personalization — Angle D: Commercial Landscape
 
 **Research value: high** — Memory-as-a-Service is now a crowded, well-funded category (20+ vendors since mid-2025) with clear sub-segments (infra memory layers, personalization APIs, writing assistants, enterprise CRM memory) and active convergence on hybrid vector+graph + temporal architectures.
+**Last updated:** 2026-04-21
 
 **Scope.** Commercial products that persist user/customer/author knowledge across sessions so an AI can respond in a way that feels continuous, "mine", and human — directly adjacent to the Unslop goal of humanizing AI output. Ordered by sub-segment.
 
@@ -14,8 +15,9 @@ These vendors sell a drop-in "memory layer" API that sits between an agent and i
 - **Tagline:** "AI Agents Forget. Mem0 Remembers." / "The Memory Layer for your AI Apps."
 - **Architecture:** Hybrid vector + knowledge graph, multi-level memory (user/session/agent). LoCoMo-style two-phase pipeline (extract salient facts → intelligently merge).
 - **Pricing:** Free Hobby (10k memories) → Starter $19/mo → Pro $249/mo (unlimited memories, Graph Memory gated here) → Enterprise custom.
-- **Traction:** ~50k GitHub stars, 186M+ monthly API calls, $24M raised (YC), 100k+ developers claimed.
+- **Traction:** ~48k GitHub stars (Apr 2026), 186M+ monthly API calls, $24.5M raised (YC), 100k+ developers, ~625k PyPI downloads/week. **Exclusive memory provider for AWS Agent SDK** as of Q1 2026.
 - **Enterprise:** SOC 2, HIPAA, BYOK, Kubernetes/air-gapped/private-cloud deploys.
+- **Benchmark reality check:** Self-reports LongMemEval 93.4%; independent tests show ~49%. Self-reports LoCoMo 91.6%; independent tests show ~58–66.9%. Mem0 "State of AI Agent Memory 2026" report (Apr 1) claims 66.9% LoCoMo vs. OpenAI Memory 52.9%, −91% latency.
 - **Headline claim:** "Cuts prompt tokens by up to 80%… 91% faster responses, 26% accuracy lift over baseline memory."
 - **Humanizer relevance:** Explicitly frames itself as enabling "personalised AI experiences" and "personality" ("Give your AI a memory and personality"). Case studies (Sunflower Sober, OpenNote) are all about relational/personalized behavior, not retrieval accuracy.
 
@@ -23,7 +25,7 @@ These vendors sell a drop-in "memory layer" API that sits between an agent and i
 - **Tagline:** "Context Engineering — assembles the right context from chat history, business data, and user behavior."
 - **Architecture:** Temporal knowledge graph (Graphiti, open source). Stores facts as entity-relation triplets with valid-from/valid-to timestamps. When facts change (e.g., user switches from Adidas → Nike), old facts are *invalidated* rather than overwritten, preserving provenance.
 - **Pricing:** Free 1k credits/mo → Flex $25/mo (20k credits) → Flex Plus $475/mo (300k credits) → Enterprise custom. Billed per "Episode" (1 data object = 1 credit).
-- **Traction:** ~24k GitHub stars (Graphiti), 94.8% Deep Memory Retrieval benchmark, 80.32% LoCoMo at 189ms single-shot.
+- **Traction:** ~25.1k GitHub stars (Graphiti), 94.8% Deep Memory Retrieval benchmark; independent tests: 71.2% LongMemEval, ~85% on Fransys week-long benchmark, 80.32% LoCoMo at 189ms single-shot.
 - **Enterprise:** SOC 2 Type II, HIPAA BAA, BYOK/BYOM/BYOC.
 - **Headline claim:** "200ms P95 retrieval… three lines of code… 100%+ accuracy improvements through personalized context."
 - **Humanizer relevance:** Unique selling point is that memory *evolves over time* — the agent knows not just what the user likes, but how their taste changed. That temporal shape is exactly what makes responses feel "you knew me back when".
@@ -105,6 +107,24 @@ This is where memory meets customer profile at scale; "humanization" here means 
 
 ---
 
+## Sub-segment 4: Cloud platform memory (new as of 2026)
+
+### 18. Microsoft Azure AI Foundry — User-Scoped Persistent Memory
+- **URL:** https://learn.microsoft.com/en-us/agent-framework/get-started/memory
+- **Date:** Mar 31, 2026
+- **Architecture:** Cosmos DB as persistence layer, per-user isolation enforced through Entra ID. Published as "Step 4" in the standard agent getting-started guide — memory as a default agent component, not an add-on.
+- **Position:** User-scoped (not account-global), aligning with the Anthropic model over ChatGPT's original global approach. Memory is managed by identity infrastructure.
+- **Humanizer relevance:** When the cloud giant treats user-scoped memory as "Step 4" in the standard agent setup, it signals that account-global memory was always an architectural compromise. Enterprise humanization at scale will run through identity-governed memory stores.
+
+### 19. Oracle AI Agent Memory — Unified Memory Core (Database 26ai)
+- **URL:** https://blogs.oracle.com/database/introducing-oracle-ai-agent-memory-a-unified-memory-core-for-enterprise-ai-systems
+- **Date:** Mar 2026 (expected CY2026 availability)
+- **Architecture:** Persistent memory stored *inside* Oracle Database engine — not a vector sidecar. Coupled with no-code Oracle AI Database Private Agent Factory for portable agent containers.
+- **Position:** Counter-thesis to vector-DB-native memory: "the database is the memory primitive." Any application that queries the same Oracle instance inherits agent continuity.
+- **Humanizer relevance:** If enterprise agents store memory in Oracle, the portability model is radically different — the user's history is wherever the database is, not locked to an AI vendor's API.
+
+---
+
 ## Patterns, trends, gaps
 
 ### Patterns
@@ -120,13 +140,19 @@ This is where memory meets customer profile at scale; "humanization" here means 
 2. **Writing-voice products are adopting memory-infra patterns**: Lex's Style Guides + Knowledge Bases, Jenova's persistent preference accumulation. They are infra-layer products wearing writer-facing UX.
 3. **Consolidation pressure**: Humanloop sunsetted Sep 2025 and merged into Anthropic Console. Expect more personalization/eval tools to get absorbed into foundation-model vendors.
 4. **Enterprise CRM incumbents moving fast**: Salesforce's published Agentic Memory architecture (May/June 2026) and Gong's Mission Andromeda (Feb 2026) compress the window for startup wedges in enterprise customer memory.
+5. **Cloud hyperscalers entering directly (Q1 2026)**: Microsoft (Azure AI Foundry user-scoped memory, Mar 2026), Oracle (Database 26ai Unified Memory Core), and AWS (Mem0 exclusive partner for Agent SDK) are all making architectural bets. The analogy to container orchestration in 2015 applies: multiple competing architectures, no consensus, every major vendor placing a different bet.
+6. **Graph memory is now in production, not experimental**: As of early 2026, graph-based memory (Zep, Cognee, Mem0g) has moved from research status to production deployments. The Mem0 "State of AI Agent Memory 2026" report explicitly marks this transition.
+7. **Sycophancy as a product risk, not just a research finding**: MIT/Penn State CHI 2026 demonstrated that condensed user profiles in memory are the largest driver of LLM sycophancy. Memory vendors have not yet responded with explicit sycophancy mitigations. This is now a known product liability.
+8. **ChatGPT reached GPT-5.4 (Mar 2026)** with improved cross-chat memory, Codex agentic coding, and a new $8/mo Go tier — expanding the consumer memory baseline that all startups are measured against.
 
 ### Gaps (opportunity space for a humanization-focused product)
 1. **No vendor owns "writing voice memory" as a portable artifact.** Lex owns it *inside* its editor; Mem0/Supermemory own it *inside* their API. Nobody sells a portable "voice profile" you attach to any LLM surface (Claude, Cursor, email client).
-2. **Style contradictions are unsolved.** Temporal fact invalidation handles "Adidas → Nike" well; nobody has published the equivalent for "voice last March vs. voice now" where the author legitimately evolves. This is a humanization-native problem.
+2. **Style contradictions are unsolved.** Temporal fact invalidation handles "Adidas → Nike" well; HorizonBench (Apr 2026) now measures preference evolution, but nobody has shipped the equivalent UX or architecture for "voice last March vs. voice now" where the author legitimately evolves.
 3. **Humanization as an outcome metric is missing.** Every memory vendor benchmarks LoCoMo/LongMemEval (retrieval accuracy). None benchmark "does output read as human/authored-by-me." There is no commercial "humanness score" SLA.
 4. **Author/reader asymmetry.** All products model one user's preferences. None model the reader/audience as a co-memory object — though writing humanness depends heavily on audience context.
 5. **Emotional/affect memory barely exists commercially.** Mem0 cites healthcare/therapy case studies but the primitive is still "fact + timestamp." No vendor ships affective/mood memory as an explicit type.
+6. **No vendor has shipped a sycophancy guard for memory-enabled assistants.** The MIT/Penn State CHI 2026 finding that condensed user profiles are the largest sycophancy driver is now public knowledge. No vendor has published a mitigation architecture. First-mover opportunity on "trustworthy memory" as a differentiator.
+7. **Benchmark fragmentation persists.** Mem0 self-reports LongMemEval 93.4% while independent tests show 49%. The 44-point gap is not explained. Zep scores 71.2% (independent) vs. 94.8% (DMR, vendor). Without an independent benchmark authority, vendor numbers are marketing artifacts.
 
 ---
 

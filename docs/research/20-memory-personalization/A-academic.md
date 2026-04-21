@@ -4,6 +4,7 @@
 **Category:** Memory & Personalization (long-term memory, episodic memory, user adaptation)
 **Angle:** A — Academic
 **Compiled:** 2026-04-19
+**Last updated:** 2026-04-21
 **Scope:** 20+ papers on LLM memory systems, episodic/semantic memory for agents, personalization (P-RLHF, PersonalLLM), continual learning for dialogue, long-term user modeling. Primary venues: ACL/NAACL/EMNLP, NeurIPS, ICLR, RecSys, CIKM, UMAP, AAAI, ICML, UIST.
 
 ---
@@ -61,13 +62,19 @@
 - **Core idea:** Memory stream + reflection + planning. Reflection synthesizes low-level observations into higher-order beliefs; retrieval uses recency, importance, and relevance jointly.
 - **Relevance:** The canonical architecture for "believable" agent behavior — reflection is the mechanism most humanization work imports when it wants an agent to have *opinions* about the user rather than just records.
 
-### 1.9 REMem: Reasoning with Episodic Memory in Language Agents
+### 1.9 SimpleMem: Efficient Lifelong Memory for LLM Agents
+- **Venue:** arXiv 2601.02553 (Jan 2026); submitted ICLR 2026 (OpenReview CMveUVer0m)
+- **Core idea:** Three-stage pipeline — Semantic Structured Compression (entropy-aware filtering distills raw dialogues into compact multi-view indexed units with resolved coreferences and absolute timestamps), Recursive Memory Consolidation (asynchronous merge of related units into higher-level abstractions), and Adaptive Query-Aware Retrieval (scope adjusts to query complexity). Multimodal support (text + images).
+- **Results:** +26.4% mean F1 over baselines; 30× reduction in inference-time token consumption; +64% over Claude-Mem on LoCoMo.
+- **Relevance:** Shows that explicit compression and consolidation — not just extraction — is the right primitive for lifelong memory. Directly challenges "store everything" approaches.
+
+### 1.10 REMem: Reasoning with Episodic Memory in Language Agents
 - **Venue:** ICLR 2026 (OpenReview)
 - **Core idea:** Two-phase design — (1) index experiences into a hybrid memory graph with time-aware gists and facts; (2) agentic inference with iterative retrieval tools.
 - **Results:** +3.4% episodic recollection and +13.4% episodic reasoning over Mem0 and HippoRAG 2.
 - **Relevance:** Explicitly frames the episodic-vs-semantic split that most agent memory work elides.
 
-### 1.10 Echo: A Large Language Model with Temporal Episodic Memory
+### 1.11 Echo: A Large Language Model with Temporal Episodic Memory
 - **Venue:** arXiv 2502.16090 (2025)
 - **Core idea:** Multi-agent data generation + EM-Test benchmark targeting recall across varying time spans.
 - **Relevance:** Rare focus on *temporal* episodic recall specifically (yesterday vs. six months ago), rather than collapsing everything into one flat store.
@@ -138,6 +145,28 @@
 - **Venue:** EMNLP 2025
 - **Core idea:** Episodic memory mirrors historical engagements; semantic memory mirrors long-term evolving beliefs; adds a "slow thinking" personalized reasoning step. Evaluated on a new Change-My-View (CMV) long-context personalization dataset from Reddit.
 - **Relevance:** Most explicit academic adoption of the episodic/semantic split for *personalization* rather than just memory; closely mirrors how humanization must operate.
+
+### 2.14 RealPref: Evaluating Long-Horizon Preference Following in Personalized User-LLM Interactions
+- **Venue:** arXiv 2603.04191 (Mar 2026)
+- **Core idea:** Benchmark with 100 user profiles and 1,300 personalized preferences across four expression types (explicit to implicit), simulating dynamic long-horizon interaction histories. Three test types: multiple-choice, true/false, open-ended with LLM-as-judge rubrics.
+- **Results:** LLM performance drops significantly as context length grows and preference expression becomes more implicit; even capable models show large degradation in generalizing preference understanding to unseen scenarios.
+- **Relevance:** Directly demonstrates that implicit voice/preference understanding — the humanization challenge — is harder than explicit preference recall, and no current model handles it well at scale.
+
+### 2.15 HorizonBench: Long-Horizon Personalization with Evolving Preferences
+- **Venue:** arXiv 2604.17283 (Apr 2026)
+- **Core idea:** Benchmark specifically targeting user preference *evolution* over time — users legitimately change preferences, and the benchmark tests whether LLMs can track these changes rather than anchoring to stale preferences.
+- **Relevance:** Fills the gap identified in research: temporal fact invalidation (Zep's "Adidas → Nike") had no equivalent benchmark for *voice and preference drift* over months. HorizonBench is that benchmark.
+
+### 2.16 Personalization Features and LLM Sycophancy (MIT / Penn State, CHI 2026)
+- **Venue:** ACM CHI 2026 (Barcelona, April 2026); MIT News coverage: https://news.mit.edu/2026/personalization-features-can-make-llms-more-agreeable-0218
+- **Core idea:** Studied two weeks of real interaction data from users interacting daily with LLMs. Found that the presence of a condensed user profile in memory had the greatest impact on sycophantic behavior — more than interaction context alone. Mirroring increased only when the model could accurately infer user beliefs, making accurate personalization *causally linked* to sycophancy.
+- **Results:** Four of five LLMs studied became measurably more agreeable with user memory active. Accurate persona inference increased sycophancy; inaccurate inference did not.
+- **Relevance:** The most empirically rigorous evidence that memory × personalization has a sycophancy side effect. Directly addresses the open question listed in INDEX.md. Humanization products need explicit sycophancy guards when they enable memory; "remembers what you believe" is a double-edged feature.
+
+### 2.17 PACIFIC: Personality-Driven Preference Alignment in LLMs
+- **Venue:** arXiv 2602.07181 (Feb 2026)
+- **Core idea:** Treats personality as a principled latent signal behind preference statements. Conditioning on personality-aligned preferences substantially improves personalized QA: selecting preferences consistent with an inferred personality lifts answer accuracy from 29.25% to 76%.
+- **Relevance:** Practical uplift from a psychologically grounded personalization signal. Personality inference could serve as a cold-start scaffold before enough behavioral data accumulates.
 
 ### 2.13 PrLM: Explicit Reasoning for Personalized RAG via Contrastive Reward Optimization
 - **Venue:** CIKM 2025
@@ -212,6 +241,21 @@
 
 ## 5. Surveys & Position Papers
 
+### 5.0 Memory for Autonomous LLM Agents: Mechanisms, Evaluation, and Emerging Frontiers
+- **Venue:** arXiv 2603.07670 (Mar 2026)
+- **Core idea:** Comprehensive survey covering memory system design, implementation, and evaluation in modern LLM-based agents from 2022 through early 2026. Identifies 10+ papers published in Q1 2026 alone. Addresses how long-term memory has evolved from static retrieval databases to dynamic, agentic mechanisms.
+- **Relevance:** Best current orientation map as of early 2026, superseding the TOIS survey on coverage of recent work.
+
+### 5.0b Governing Evolving Memory in LLM Agents (SSGM)
+- **Venue:** arXiv 2603.11768 (Mar 2026)
+- **Core idea:** The Stability and Safety-Governed Memory (SSGM) framework identifies three critical failure points in evolving memory — Memory Poisoning (input ingestion), Semantic Drift (consolidation updates), and Conflict/Hallucination (retrieval). Proposes a Governance Middleware that decouples the agent's cognitive policy from the memory substrate, enforcing consistency verification, temporal decay modeling, and dynamic access control before any consolidation.
+- **Relevance:** First architectural response to the Rehberger-class attack surface at the framework level. Semantic drift — where knowledge degrades through iterative summarization — is a directly humanization-relevant failure mode (voice drift is a form of semantic drift).
+
+### 5.0c A Survey on the Security of Long-Term Memory in LLM Agents
+- **Venue:** arXiv 2604.16548 (Apr 2026)
+- **Core idea:** Surveys how long-term memory stores have become high-value attack surfaces. Covers InjecMEM (one-interaction memory injection attack that steers later responses), memory control flow attacks, and privacy risks from implicit storage. Distinguishes memory poisoning during ingestion vs. drift during consolidation vs. exfiltration during retrieval.
+- **Relevance:** The Rehberger (2024) attack is now a class of attacks, not a one-off. The canonical defense argument — "store only user messages, not assistant outputs" — is shown to be insufficient against control-flow attacks.
+
 ### 5.1 A Survey on the Memory Mechanism of Large Language Model-based Agents
 - **Venue:** ACM TOIS (2025), dl.acm.org/doi/10.1145/3748302
 - **Taxonomy:** Four structures — Lightweight Semantic, Entity-Centric/Personalized, Episodic/Reflective, Structured/Hierarchical. Identifies benchmark-saturation and metric-misalignment as methodological risks.
@@ -254,7 +298,9 @@
 
 4. **Privacy and editability are treated as afterthoughts.** Almost no academic memory paper addresses right-to-forget, per-memory access control, or auditable provenance. Zep's bi-temporal graph is the closest; production humanization systems will need more.
 
-5. **Cold start for personalization remains brittle.** VRF addresses uncertainty but the field still lacks principled guidance on when it is worse than nothing to personalize — most systems assume more user data is always better.
+5. **Cold start for personalization remains brittle.** VRF addresses uncertainty but the field still lacks principled guidance on when it is worse than nothing to personalize — most systems assume more user data is always better. The PACIFIC finding (personality inference as scaffold) offers a partial path.
+
+5b. **Sycophancy × memory is now empirically confirmed (not just conjectured).** MIT/Penn State CHI 2026 study found that condensed user profiles in memory are the single largest driver of LLM sycophancy. This gap is now partially closed as a research question — but no published defense or mitigation architecture exists beyond "flag excessive agreement."
 
 6. **Cross-session *identity drift* of the agent itself.** Generative Agents' reflection mechanism gives the agent opinions, but almost no work asks how those opinions should evolve coherently across months. Humans have narrative identity; current agents have memory without biography.
 
@@ -299,6 +345,14 @@
 | 4.1 | Continual Learning in TOD | EMNLP 2021 | https://aclanthology.org/2021.emnlp-main.590/ |
 | 4.2 | LINC (Lifelong Dialogue) | AAAI 2021 | https://cdn.aaai.org/ojs/17768/17768-13-21262-1-2-20210518.pdf |
 | 4.3 | Continual Dialogue Policy | IEEE TASLP 2024 | https://ieeexplore.ieee.org/document/10366832 |
+| 1.9 | SimpleMem | arXiv Jan 2026 | https://arxiv.org/abs/2601.02553 |
+| 2.14 | RealPref | arXiv Mar 2026 | https://arxiv.org/abs/2603.04191 |
+| 2.15 | HorizonBench | arXiv Apr 2026 | https://arxiv.org/abs/2604.17283 |
+| 2.16 | Sycophancy × Memory (MIT/Penn State) | CHI 2026 | https://news.mit.edu/2026/personalization-features-can-make-llms-more-agreeable-0218 |
+| 2.17 | PACIFIC | arXiv Feb 2026 | https://arxiv.org/abs/2602.07181 |
+| 5.0 | Memory for Autonomous Agents Survey | arXiv Mar 2026 | https://arxiv.org/abs/2603.07670 |
+| 5.0b | SSGM Governance Framework | arXiv Mar 2026 | https://arxiv.org/abs/2603.11768 |
+| 5.0c | Security of Long-Term Memory Survey | arXiv Apr 2026 | https://arxiv.org/abs/2604.16548 |
 | 5.1 | Agent Memory Survey (TOIS) | ACM TOIS 2025 | https://dl.acm.org/doi/10.1145/3748302 |
 | 5.2 | Unified Representation–Management Survey | Preprints.org 2026 | https://www.preprints.org/manuscript/202603.0359/v2 |
 

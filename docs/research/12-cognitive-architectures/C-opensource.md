@@ -2,9 +2,11 @@
 
 **Research value: high** — Two coexisting generations of open-source cognitive architectures are directly relevant to "humanizing" AI: (a) the classical symbolic arches (Soar, ACT-R, OpenCog Hyperon) that encode decades of psychology-grounded models of memory, attention, and rationality, and (b) a fast-moving LLM-era cluster (Generative Agents, Voyager, MemGPT/Letta, MetaGPT, CAMEL, ChatDev, Agent-S, AutoGen, BabyAGI, AutoGPT) that operationalizes CoALA-style working/episodic/semantic/procedural memory on top of language models. The LLM cluster is where most "sounds like a person" behavior gets produced today, but the classical arches are the source of the vocabulary (memory types, decision cycles, chunking, production rules) the LLM repos now use.
 
+**Last updated: April 2026. Covers April 2025–April 2026. Star counts are as of April 2026 (approximate).**
+
 ## Executive Summary
 
-The field splits into five layers. (1) **Classical symbolic arches** — `SoarGroup/Soar` (416★, BSD, U-Michigan, Laird's *The Soar Cognitive Architecture* is the canonical reference) and `jakdot/pyactr` (179★, GPL-3) / `CarletonCognitiveModelingLab/python_actr` (37★, MIT) / official Common-Lisp ACT-R from CMU — provide production-rule / working-memory / declarative-memory machinery with quantitative latency predictions. (2) **Hybrid/neurosymbolic AGI arches** — `trueagi-io/hyperon-experimental` (250★, MeTTa "Atomese 2" in Rust/Python) and `opencog/atomspace` (962★, hypergraph DB) chase human-like reasoning via metagraph rewriting. (3) **Simulacra / believable-agent systems** — `joonspk-research/generative_agents` (21.1K★, Stanford Smallville) introduced the memory-stream + reflection + planning triple that is now the de facto template for "believable human behavior"; the `StanfordHCI/genagents` follow-up simulates 1,000 real people from interview data. (4) **Long-horizon, stateful-memory agents** — `letta-ai/letta` (22.2K★, formerly MemGPT), `MineDojo/Voyager` (6.8K★, lifelong-learning skill library), and `simular-ai/Agent-S` (10.8K★, first to beat humans on OSWorld at 72.6%). (5) **Role/SOP-based multi-agent societies** — `Significant-Gravitas/AutoGPT` (183.5K★), `yoheinakajima/babyagi` (22.2K★, archived but foundational), `FoundationAgents/MetaGPT` (66.7K★), `OpenBMB/ChatDev` (32.5K★, now ChatDev 2.0 zero-code platform), `camel-ai/camel` (16.6K★), `microsoft/autogen` (57.2K★, maintenance mode, merging into Microsoft Agent Framework). (6) **Theory scaffolding** — `ysymyth/awesome-language-agents` (1.2K★) curates the CoALA bibliography (300+ citations) and is the closest thing the LLM-agent field has to a shared cognitive vocabulary.
+The field splits into six layers. (1) **Classical symbolic arches** — `SoarGroup/Soar` (416★, BSD, U-Michigan, Laird's *The Soar Cognitive Architecture* is the canonical reference) and `jakdot/pyactr` (179★, GPL-3) / `CarletonCognitiveModelingLab/python_actr` (37★, MIT) / official Common-Lisp ACT-R from CMU — provide production-rule / working-memory / declarative-memory machinery with quantitative latency predictions. (2) **Hybrid/neurosymbolic AGI arches** — `trueagi-io/hyperon-experimental` (v0.2.10, Feb 2026; pre-alpha) and `opencog/atomspace` (962★, hypergraph DB) chase human-like reasoning via metagraph rewriting; OpenCog Hyperon reached a production-ready stack milestone in Nov 2025 with "Baby Hyperon" prototypes in virtual environments. (3) **Simulacra / believable-agent systems** — `joonspk-research/generative_agents` (21.1K★, Stanford Smallville) introduced the memory-stream + reflection + planning triple that is now the de facto template for "believable human behavior"; the `StanfordHCI/genagents` follow-up simulates 1,000 real people from interview data. (4) **Long-horizon, stateful-memory agents** — `letta-ai/letta` (formerly MemGPT; released Letta Code, Conversations API, and Letta Code App through Apr 2026), `MineDojo/Voyager` (6.8K★, lifelong-learning skill library), and `simular-ai/Agent-S` (Agent S3, Oct 2025, first to surpass human performance on OSWorld at 72.60%). (5) **Role/SOP-based multi-agent societies** — `Significant-Gravitas/AutoGPT` (183.5K★), `yoheinakajima/babyagi` (22.2K★, archived but foundational), `FoundationAgents/MetaGPT` (66.7K★), `OpenBMB/ChatDev` (32.5K★, now ChatDev 2.0 DevAll zero-code platform, Jan 2026), `camel-ai/camel` (16.6K★), `microsoft/autogen` (57.2K★, maintenance mode, merging into Microsoft Agent Framework Oct 2025). (6) **Dedicated memory-layer repos** — `mem0ai/mem0` (~48K★ by Oct 2025; ECAI 2025 paper benchmarks ten approaches), `MAGMA` (multi-graph agentic memory, Jan 2026), `DEEP-PolyU/Awesome-GraphMemory` (curated graph-memory taxonomy). (7) **Theory scaffolding** — `ysymyth/awesome-language-agents` (1.2K★) curates the CoALA bibliography (300+ citations); `VoltAgent/awesome-ai-agent-papers` (2026, curated collection of 2026 agent papers); `Shichun-Liu/Agent-Memory-Paper-List` (companion to the Dec 2025 memory survey).
 
 The strongest shared insight across repos: human-feeling output comes not from prompt style but from architecture — a working/long-term memory split, an explicit reflection step that condenses experience into higher-order generalizations, a skill/procedure store that grows over time, and a decision-making cycle separating deliberation from action. Voice tricks without these structures revert to formulaic output within a few turns.
 
@@ -64,6 +66,20 @@ The strongest shared insight across repos: human-feeling output comes not from p
 
 - **bdambrosio/Cognitive_workbench** — Research framework with incremental planning, FAISS semantic-memory search, reflective QC, 24 built-in tools, OODA-loop (Observe-Orient-Decide-Act) structure.
 
+### Graph Memory and Specialized Memory Repos (new 2025–2026)
+
+- **mem0ai/mem0** — `github.com/mem0ai/mem0` — ~48K★ — MIT — ECAI 2025 paper. Universal memory layer for AI agents; ships combined vector + graph memory; benchmarked head-to-head against ten approaches on LOCOMO. The most widely adopted drop-in memory layer as of 2026; competes with Letta's integrated approach.
+
+- **MAGMA** — arXiv:2601.03236 (Jan 2026). Multi-graph agentic memory architecture separating semantic, episodic, and procedural memory into distinct graph structures; supports temporal, causal, and hierarchical relationship encoding simultaneously.
+
+- **DEEP-PolyU/Awesome-GraphMemory** — Survey and curated list for graph-based agent memory; taxonomy of techniques distinguishing vector retrieval (semantic similarity) from graph traversal (relational reasoning). Reference for the field's 2025–2026 shift toward production graph memory.
+
+- **Shichun-Liu/Agent-Memory-Paper-List** — Companion repo to "Memory in the Age of AI Agents" survey (arXiv:2512.13564, Dec 2025). Tracks R3Mem, MemRL, MemEvolve, MemVerse, and other 2025 memory papers; the most current bibliography for agent memory work.
+
+- **LAMDA-NeSy/Awesome-LLM-Reasoning-with-NeSy** — Curated list of neurosymbolic reasoning papers in the LLM era; tracks integration approaches and current benchmarks. Essential companion to the neurosymbolic revival.
+
+- **VoltAgent/awesome-ai-agent-papers** — Curated collection of agent papers released in 2026 covering engineering, memory, evaluation, workflows, and autonomous systems.
+
 ## Key Techniques / Patterns
 
 1. **CoALA memory-type taxonomy.** Working memory + episodic (experience) + semantic (knowledge) + procedural (skills/code). Letta, Voyager, Generative Agents, MetaGPT, and CAMEL all map onto this four-way split; divergence is in *which* long-term store they emphasize. Humanization-relevant: episodic memory produces "I remember when…" coherence; procedural memory produces competence that compounds instead of drifting.
@@ -108,19 +124,23 @@ The strongest shared insight across repos: human-feeling output comes not from p
 
 ## Emerging Trends
 
-- **Convergence on CoALA vocabulary.** Papers and READMEs from 2024–2026 (Letta, MetaGPT, ChatDev, Agent-S, SPIRAL, ReCAP) increasingly adopt working/episodic/semantic/procedural memory language and grounding/reasoning/retrieval/learning action taxonomy. CoALA is becoming the shared interface spec the field lacked.
+- **Convergence on CoALA vocabulary.** Papers and READMEs from 2025–2026 (Letta, MetaGPT, ChatDev, Agent-S, SPIRAL, ReCAP) increasingly adopt working/episodic/semantic/procedural memory language and grounding/reasoning/retrieval/learning action taxonomy. CoALA is becoming the shared interface spec the field lacked.
 
-- **From chat frameworks to stateful-agent platforms.** Letta's rebrand (MemGPT → Letta) and ChatDev 2.0's pivot to a "zero-code multi-agent platform" mark a shift from single-session prompt engineering to persistent, multi-user, multi-agent infrastructure.
+- **From chat frameworks to stateful-agent platforms.** Letta's series of 2025–2026 product releases (Letta Evals, Conversations API, Letta Code, Letta Code App) and ChatDev 2.0's "DevAll" pivot (Jan 2026) mark a shift from single-session prompt engineering to persistent, multi-user, multi-agent infrastructure.
 
-- **Consolidation in multi-agent frameworks.** AutoGen is merging into Microsoft Agent Framework; BabyAGI is archived; AutoGPT is still dominant by stars but development has slowed relative to MetaGPT / Letta / Agent-S. The 2023 Cambrian explosion is compressing into a few production-grade platforms.
+- **Graph memory as the dominant frontier (2025–2026).** By early 2026, graph-based agent memory is in production — not experimental. Mem0 added graph memory to its production stack; MAGMA (Jan 2026) provides the multi-graph architecture reference; VentureBeat's 2026 enterprise predictions cite graph memory as table stakes. The vector-only approach is now characterized as legacy.
+
+- **Consolidation in multi-agent frameworks.** AutoGen merged into Microsoft Agent Framework (Oct 2025); BabyAGI is archived; AutoGPT is still dominant by stars but development slowed relative to MetaGPT / Letta / Agent-S. The 2023 Cambrian explosion has compressed into a few production-grade platforms.
 
 - **Learned orchestration over hand-written SOPs.** ChatDev's Puppeteer paper (NeurIPS 2025) and MetaGPT's AFlow (ICLR 2025 oral) replace fixed workflows with RL-optimized central orchestrators — agents that *learn* when and how to activate sub-agents.
 
-- **Grounded computer-use agents surpass humans.** Agent-S3 on OSWorld (72.60%) and related work on WindowsAgentArena / AndroidWorld show that cognitive-architecture-plus-LLM hybrids are now crossing human baselines on realistic tasks. The humanization question is shifting from "can it talk like a person" to "can it act like a person over long horizons."
+- **Grounded computer-use agents surpass humans.** Agent-S3 on OSWorld (72.60%, Oct 2025) and related work on WindowsAgentArena / AndroidWorld show that cognitive-architecture-plus-LLM hybrids are now crossing human baselines on realistic tasks. Agent-S3's Behavior Best-of-N (bBoN) scaling framework further improves to 69.9% with wide-scaling. The humanization question is shifting from "can it talk like a person" to "can it act like a person over long horizons."
 
-- **Neurosymbolic revival through Hyperon.** MeTTa + AtomSpace are positioned as the general substrate under which LLMs, logic, and probabilistic reasoning can cohabit — the most active non-LLM AGI architecture in open source.
+- **Hyperon reached production-ready stack milestone (Nov 2025).** MeTTa + AtomSpace are no longer purely pre-alpha; "Baby Hyperon" prototypes run in virtual environments. Version 0.2.10 shipped Feb 2026. Still the most active non-LLM AGI architecture in open source but gap to LLM-based tools remains large.
 
-- **Interview-grounded simulacra.** StanfordHCI/genagents (1,000 real people, 2,000 interview hours) signals a move away from fictional "Isabella in Smallville" toward agents anchored in actual human data.
+- **Interview-grounded simulacra remain the empirical gold standard.** StanfordHCI/genagents (1,000 real people, 2,000 interview hours, Nov 2024) has not been superseded as of Apr 2026. The finding — interview grounding achieves 85% of test–retest reliability — still stands as the strongest empirical argument against purely prompt-based persona.
+
+- **Specialized memory libraries emerging as a distinct repo category.** Mem0, Zep, Supermemory, MemPalace, and others have formed a distinct "memory layer" segment. By 2026, practitioners choose a memory framework separately from their agent framework — a new architectural separation that didn't exist in 2023.
 
 ## Open Questions / Gaps
 

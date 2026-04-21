@@ -16,8 +16,8 @@ Each entry uses the same fields: *Vendor · Product · Positioning · Autonomy c
 - **Positioning:** "The first AI software engineer."
 - **Autonomy claim:** "Devin can plan and execute complex engineering tasks requiring thousands of decisions… recall relevant context at every step, learn over time, and fix mistakes."
 - **Human-likeness claim:** Framed as a *colleague* — "Cognition uses Devin to build Devin," merging 659 Devin-authored PRs in a single week.
-- **Surface:** Own Linux shell + browser + editor; async worklog.
-- **Status:** $2B valuation, >$150M ARR (incl. Windsurf IDE acquisition, Jul 2025); $20–$500/seat.
+- **Surface:** Own Linux shell + browser + editor; async worklog. Devin 2.2 (Feb 2026) added full Linux desktop computer-use — Figma, Photoshop, and other GUI-native software.
+- **Status:** $2B valuation, >$150M ARR (incl. Windsurf IDE acquisition, Jul 2025). Devin 2.0 (April 2025) dropped entry pricing from $500/month to $20/month. Devin 2.2 added parallel task delegation to a team of isolated Devin instances.
 - **Source:** [cognition.ai/blog/introducing-devin](https://cognition.ai/blog/introducing-devin/), [cognition.ai/blog/devin-2](https://www.cognition.ai/blog/devin-2).
 
 ### 1.2 MultiOn
@@ -132,13 +132,13 @@ Each entry uses the same fields: *Vendor · Product · Positioning · Autonomy c
 - **Status:** Launched Jan 2024; widely criticized for gap between demo and delivered capability; still iterating in 2026.
 - **Source:** [rabbit.tech/updates/introducing-r1](https://www.rabbit.tech/updates/introducing-r1), [rabbit.tech/lam-playground](https://rabbit.tech/lam-playground).
 
-### 1.16 OpenAI Operator
-- **Positioning:** "An agent that can do work for you independently."
-- **Autonomy claim:** Computer-Using Agent (CUA) "perceives screenshots, reasons through next steps using chain-of-thought, performs actions."
-- **Human-likeness claim:** Operator uses its *own browser* — the mental model is an AI-controlled human employee.
-- **Surface:** operator.chatgpt.com; runs in cloud sandbox.
-- **Status:** Launched Jan 2025 (ChatGPT Pro preview); benchmarks 87% WebVoyager, 58.1% WebArena, 38.1% OSWorld. Being folded into mainline ChatGPT agent mode.
-- **Source:** [openai.com/index/introducing-operator](https://openai.com/index/introducing-operator), [openai.com/index/computer-using-agent](https://openai.com/index/computer-using-agent/).
+### 1.16 OpenAI Operator / ChatGPT Agent
+- **Positioning:** "An agent that can do work for you independently" (Operator, Jan 2025) → "ChatGPT now thinks and acts" (ChatGPT Agent, Jul 2025).
+- **Autonomy claim:** ChatGPT Agent fuses Operator (computer use) and Deep Research (multi-step reasoning) into a single system: one model, one virtual computer, fluid switching between browsing, terminal, code execution, and external connectors (Gmail, GitHub, calendar).
+- **Human-likeness claim:** "Fluidly shifting between reasoning and action … iterative, collaborative workflows." Parallel execution with self-reported confidence for best-of-8 sampling.
+- **Surface:** Virtual computer in the cloud; state persists across tool switches; human-in-the-loop watch mode with pause/takeover.
+- **Status:** Operator launched Jan 2025 (87% WebVoyager, 58.1% WebArena, 38.1% OSWorld); ChatGPT Agent unified product launched Jul 2025 with GPT-5.2 backbone; ChatGPT Agent achieves 68.9% on agentic search/browsing tasks vs 54.9% for standalone GPT-5.2.
+- **Source:** [openai.com/index/introducing-operator](https://openai.com/index/introducing-operator), [openai.com/index/introducing-chatgpt-agent](https://openai.com/index/introducing-chatgpt-agent/).
 
 ### 1.17 Anthropic Claude Computer Use
 - **Positioning:** Claude can "use computers the way people do — by looking at a screen, moving a cursor, clicking buttons, and typing text."
@@ -247,13 +247,15 @@ This mirrors Nadella's claim that agents collapse the app layer — where labor 
 
 ## 4. Trends
 
-1. **"Super-agent" consolidation.** Manus ($90M ARR in <6 months → Meta acquisition), Genspark viral growth, Operator folding into core ChatGPT. The standalone "do-everything" agent is becoming a feature of the platform, not a product.
-2. **Labs → applied shift at frontier model vendors.** OpenAI, Anthropic, Google each shipped their own computer-use agent within 14 months (Oct 2024 – Dec 2025). They now compete directly with Devin/Cognition in their own product surface.
+1. **"Super-agent" consolidation.** Manus ($90M ARR in <6 months → Meta acquisition), Genspark viral growth, Operator folding into ChatGPT Agent (Jul 2025). The standalone "do-everything" agent is becoming a feature of the platform, not a product.
+2. **Labs → applied shift at frontier model vendors.** OpenAI, Anthropic, Google each shipped their own computer-use agent within 14 months (Oct 2024 – Dec 2025). They now compete directly with Devin/Cognition in their own product surface. Anthropic launched Claude Managed Agents (April 2026) as a fully hosted agent runtime — not just an API, but sandboxing, orchestration, and governance as a service. Early adopters include Notion, Rakuten, and Asana.
 3. **Acqui-hire gravity on first-wave agent labs.** Adept (→ Amazon), Orby (→ Uniphore), Manus (→ Meta), Windsurf (→ Cognition). Pure-play agent labs are either being absorbed or pivoting to narrow verticals (Imbue → dev productivity, Reflection → coding-as-root-node).
 4. **CX is the first commercially proven autonomous-agent vertical.** Sierra, Decagon, Parloa, Mava, Cresta (adjacent) all show double-digit deflection, with customer-named production deployments. Marketing has moved from "will it work" to "which provider."
 5. **Voice is back.** Decagon's Proactive Agents, Parloa's voice-first platform, Sierra's voice agents, Genspark's phone-call automation. Voice is being re-pitched as the *highest-trust* autonomy interface precisely because it forces the agent to behave like a person.
 6. **Transparency as a selling point.** Jules' "visible plan," Sierra's supervisor-enforced guardrails, Devin's worklog UI, Anthropic's "think" tool. Vendors are discovering that *showing the thinking* is a feature, not just an ops affordance.
 7. **Open-weights is a new axis.** Reflection's "Frontier Open Intelligence" positioning and Nvidia's $800M check suggest the next agent wave may reject the closed-API dependency of the first.
+8. **Interoperability is becoming a requirement.** Google's A2A protocol (April 2025, 50+ enterprise partners, Linux Foundation governance by June 2025) and Anthropic's MCP (97M monthly SDK downloads, donated to Agentic AI Foundation in December 2025) are converging into a two-layer standard: MCP for tool access, A2A for agent-to-agent communication. Enterprise buyers are now treating A2A/MCP support as a procurement criterion, not a nice-to-have.
+9. **Benchmark saturation is forcing harder tests.** SWE-bench Verified exceeded 85% for top agents by April 2026. SWE-bench Pro (Scale AI, harder, less contamination risk) was introduced in 2025 as the new frontier benchmark — top scores fall to ~23%, resetting the sense of progress. Agent developers now routinely distinguish "SWE-bench number" from "production utility," since the gap between eval score and real-world reliability remains wide.
 
 ---
 

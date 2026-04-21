@@ -31,7 +31,7 @@
 ### 1.3 `Mamba413/AdaDetectGPT` — AdaDetectGPT
 - **Link:** https://github.com/Mamba413/AdaDetectGPT
 - **License / stars:** open-source, ~71★ (NeurIPS 2025)
-- **What it is:** Adaptive extension of Fast-DetectGPT with statistical guarantees (formal FPR control). Evidence that academic detection work is still shipping code into 2025/2026.
+- **What it is:** Adaptive extension of Fast-DetectGPT built on a learned witness function. Provides finite-sample statistical guarantees on FPR, TPR, FNR, TNR — the first zero-shot detector with provable false-positive control. Outperforms Fast-DetectGPT by 12.5–37% AUC across datasets. NeurIPS 2025 poster. A humanizer that benchmarks only against Fast-DetectGPT is now under-tested.
 
 ### 1.4 `ahans30/Binoculars` — Binoculars
 - **Link:** https://github.com/ahans30/Binoculars
@@ -99,6 +99,15 @@
 - **README quote:**
   > "We propose a family of **regeneration attacks** to remove invisible watermarks. The attack method effectively removes invisible watermarks. Our attack first maps the watermarked image to its embedding, which is another representation of the image. Then the embedding is noised to destruct the watermark. After that, a regeneration algorithm reconstructs the image from the noisy embedding."
 - **Notes:** Primary target is *image* watermarks, not text, but the same structural attack (embed → noise → reconstruct) has been ported to text via encoder-paraphraser-decoder pipelines (DIPPER + back-translation — see below). Included because this is where the attack template originates.
+
+### 2.5 `hzy312/Awesome-LLM-Watermark` — Curated watermark paper list
+- **Link:** https://github.com/hzy312/Awesome-LLM-Watermark
+- **What it is:** Actively maintained curated list covering watermarking, robustness attacks, and detection schemes; the watermark-specific equivalent of Awesome_papers_on_LLMs_detection. Best single entry point for the 2025-onward watermarking literature.
+
+### 2.6 `Allencheng97/Self-information-Rewrite-Attack` — SIRA attack code
+- **Link:** https://github.com/Allencheng97/Self-information-Rewrite-Attack
+- **Paper:** Cheng et al., ICML 2025 — "Revealing Weaknesses in Text Watermarking Through Self-Information Rewrite Attacks" (arXiv 2505.05190).
+- **What it is:** The SIRA attack: calculates self-information (entropy) of each token, masks high-entropy positions where watermark patterns embed, then fills them in with any LLM. ~100% attack success rate on 7 watermarking schemes at $0.88/million tokens. No access to the watermark algorithm or generating model required. The most damaging single open-source release for the watermarking research program since Jovanović's watermark-stealing attack.
 
 ---
 
@@ -207,17 +216,22 @@ These are lower-stature than the academic repos above but matter because they de
   > "MGTBench provides the reference implementations of different machine-generated text (MGT) detection methods … Metric-based methods: Log-Likelihood, Rank, Log-Rank, Entropy, GLTR Test 2 Features, DetectGPT, LRR, NPR. Model-based methods: OpenAI Detector, ChatGPT Detector, ConDA, GPTZero, LM Detector."
 - **Notes:** MGTBench 2.0 adds 16 academic categories across STEM, Humanities, Social Sciences, and covers GPT-3.5, Mixtral, Llama3, GPT-4o-mini, etc. Together with RAID these are the two benchmarks you will be asked to report against.
 
-### 5.3 `Xianjun-Yang/Awesome_papers_on_LLMs_detection`
+### 5.3 WaterPark / "Watermark under Fire" — Robustness Evaluation Platform
+- **Paper / code:** Liang, Wang et al. — EMNLP 2025 Findings. arXiv 2411.13425.
+- **Link:** https://arxiv.org/abs/2411.13425
+- **What it is:** First unified platform integrating 10 watermarkers × 12 representative attacks × 8 metrics. Key finding: no single watermark is robust across all attacks; distribution-transform watermarks resist text-mixing; explicit-signal watermarks resist linguistic variation. The RAID equivalent for watermarking. "Did you evaluate on WaterPark?" is now a standard review question for watermarking papers.
+
+### 5.4 `Xianjun-Yang/Awesome_papers_on_LLMs_detection`
 - **Link:** https://github.com/Xianjun-Yang/Awesome_papers_on_LLMs_detection
 - **What it is:** ~286★ curated paper list covering training-based detection (black-box + white-box), zero-shot methods, watermarking, fingerprinting, code-detection, datasets 2019–2024. Last push June 2025. The best single entry-point into the literature.
 
-### 5.4 `datamllab/awsome-LLM-generated-text-detection`
+### 5.5 `datamllab/awsome-LLM-generated-text-detection`
 - **Link:** https://github.com/datamllab/awsome-LLM-generated-text-detection
 - **README quote:**
   > "A curated, but probably biased and incomplete, list of LLM-generated text detection resources … we group existing methods into two categories: **black-box detection** and **white-box detection**. Black-box detection methods are limited to API-level access to LLMs … An alternative is white-box detection, in this scenario, the detector has full access to the LLMs and can control the model's generation behavior for traceability purposes."
 - **Notes:** Paired with a companion survey paper and a sibling repo `The-Science-of-LLM-generated-Text-Detection`. Good for building a literature map fast.
 
-### 5.5 `junchaoIU/LLM-generated-Text-Detection`
+### 5.6 `junchaoIU/LLM-generated-Text-Detection`
 - **Link:** https://github.com/junchaoIU/LLM-generated-Text-Detection
 - **What it is:** NeurIPS 2024 survey companion, ~82★. Organizes detectors by family (zero-shot, fine-tuning, adversarial learning, LLM-as-detector) and aggregates datasets, benchmarks, metrics.
 
@@ -241,11 +255,12 @@ These are lower-stature than the academic repos above but matter because they de
 
 ## Gaps
 
-- **No open-source humanizer ships a self-calibrating detector panel.** Every humanizer claims sub-10% GPTZero scores. None of them *automatically* round-trip the output through Fast-DetectGPT + Binoculars + Ghostbuster + RAID-style attacks before returning. StealthRL is the closest thing to this on the research side but it is not packaged as a product.
-- **No humanizer currently targets SynthID.** All public humanizers test against GPTZero / ZeroGPT / Originality. SynthID is the watermark most likely to actually be on real Gemini/Gemma output in the wild. This is a testing blind-spot the entire humanizer ecosystem shares.
-- **No open humanizer has a trained policy model.** DIPPER is the only 10B+ open paraphraser tuned for evasion, and it's 3+ years old at this point. Distilling DIPPER into a smaller model (3–7B), or RL-training a new Qwen/Llama variant against a modern detector ensemble à la StealthRL, is an obvious unclaimed slot.
+- **No open-source humanizer ships a self-calibrating detector panel.** Every humanizer claims sub-10% GPTZero scores. None of them *automatically* round-trip the output through Fast-DetectGPT + AdaDetectGPT + Binoculars + Ghostbuster + RAID-style attacks before returning. StealthRL is the closest thing to this on the research side but it is not packaged as a product.
+- **No humanizer currently targets SynthID, and SIRA changes the calculus.** All public humanizers test against GPTZero / ZeroGPT / Originality. SynthID is deployed on Gemini output at scale. SIRA (ICML 2025) now makes SynthID removal a commodity operation at $0.88/million tokens — but no humanizer product has incorporated it, likely for regulatory/PR reasons. The ETH SRI Lab black-box probing of SynthID confirms it is easier to scrub than other SOTA schemes.
+- **No open humanizer has a trained policy model newer than DIPPER (2023).** Distilling DIPPER into a smaller model (3–7B), or RL-training a new Qwen/Llama variant against a modern detector ensemble à la StealthRL, remains an unclaimed slot. AdaDetectGPT's formal guarantees raise the bar for what a trained evasion policy must defeat.
 - **Attribution/retrieval defenses are under-attacked.** The original DIPPER paper itself argues retrieval is the strongest defense against paraphrase. Very few evasion repos attack retrieval defenses — they assume a stateless detector. A real deployment will have both.
-- **Evaluation thresholds are inconsistent.** Binoculars ships a fixed global threshold, RAID reports TPR@FPR=1%, StealthRL reports TPR@1%FPR and AUROC. Humanizer README claims ("<10% on GPTZero") are not comparable to academic numbers. A shared eval harness that reports the same metrics as RAID / StealthRL across all humanizers does not yet exist.
+- **Evaluation thresholds are inconsistent.** Binoculars ships a fixed global threshold, RAID reports TPR@FPR=1%, StealthRL reports TPR@1%FPR and AUROC. Humanizer README claims ("<10% on GPTZero") are not comparable to academic numbers. A shared eval harness that reports the same metrics as RAID / StealthRL / WaterPark across all humanizers does not yet exist.
+- **WaterPark covers watermark attacks, not humanizer attacks.** The humanizer-vs-watermark evasion space (i.e., using SIRA or DIPPER specifically to defeat SynthID in a production pipeline) is not covered by RAID, WaterPark, or any existing benchmark. This is the specific measurement gap a watermark-aware humanizer would live in.
 
 ## Cross-domain analogy
 
@@ -281,3 +296,6 @@ The structural similarity to the **adversarial examples / robustness** literatur
 - https://github.com/Xianjun-Yang/Awesome_papers_on_LLMs_detection — curated paper list
 - https://github.com/datamllab/awsome-LLM-generated-text-detection — curated paper list
 - https://github.com/junchaoIU/LLM-generated-Text-Detection — NeurIPS 2024 survey companion
+- https://github.com/hzy312/Awesome-LLM-Watermark — curated LLM watermark paper list (actively maintained 2025)
+- https://github.com/Allencheng97/Self-information-Rewrite-Attack — SIRA watermark attack (ICML 2025)
+- https://arxiv.org/abs/2411.13425 — WaterPark / Watermark under Fire (EMNLP 2025)

@@ -56,6 +56,14 @@ The strongest cross-repo finding: **stated ToM performance collapses the moment 
 
 - **bigai-ai/ToM-RL** — `github.com/bigai-ai/ToM-RL` — BIGAI. Applies RL over ToM modeling for LLM agents; one of the few repos wiring ToM directly into an RL training loop rather than treating it as an eval.
 
+- **ToM-RL (2025, arXiv:2504.01698)** — Rule-based RL post-training for ToM. A 7B model reaches **84.50% on Hi-ToM**, outperforming GPT-4o and DeepSeek-v3 despite its size. Smaller models (≤3B) show reasoning collapse. **Caveat from July 2025 (arXiv:2507.15788):** the same class of RL fine-tuning fails to generalize to out-of-distribution ToM tasks — models hack training-distribution statistics rather than acquiring abstract ToM. These two papers define the live empirical debate: effective on benchmark; does not generalize.
+
+- **villacu/MoMentS** — `github.com/villacu/MoMentS` — Findings of EMNLP 2025. arXiv:2507.04415. 2,300+ multiple-choice questions across **seven ToM categories** grounded in short narrative films (long video context). Extends the multimodal stack beyond household video into open-domain social narratives. Published at EMNLP 2025.
+
+- **MindGames Arena (NeurIPS 2025 Competition)** — `mindgamesarena.com` · NeurIPS 2025 competition. Four strategic games (social deduction + coordination) where LLM agents communicate via natural language, reason about hidden states, and adapt strategies in repeated interactions. First large-scale competitive evaluation of **functional ToM** — adapting to partners — rather than literal ToM. Complements the ICML 2025 position paper critique that benchmarks only measure literal ToM.
+
+- **ToMAgent / ToMA (arXiv:2509.22887)** — No standalone repo yet; paper via OpenReview. Pairs ToM inference with **dialogue lookahead** to produce mental states maximally useful for achieving dialogue goals. Evaluated on Sotopia: up to +18.9% over best base model. Closest available implementation of ToM wired into generation rather than evaluated as QA.
+
 - **SCAI-JHU/AutoToM** — `github.com/SCAI-JHU/AutoToM` — NeurIPS 2025 Spotlight. Automated Bayesian inverse planning + model discovery; claims SOTA on MMToM-QA and four other ToM benchmarks, plus "human-like confidence estimates" and embodied decision-making. The direction of travel for the MMToM lineage.
 
 - **SCAI-JHU/MuMA-ToM** — `github.com/SCAI-JHU/MuMA-ToM` — AAAI 2025 Oral. Multi-modal, multi-agent ToM; extends MMToM-QA to embodied multi-agent interaction.
@@ -116,11 +124,13 @@ The strongest cross-repo finding: **stated ToM performance collapses the moment 
 
 - **Applied-ToM is eating explicit-ToM.** SimpleToM's thesis — that models' surface ability to state beliefs doesn't predict their ability to act on them — is being picked up in downstream work and is likely to become the headline metric in 2026 evals.
 
+- **Literal vs. functional ToM is the newest framing split.** The ICML 2025 position paper argues static prediction tasks (literal ToM) don't measure whether models adapt to real partners (functional ToM). MindGames (NeurIPS 2025) is the first competition designed around functional ToM in game-play. Expect this axis to dominate 2026 benchmark debate the way explicit/applied dominated 2024–2025.
+
 - **Conversation > narrative.** FANToM made explicit what the field had been sensing: Sally–Anne narratives are artificially easy because the narrator spells out who saw what. In natural conversation with entries/exits, models collapse. Expect more `fantom`-style conversation-native repos.
 
-- **Multimodal + embodied.** MMToM-QA → MuMA-ToM → AutoToM is a clear trajectory: text → household video → multi-agent embodied. Bayesian inverse planning as the "interpretable bridge" between symbolic simulation and LLM inference is consolidating as the dominant non-LLM-only approach.
+- **Multimodal + embodied.** MMToM-QA → MuMA-ToM → AutoToM → MoMentS is a clear trajectory: text → household video → multi-agent embodied → open social narratives in film. Bayesian inverse planning as the "interpretable bridge" between symbolic simulation and LLM inference is consolidating as the dominant non-LLM-only approach.
 
-- **ToM in training loops, not just eval.** `bigai-ai/ToM-RL`, Sotopia-RL / Sotopia-π, and ExploreToM's demonstrated +27 points on ToMi via fine-tuning on generated data all point to ToM becoming a *training signal*, not just a test. This is the frontier.
+- **ToM in training loops, not just eval — but generalization is contested.** `bigai-ai/ToM-RL`, Sotopia-RL / Sotopia-π, ExploreToM fine-tuning (+27 on ToMi), and ToM-RL (84.5% on Hi-ToM) all show in-distribution gains. The July 2025 rebuttal (arXiv:2507.15788) shows these gains evaporate on out-of-distribution tasks. Whether RL instills ToM or overfits is the live question.
 
 - **Social simulators as emergent ToM testbeds.** Generative Agents (2023) → genagents (2024, interview-grounded 1K agents) → Sotopia (2024, formalized 7-dim rubric) → AgentSims + CAMEL/OASIS (world-scale). "ToM works" is being operationally redefined as "agents behave coherently in a simulated society," and the QA-benchmark subculture and the simulator subculture are starting to cite each other.
 
@@ -171,3 +181,8 @@ The strongest cross-repo finding: **stated ToM performance collapses the moment 
 - `github.com/py499372727/AgentSims` — LLM evaluation sandbox, ACL 2023 arXiv, MIT.
 - `github.com/camel-ai/camel` — CAMEL multi-agent society, role-playing + OASIS world simulation.
 - `github.com/bigai-ai/ToM-RL` — BIGAI; RL over ToM modeling.
+- arXiv:2504.01698 — ToM-RL; RL post-training unlocks Hi-ToM 84.5% in 7B model.
+- arXiv:2507.15788 — Oguntola et al.; RL ToM gains don't generalize OOD.
+- `github.com/villacu/MoMentS` — Ramirez et al., EMNLP 2025; 2,300+ questions from short films.
+- `mindgamesarena.com` — NeurIPS 2025 MindGames Competition; functional ToM via game-play.
+- arXiv:2509.22887 — Piatti et al., ToMAgent; ToM + dialogue lookahead, +18.9% on Sotopia.

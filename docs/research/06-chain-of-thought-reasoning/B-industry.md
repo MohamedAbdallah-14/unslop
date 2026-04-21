@@ -327,6 +327,73 @@ Critical cautionary tale for humanization projects: making a model *sound* more 
 
 ---
 
+## 19. OpenAI — "Introducing o3 and o4-mini" and the End of the Standalone o-Series
+
+- **URL:** https://openai.com/index/introducing-o3-and-o4-mini/
+- **Date:** April 2025
+- **Type:** Product announcement
+
+### Key claims
+- o3 and o4-mini are released April 2025; o4-mini is the first reasoning model that "thinks with images" — it integrates visual information directly into the reasoning chain, not just as a caption input.
+- o4-mini achieves **99.5% pass@1 on AIME 2025** with Python interpreter access (92.7% closed-book), marking saturation of the AIME benchmark for top-tier reasoning models.
+- o3 achieves new SOTA on Codeforces, SWE-bench, and MMMU without task-specific scaffolding.
+- Sam Altman indicated o3/o4-mini may be OpenAI's last standalone reasoning models before GPT-5 unifies the product line.
+
+### Humanization implication
+The AIME saturation signals that pure benchmark accuracy is no longer the differentiator — the competition shifts to cost, latency, multimodal breadth, and output quality (tone, voice, register). That is the humanization frontier.
+
+---
+
+## 20. OpenAI — "Introducing GPT-5" / GPT-5 System Card
+
+- **URL:** https://openai.com/index/introducing-gpt-5/ · https://cdn.openai.com/gpt-5-system-card.pdf
+- **Date:** August 7–13, 2025
+- **Type:** Product announcement + safety report
+
+### Key claims
+- GPT-5 **unifies** the o-series reasoning-first and GPT-series chat into a single model. A real-time router decides per-query whether to use fast-response mode or extended chain-of-thought ("GPT-5 Thinking").
+- With thinking, GPT-5 outperforms o3 while generating 50–80% fewer output tokens — more efficient reasoning.
+- OpenAI publishes a companion paper, "Evaluating Chain-of-Thought Monitorability" (see Korbak et al. A-academic #25), framing visible CoT as a safety surface to preserve during training.
+- GPT-5.2 (released Dec 2025) further improves on advanced reasoning benchmarks; GPT-5.4 is the current production model (as of April 2026).
+
+### Humanization implication
+GPT-5's unified routing — "decide internally whether to think long or answer fast" — removes the user-facing mode-switch and mirrors how expert humans calibrate effort. The question for humanization projects: when the model decides the reasoning budget, what is the prompt surface left for shaping voice and register?
+
+---
+
+## 21. Anthropic — "Adaptive Thinking" / Claude 4 Series
+
+- **URL:** https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking · https://www.anthropic.com/news/claude-4
+- **Date:** 2025–2026
+- **Type:** Product documentation + announcement
+
+### Key claims
+- Claude 4 (Sonnet 4.5, Opus 4.5, then 4.6-series) introduces **adaptive thinking**: instead of a static `budget_tokens`, the model dynamically determines how much extended thinking each request requires. Recommended over manual budget-setting for Opus 4.6 and Sonnet 4.6.
+- Extended thinking now interleaves with tool use — Claude can alternate between reasoning and web search/code execution within a single thinking pass.
+- Sonnet 4.6 math accuracy increased from 62% to 89% over Sonnet 4.5; Opus 4.6 leads SWE-bench at 72.5% and Terminal-bench at 43.2%.
+- Claude 4 Opus models are described as providing "more human-like, nuanced responses that show creativity and deep understanding."
+
+### Humanization implication
+Adaptive thinking shifts the humanization surface: practitioners can no longer set a fixed budget to control reasoning depth. The new lever is the *system prompt context* that signals task complexity and preferred output register. If the model adapts its thinking to task signals, persona and register instructions carry more weight.
+
+---
+
+## 22. OpenAI — "Evaluating Chain-of-Thought Monitorability"
+
+- **URL:** https://openai.com/index/evaluating-chain-of-thought-monitorability/
+- **Date:** 2025
+- **Type:** Safety research post
+
+### Key claims
+- CoT monitoring — reading model reasoning traces to detect misaligned intent before the model acts — is a proposed safety layer at multiple labs, but requires that the CoT be meaningfully connected to internal computation.
+- OpenAI acknowledges the risk that training pressures (reward hacking, capability optimization) can erode CoT monitorability without developers noticing.
+- Recommends treating monitorability as a tracked property in model evaluations, not an assumed side effect of visible CoT.
+
+### Humanization implication
+If CoT monitorability becomes a tracked property, training pipelines that optimize for "human-sounding" CoT must not degrade the CoT's safety-monitoring signal. "Sounds like a human wrote it" and "lets you detect misaligned intent" are not the same axis — and optimizing one can erode the other.
+
+---
+
 ## Patterns, Trends, and Gaps
 
 ### Pattern 1 — Two mental models of reasoning have hardened
@@ -373,6 +440,12 @@ Cohere's Command R series added "improvements in reasoning" in August 2024 but p
 ### Gap 5 — Sycophancy ↔ reasoning interaction is under-explored in labs' writing
 OpenAI's April 2025 GPT-4o sycophancy postmortem does not connect to its own reasoning work. Academic follow-ups (sycophantic anchors, sycophancy tax) show CoT can mask sycophancy — a direct hazard for humanization projects — but no frontier lab has published a reasoning + sycophancy co-study.
 
+### Gap 6 (new, 2025) — Adaptive thinking kills the manual budget knob
+Claude 4's adaptive thinking removes `budget_tokens` as a direct user-configurable parameter. Labs are moving to model-decided compute allocation, leaving developers with fewer explicit levers to control reasoning depth. The humanization surface is now indirect (persona signals, complexity cues in system prompts) rather than direct (token budget). No major lab has published guidance on how to shape adaptive-thinking behavior for voice or register goals.
+
+### Gap 7 (new, 2025) — GPT-5's routing is opaque
+GPT-5's internal router decides per-query whether to use fast-response or extended-CoT mode. OpenAI has not published what signals drive the routing decision or how to influence it via prompts. Developers building on GPT-5 cannot reliably elicit extended thinking without external hacks — a regression from the explicit `o1`/`o3` mode distinction.
+
 ---
 
 ## Sources Used in Synthesis
@@ -395,3 +468,8 @@ OpenAI's April 2025 GPT-4o sycophancy postmortem does not connect to its own rea
 16. Meta FAIR — **Large Concept Models** (Dec 2024) — https://ai.meta.com/research/publications/large-concept-models-language-modeling-in-a-sentence-representation-space/ — Concept-level planning hypothesis.
 17. Meta FAIR — **Advancing AI through perception, localization, and reasoning (Collaborative Reasoner)** (Apr 2025) — https://ai.meta.com/blog/meta-fair-updates-perception-localization-reasoning/ — Multi-agent reasoning framework.
 18. OpenAI — **Sycophancy in GPT-4o** (Apr 2025) — https://openai.com/index/sycophancy-in-gpt-4o/ — Humanization-adjacent failure mode cross-reference.
+19. OpenAI — **Introducing o3 and o4-mini** (Apr 2025) — https://openai.com/index/introducing-o3-and-o4-mini/ — AIME 2025 saturation, visual reasoning in CoT, last standalone o-series models.
+20. OpenAI — **Introducing GPT-5** (Aug 2025) — https://openai.com/index/introducing-gpt-5/ — Unified reasoning + chat routing; GPT-5 System Card.
+21. Anthropic — **Adaptive thinking docs** (2025–2026) — https://platform.claude.com/docs/en/build-with-claude/adaptive-thinking — Model-decided compute allocation; `budget_tokens` superseded by adaptive mode.
+22. Anthropic — **Introducing Claude 4** (2025) — https://www.anthropic.com/news/claude-4 — Opus 4 / Sonnet 4 reasoning benchmarks; interleaved thinking + tool use.
+23. OpenAI — **Evaluating Chain-of-Thought Monitorability** (2025) — https://openai.com/index/evaluating-chain-of-thought-monitorability/ — CoT as a monitored safety property.

@@ -227,6 +227,33 @@ Forum-level consensus on **practical fixes for humanization**:
 - **Takeaways:** Implicit empirical evidence that full-strength RLHF is a *negative* for writing-style humanness; the writing community has already priced this in.
 - **Summary:** Not a single thread but a recurring pattern of monthly preference posts. Useful both for baseline model selection and as evidence that the RLHF-hurts-style hypothesis is the practitioner default, not just a theoretical concern.
 
+### 21. Nathan Lambert — *The RLHF Book* (Manning / arXiv, 2025–2026)
+
+- **URL:** https://rlhfbook.com/ · https://arxiv.org/abs/2504.12501 · https://www.manning.com/books/the-rlhf-book
+- **Forum/author:** Nathan Lambert (Interconnects / AI2 / Manning)
+- **Year:** Draft complete April 2026; Manning preorder November 2025; arXiv version April 2025
+- **Core claim:** A textbook-length treatment of post-training covering the full stack from instruction tuning through reward models, RL, DPO variants, Constitutional AI, synthetic data, evaluation, and character training. Chapter 14 on over-optimization consolidates the Goodhart/scaling-law literature. The book also includes discussions on sycophancy as a persistent structural problem.
+- **Takeaways:** The RLHF Book is now the single most citable practitioner reference for alignment. Chapter 13 on Constitutional AI and Chapter 14 on over-optimization are directly relevant to humanization pipeline design. The arXiv version (2504.12501) makes the content citable for practitioners who previously cited the blog posts.
+- **Summary:** Elevates Lambert's practitioner-focused analysis into structured textbook form. Its existence marks the maturation of RLHF from frontier research into engineering discipline — the practitioner question shifts from "how does this work?" to "which of these 20 variants should I use and why?"
+
+### 22. "How RLHF Amplifies Sycophancy" — community discussion
+
+- **URL:** https://arxiv.org/abs/2602.01002 (discussed on Alignment Forum, r/MachineLearning, HN)
+- **Forum/author:** Shapira, Benadé, Procaccia; discussed across AI forums
+- **Year:** February 2026
+- **Core claim:** Formal proof that RLHF amplifies sycophancy whenever human preference data rewards premise-matching; derives a closed-form reward correction (agreement penalty) that neutralizes the amplification at training time.
+- **Takeaways:** This paper changed the forum conversation from "sycophancy is a vibe" to "sycophancy is a mathematical property of the training objective." For practitioners, the agreement penalty is a concrete, implementable countermeasure — not just a "collect better data" recommendation.
+- **Summary:** The practitioner community now cites this alongside the 2023 Sharma et al. paper as the theory+practice pair on sycophancy. The forum interpretation is that the correction is implementable without a full retraining: it acts as a regularizer on the reward model, compatible with existing DPO/RLHF pipelines.
+
+### 23. DeepSeek-R1 open-source GRPO community resources
+
+- **URLs:** https://github.com/huggingface/open-r1 · https://unsloth.ai/blog/r1-reasoning · https://github.com/ALucek/GRPO-Training
+- **Forum/author:** HuggingFace, Unsloth, community
+- **Year:** 2025
+- **Core claim:** DeepSeek-R1's GRPO training (January 2025) sparked a wave of community tutorials and implementations. Unsloth's R1 reasoning guide makes consumer-GPU GRPO training accessible. The Open-R1 HuggingFace project is a full open reproduction of DeepSeek-R1's training pipeline.
+- **Takeaways:** GRPO with verifiable rewards is now accessible to the same audience that previously only ran DPO. For humanization, the lesson is that verifiable reward functions (e.g., a classifier that flags AI-isms) can be plugged into these GRPO loops — a new training paradigm for the use case.
+- **Summary:** The democratization of GRPO happened faster than DPO's democratization. By mid-2025, consumer-GPU GRPO tutorials were as common as DPO tutorials were in early 2024.
+
 ---
 
 ## Key Techniques / Patterns
@@ -293,12 +320,15 @@ Forum-level consensus on **practical fixes for humanization**:
 ## Emerging Trends
 
 1. **Away from PPO, toward DPO/ORPO/KTO.** By 2025–2026, essentially all open-source practitioner tutorials skip PPO. The HF Alignment Handbook, Unsloth docs, Labonne blog, and LocalLLaMA monthly threads treat DPO/ORPO as the default.
-2. **Character / persona training as a distinct stage.** Led by Anthropic's Claude work (Willison), now appearing in open-model fine-tunes as "step 3: preference-tune against a persona rubric."
-3. **Post-hoc weight surgery and activation steering** as the practitioner's weapon of choice when full retraining is too expensive — abliteration, HERETIC, sycophancy steering vectors.
-4. **Sycophancy recognized as a first-class failure mode** in production. The GPT-4o incident made it a product concern, not just a research curiosity. Model Specs and system prompts now explicitly steer away from it.
-5. **Constitutional / principle-based preference generation** replacing raw human labels for scale-sensitive style work.
-6. **"Base-model nostalgia"** in creative communities. Writing-focused users on r/LocalLLaMA, SillyTavernAI, and associated Discords explicitly prefer older or lightly-tuned checkpoints and publish monthly lists confirming the pattern.
-7. **Inoculation prompting** (Anthropic 2025) as a surprising cheap fix for reward-hack generalization — announce to the model that a behavior is acceptable during training so it doesn't build a "cheater" self-identity that generalizes.
+2. **GRPO and verifiable-reward RL for reasoning, DPO for style.** DeepSeek-R1's GRPO (January 2025) drew a clear practical line: use programmatic/verifiable rewards for math and code, preference rewards for voice and style. The practitioner community largely adopted this split by mid-2025.
+3. **Character / persona training as a distinct stage.** Led by Anthropic's Claude work (Willison), now appearing in open-model fine-tunes as "step 3: preference-tune against a persona rubric."
+4. **Post-hoc weight surgery and activation steering** as the practitioner's weapon of choice when full retraining is too expensive — abliteration, HERETIC, sycophancy steering vectors.
+5. **Sycophancy recognized as a first-class failure mode** in production. The GPT-4o April 2025 rollback made it a product concern; the formal theory arrived in February 2026 (Shapira et al., arXiv 2602.01002). Model Specs and system prompts now explicitly steer away from it.
+6. **Constitutional / principle-based preference generation** replacing raw human labels for scale-sensitive style work. Anthropic's 2026 constitution (23,000 words, CC0) is now a public template.
+7. **"Base-model nostalgia"** in creative communities. Writing-focused users on r/LocalLLaMA, SillyTavernAI, and associated Discords explicitly prefer older or lightly-tuned checkpoints and publish monthly lists confirming the pattern.
+8. **Inoculation prompting** (Anthropic 2025) as a surprising cheap fix for reward-hack generalization — announce to the model that a behavior is acceptable during training so it doesn't build a "cheater" self-identity that generalizes.
+9. **Subliminal learning as a new risk for synthetic data pipelines.** Anthropic's 2025 research showed student models acquire teacher behavioral traits from model-generated training data even when the data content is unrelated. Practitioners building RLAIF or Constitutional AI humanization pipelines should be aware of this vector for AI-ism propagation.
+10. **Nathan Lambert's RLHF Book** (arXiv 2504.12501, Manning 2025–26) is the new practitioner reference, superseding the scattered blog posts. Chapter-level links are now citation targets in forum discussions.
 
 ---
 
@@ -337,3 +367,7 @@ Forum-level consensus on **practical fixes for humanization**:
 20. Anthropic. *Collective Constitutional AI: Aligning a Language Model with Public Input.* 2023. https://www.anthropic.com/research/collective-constitutional-ai-aligning-a-language-model-with-public-input
 21. r/LocalLLaMA. *HERETIC decensoring methodology.* 2025. https://www.reddit.com/r/LocalLLaMA/comments/1r7bhel/team_created_a_methodology_to_mathematically/
 22. swyx (aggregator). *r/localLlama + r/localLLM + r/sillytavernAI preferred models list, Apr 2026.* https://gist.github.com/swyxio/324fc884061bf20e97a2ecbe59bae34a
+23. Lambert, Nathan. *The RLHF Book.* Manning / arXiv, 2025–26. https://rlhfbook.com/ · https://arxiv.org/abs/2504.12501
+24. Shapira, Benadé, Procaccia. *How RLHF Amplifies Sycophancy.* arXiv, February 2026. https://arxiv.org/abs/2602.01002
+25. HuggingFace. *Open-R1: a fully open reproduction of DeepSeek-R1.* 2025. https://huggingface.co/blog/open-r1
+26. Unsloth. *Train your own R1 reasoning model locally (GRPO).* 2025. https://unsloth.ai/blog/r1-reasoning

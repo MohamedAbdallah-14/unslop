@@ -258,14 +258,16 @@ So unslop is a polish tool, not a detector-defeat tool. The blind LLM-judge test
 
 What actually lowers detector scores, ordered by strength:
 
-1. **Paraphrase through a different model family.** If GPT wrote it, have Claude rewrite. Or Gemini. Different stylometric fingerprints. This is the single strongest lever and unslop cannot do it alone.
+1. **Paraphrase through a different model family.** If GPT wrote it, have Claude rewrite. Or Gemini. Different stylometric fingerprints. This is the single strongest lever and unslop cannot do it alone. TempParaphraser (EMNLP 2025) formalizes this as temperature-simulation paraphrase and reports an 82.5% average reduction in detector accuracy. When the `--detector-feedback` ladder exhausts, the CLI prints this recommendation explicitly.
 2. **Burstiness.** Span sentence lengths roughly 4 to 35 words inside a paragraph. Phase 1 structural does this when material exists.
 3. **Specificity the model can't fake.** Real dates, real project names, real numbers, first-person anecdotes. Training data doesn't contain *your* specifics.
 4. **Contractions and small fragments.** "don't", "won't", the occasional start with "And" or "But". Phase 5 soul does the contraction half.
 5. **Break predictable structure.** If every bullet has the same shape (verb + metric + with + tool), vary half of them.
 6. **One or two rough edges.** A slightly awkward phrasing, a parenthetical trail, a non-linear logical jump — all of these read human.
 
-Commercial unslop SaaS (Undetectable.ai, StealthGPT, WriteHuman, HIX Bypass, the ~150 products Category 18 audits) mostly don't beat a second pass through a different model plus five minutes of manual editing. Independent audits (DAMAGE COLING 2025; Epaphras & Mtenzi 2026) show wide gaps between their "99.8% undetectable" claims and reality, and the gap shifts monthly.
+Commercial unslop SaaS (Undetectable.ai, StealthGPT, WriteHuman, HIX Bypass, Ryter Pro, Walter Writes AI, GPTHuman.ai, the ~150 products Category 18 audits) mostly don't beat a second pass through a different model plus five minutes of manual editing. Independent audits (DAMAGE COLING 2025; Epaphras & Mtenzi 2026; Turnitin's August 2025 anti-humanizer update, which shipped detection of the specific paraphrase patterns these tools produce) show wide gaps between their "99.8% undetectable" claims and reality, and the gap shifts monthly. Chicago Booth's 2026 audit of twelve humanizer services found the median accuracy drop in downstream detectors was ~6 points, not the claimed 40+.
+
+The right comparison isn't another SaaS. It's **Anthropic Custom Styles** (shipped November 2025 in Claude.ai) and **OpenAI's style-steering prompt patterns** — first-party style control from the model vendor, targeted at the same job: make the output match your voice without bolting on a separate rewriting stage. Unslop is complementary: Custom Styles sets the ceiling, the deterministic + LLM rewriting in this package catches residue after generation. The ICLR 2026 Antislop paper formalizes this split as "auto-antislop" — learned per-pattern counts of AI-isms, used both at decode time and post-hoc, which is the shape this repo implements.
 
 ### Live detector feedback loop
 
@@ -290,6 +292,13 @@ The canonical case. Walks through the full stack in order:
 6. **Top summary in your real voice.** Not "Results-driven professional with a passion for". Something like: "Backend engineer. Ten years in payments. I like the unsexy systems work nobody volunteers for."
 7. **Human-read, not detector-read.** If a friend says "yeah, that sounds like you", you're done. Detector scores are noisy and change weekly.
 8. **Optional paranoia pass.** If the ATS is known to run detectors, paraphrase once through a different model family, then manually restore any bullet where the paraphrase killed a specific number or tool name. Never trust a paraphrase blind.
+
+### Persona drift over long sessions
+
+RMTBench and HorizonBench (arXiv 2604.17283, April 2026) measure >30% persona-consistency degradation after roughly 8–12 user turns in the same session. Two layers cover this:
+
+- `hooks/unslop-mode-tracker.js` tracks a per-session turn counter (`~/.claude/.unslop-turn-count`) and re-emits an expanded reinforcement banner at turns 8, 16, 24, 32, and every 16 thereafter. You don't have to opt in — the hook handles it. `hooks/unslop-activate.js` resets the counter on session start so nothing persists across shells.
+- For voice-match, `unslop/scripts/style_memory.py` stores a numeric stylometric anchor (average sentence length, contraction rate, etc.) on disk. Pure numbers, no free-text preferences — the MIT/Penn State CHI 2026 paper on "sycophancy memory" links free-text preference storage to amplified sycophancy over time; we designed the cache to make that vector physically unavailable.
 
 ### The warmth-reliability warning
 

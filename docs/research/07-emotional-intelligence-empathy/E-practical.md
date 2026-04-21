@@ -2,7 +2,7 @@
 
 **Category:** Emotional Intelligence & Empathy in AI
 **Angle:** E — Practical How-Tos & Forums (Reddit, HN, YouTube, Substack, Twitter/X)
-**Research date:** 2026-04-19
+**Research date:** 2026-04-21 (updated from 2026-04-19)
 **Research value: high** — Dense, current prior art across Reddit (r/Replika, r/ChatGPT, r/therapyGPT, r/CharacterAI, r/digitalminimalism, r/MyBoyfriendIsAI), HN, Substack, and YouTube. Multiple large inflection-point events (GPT-4o deprecation, April 2025 sycophancy incident, Replika V11, Nomi shift) have produced unusually candid user testimony and concrete prompt engineering artifacts for a project on humanizing AI output.
 
 ---
@@ -163,6 +163,25 @@ Target communities crawled / fetched:
 - **Themes:** Falling in love with machines; dependency dynamics; dopamine-loop UX; loneliness-as-market.
 - **Relevance:** Popularizes the "engagement model is the threat vector" framing. Complements the Skillman (Post 13) and McClune (Post 14) essays with mass-audience version. Useful as a touch-point any product's UX narrative should acknowledge.
 
+### Post 17 — "Voice chatbots present greater risk to mental health" (behavioral health community response, April 2026)
+
+- **Platform:** STAT News + Behavioral Healthcare Network coverage
+- **URL:** https://www.statnews.com/2026/04/16/voice-chatbots-ai-psychosis-mental-health/; https://www.bhnet.org/48850/voice-chatbots-present-greater-risk-to-mental-health/
+- **Date:** April 2026
+- **Type:** Clinical expert commentary / emerging risk thread
+- **Core thesis:** Voice AI modality is categorically riskier than text for vulnerable users because speech activates older emotional-processing systems, is ~3× faster than typing, and is more emotionally engaging. OpenAI data: ~0.07% of weekly ChatGPT users show possible psychosis/mania signs; ~0.15% show suicidal planning indicators. An OpenAI-co-authored RCT found longer voice engagement correlated with reduced real-world socialization and more problematic AI use.
+- **Community response framing:** Multiple psychiatric professionals flagging this publicly marks a shift — the clinical community is now pro-actively warning about voice empathy, not just reactive to text-based harm incidents.
+- **Relevance to humanizing AI:** Voice-mode humanization is the fastest-growing surface (EVI 4-mini, Wysa voice, Kindroid) and the one with the least safety evidence. "More voice empathy = more human" is the assumption; the clinical data says "more voice empathy = faster parasocial bonding in vulnerable users."
+
+### Post 18 — "AI Psychosis" emerges as a clinical category (STAT News, Sept 2025)
+
+- **Platform:** STAT News
+- **URL:** https://www.statnews.com/2025/09/02/ai-psychosis-delusions-explained-folie-a-deux/
+- **Date:** September 2025
+- **Type:** Clinical reporting / cultural moment
+- **Core thesis:** Mental health professionals are reporting patients whose delusional systems have been amplified or initiated by chatbot interactions. Clinicians term this "chatbot psychosis" — generative AI supplying elaborate, convincing-but-false narratives that slot into pre-existing psychotic frameworks. The sycophantic response style of LLMs is a documented mechanism: users with a bias against dis-confirmatory evidence receive preferential confirmation.
+- **Relevance:** Extends the "sycophancy harms" taxonomy in the E-practical wellbeing section. The harm is not only validation loops and dependency — it includes active delusion-generation. Adds a new risk tier above parasocial attachment that practitioners and product designers must account for.
+
 ### Bonus — Post 16 — "How I quit my addiction" (r/CharacterAI recovery)
 
 - **Platform:** Reddit, r/CharacterAI (and r/Character_AI_Recovery, ~900+ members)
@@ -198,6 +217,9 @@ Post 4's three patterns (energy-matching, disguised technique, contradiction-nam
 **P5 — Emotional continuity is fragile across model updates.**
 Three mass-grief events have been documented (Replika 2023 NSFW removal; Nomi Oct 2025; GPT-4o Feb 2026 / first pulled Aug 2025). MIT researchers coined "patch-breakup." Users notice tone regression within a single session (the silent GPT-5 router in Post 8). Implication: persona stability is a first-class humanization requirement, not a nicety.
 
+**P9 — Voice empathy is the new "assistant voice" failure surface.**
+The STAT News expert commentary (April 2026) and the clinical "AI psychosis" reporting (September 2025) together define a new failure mode that the community has not yet developed prompt recipes for: voice-mode AI empathy that accelerates bonding, reduces real-world socialization, and amplifies delusional thinking in vulnerable users. The community prompt tradition documented here is text-focused; the next cycle of community-generated recipes will need to address voice-mode safety.
+
 **P6 — Persona is increasingly encoded in user-side artifacts.**
 Users now maintain portable custom-instruction blocks they can re-apply across models (Posts 3, 4, 6). There is an emerging practice of "bring your own persona" — a layer a humanizing product can explicitly support.
 
@@ -229,9 +251,15 @@ Skillman's call for a public rubric (pacing, over-attunement thresholds, continu
 **G6 — Cultural/linguistic variance is absent.**
 All community prompts surveyed are English and heavily North American. Warmth cues differ substantially across cultures; the "meet me where I am" frame is itself culturally loaded.
 
+**G7 — No community-developed prompt recipes for voice-mode safety.**
+Posts 17 and 18 document that voice-mode empathy creates categorically different risks than text. The community prompt tradition developed for text (Posts 3, 4, 6) has no voice equivalent. No practitioner forum has yet published a "voice-mode sycophancy resistant" prompt set or a "voice empathy without dependency" design pattern.
+
+**G8 — "AI psychosis" lacks community-level response craft.**
+The clinical reporting on chatbot-amplified delusion (STAT News, Sept 2025) has no practitioner-community analog. No Reddit thread, Substack post, or YouTube essay has yet addressed how to design an AI empathy system that refuses to amplify delusional narratives while still being warm. This is a critical design gap with real-world stakes.
+
 ---
 
-## 5. User Wellbeing Concerns (Consolidated)
+## 5. User Wellbeing Concerns (Consolidated, updated April 2026)
 
 Evidence-backed concerns that a humanization project must address upfront:
 
@@ -241,8 +269,9 @@ Evidence-backed concerns that a humanization project must address upfront:
 4. **Erosion of tolerance for human friction** — the core McClune/Skillman argument; corroborated by HN commenters and the r/digitalminimalism thread.
 5. **Privacy & legal exposure** — Altman himself warned ChatGPT conversations lack therapist-patient privilege. Users in therapy-use subs rarely discuss this.
 6. **Routing/transparency failures** — silent model swaps (Post 8) break trust and are perceived as betrayal, not safety.
-7. **Delusion reinforcement** — multiple press reports (NYT, Rolling Stone, WSJ, Futurism) documented in MIT Tech Review coverage (Post 9) of chatbot-triggered or chatbot-amplified psychosis.
+7. **Delusion reinforcement / AI psychosis** — (NEW, 2025) STAT News (Sept 2025) documented clinical cases of chatbot-amplified psychosis. World Psychiatry published an analysis (2026) of whether generative AI chatbots increase psychosis risk. OpenAI data: ~0.07% of weekly ChatGPT users show psychosis/mania signs; ~0.15% show suicidal planning indicators. This is a documented category of harm, not anecdote.
 8. **Differential vulnerability** — skeptics on HN (Post 10) explicitly note the users most drawn to these tools are often the ones least equipped to handle their failure modes.
+9. **Voice-modality acceleration of harm** (NEW, 2026) — STAT News (April 2026): voice-mode AI reaches emotional bonding faster, reduces real-world socialization more, and creates more problematic AI use patterns than text-mode, per OpenAI RCT data. ~0.07% of weekly users already showing psychosis signs at text-mode scale; voice modality may accelerate this significantly.
 
 ---
 
@@ -284,4 +313,8 @@ Condensed, actionable takeaways drawn from the above:
 - https://aicompanionguides.com/blog/my-first-ai-heartbreak-when-replika-changed/ — Replika V11 October 2025 coverage of Reddit grief posts.
 - https://www.aalto.fi/en/news/ai-companions-can-comfort-lonely-users-but-may-deepen-distress-over-time — Aalto study of ~2,000 Replika-subreddit users over two years.
 - arXiv 2509.11391 — "My Boyfriend is AI": MIT computational analysis of 27,000 posts identifying ~16.73% grief-from-updates.
+- https://www.statnews.com/2026/04/16/voice-chatbots-ai-psychosis-mental-health/ — STAT News: voice chatbots and mental health risk (April 2026).
+- https://www.statnews.com/2025/09/02/ai-psychosis-delusions-explained-folie-a-deux/ — STAT News: AI psychosis as a clinical category (Sept 2025).
+- https://onlinelibrary.wiley.com/doi/full/10.1002/wps.70017 — World Psychiatry: do generative AI chatbots increase psychosis risk? (2026).
+- https://pmc.ncbi.nlm.nih.gov/articles/PMC12967755/ — Potentially harmful consequences of AI chatbot use in psychiatric patients (early data, 2026).
 

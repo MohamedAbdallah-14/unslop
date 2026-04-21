@@ -39,15 +39,15 @@
 ### 5. ElevenLabs Conversational / ElevenAgents
 - **Category:** Voice + chat agent platform built on Eleven v3 Conversational TTS.
 - **Humanization positioning:** "Human-sounding" and "natural within context" as core claims.
-- **Naturalness mechanism:** Expressive tags (`[laughs]`, `[whispers]`, `[sighs]`); sub-300 ms voice latency; real-time emotion/speech-pattern-driven turn-taking; 70+ languages; 10,000+ studio voices.
+- **Naturalness mechanism:** Expressive tags (`[laughs]`, `[whispers]`, `[sighs]`); sub-300 ms voice latency; real-time emotion/speech-pattern-driven turn-taking; 70+ languages; 10,000+ studio voices. **Key 2025 update:** Eleven v3 model open-sourced March 2025 — only self-hostable zero-shot voice-cloning model in the category. Company valued at $3.3 billion (January 2025).
 - **Marketing quote:** *"Natural, human-sounding agents"* with *"ultra-low latency."*
 - **URL:** elevenlabs.io/voice-agents
 
-### 6. Hume EVI (Empathic Voice Interface)
+### 6. Hume EVI 3 (Empathic Voice Interface)
 - **Category:** Empathic voice-first agent API.
-- **Humanization positioning:** *"The first AI with emotional intelligence."* Frames naturalness as emotion-matching, not just prosody.
-- **Naturalness mechanism:** Empathic LLM (eLLM) blending LLM + prosody measurements; detects tune/rhythm/timbre; matches apologetic, sympathetic, calm, or excited "vibe"; ~300 ms TTFB; interruptibility; chat history carries emotion data. Octave TTS reportedly beat ElevenLabs in a 180-rater blind test on naturalness (51.7%), audio quality (71.6%), and description-match (57.7%).
-- **Marketing quote:** *"Conversational AI with emotional intelligence … natural, empathic conversations at scale."*
+- **Humanization positioning:** *"The first AI with emotional intelligence."* Frames naturalness as emotion-matching across the full session, not just per-response.
+- **Naturalness mechanism:** EVI 3 (May 2025): unified speech-language model with <300 ms TTFB; 200,000+ custom voices via 30-second voice cloning; *continuous* emotional adaptation across the entire conversation (not just per-turn). Octave TTS won a 180-rater blind test over ElevenLabs on naturalness (51.7%), audio quality (71.6%), description-match (57.7%).
+- **Marketing quote:** *"Conversational AI with emotional intelligence … natural, empathic conversations at scale."* Compared by independent reviewers: "the only solution that adapts its tone to the user's emotional state."
 - **URL:** hume.ai/empathic-voice-interface
 
 ### 7. Sesame (Maya & Miles / CSM)
@@ -129,7 +129,7 @@
 ### Converging vocabulary — and what it actually means
 Virtually every vendor now claims "human-like," "natural," or "empathetic" conversation. The real differentiation is *which* of these five dimensions a vendor owns:
 
-1. **Latency as naturalness.** Retell (~600 ms), ElevenLabs / EVI (~300 ms TTFB), Deepgram Aura-2 (<200 ms streaming), Play.ai (143 ms model), Vapi (<500 ms). Sub-second is now table stakes; sub-300 ms is the current humanlike frontier.
+1. **Latency as naturalness.** Retell (~600 ms), ElevenLabs / EVI 3 (~300 ms TTFB), Deepgram Aura-2 (<200 ms streaming), Play.ai (143 ms model), Vapi (<500 ms), NVIDIA PersonaPlex (~170 ms). Sub-second is now table stakes; sub-300 ms is the current humanlike frontier; sub-200 ms is the emerging 2026 target for flagship products.
 2. **Turn-taking and barge-in.** Retell's proprietary turn-taking model, LiveKit's semantic turn detection, ElevenLabs' emotion-aware turn-taking, Synthflow's "patience level." The field has moved past voice activity detection toward semantic end-of-utterance prediction.
 3. **Prosody and expressivity.** ElevenLabs' expressive tags, Cresta's 12 measurable vocal traits, Deepgram's context-aware pacing, Play.ai's lifelike intonation, Hume Octave's context-understanding TTS.
 4. **Emotion / empathy.** Hume EVI is the clearest standalone bet on this dimension; Sesame, Ada, Forethought all layer it on top of other claims.
@@ -147,7 +147,8 @@ Sesame is the only vendor that openly publishes a benchmark showing where they s
 ### Gaps / opportunities
 - **Text-chat naturalness is thinner than voice.** Intercom/Ada/Forethought/Kore market "empathetic" or "human-quality," but none publish a CMOS-style naturalness benchmark. The text side still optimizes almost entirely for *resolution rate*, not *humanness*.
 - **Cross-channel humanization is not unified.** Fin and Cresta are closest to a single humanization layer across voice + chat, but most vendors still have separate TTS-flavored voice naturalness and RAG-flavored text naturalness.
-- **Emotion ≠ humanness.** The market conflates the two, but Hume (emotion) and Sesame (presence/prosody) are solving different problems — a product that combines *empathic response* with *spoken-style content rewriting* is not currently offered by any single vendor.
+- **Persona drift is now empirically quantified but no vendor is fixing it.** Academic benchmarks (2025) show persona self-consistency metrics degrade >30% after 8–12 dialogue turns even with context intact, and RMTBench (80 characters, 8,000+ turns) shows widespread failures. No commercial voice agent publishes a consistency metric or mitigation. Character.AI's reduction in repetition is the closest published effort and it addressed repetition, not identity drift.
+- **Emotion ≠ humanness.** The market conflates the two, but Hume EVI 3 (emotion) and Sesame (presence/prosody) are solving different problems — a product that combines *empathic response* with *spoken-style content rewriting* is not currently offered by any single vendor.
 
 ---
 

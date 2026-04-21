@@ -9,13 +9,22 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-const { getDefaultMode, safeWriteFlag, getFlagPath } = require('./unslop-config');
+const {
+  getDefaultMode, safeWriteFlag, getFlagPath,
+  getTurnCounterPath, resetTurnCount,
+} = require('./unslop-config');
 
 const claudeDir = process.env.CLAUDE_CONFIG_DIR || path.join(os.homedir(), '.claude');
 const flagPath = getFlagPath();
+const counterPath = getTurnCounterPath();
 const settingsPath = path.join(claudeDir, 'settings.json');
 
 const mode = getDefaultMode();
+
+// Persona-drift reset: a new session always starts at turn 0. RMTBench /
+// HorizonBench report that long contexts accumulate drift; the counter is
+// only meaningful within a single session, so we zero it here.
+resetTurnCount(counterPath);
 
 if (mode === 'off') {
   try { fs.unlinkSync(flagPath); } catch (e) {}

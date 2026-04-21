@@ -207,7 +207,19 @@
 
 ---
 
-## 14. Google — "5 ways to have more natural conversations with Gemini" (Gemini Live audio updates)
+## 14. NVIDIA — "PersonaPlex: Natural Conversational AI With Any Role and Voice"
+
+- **Publisher / author:** NVIDIA ADLR Research
+- **Date:** January 15, 2026
+- **URL:** https://research.nvidia.com/labs/adlr/personaplex/
+- **Model:** PersonaPlex — 7B open model (MIT License + NVIDIA Open Model License) for full-duplex conversational AI; persona control via text-based role prompts and audio-based voice conditioning.
+- **Core contribution to "humanness":** Trained on Fisher English corpus (human-style timing, pauses, backchannel behavior) mixed with synthetic assistant/customer-service dialogues (role instructions, task coverage). Handles interruptions, backchannels, and authentic conversational rhythm with ~170 ms response time.
+- **Key quote:** PersonaPlex "breaks the trade-off between customization and naturalness" — prior full-duplex models either locked the voice or sacrificed persona control.
+- **Humanization relevance:** The first open full-duplex model that explicitly separates *voice identity* (audio conditioning) from *role identity* (text prompt), giving practitioners independent control over both axes without a stitched pipeline. The Fisher-corpus training approach is the most direct implementation of learning backchannel timing from real human conversations rather than synthetic data.
+
+---
+
+## 15. Google — "5 ways to have more natural conversations with Gemini" (Gemini Live audio updates)
 
 - **Publisher / author:** Google Keyword Blog — Angela Sun, Gemini app PM
 - **Date:** November 12, 2025
@@ -224,7 +236,7 @@
 
 ---
 
-## 15. Character.AI — "Reducing Repetition in Character Conversations" + prompt-design post
+## 16. Character.AI — "Reducing Repetition in Character Conversations" + prompt-design post
 
 - **Publisher / author:** Character.AI Blog & Research
 - **Dates:** ongoing 2024–2025
@@ -238,6 +250,29 @@
   3. **Memory decay** — visualizing how much context remains before compression, so the user can *see* when a character is "forgetting."
 - **Design stance:** personalities require "clearly defined identity, tone, behavior, and constraints" and "specific traits, speech styles, and world context" — vague "vibes" fail.
 - **Humanization relevance:** One of the few real-world data points on what it takes to make an AI feel like a *specific someone* for hours. Relevant to any humanizer that tries to maintain a consistent voice rather than "generic natural" output.
+
+---
+
+## 17. Hume AI — EVI 3 Launch and Octave TTS
+
+- **Publisher / author:** Hume AI
+- **Date:** May 2025
+- **URLs:** https://hume.ai/empathic-voice-interface; https://hume.ai/blog/octave-the-first-text-to-speech-model-that-understands-what-it-s-saying
+- **Model:** EVI 3 — unified speech-language model with ultra-low latency (<300 ms TTFB), 200,000+ custom voices via 30-second voice cloning, advanced personality mimicry; Octave TTS as the context-understanding voice backbone.
+- **Core contribution to "humanness":** EVI 3 adds *continuous emotional adaptation* — the model adjusts tone, pace, and word choice across the entire conversation based on ongoing prosodic signals, not just per-response. Octave TTS won a 180-rater blind test over ElevenLabs on naturalness (51.7%), audio quality (71.6%), and description-match (57.7%).
+- **Key quote:** "The only solution that adapts its tone to the user's emotional state" — distinguishes Hume from TTS-first competitors.
+- **Humanization relevance:** EVI 3 extends the original EVI framing of "prosody as input" to a continuous feedback loop across an entire session, the closest any commercial product has come to implementing Clark & Brennan's acceptance-phase grounding with emotional metadata.
+
+---
+
+## 18. Rasa — Spring 2026 Release (CALM v1.16)
+
+- **Publisher / author:** Rasa
+- **Date:** Spring 2026
+- **URL:** https://rasa.com/blog/behind-the-release-notes-product-updates-spring-2026
+- **Context:** Rasa 3.16 + Studio 1.16; CALM (Conversational AI with Language Models) now the primary Rasa framework.
+- **Core contribution to "humanness":** CALM ships *Rasa Tools for IDE copilots*, built-in CSAT, faster ReAct voice agents, and support for GPT-5.1 and Claude Sonnet 4.5 as underlying LLMs. The CALM framework separates language (LLM reasoning) from logic (deterministic flows), positioning it as "enterprise-safe" LLM dialogue rather than pure generation — a deliberate architectural dissent from the end-to-end audio wave.
+- **Humanization relevance:** Rasa CALM's 2026 position is the enterprise counterpart to Moshi/PersonaPlex: it trades raw naturalness for controllability and auditability. The distinction matters for practitioners who cannot deploy unconstrained full-duplex models for regulated industries.
 
 ---
 
@@ -277,7 +312,7 @@
 - **2020–2022:** Text-only, evaluation-first era. Metrics (SSA → SSI) were the unit of progress.
 - **2022–2023:** Skills blending and persona era. BlenderBot 3, Character.AI, Inflection Pi all ship personality + memory + retrieval.
 - **2024:** Voice unification era. GPT-4o, Hume EVI, and Kyutai Moshi collapse the pipeline.
-- **2025–2026:** Instructable-expressivity and production voice era. gpt-realtime ("speak empathetically in a French accent"), Sesame CSM, ElevenLabs Expressive Mode, Gemini Live. Character, memory, prosody, and turn-taking are now controllable product surfaces.
+- **2025–2026:** Instructable-expressivity and production voice era. `gpt-realtime` ("speak empathetically in a French accent"), Sesame CSM, ElevenLabs Expressive Mode, Gemini 2.5 Flash Native Audio, Hume EVI 3, and NVIDIA PersonaPlex. Character, memory, prosody, and turn-taking are now controllable product surfaces. Full-duplex as default architecture, not experiment: PersonaPlex (Jan 2026), DuplexCascade (Mar 2026), and ongoing Moshi updates (Dec 2025) mark the mature phase. Rasa CALM represents the deliberate counter-trend: structured LLM dialogue for enterprises where unconstrained naturalness is a liability.
 
 ## Gaps worth noting
 
@@ -285,8 +320,8 @@
   Almost every post is about *output* humanness (tone, prosody, specificity, warmth). The internal *reasoning* humanness (hesitation, self-correction, uncertainty hedging, non-monotonic thought) is only implicitly handled — Moshi's "Inner Monologue" and Anthropic's character training are the closest analogs. This is a real white space for the Unslop project.
 - **No public, agreed-on metric for "character consistency" over long sessions.**
   LaMDA gave us SSI for single turns. Nothing equivalent exists publicly for persona drift, memory-grounded continuity, or relationship stance across weeks of use — yet every product from Pi to Character.AI to Claude implicitly relies on it.
-- **Sycophancy is named, not solved.**
-  Anthropic calls out pandering; nobody publishes a measurement of it. Industry posts generally optimize engagement metrics (retention, session length) that *reward* sycophancy, creating a quiet misalignment between what's published as "humanlike" and what is healthily humanlike.
+- **Sycophancy is now being measured, but not fixed.**
+  Anthropic called it out; 2025–2026 academic work has caught up. SycEval (AAAI 2025) reports 58% sycophancy rates across tested models, with Gemini highest at 62%. TRUTH DECAY (2025) benchmarks multi-turn sycophancy specifically. BrokenMath (Oct 2025) finds 29% sycophancy even in GPT-5. Industry posts still generally optimize engagement metrics (retention, session length) that *reward* sycophancy — the measurement gap is closing while the product-incentive gap remains wide open.
 - **Multilingual humanness lags English prosody.**
   ElevenLabs, Gemini Live, and gpt-realtime all advertise 70–90+ language support, but every candid passage (Sesame's CMOS, Moshi's English-first corpus, ElevenLabs' "nuance previously lagged" admission for Hindi) concedes the humanness bar drops sharply outside English.
 - **No shared vocabulary for "good character."**

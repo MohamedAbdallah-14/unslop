@@ -34,7 +34,7 @@ The center of gravity has moved decisively from (1)–(3) toward (4)–(5) since
 ### 2. `salesforce/GeDi` — Generative Discriminator Guided Generation
 
 - **URL:** https://github.com/salesforce/GeDi
-- **Stars / activity:** Archived June 2025, Python, includes GPT-3 API support.
+- **Stars / activity:** **Archived June 2025** (no longer actively maintained), Python, includes GPT-3 API support.
 - **Approach:** Small class-conditional LMs compute per-token Bayes-rule reweighting of a larger LM's logits. Reports ~30× faster than PPLM with better diversity.
 - **Humanizer relevance:** Same attribute-control goal as PPLM but practical at interactive latency. Natural fit for a "humanness" discriminator scoring candidate tokens against an AI-detector signal.
 
@@ -48,7 +48,7 @@ The center of gravity has moved decisively from (1)–(3) toward (4)–(5) since
 ### 4. `salesforce/ctrl` — Conditional Transformer Language Model
 
 - **URL:** https://github.com/salesforce/ctrl
-- **Stars / activity:** ~1.88k stars, archived May 2025, BSD-3-Clause.
+- **Stars / activity:** ~1.88k stars, **archived May 2025** (no longer maintained), BSD-3-Clause.
 - **Approach:** 1.63B-param LM pretrained on 50+ control codes derived from URL/domain structure (Wikipedia, Reddit subreddits, etc.). Controls style/genre/entities/dates via prepended tokens.
 - **Humanizer relevance:** Historical — control-code-in-prompt is the intellectual ancestor of every "act as X" system-prompt pattern. Not worth running today, but the code-taxonomy is instructive when designing a style ontology.
 
@@ -143,7 +143,7 @@ The center of gravity has moved decisively from (1)–(3) toward (4)–(5) since
 ### 18. `shandley/claude-style-guide` — Anti-LLM-ism Styleguide Generator
 
 - **URL:** https://github.com/shandley/claude-style-guide
-- **README quote:** "Pipeline to analyze Claude Opus 4.5 writing patterns and generate a styleguide for avoiding LLM-isms."
+- **README quote:** "Pipeline to analyze Claude writing patterns and generate a styleguide for avoiding LLM-isms."
 - **Approach:** Analyze documents → detect AI patterns via a `prose-check` command → emit an actionable styleguide listing words/phrases to avoid with human alternatives.
 - **Humanizer relevance:** Directly on-target — same product thesis as Humanizer, smaller scope. Worth studying the taxonomy of "LLM-isms" they enumerate.
 
@@ -180,6 +180,33 @@ The center of gravity has moved decisively from (1)–(3) toward (4)–(5) since
 - **Contents:** Supervised/unsupervised split, with code links for the foundational works (Hu et al. ICML'17, Shen et al. NIPS'17, Li et al. NAACL'18, Prabhumoye et al. ACL'18).
 - **Humanizer relevance:** Secondary index, broader than the survey list but less curated.
 
+### 24. `jaaack-wang/llms-implicit-writing-styles-imitation` — EMNLP 2025 Evaluation Framework *(new)*
+
+- **URL:** https://github.com/jaaack-wang/llms-implicit-writing-styles-imitation
+- **Stars / activity:** Active 2025, companion to EMNLP 2025 Findings paper.
+- **Approach:** Evaluation harness for measuring implicit-style imitation across six frontier LLMs (GPT-4o, Gemini-2.0-Flash, DeepSeek-V3, Llama-4-Maverick, etc.) using four complementary metrics: authorship attribution, authorship verification, style matching, and AI detection.
+- **Humanizer relevance:** First openly released, multi-metric evaluation harness specifically for personal-style imitation from few-shot samples. Directly fills the "no unified eval harness" gap identified in prior versions of this document — though still focused on imitation evaluation, not humanizer quality.
+
+### 25. `llm-authorship/survey` — Authorship Attribution in the LLM Era Survey *(new)*
+
+- **URL:** https://github.com/llm-authorship/survey
+- **Stars / activity:** Living paper list, actively maintained 2025.
+- **Contents:** Companion to the SIGKDD 2025 survey "Authorship Attribution in the Era of LLMs." Organizes papers across four problems: human-text attribution, LLM-detection, LLM attribution, and co-authored classification. Full resource listing at `https://llm-authorship.github.io/`.
+- **Humanizer relevance:** The authoritative index for evaluation oracles. Use to find verifiers appropriate for measuring voice-transfer quality.
+
+### 26. `TamSiuhin/P2P` — Profile-to-PEFT Hypernetwork *(new)*
+
+- **URL:** https://github.com/TamSiuhin/P2P
+- **Stars / activity:** Active 2025, companion to arXiv 2510.16282.
+- **Approach:** Hypernetwork that maps encoded user profiles directly to LoRA adapter weights at 0.57s per user (vs. 20.44s for standard LoRA training). Enables cold-start personalized style without per-user training.
+- **Humanizer relevance:** The most practically relevant new repo for voice cloning at scale. If the hypernetwork approach matures, it eliminates the per-user fine-tuning bottleneck that makes current voice-LoRA tooling unscalable.
+
+### 27. `VanillaCreamer/Awesome-Personalized-LLMs` — Personalized LLM Survey List *(new)*
+
+- **URL:** https://github.com/VanillaCreamer/Awesome-Personalized-LLMs
+- **Contents:** Curated list of personalized LLM papers updated through 2025–2026. Covers style personalization, preference optimization, and memory-augmented personalization.
+- **Humanizer relevance:** Current living index for the personalization–style intersection. Broader than style-transfer-specific lists.
+
 ---
 
 ## Patterns
@@ -194,17 +221,21 @@ The center of gravity has moved decisively from (1)–(3) toward (4)–(5) since
 
 - **Small models are winning narrow tasks.** TinyStyler (~800M) beating GPT-4 on authorship transfer is the canonical data point. For humanization specifically, a specialized 1–3B model + user-LoRA likely beats frontier general-purpose models.
 - **Authorship embeddings over style labels.** Moving from "formal↔casual" to "this 300-token embedding describes your voice" is the clearest post-2024 trend (TinyStyler, StyIns lineage).
-- **Stylometry is coming back.** Classical Writeprints-style features are being rediscovered as (a) interpretability signal, (b) training reward, and (c) evaluation metric — because LLM-based similarity scores are polluted by the same LLM-isms you're trying to remove.
+- **Stylometry is coming back.** Classical Writeprints-style features are being rediscovered as (a) interpretability signal, (b) training reward, and (c) evaluation metric — because LLM-based similarity scores are polluted by the same LLM-isms you're trying to remove. EMNLP 2025 "Catch Me If You Can" and the Biber-based interpretable-variation paper (2026) reinforce this.
 - **On-device fine-tuning is crossing the viability line.** DidierRLopes's MLX Phi-3 LoRA and the general tsmatz/LoRA-from-scratch work suggest laptop-grade personal-voice models are real by late-2025.
+- **Hypernetwork synthesis of adapters is an emerging alternative to per-user LoRA.** Profile-to-PEFT (TamSiuhin/P2P) generates personalized LoRA weights from a profile in under a second. If this generalizes to style profiles, it removes the per-user training bottleneck.
+- **GeDi and CTRL are now officially archived (2025).** These were the canonical decoding-time steering repos. Their archiving reflects the field's shift to LLM-era methods, but their *techniques* are still live in STEER, Style Vectors, and activation-steering work.
+- **Multi-metric evaluation is arriving.** The `jaaack-wang/llms-implicit-writing-styles-imitation` repo (EMNLP 2025) is the first openly released harness that evaluates personal-style imitation across four complementary metrics. The "no eval harness" gap is narrowing.
 
 ## Gaps
 
 - **No open-source "humanizer" with a published detector-evasion benchmark.** Lots of commercial tools claim GPTZero/Originality evasion; almost zero open repos publish scores against any detector. Open here.
 - **No public authorship-embedding model on permissive license.** TinyStyler's embeddings are tied to its paper; no drop-in, pip-installable equivalent of sentence-transformers for authorship exists.
-- **No unified eval harness.** Style transfer still uses per-paper Yelp/GYAFC splits with BLEU + style-classifier accuracy; voice-clone repos don't evaluate at all. Nothing like HumanEval exists for "does this sound like the user."
-- **Sparse LoRA-registry tooling.** Lots of "how I fine-tuned on my blog" one-offs, no infrastructure for managing N-users × M-tasks LoRAs, hot-swapping, or merging.
+- **Eval harness gap is partially closed but still incomplete.** The EMNLP 2025 "Catch Me If You Can" harness evaluates style imitation from few samples, but it tests LLM-based imitation not humanizer pipeline quality. Nothing like HumanEval exists for "does this end-to-end humanizer pipeline produce output that sounds like the target user."
+- **Sparse LoRA-registry tooling.** Lots of "how I fine-tuned on my blog" one-offs, no infrastructure for managing N-users × M-tasks LoRAs, hot-swapping, or merging. P2P/hypernetwork approaches (2025) are the most credible attack on this, but OSS tooling has not yet followed the papers.
 - **Weak support for ongoing drift.** All voice-clone projects assume "fit once"; none handle "my style changed, update the model" as a first-class operation.
-- **The legacy stylometry tools are unmaintained.** JStylo/Anonymouth are Java-from-2013. A modern Python rewrite of the feature extractors, ideally with HuggingFace-style APIs, is an open niche.
+- **The legacy stylometry tools are unmaintained.** JStylo/Anonymouth are Java-from-2013. A modern Python rewrite of the feature extractors, ideally with HuggingFace-style APIs, is an open niche. Neurobiber (2025) fills part of the feature-extraction gap but not the authorship-classification or anonymization workflow.
+- **Long-text voice consistency is unimplemented.** ZeroStylus (2025) is the first paper-with-code attacking document-level style, but no OSS library implements document-level voice consistency as a first-class feature.
 
 ## Sources
 
@@ -232,3 +263,7 @@ The center of gravity has moved decisively from (1)–(3) toward (4)–(5) since
 - https://github.com/zhijing-jin/Text_Style_Transfer_Survey — Survey reading list (2022)
 - https://github.com/yd1996/awesome-text-style-transfer — Awesome list
 - https://direct.mit.edu/coli/article/48/1/155/108845/Deep-Learning-for-Text-Style-Transfer-A-Survey — MIT CL survey for lineage context
+- **[NEW]** https://github.com/jaaack-wang/llms-implicit-writing-styles-imitation — EMNLP 2025 style-imitation eval harness
+- **[NEW]** https://github.com/llm-authorship/survey — SIGKDD 2025 authorship attribution survey paper list
+- **[NEW]** https://github.com/TamSiuhin/P2P — Profile-to-PEFT hypernetwork (arXiv 2510.16282)
+- **[NEW]** https://github.com/VanillaCreamer/Awesome-Personalized-LLMs — Personalized LLM living index

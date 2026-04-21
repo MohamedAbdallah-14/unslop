@@ -6,5 +6,15 @@ The single source of truth for the package version is this `__version__`.
 `pyproject.toml` reads it via `dynamic = ["version"]` + `tool.setuptools.dynamic`.
 """
 
-__all__ = ["cli", "humanize", "detect", "validate"]
-__version__ = "0.4.2"
+__all__ = [
+    "cli",
+    "humanize",
+    "detect",
+    "validate",
+    "structural",
+    "soul",
+    "stylometry",
+    "style_memory",
+    "detector",
+]
+__version__ = "0.5.1"

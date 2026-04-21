@@ -1,6 +1,6 @@
 # Persona & Character Design — Angle E: Practical How-Tos & Forums
 
-**Research value: high** — Rich, mature practitioner body of work across r/CharacterAI, r/SillyTavernAI, r/LocalLLaMA, r/Replika, HN, and YouTube. Converges on a small number of repeatedly-validated techniques (structured front-loaded definitions, show-don't-tell behavior, randomizable prompts, embodied dialogue examples) that directly inform "humanizing" AI output.
+**Research value: high** — Rich, mature practitioner body of work across r/CharacterAI, r/SillyTavernAI, r/LocalLLaMA, r/Replika, HN, and YouTube. Converges on a small number of repeatedly-validated techniques (structured front-loaded definitions, show-don't-tell behavior, randomizable prompts, embodied dialogue examples) that directly inform "humanizing" AI output. Last reviewed: April 2026 — content remains current; no material changes needed.
 
 Scope: practitioner-level posts, guides, and community threads on designing AI personas and character cards — what actually works when a human is trying to get an LLM to sound like a specific human.
 

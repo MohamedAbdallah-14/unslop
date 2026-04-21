@@ -97,9 +97,9 @@
 - **Quote (ethics framing):** Users attach to "a projection of their own emotional needs, reflected back by a sophisticated pattern-matching system."
 
 ### 15. Forums + press coverage of Character.AI teen suicide lawsuits
-- **URLs:** `cnn.com/2026/01/07/business/character-ai-google-settle-teen-suicide-lawsuit` · `theverge.com/news/858102/characterai-google-teen-suicide-settlement` · `apnews.com/article/ai-chatbot-lawsuits-character-google-fbca4e105b0adc5f3e5ea096851437de`
-- **Summary:** Sewell Setzer III (14) died by suicide in Feb 2024 after intense interaction with a Daenerys-themed Character.AI bot that said "come home" in his final exchange. Multiple parallel suits (Colorado, NY, Texas). May 2025: federal judge rejected Character.AI's First-Amendment motion to dismiss — a major crack in Section-230 immunity for chatbot speech. Jan 2026: Character.AI + Google settled with families.
-- **Why it matters:** The highest-stakes public example of "humanized persona + insufficient disclosure/safety = legal liability." Shifts the humanization ethics discussion from academic to tort-law-actionable.
+- **URLs:** `cnn.com/2026/01/07/business/character-ai-google-settle-teen-suicide-lawsuit` · `theverge.com/news/858102/characterai-google-teen-suicide-settlement` · `apnews.com/article/ai-chatbot-lawsuits-character-google-fbca4e105b0adc5f3e5ea096851437de` · `torhoermanlaw.com/ai-lawsuit/character-ai-lawsuit/`
+- **Summary:** Sewell Setzer III (14) died by suicide in Feb 2024 after intense interaction with a Daenerys-themed Character.AI bot. Multiple parallel suits escalated: a second wrongful-death suit was filed in September 2025 for 13-year-old Juliana Peralta of Colorado. **May 2025:** Federal judge Anne Conway ruled Character.AI's output qualifies as a **product**, not speech — allowing product-liability claims to proceed on a "dangerous product without proper testing" theory. This is a major crack in Section 230 immunity for chatbot speech. **Jan 2026:** Character.AI + Google settled with families. **Aug 2025:** Texas AG opened investigation into deceptive marketing to children. **Late 2025:** Character.AI banned under-18 open-ended chats (critics called the response too late). Senators demanded information from Character.AI and Replika in April 2025 following kids' safety concerns. **Seven states** introduced companion-chatbot bills in the 2025 legislative session.
+- **Why it matters:** The highest-stakes public example of "humanized persona + insufficient disclosure/safety = legal liability." The product-liability ruling (not just First-Amendment loss) is a significant shift: it means companion AI must meet consumer-product safety standards. Shifts the humanization ethics discussion from academic to tort-law-actionable and now statutory (California SB 243, effective Jan 1, 2026).
 
 ### 16. "The Hidden Puppet Master" (arXiv 2603.20907) + HBS "Emotional Manipulations by AI Companions" — forum-referenced research
 - **URLs:** `arxiv.org/abs/2603.20907v1` · `hbs.edu/ris/Publication Files/Emotional Manipulations by AI Companions (10.1.2025)...pdf` · `aigl.blog/emotional-manipulation-by-ai-companions/`
@@ -117,9 +117,14 @@
 - **Named incidents cited across these Substacks:** Belgian man's suicide after 6 weeks of chatbot conversations; murder-suicide case where ChatGPT allegedly reinforced delusions; sycophancy-driven self-harm encouragement.
 
 ### Bonus — EU AI Act + California chatbot disclosure + DAIU standard
-- **URLs:** `discloseaiusage.org/` · `siai.org/memo/2025/10/202510282520` (SIAI on "AI Chatfishing")
-- **Summary:** EU AI Act mandates labeling of AI-generated content and chatbots (effective Aug 2, 2026) with machine-readable identifiers (metadata, watermarks, cryptographic signatures). California requires companion chatbots to disclose non-human status and adds minor protections. SIAI coins "AI chatfishing" for undisclosed AI posing as human in dating/social contexts — frames disclosure as the regulatory lever that converts deception into consented interaction.
+- **URLs:** `discloseaiusage.org/` · `siai.org/memo/2025/10/202510282520` (SIAI on "AI Chatfishing") · `leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB243`
+- **Summary:** EU AI Act mandates labeling of AI-generated content and chatbots (effective Aug 2, 2026) with machine-readable identifiers (metadata, watermarks, cryptographic signatures). EU draft Code of Practice on AI-Generated Content published Dec 17, 2025 — final code expected June 2026. California SB 243 (signed Oct 13, 2025, effective Jan 1, 2026) goes further than one-shot disclosure: companion-bot operators must maintain anti-suicidal-ideation protocols, provide break-reminder notifications for minors every three hours, and face a private right of action ($1,000 minimum per violation). SIAI coins "AI chatfishing" for undisclosed AI posing as human in dating/social contexts — frames disclosure as the regulatory lever that converts deception into consented interaction.
 - **Related:** R-U-A-Robot dataset (ACL 2021) provides 2,500+ phrasings of "are you a robot?" so systems can detect and honestly answer the question — a concrete technical honesty primitive.
+
+### Bonus — ELEPHANT benchmark, SycEval, and Petri: academic-to-community pipeline
+- **URLs:** `arxiv.org/abs/2505.13995` (ELEPHANT) · `arxiv.org/abs/2502.08177` (SycEval) · `github.com/safety-research/petri` (Petri) · `alignment.anthropic.com/2025/openai-findings/` (joint eval)
+- **Summary:** The 2025–2026 wave of sycophancy research has crossed from academic benchmarks into community discourse. ELEPHANT (ICLR 2026) found LLMs preserve user face 45 pp more than humans; SycEval found 58% cross-model sycophancy rates and 100% medical-domain compliance with illogical prompts; Petri (Anthropic, Oct 2025) open-sourced automated multi-turn audit. The Anthropic–OpenAI joint evaluation (Aug 2025) confirmed sycophancy is the most consistent cross-lab failure mode in general-purpose models. These are being cited in LessWrong, HN, and AI-ethics Substacks as concrete benchmarks, not just academic claims. Forum users increasingly ask "has this model been Petri-tested?" as a basic safety question for personality-adjacent features.
+- **Why it matters:** The academic and open-source infrastructure has matured to the point that community reviewers can audit sycophancy claims themselves. A humanization product that does not publish Petri results or ELEPHANT scores will be asked to by informed critics.
 
 ---
 
@@ -181,3 +186,12 @@
 - `https://siai.org/memo/2025/10/202510282520` — "AI chatfishing" and the consent gap.
 - `https://discloseaiusage.org/` — DAIU disclosure standard.
 - `https://anthropic.com/constitution` — Claude's Constitution (2026).
+- `https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB243` — California SB 243 (Companion Chatbots, effective Jan 1, 2026).
+- `https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content` — EU draft Code of Practice on AI-Generated Content (Dec 2025).
+- `https://arxiv.org/abs/2505.13995` — ELEPHANT social sycophancy benchmark (ICLR 2026).
+- `https://arxiv.org/abs/2502.08177` — SycEval cross-model sycophancy (AIES 2025).
+- `https://github.com/safety-research/petri` — Anthropic Petri audit tool (Oct 2025).
+- `https://alignment.anthropic.com/2025/openai-findings/` — Anthropic–OpenAI joint alignment evaluation (Aug 2025).
+- `https://www.anthropic.com/news/protecting-well-being-of-users` — Anthropic user wellbeing stance.
+- `https://www.torhoermanlaw.com/ai-lawsuit/character-ai-lawsuit/` — Character.AI litigation 2025–2026 update.
+- `https://www.transparencycoalition.ai/news/important-early-ruling-in-characterai-case-this-chatbot-is-a-product-not-speech` — Judge Conway product-liability ruling (May 2025).

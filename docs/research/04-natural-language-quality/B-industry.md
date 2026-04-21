@@ -183,6 +183,32 @@
 - **Key takeaway:** Voice is now a documented product surface, not a tacit consequence of RLHF. For humanization work this is consequential: the target voice is literally spec'd, and you can read what OpenAI considers a "warm but not sycophantic" response should do.
 - **2-sentence summary:** The first public, versioned, CC0-licensed specification of how a frontier model should write. Closes the loop with "Sycophancy in GPT-4o" by encoding the lessons as a principle the model is now trained against.
 
+### 1.17 Anthropic Custom Styles — Personalized Response Modes
+- **URL:** https://aiintransit.medium.com/customizing-claudes-response-style-a-new-feature-by-anthropic-d341da146c25
+- **Author/Org:** Anthropic (product feature, 2025)
+- **Year:** 2025
+- **Core claim:** Anthropic shipped "Custom Styles" to Claude.ai users: pre-built style presets (Normal, Concise, Explanatory, Formal) and user-defined styles that let Claude adapt tone, structure, and length across conversations. This is Claude's equivalent of GPT-5.1's tone slider — humanization as a first-class product surface, not a prompt hack.
+- **Techniques/themes:** Style profiles persisting across sessions; user-defined custom instructions; preset tone modes; character disposition training (builds on Claude's Character essay).
+- **Key takeaway:** The gap between "ambient" Claude and "humanized" Claude is narrowing from the frontier model side. By 2026, custom styles in both Claude and GPT are table stakes — humanization tools now compete with built-in model affordances.
+- **2-sentence summary:** Anthropic's Custom Styles feature makes tone adaptation a first-class UI affordance in Claude.ai, reducing the marginal value of external humanization prompts for casual users. It confirms the "character training upstream" trend identified in Claude's Character (2024) is reaching product.
+
+### 1.18 "NLG Evaluation 2025 vs. 2015: Much Improved But Needs to Be Better"
+- **URL:** https://ehudreiter.com/2025/02/04/nlg-evaluation-2025-vs-2015/
+- **Author/Org:** Ehud Reiter (NLG researcher, Aberdeen)
+- **Year:** Feb 2025
+- **Core claim:** In 2015 essentially all NLG evaluation used BLEU/ROUGE. By 2025, LLM-as-judge has become standard for automatic evaluation and annotation-based human evaluation has improved. But reproducibility is still poor and domain-specific challenges (medical, legal) remain unsolved.
+- **Key takeaway for humanization:** "Best automatic evaluation in 2025 uses LLMs (LLM-as-judge), and when done carefully — with consideration of limitations, biases, and data contamination — it often has predictive power about real-world utility." This is the practitioner endorsement of LLM-judge with caveats.
+- **2-sentence summary:** An experienced NLG practitioner's review of evaluation progress over 10 years. Relevant because it confirms industry consensus that BLEU/ROUGE are deprecated and LLM-judge is the new normal — but emphasizes that "done carefully" is load-bearing.
+
+### 1.19 EU AI Act Article 50 Draft Code of Practice (Dec 2025)
+- **URL:** https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content
+- **Author/Org:** European Commission
+- **Year:** Dec 2025 (first draft; obligations effective August 2026)
+- **Core claim:** GPAI providers must mark all AI-generated text via a multilayered approach (metadata + watermark + fingerprinting). Deployers must label deepfakes and public-interest AI text. Providers must also offer user-facing detectors via API or UI. Explicitly prohibits ToS-level removal of watermarks.
+- **Key takeaway for humanization:** Adversarial humanization (bypass tools, paraphrase rewriters) is now explicitly in regulatory scope. Any product that strips or degrades AI watermarks for evasion purposes is non-compliant with EU law from August 2026. This changes the market landscape for detection-bypass tools (Undetectable.ai, HIX Bypass, etc.) operating in the EU.
+- **2-sentence summary:** The first binding regulatory framework for AI text marking, arriving August 2026. Makes the watermark vs. humanization trade-off a compliance question rather than purely a research one.
+- **Quote:** "No single marking technique is currently sufficient; a multilayered approach is required."
+
 ---
 
 ## 2. Cross-Post Patterns, Trends, and Gaps
@@ -202,6 +228,9 @@
 - **Model-spec-level anti-sycophancy:** OpenAI's `avoid_sycophancy` principle (and Anthropic's rejection of pandering in Claude's Character) signal a shift: frontier labs now treat excessive agreeableness as a published anti-goal, not a neutral feature.
 - **Character training moving upstream:** Anthropic's Constitutional-AI character variant shows persona is being baked into post-training, not patched in via system prompt — which raises the bar for what downstream humanizers can plausibly alter.
 - **Reasoning-model voice is an open frontier:** Raschka's 2025 taxonomy makes clear that o1/R1-style models introduce a new artifact — reasoning traces — whose humanization properties are under-explored industry-wide.
+- **Tone as built-in product surface has landed.** GPT-5.1 tone presets and Anthropic Custom Styles (2025) mean frontier models now ship humanization as a first-class feature. External humanizers compete with native affordances, not just raw models.
+- **EU AI Act watermarking requirements arrive August 2026.** Article 50 creates the first regulatory floor for AI text marking. Detection-bypass products operating in the EU need legal review. Watermark vs. humanization is no longer purely academic.
+- **LLM-judge biases are quantified and public.** The CALM framework and Gao et al. (Computational Linguistics, 2025) establish a reproducible bias budget: ~40% position inconsistency, ~15% verbosity inflation. Any industry evaluation claim based on LLM-judge without bias disclosure is now contestable.
 
 ### 2.3 Gaps in the public industry discourse
 
@@ -242,6 +271,9 @@
 | 14 | Slop Evader: Why AI Text Fails | AI Fire | 2025 | https://www.aifire.co/p/slop-evader-why-ai-text-fails-how-to-reclaim-your-voice |
 | 15 | Understanding Reasoning LLMs | Sebastian Raschka | 2025 | https://sebastianraschka.com/blog/2025/understanding-reasoning-llms.html |
 | 16 | Model Spec (2025/10/27) | OpenAI | 2025 | https://model-spec.openai.com/2025-10-27 |
+| 17 | Anthropic Custom Styles | Anthropic | 2025 | https://aiintransit.medium.com/customizing-claudes-response-style-a-new-feature-by-anthropic-d341da146c25 |
+| 18 | NLG Evaluation 2025 vs 2015 | Ehud Reiter | Feb 2025 | https://ehudreiter.com/2025/02/04/nlg-evaluation-2025-vs-2015/ |
+| 19 | EU AI Act Article 50 Draft Code of Practice | European Commission | Dec 2025 | https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content |
 
 ---
 

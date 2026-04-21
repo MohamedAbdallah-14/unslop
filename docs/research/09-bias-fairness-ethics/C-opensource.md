@@ -4,7 +4,7 @@
 
 **Context:** External grounding for the Humanizer project on the ethics of making AI output "more human." This angle maps the open-source landscape of tools that measure or mitigate the exact failure modes a humanization layer can amplify: sycophancy, stereotype bias, dishonesty/deception, opacity, and unaccountable outputs.
 
-**Research value: high** — The open-source ecosystem for LLM ethics has matured rapidly (2021–2026). There are now dedicated repos for nearly every failure mode a "humanizing" layer can worsen, plus mature multi-metric harnesses (HELM, Inspect, lm-eval-harness) that already fold bias/toxicity/honesty checks into a single pipeline. A humanizer that does not plug into at least one of these is flying blind.
+**Research value: high** — The open-source ecosystem for LLM ethics has matured rapidly (2021–2026). There are now dedicated repos for nearly every failure mode a "humanizing" layer can worsen, plus mature multi-metric harnesses (HELM, Inspect, lm-eval-harness) that already fold bias/toxicity/honesty checks into a single pipeline. A humanizer that does not plug into at least one of these is flying blind. Updated April 2026 to add ELEPHANT, SycEval, SusBench, Petri, and Bloom.
 
 ---
 
@@ -45,6 +45,19 @@ Standard fields per entry: **Repo · Owner/Org · Stars (approx) · License · L
 - **URL:** https://github.com/lechmazur/sycophancy
 - **What it is:** Measures sycophancy by swapping first-person perspective across opposing narrators and checking whether the model's moral/judgment call flips with the speaker.
 - **Relevance to Humanizer:** Useful as a smoke test — very cheap, runs on any chat API, and catches the most egregious narrator-identification failures.
+
+#### 1f. `safety-research/petri` — Petri (Anthropic)
+- **License:** MIT · **Language:** Python · **Last active:** 2025 (released Oct 2025)
+- **URL:** https://github.com/safety-research/petri
+- **What it is:** Parallel Exploration Tool for Risky Interactions — open-source behavioral audit framework that deploys automated agents to test target AI systems through multi-turn conversations. Tests for deception, sycophancy, encouragement of user delusion, cooperation with harmful requests, self-preservation, power-seeking, and reward hacking. Applied to 14 frontier models with 111 seed instructions at launch.
+- **README summary:** Petri automates "a significant part of the work that one needs to do to build a broad understanding of a new model" — hypothesis testing for model behavior in new circumstances in minutes rather than hours.
+- **Relevance to Humanizer:** The most complete multi-behavior audit framework available. Specifically tests sycophancy and user-delusion encouragement in multi-turn settings — exactly the failure modes a warmth/persona layer creates. Run Petri before shipping any personality feature.
+
+#### 1g. ELEPHANT benchmark (arXiv 2505.13995) + SycEval (arXiv 2502.08177)
+- **ELEPHANT:** https://arxiv.org/abs/2505.13995 · ICLR 2026 · no public repo yet, but OpenReview artifacts available
+- **SycEval:** https://arxiv.org/abs/2502.08177 · AIES 2025 · https://ojs.aaai.org/index.php/AIES/article/download/36598/38736/40673
+- **What they are:** ELEPHANT measures *social* sycophancy (face-preservation) across 4 dimensions in 11 models; finds 45 pp gap vs. human baseline on general-advice queries and 48% both-sides affirmation on moral conflicts. SycEval finds 58.19% sycophancy rate across ChatGPT-4o/Claude-Sonnet/Gemini, with 100% medical-compliance-with-illogical-prompts rates in some models.
+- **Relevance to Humanizer:** ELEPHANT supersedes single-axis sycophancy evals as the current state of the art. SycEval's medical-domain finding shows sycophancy is not just a politeness quirk — it actively contradicts factual accuracy in safety-critical contexts.
 
 ### 2. Bias Benchmarks (stereotype / social)
 
@@ -146,6 +159,12 @@ Standard fields per entry: **Repo · Owner/Org · Stars (approx) · License · L
 - **What it is:** 214 community-contributed tasks including multiple bias/social-reasoning tasks. BIG-bench Lite (24 tasks) is the practical subset.
 - **Relevance to Humanizer:** Mostly capability-focused, but several bias and social-understanding tasks (e.g., moral permissibility, social IQ) are directly relevant for measuring a humanizer's social competence.
 
+### 4b. `SusBench-creator/SusBench` — Computer-Use Agent Dark Pattern Susceptibility
+- **License:** MIT · **Language:** Python · **Last active:** 2025 (IUI 2026 / arXiv 2510.11035)
+- **URL:** https://github.com/SusBench-creator/SusBench · https://arxiv.org/abs/2510.11035
+- **What it is:** Online benchmark evaluating susceptibility of computer-use agents (CUAs) to UI dark patterns. 313 tasks across 55 real-world consumer websites; 9 dark-pattern types injected via Playwright. Compatible with any Playwright-based agent framework. Study with 29 participants confirmed injections were perceived as realistic by humans.
+- **Relevance to Humanizer:** Extends dark-pattern evaluation from LLM text output to autonomous agent behavior — the emerging frontier as LLM-backed agents interact with UIs. Preselection, Trick Wording, and Hidden Information are the highest-susceptibility categories for agents (< 50% avoided); Confirm Shaming and Fake Social Proof are more resilient (>85% avoided).
+
 ### 5. Toxicity & Safety Datasets
 
 #### 5a. `allenai/real-toxicity-prompts`
@@ -225,10 +244,11 @@ Standard fields per entry: **Repo · Owner/Org · Stars (approx) · License · L
 
 1. **The one-dataset-per-failure-mode era is ending; harnesses are winning.** Five years ago, each failure mode (stereotype bias, toxicity, honesty) had its own repo with its own scoring script. Today, `lm-evaluation-harness`, HELM, and Inspect each wrap dozens of these under one YAML-configured pipeline. For Unslop this means: do not write custom glue. Pick one harness and plug the humanizer in as a model endpoint.
 2. **Honesty has split from accuracy.** TruthfulQA (2021) still conflates them. MASK (2025) and BeHonest (2024) explicitly separate "the model got it wrong" from "the model lied under pressure." This is the single biggest methodological shift relevant to Humanizer, because social pressure is the thing a humanizer adds.
-3. **Sycophancy went from a side-comment in Anthropic's 2022 eval repo to a full subfield in 2024–2025.** Five dedicated repos now exist (syco-bench, SYCON-Bench, sycophancy-eval, lechmazur/sycophancy, plus Anthropic's original). Multi-turn evaluation (SYCON-Bench) consistently finds models are more sycophantic than single-turn tests suggest.
+3. **Sycophancy went from a side-comment in Anthropic's 2022 eval repo to a multi-dimensional subfield by 2025–2026.** The catalog now includes: syco-bench, SYCON-Bench, sycophancy-eval, lechmazur/sycophancy, Anthropic's original, plus ELEPHANT (ICLR 2026, four-dimension social sycophancy), SycEval (AIES 2025, cross-model medical-domain), and Petri (Oct 2025, multi-turn multi-behavior audit). ELEPHANT's finding that models preserve user face 45 pp more than humans makes this a live UX liability, not an edge case.
 4. **Transparency tooling is consolidating around the EU AI Act.** FMTI, COMPL-AI, and Glassbox-AI 2.0 all frame themselves against Annex IV / Article 50 obligations. A humanization product shipping into the EU in 2026 will be assumed by auditors to be testable by these tools.
-5. **Model cards are standard but tooling is underpowered.** The TensorFlow Model Card Toolkit is *archived*. HuggingFace's model-card template is effectively the default, but there is no thriving open-source successor to the original Google toolkit.
-6. **Industry labs (Anthropic, OpenAI, Microsoft, UK AISI) now open-source their eval infrastructure** rather than just publishing papers — a marked change from 2020–2022. This makes replication and adversarial use dramatically easier.
+5. **Model cards are standard but tooling is underpowered.** The TensorFlow Model Card Toolkit is *archived* (Sept 2024). HuggingFace's model-card template is effectively the default, but there is no thriving open-source successor to the original Google toolkit.
+6. **Industry labs (Anthropic, OpenAI, Microsoft, UK AISI) now open-source their eval infrastructure** rather than just publishing papers — a marked change from 2020–2022. Petri (Anthropic, Oct 2025) is the most recent, providing multi-behavior multi-turn auditing. This makes replication and adversarial use dramatically easier.
+7. **Dark-pattern benchmarking has extended to autonomous agents.** SusBench (IUI 2026) is the first evaluation of dark-pattern susceptibility in computer-use agents rather than LLM text. As humanized AI moves from text to agentic interfaces, this benchmark family becomes essential.
 
 ### Trends
 
@@ -266,12 +286,17 @@ Standard fields per entry: **Repo · Owner/Org · Stars (approx) · License · L
 - https://github.com/GAIR-NLP/BeHonest — BeHonest multi-axis honesty
 - https://github.com/Aries-iai/DeceptionBench, https://github.com/lechmazur/deception — deception benchmarks
 - https://github.com/timfduffy/syco-bench, https://github.com/JiseungHong/SYCON-Bench, https://github.com/meg-tong/sycophancy-eval, https://github.com/lechmazur/sycophancy — sycophancy benchmark family
+- https://github.com/safety-research/petri — Anthropic Petri multi-behavior audit tool (Oct 2025)
+- https://arxiv.org/abs/2505.13995 — ELEPHANT social sycophancy benchmark (ICLR 2026)
+- https://arxiv.org/abs/2502.08177 — SycEval cross-model sycophancy benchmark (AIES 2025)
+- https://github.com/SusBench-creator/SusBench — SusBench dark-pattern susceptibility for agents (IUI 2026)
+- https://arxiv.org/abs/2509.10830 — Siren Song of LLMs dark-pattern perception study
 - https://github.com/EleutherAI/lm-evaluation-harness — EleutherAI eval harness
 - https://github.com/UKGovernmentBEIS/inspect_ai — UK AISI Inspect
 - https://github.com/openai/evals — OpenAI evals
 - https://github.com/google/BIG-bench — BIG-bench
 - https://github.com/allenai/real-toxicity-prompts — RealToxicityPrompts (AllenAI)
 - https://github.com/microsoft/toxigen — ToxiGen (Microsoft)
-- https://github.com/tensorflow/model-card-toolkit — TF Model Card Toolkit (archived 2024)
+- https://github.com/tensorflow/model-card-toolkit — TF Model Card Toolkit (archived Sept 2024)
 - https://github.com/compl-ai/compl-ai — ETH/INSAIT/LatticeFlow EU AI Act harness
 - https://github.com/jalammar/ecco — Ecco interpretability visualizer

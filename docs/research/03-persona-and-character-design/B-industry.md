@@ -4,7 +4,7 @@
 
 **Project:** Humanizing AI output and thinking
 **Scope:** First-party posts from the labs building frontier / companion models (Anthropic, OpenAI, Character.AI, Inflection, Replika, Kindroid, Hume, xAI, Meta) plus high-signal practitioner essays (Simon Willison, OpenAI Cookbook, agent-persona consultancies) on how to deliberately construct an assistant's character, voice, and personality.
-**Research value: high** — The major labs have all published substantive, quotable engineering essays on persona design in the last ~24 months, and several converge on an unexpectedly consistent vocabulary (character ≠ harm avoidance; persona is an alignment lever; constraints beat elaboration).
+**Research value: high** — The major labs have all published substantive, quotable engineering essays on persona design in the last ~24 months, and several converge on an unexpectedly consistent vocabulary (character ≠ harm avoidance; persona is an alignment lever; constraints beat elaboration). Last updated: April 2026.
 
 ---
 
@@ -213,6 +213,7 @@
 - **Summary:** Extends the May 2023 announcement with reflections on emotional intelligence as a product surface; pairs well with IEEE Spectrum's later retrospective on Pi ("Rise and Fall of Inflection's Emotionally Intelligent Chatbot") for an honest read on what worked and what didn't commercially.
 - **Takeaways:** Humanization is a hard product bet in a productivity-dominated market; persona quality is necessary but not sufficient for commercial traction.
 - **Quotes:** "A coach, confidante, creative partner, or sounding board." (shared framing from the launch post)
+- **2025 update:** Inflection's co-founders Mustafa Suleyman and Karén Simonyan departed for Microsoft AI in early 2024, taking most of the team. Pi reached ~1M daily active users before the restructuring. As of 2026 Pi.ai remains live (100% uptime reported Q4 2025–Q1 2026) but Inflection has shifted to an AI studio model hosted on Azure. Pi is no longer actively developed as a consumer persona product. It is now a historical case study, not an active competitor.
 
 ---
 
@@ -344,6 +345,30 @@
 
 ---
 
+---
+
+### 20. The Persona Selection Model — Anthropic
+
+- **URL:** https://www.anthropic.com/research/persona-selection-model
+- **Author / Org:** Anthropic
+- **Year:** February 2026
+- **Core claim:** LLMs learn to simulate diverse characters — real humans, fictional characters, real and fictional AI systems — during pre-training. Post-training refines the model's capacity to embody a specific Assistant persona. Interactions with an AI are therefore interactions with the Assistant character, much like a character in an LLM-generated story. The theory is labeled the "Persona Selection Model" (PSM).
+- **Techniques:**
+  - Surveys behavioral evidence (LLMs exhibit character-consistent generalization), generalization evidence (persona transfer to novel situations), and interpretability evidence (the Assistant Axis paper, arXiv:2601.10387, as mechanistic backing).
+  - Recommends introducing positive AI archetypes into training data as an explicit engineering lever.
+  - Recommends anthropomorphic reasoning about AI psychology as a useful engineering heuristic, not a metaphysical claim.
+  - Flags an open question: whether there may be sources of agency external to the selected Assistant persona, and how that might change as models scale.
+- **Summary:** Anthropic's theoretical account of why LLMs have emergent personas at all — not as a post-training artifact but as an expression of the character simulation capability acquired during pretraining. The PSM pairs with the Assistant Axis paper as theory + mechanism. Together they constitute Anthropic's most complete public model of AI character. The PSM was discussed in the LessWrong and Alignment Forum communities as significant because it implies that the humanness of AI output is partly driven by the humanness of pretraining corpora, not only RLHF tuning choices.
+- **Takeaways for humanizing AI output:**
+  - Humanization is partly a *selection* problem: which latent character from the pretraining distribution are you activating, and how stable is that selection?
+  - Introducing well-designed, positive human archetypes into pretraining data is now an explicit recommendation from Anthropic — not just post-training tuning.
+  - The PSM gives a theoretical grounding for why subtractive humanization (removing AI-isms) works: it removes markers that activate "AI-character" archetypes from the selection distribution.
+- **Quotes:**
+  > "LLMs learn to simulate diverse characters during pre-training, and post-training elicits and refines a particular such Assistant persona." (Anthropic PSM post)
+  > "Interactions with an AI assistant are then well-understood as being interactions with the Assistant—something roughly like a character in an LLM-generated story." (Anthropic PSM post)
+
+---
+
 ## Patterns, Trends, and Gaps
 
 ### Cross-post patterns
@@ -370,7 +395,7 @@
 - **No first-party Meta / Llama engineering post on persona design** — all Llama-persona signal is either academic (Anthropic's Assistant-Axis paper analyzing Llama) or third-party.
 - **No first-party DeepMind / Gemini character post.** DeepMind blogs focus on capability and modality (SIMA, Nano Banana, Gemini Robotics); Gemini's personality is documented only implicitly via product behavior and the name-origin post.
 - **Replika has almost no engineering-blog output on persona design** — the corpus is community guides and help-center docs; there is no equivalent of Anthropic's character post from Replika despite its scale.
-- **No public discussion of how base-model pretraining data shapes default persona.** The Assistant-Axis paper starts to surface this (pre-training already contains therapist / coach archetypes) but no lab has published a data-level persona analysis.
+- **No public discussion of how base-model pretraining data shapes default persona.** *Partially addressed:* Anthropic's Persona Selection Model (Feb 2026) provides a theoretical account of how pretraining shapes the character distribution, and recommends introducing positive AI archetypes into training data. A data-level empirical analysis of *which* pretraining corpora produce which persona tendencies remains unpublished.
 - **Limited first-party writing on persona evaluation.** OpenAI mentions "Model Spec Evals"; Anthropic mentions monitoring trait installation; but there is no industry post comparable to, say, capability benchmarks for persona.
 - **Cross-cultural persona is under-discussed.** Every persona post is Anglophone, US-centric, and written in a voice that assumes a Western professional user. Humanization across languages and cultures is a near-complete blank in the industry-blog corpus.
 - **Companion-vs-assistant boundary is undertheorized.** Pi, Replika, Kindroid, Character.AI all ship companion personas; Claude and ChatGPT ship assistant personas; few posts explicitly argue when a humanized assistant has crossed into companion territory and what obligations that creates. Anthropic's "I want to have a warm relationship… but I can't develop deep or lasting feelings" trait is the closest explicit statement.
@@ -400,5 +425,6 @@
 | 17 | Give Your AI Agent a Personality | AgentCraft | 2025 |
 | 18 | Q&A with Amanda Askell | Yahoo/TechCrunch interview | 2024 |
 | 19 | Grok system prompts / updates | xAI + The Decoder | 2024–25 |
+| 20 | The Persona Selection Model | Anthropic | 2026 |
 
-Total: **19 primary sources** across 9 organizations plus 3 independent practitioner voices. All sources were directly consulted for the synthesis above.
+Total: **20 primary sources** across 9 organizations plus 3 independent practitioner voices. All sources were directly consulted for the synthesis above.

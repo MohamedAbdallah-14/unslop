@@ -2,7 +2,7 @@
 
 **Scope:** Open-source projects on GitHub whose code ships alongside published academic work on *humanizing* AI-generated text — i.e. paraphrase / rewrite / style-transfer systems whose stated goal is to make machine-generated output pass for human, or equivalently to evade AI-text detectors while preserving meaning. Adjacent academic primitives (authorship obfuscation, detector-robustness benchmarks, watermark-stealing) are included where the core mechanism is a humanization operator or a standardized humanization evaluation harness.
 
-**Research value: high.** A dense, fast-moving literature from 2023–2025 with ~18 directly relevant GitHub repos, clear lineage (DIPPER → HMGC → HUMPA → StealthRL/AuthorMist), and a dedicated benchmark (TH-Bench) that already compares the main attack families. Findings should weight heavily in any technical plan.
+**Research value: high.** A dense, fast-moving literature from 2023–2026 with ~21 directly relevant GitHub repos, clear lineage (DIPPER → HMGC → HUMPA → StealthRL/AuthorMist → MASH), and a dedicated benchmark (TH-Bench) that already compares the main attack families. ANTISLOP (ICLR 2026) has now formalized inference-time slop prevention as a peer-reviewed technique. Findings should weight heavily in any technical plan.
 
 ---
 
@@ -73,7 +73,31 @@ For each project: **Repo · Paper/Venue · Year · Mechanism · Target detectors
     - Mechanism: training-free **contrastive decoding** — subtracts an "auxiliary machine-like distribution" from the paraphraser's logits to push outputs away from detectable patterns.
     - Strength: no detector query budget needed at attack time (pure decoding-time).
 
-11. **LLM-Detector-Robustness — `shizhouxing/LLM-Detector-Robustness`**
+11. **MASH — `(preprint; no public repo as of April 2026)`**
+    - Paper: Gu, Li, Hu, *"MASH: Evading Black-Box AI-Generated Text Detectors via Style Humanization"*, arXiv 2601.08564 (**January 2026**).
+    - Mechanism: multi-stage pipeline — **Style-injection Supervised Fine-Tuning (Style-SFT)** learns style vectors from AI vs human corpora, then **DPO** adapts to the detector's decision boundary. Evasion is style-transfer-first rather than paraphrase-first.
+    - Results: outperforms SOTA baselines across six domains; a 0.1B parameter MASH model surpasses much larger competitors in evasion while requiring only limited detector interactions. Maintains superior linguistic quality throughout.
+    - Status: preprint; code not yet public. Watch for release; the SFT+DPO recipe is the cleanest 2026 addition to the "small-model wins" pattern.
+
+12. **ANTISLOP — `sam-paech/antislop-sampler` + `sam-paech/auto-antislop`**
+    - Paper: Paech, Roush, Goldfeder, Shwartz-Ziv, *"ANTISLOP: A Comprehensive Framework for Identifying and Eliminating Repetitive Patterns in Language Models"*, arXiv 2510.15061 (**ICLR 2026**).
+    - Mechanism: **inference-time backtracking sampler** that retries token generation when output matches any of ~8,000 banned phrases or n-gram patterns, adjusting logit probabilities. `auto-antislop` extends this into an automated fine-tuning pipeline (FTPO dataset construction from sampler outputs → iterative slop elimination).
+    - HF artifacts: `sam-paech/gemma-3-27b-it-antislop` — a fine-tuned checkpoint demonstrating the `auto-antislop` pipeline.
+    - Status: **active**; ICLR 2026 acceptance formalizes what was a practitioner tool into peer-reviewed technique. Integration in koboldcpp 1.76+, open-webui, antislop-vllm (OpenAI-compatible API wrapper).
+    - Note: framing is "slop elimination" rather than "AI-detection evasion," but the mechanism and the problem being solved are the same. This is now the most academically credible inference-time humanization approach.
+
+13. **Stance-Directed Humanizing AI — `tweetpie/stance-directed-humanizing-ai`**
+    - Paper: *"Towards a Programmable Humanizing AI through Scalable Stance-Directed Architecture"* (preprint 2025; HF Space live).
+    - Mechanism: pipeline of (1) stance-aware ABSA model extracting sentiment toward aspects/entities, (2) toxic-content classifier, (3) stance-directed tweet generator fine-tuned on healthy-discourse corpora. Goal is constructive-discourse generation rather than detector evasion, but the architecture — programmable style axes with classifier-in-the-loop feedback — is directly applicable.
+    - Artifacts: HF Space at `tweetpie/stance-directed-humanizing-ai`. More limited in scope than detector-evasion repos, but worth noting as the cleanest "programmable stance" humanization primitive in 2025.
+
+14. **BART/Mistral AI-to-Human Style Transfer Corpus — (no dedicated repo; hosted on HF)**
+    - Paper: *"Please Make it Sound like Human: Encoder-Decoder vs. Decoder-Only Transformers for AI-to-Human Text Style Transfer"*, arXiv 2604.11687 (**April 2026**).
+    - Mechanism: fine-tunes BART-base, BART-large, Mistral-7B-Instruct (QLoRA) on 25,140 paired AI-input / human-reference text chunks. Identifies 11 measurable stylistic markers. BART-large achieves BERTScore F1 0.924 with 17× fewer parameters than Mistral-7B. Crucially, higher Mistral marker-shift scores reflect *overshoot*, not accuracy — a methodological blind spot flagged by the authors.
+    - Artifacts: parallel corpus of 25,140 pairs; three fine-tuned model checkpoints.
+    - Status: most current (April 2026) fine-tune recipe for AI-to-human style transfer. Reusable training data for any architecture.
+
+15. **LLM-Detector-Robustness — `shizhouxing/LLM-Detector-Robustness`**
     - Paper: Shi et al., *"Red Teaming Language Model Detectors with Language Models"*, **TACL 2024** (arXiv 2305.19713).
     - Mechanism: two attacks — (a) context-aware synonym substitution via an auxiliary LLM, (b) automatic prompt search for style-altering instructions. Evaluated vs DetectGPT + watermark detectors with a DIPPER + genetic-search attacker.
     - BSD-3-Clause; small repo but widely cited as an early red-team reference.
@@ -115,6 +139,13 @@ For each project: **Repo · Paper/Venue · Year · Mechanism · Target detectors
     - Headline finding: **no single attack wins all three axes** — effectiveness ↔ quality ↔ cost trade-offs are real.
     - A fork of MGTBench-2.0, so operationally compatible.
 
+### Defender tools (relevant to humanization via attack-surface understanding)
+
+19. **DAMAGE — (ACL 2025 GenAIDetect workshop)**
+    - Paper: *"DAMAGE: Detecting Adversarially Modified AI Generated Text"*, arXiv 2501.03437 (**January 2026**).
+    - Mechanism: trains a classifier specifically on humanizer-modified text, learning the residual signatures that humanization passes leave behind. Turnitin's August 2025 anti-humanizer feature is the commercial implementation of this same design rationale.
+    - Relevance: any humanizer benchmarked before August 2025 should be retested against post-DAMAGE detectors. The arms race is now explicitly iterative: humanizer outputs → DAMAGE-trained detectors → humanizers that evade DAMAGE.
+
 ---
 
 ## Adjacent Solutions (worth porting patterns from)
@@ -130,11 +161,13 @@ For each project: **Repo · Paper/Venue · Year · Mechanism · Target detectors
 
 ### Patterns that converged 2023 → 2026
 
-1. **Mechanism stack.** Four families dominate: (a) **paragraph paraphrase** (DIPPER and descendants), (b) **word-level perturbation** (RAFT, Shi et al.), (c) **detector-in-the-loop RL** (AuthorMist, StealthRL, HUMPA), (d) **decoding-time guidance** (SICO, CoPA, HUMPA's proxy).
+1. **Mechanism stack.** Five families now dominate: (a) **paragraph paraphrase** (DIPPER and descendants), (b) **word-level perturbation** (RAFT, Shi et al.), (c) **detector-in-the-loop RL** (AuthorMist, StealthRL, HUMPA), (d) **decoding-time guidance** (SICO, CoPA, HUMPA's proxy), (e) **style-transfer fine-tuning** (MASH's Style-SFT+DPO, BART/Mistral corpus work arXiv 2604.11687). ANTISLOP adds a sixth at inference time: **token-level backtracking**.
 2. **API-as-reward is the new normal.** Starting with AuthorMist (early 2025), treating commercial detectors as opaque reward functions has become standard — it sidesteps the need for gradient access and aligns training with the exact surface the user will face in production.
 3. **Convergence theorem is empirical.** Multiple 2025 papers (Adversarial-Paraphrasing, StealthRL) report that attacks **transfer** to unseen detectors. The implicit claim — detectors learn the same human-text manifold — is now strongly supported and is the strongest argument for why humanization is tractable *as a general problem* rather than a cat-and-mouse per-detector game.
-4. **Small models beat big ones.** GradEscape (139M) and AuthorMist (3B) outperform DIPPER (11B). The frontier moved from scale to **signal quality in the training loop**.
+4. **Small models beat big ones.** GradEscape (139M) and AuthorMist (3B) outperform DIPPER (11B). MASH (0.1B) continues this trend in early 2026. The frontier moved from scale to **signal quality in the training loop**.
 5. **Benchmarks caught up.** Before TH-Bench (mid-2025) every paper reported on its own detector/dataset mix. TH-Bench + MGTBench-2.0 now let any new humanizer plug in and produce comparable numbers — an implementation can rely on this scaffolding rather than reinvent it.
+6. **Defenders are catching up too.** Turnitin's August 2025 anti-humanizer update and DAMAGE (arXiv 2501.03437) represent a new defender move: train explicitly on known humanizer outputs to detect their residual signatures. The arms race has entered a second cycle — attack evaluation must now include post-August-2025 detector versions.
+7. **Inference-time approaches formalized.** ANTISLOP (ICLR 2026) converts practitioner backtracking into peer-reviewed technique and adds `auto-antislop` for automated fine-tuning. This is no longer a LocalLLaMA hack; it is a citable method.
 
 ### Gaps worth exploiting
 
@@ -142,7 +175,7 @@ For each project: **Repo · Paper/Venue · Year · Mechanism · Target detectors
 2. **Quality metrics are still weak.** Most papers report BERTScore / semantic similarity. Almost no repo reports **fluency-by-human-eval at scale** or downstream task utility (does the humanized essay still argue the same thesis?). Anyone who invests in honest quality measurement differentiates immediately.
 3. **Interpretable controls under-explored outside obfuscation.** StyleRemix's per-style LoRAs are a near-perfect fit for a *user-facing* humanizer ("rewrite at grade 10, more informal, less hedging"), but no humanization repo has generalized that UX.
 4. **Multilingual is almost absent.** HUMPA shows cross-language gains incidentally; only TextHumanize (non-academic, listed in sibling research docs) explicitly supports 25 languages. Gap for a research-grade multilingual humanizer.
-5. **Defense-aware humanization.** Most attacks are evaluated against static detectors. Almost nothing targets **adaptive/active defenses** (Raidar, Binoculars retrained). This is where the arms race will move in 2026.
+5. **Defense-aware humanization.** Most attacks are evaluated against static detectors. Turnitin's August 2025 anti-humanizer update and DAMAGE (arXiv 2501.03437) show the defender has moved. The arms race is now explicitly iterative; next-gen humanizers must be benchmarked against post-DAMAGE detectors, not pre-2025 baselines.
 6. **No standard "humanness" benchmark.** TH-Bench measures *evasion*, not *humanness*. There is room for a benchmark whose ground truth is human preference rankings, not detector scores — a cleaner training signal than API reward.
 
 ### Cross-domain analogies (earned)
@@ -175,4 +208,9 @@ For each project: **Repo · Paper/Venue · Year · Mechanism · Target detectors
 - `abehou/SemStamp` — SemStamp (NAACL 2024).
 - `vivek3141/ghostbuster` — Ghostbuster (NAACL 2024), cited as evaluation target.
 - arXiv 2310.05095 — Evasive Soft Prompts (EMNLP Findings 2023).
-- arXiv 2604.11687 — BART/Mistral AI-to-Human style-transfer corpus.
+- arXiv 2604.11687 — BART/Mistral AI-to-Human style-transfer corpus (April 2026).
+- arXiv 2601.08564 — MASH: Style Humanization (January 2026).
+- arXiv 2510.15061 + openreview.net — ANTISLOP (ICLR 2026); `sam-paech/antislop-sampler`, `sam-paech/auto-antislop`.
+- `tweetpie/stance-directed-humanizing-ai` — Programmable Stance-Directed Humanization (2025).
+- arXiv 2501.03437 — DAMAGE: Detecting Adversarially Modified AI Generated Text (ACL 2025 GenAIDetect).
+- turnitin.com/press — Turnitin anti-humanizer feature announcement (August 2025).

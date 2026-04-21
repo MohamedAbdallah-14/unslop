@@ -242,6 +242,62 @@ class HookInstallFlow(unittest.TestCase):
                 "uninstall must preserve user's custom statusline",
             )
 
+    def test_drift_checkpoint_banner_at_turn_8(self):
+        """RMTBench/HorizonBench reinforcement: at turn 8 the mode-tracker
+        must emit the expanded drift-check banner; turns 1-7 must emit the
+        compact banner only."""
+        with tempfile.TemporaryDirectory(prefix="unslop-drift-") as tmp:
+            home = Path(tmp)
+            claude = home / ".claude"
+            claude.mkdir()
+            (claude / ".unslop-active").write_text("balanced")
+            outputs: list[str] = []
+            for _ in range(9):
+                result = self._run(
+                    ["node", "hooks/unslop-mode-tracker.js"],
+                    home,
+                    stdin='{"prompt":"hello"}',
+                )
+                outputs.append(result.stdout)
+            for i, out in enumerate(outputs, start=1):
+                if i == 8:
+                    self.assertIn("drift-check", out, f"turn {i} should warn")
+                    self.assertIn("HorizonBench", out)
+                else:
+                    self.assertNotIn("drift-check", out, f"turn {i} should be quiet")
+            counter = claude / ".unslop-turn-count"
+            self.assertTrue(counter.exists())
+            self.assertEqual(counter.read_text().strip(), "9")
+
+    def test_drift_counter_resets_on_session_start(self):
+        """activate.js must zero the persona-drift counter so fresh sessions
+        don't inherit stale turn counts."""
+        with tempfile.TemporaryDirectory(prefix="unslop-drift-reset-") as tmp:
+            home = Path(tmp)
+            claude = home / ".claude"
+            claude.mkdir()
+            (claude / ".unslop-turn-count").write_text("42")
+            self._run(["node", "hooks/unslop-activate.js"], home)
+            counter = claude / ".unslop-turn-count"
+            self.assertFalse(counter.exists(), "activate.js must clear counter")
+
+    def test_drift_counter_resets_on_stop_phrase(self):
+        """Turning unslop off must also zero the counter so the next
+        activation starts fresh."""
+        with tempfile.TemporaryDirectory(prefix="unslop-drift-stop-") as tmp:
+            home = Path(tmp)
+            claude = home / ".claude"
+            claude.mkdir()
+            (claude / ".unslop-active").write_text("balanced")
+            (claude / ".unslop-turn-count").write_text("15")
+            self._run(
+                ["node", "hooks/unslop-mode-tracker.js"],
+                home,
+                stdin='{"prompt":"stop unslop"}',
+            )
+            self.assertFalse((claude / ".unslop-active").exists())
+            self.assertFalse((claude / ".unslop-turn-count").exists())
+
     def test_claude_config_dir_env_var_honored(self):
         """CLAUDE_CONFIG_DIR should redirect flag file location."""
         with tempfile.TemporaryDirectory(prefix="unslop-env-") as tmp:

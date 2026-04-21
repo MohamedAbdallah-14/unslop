@@ -265,6 +265,23 @@ Scope: Reddit (r/AutoGPT, r/LocalLLaMA, r/AI_Agents, r/singularity, r/MachineLea
 
 ---
 
+---
+
+## Post 17 — Anthropic 2026 Agentic Coding Trends Report
+
+- **URL:** https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf
+- **Author / venue:** Anthropic; public report
+- **Year:** 2026
+- **Core tip:** Trust in agents grows with usage. Newer Claude Code users grant full auto-approve in ~20% of sessions; by 750 sessions that rises to over 40%. The P99.9 session length nearly doubled (25 → 45 min) in three months as users became more comfortable granting autonomy.
+- **Techniques:**
+  - Reversibility tiering is now measurable in production: users increasingly auto-approve reversible actions while gating irreversible ones — a natural version of the pattern recommended in 12-Factor Agents.
+  - Software engineering accounts for ~50% of agentic tool use in the wild; design frameworks around this majority case.
+  - The trend: autonomy is earned, not declared. Agents start highly supervised and earn more autonomy as trust accumulates.
+- **Summary:** The strongest large-scale empirical dataset on how human-agent collaboration actually evolves over time. The earlier stat (73% of tool calls human-gated, 0.8% irreversible) remains valid but now has trajectory data: the 73% drops as users gain experience. Autonomy is a sliding window, not a binary.
+- **Takeaway for humanization:** Humanized agents earn trust through demonstrated reliability, not through claiming autonomy. Designing for the "new user" experience (conservative defaults, explicit reasoning traces) differs meaningfully from designing for the "experienced user" who has handed over more control.
+
+---
+
 ## Patterns and trends across posts
 
 1. **"Agent" is being redefined downward.** Across Anthropic's post, 12-Factor Agents, the r/LocalLLaMA frameworks analysis, and the 17-week production writeup, the consensus is that most production "agents" are workflows with LLM decision points — and *that's good*. The true-agent architecture is reserved for research, not for shipping.
@@ -290,6 +307,7 @@ Scope: Reddit (r/AutoGPT, r/LocalLLaMA, r/AI_Agents, r/singularity, r/MachineLea
 
 ## Sources
 
+- https://resources.anthropic.com/hubfs/2026%20Agentic%20Coding%20Trends%20Report.pdf — Anthropic 2026 Agentic Coding Trends Report.
 - https://news.ycombinator.com/item?id=42468058 — HN thread on Anthropic's "Building Effective Agents."
 - https://news.ycombinator.com/item?id=43699271 — HN thread on 12-Factor Agents (HumanLayer).
 - https://github.com/humanlayer/12-factor-agents — Source repo for 12-factor principles.

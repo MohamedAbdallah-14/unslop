@@ -143,7 +143,18 @@
 
 ### 27. HN 38382067 — "My experience trying to write human-sounding articles using Claude AI"
 - **URL:** https://news.ycombinator.com/item?id=38382067
-- **Summary:** Early practitioner post on Claude as a more "voice-preserving" alternative to GPT-4 for long-form. Foreshadows Claude's later first-party Styles feature.
+- **Summary:** Early practitioner post on Claude as a more "voice-preserving" alternative to GPT-4 for long-form. Foreshadows Claude's later first-party Styles feature (shipped 2025).
+
+### 28. HN 44116535 — "Anthropic launches a voice mode for Claude" (thread)
+- **URL:** https://news.ycombinator.com/item?id=44116535
+- **Community / date:** HN, May 2025
+- **Summary:** Announcement thread for Anthropic's Claude voice mode. Within the thread, strong commentary on the gap between audio voice and text style — "voice mode handles prosody, not idiolect." Useful as a framing clarification: speech voice cloning (TTS prosody) and text style cloning (written voice) are distinct problems that the industry is conflating.
+
+### 29. Psychology Today — "LLMs and the 'Blandification' of Writing" (March 2026)
+- **URL:** https://www.psychologytoday.com/us/blog/emotional-behavior-behavioral-emotions/202603/llms-and-the-blandification-of-writing
+- **Community / date:** Psychology Today blog, March 2026
+- **Summary:** Popular-press coverage of the "How LLMs Distort Our Written Language" research (arXiv 2603.18161). Coins the term **blandification** for the ~70% shift toward argumentative neutrality in LLM-assisted essays. Notes that heavy LLM users self-report their writing as less creative and not in their voice. Provides accessible framing for the externally measured scale of the homogenization problem.
+- **Relevance:** Gives the practitioner community a memorable word ("blandification") for the precise phenomenon Unslop addresses. The 70% neutralization figure is the strongest external measurement of the problem to date.
 
 ---
 
@@ -170,9 +181,11 @@
 ## Trends
 
 - **Productization of voice profiles.** Dedicated tools (VoiceDNA, My Writing Twin, GHOSTYPE, Willow, writelikeme.io) are moving the workflow out of prompts and into per-user on-device or saved profiles.
-- **Claude Styles as first-party baseline.** Anthropic shipped a built-in upload-samples feature; r/ChatGPT frequently points at this as "what OpenAI should have."
+- **Claude Styles as first-party baseline.** Anthropic shipped a built-in upload-samples feature in 2025; r/ChatGPT frequently points at this as "what OpenAI should have." The existence of this first-party baseline means prompt-based voice advice is now compared against it, not against a clean baseline.
 - **Context engineering framing.** r/PromptEngineering conversation has shifted from "what do I say to the model?" to "what does the model need to know before I say anything?" — voice files fit naturally into that framing.
 - **Metric-driven style extraction.** VoiceDNA reports 40+ per-channel metrics; academic HN users are reverse-engineering LLM style fingerprints. The field is moving from vibes-based to quantified voice.
+- **"Blandification" entering mainstream vocabulary.** The Psychology Today coverage of the "How LLMs Distort Our Written Language" research (March 2026) gave practitioners a widely shared label for the phenomenon. Expect "blandification" to become a common search term and framing in the practitioner community.
+- **Practitioner awareness of the academic fidelity gap.** EMNLP 2025 "Catch Me If You Can" is circulating in HN and r/LocalLLaMA discussions. The finding that frontier models fail at implicit personal-style imitation is validating the "you need fine-tuning, not just prompts" position that was previously held by vendors only.
 
 ## Gaps / Opportunities (relevant to Humanizer project)
 
@@ -213,3 +226,5 @@
 - https://www.linkedin.com/posts/thesamisharaf_chatgpt-generates-fluff-but-i-fix-it-this-activity-7227625936513310720-sw62 — "I AM READY / NEXT / DONE" analysis prompt
 - https://www.youtube.com/watch?v=inf4T7KG1YQ — YouTube full system guide
 - https://www.youtube.com/watch?v=Txc1ubMojaQ — YouTube Custom GPT + fine-tuning walk-through
+- **[NEW]** https://news.ycombinator.com/item?id=44116535 — HN Anthropic voice mode thread; text vs. audio voice distinction
+- **[NEW]** https://www.psychologytoday.com/us/blog/emotional-behavior-behavioral-emotions/202603/llms-and-the-blandification-of-writing — "blandification" framing, March 2026

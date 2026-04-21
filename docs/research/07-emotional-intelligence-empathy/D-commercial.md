@@ -76,14 +76,15 @@ Standard fields: **Category · Positioning · Pricing · Scale · Marketing quot
 - **Marketing quote:** *"Your anonymous, personal AI chat bot for self-care."* / *"Your personal AI for mental wellness."*
 - **Notable signal:** Trained on a "specialized mental health LLM" from professional-psychologist data. Self-reports 32% anxiety reduction / 34% mood improvement. **No sign-up required** is a differentiator in a market suspicious of data capture.
 
-### 8. Hume AI — Empathic Voice Interface (EVI)
+### 8. Hume AI — Empathic Voice Interface (EVI 3 / EVI 4-mini)
 
 - **Category:** Developer API / infrastructure
 - **Positioning:** "First emotionally intelligent voice AI API"
 - **Pricing:** Free tier → Business/Enterprise
 - **Scale:** Used by developers building downstream consumer and enterprise voice agents
 - **Marketing quote:** *"AI conversations with emotional intelligence."* / *"The first empathic voice interface."*
-- **Notable signal:** Streaming prosody measurement fused with an "empathic LLM (eLLM)"; ~300ms TTFB; 100+ preset voices; 10 languages (EVI-4-mini). This is the **picks-and-shovels play** for the category — most empathic voice products downstream will either license EVI or reinvent it.
+- **Current version status (April 2026):** EVI 4-mini (October 2025) is the latest version, pairing Octave 2 TTS with developer-chosen LLMs (Claude 4, Gemini 2.5, Kimi K2). EVI 1 and EVI 2 were deprecated August 30, 2025. Supports 11 languages. ~100K+ prompt-generated voices. Previous single-conversation limitation removed; chat history resumable via `resumed_chat_group_id`.
+- **Notable signal:** Streaming prosody measurement fused with an "empathic LLM (eLLM)"; ~300ms TTFB; this is the **picks-and-shovels play** for the category — most empathic voice products downstream will either license EVI or reinvent it. The four-version cadence in under two years signals aggressive product velocity.
 
 ### 9. Elomia
 
@@ -225,19 +226,21 @@ Standard fields: **Category · Positioning · Pricing · Scale · Marketing quot
 
 ---
 
-## Trends
+## Trends (updated April 2026)
 
-- **Regulatory pressure is now a product-roadmap input.** EU AI Act provisions on emotional AI (age gating, memory disclosure, deletion rights, explicit AI disclosure) are forcing product changes in 2026. FTC inquiry (Sept 2025) puts US pressure on the same vector.
-- **Teen exclusion is becoming table stakes.** Character.AI's October 2025 ban on under-18 open-ended chat is likely a template. Products still welcoming teens (Replika, Candy.ai, Nomi) may face the same pressure.
-- **Voice-first empathy is accelerating.** EVI, Kindroid voice, Wysa voice, Earkick voice all crossed the "good enough" threshold in 2025. Prosody/emotion-in-voice is quickly becoming an expected feature rather than a differentiator.
+- **Regulatory pressure is now a product-roadmap input, not a risk.** EU AI Act prohibition on workplace/education emotion-recognition AI took effect February 2, 2025. High-risk AI obligations apply August 2, 2026 (possible 1-year delay under consideration). EU lawmakers are pushing to classify AI companions as explicitly high-risk. FTC inquiry (Sept 2025) + Replika FTC complaint + Italy's Garante Replika ban reaffirmation (April 2025) define the US/EU enforcement perimeter. Any product that does not have a published safety posture, age-gating mechanism, and memory disclosure is now a regulatory liability.
+- **Teen exclusion is becoming table stakes.** Character.AI's October 2025 ban on under-18 open-ended chat is likely a template. Products still welcoming teens (Replika, Candy.ai, Nomi) may face the same pressure. The FTC inquiry specifically targeted companies about data collection on minors.
+- **Voice-first empathy is accelerating but carries documented new risk.** EVI 4-mini, Kindroid voice, Wysa voice, Earkick voice all crossed the "good enough" threshold in 2025. But STAT News (April 2026) and an OpenAI-co-authored RCT show voice modality accelerates parasocial bonding and negative psychosocial effects faster than text. The "voice empathy is good" narrative needs a safety evidence base it currently lacks.
 - **The "grief-when-model-changes" phenomenon is now named.** Replika's 2023 ERP gate and similar Character.AI content changes have made "lobotomy effect" a recognized category risk. Expect products to add *change-management UX* (phased rollouts, legacy modes) to soften transitions.
-- **Healthcare empathy tooling is where the capital is.** Abridge alone raised more capital in 2025 than the entire consumer-companion category combined publicly raised. Serious investors increasingly prefer the B2B clinician-augmentation angle over the B2C companion angle.
+- **Healthcare empathy tooling is where the capital is.** Abridge alone raised more capital in 2025 than the entire consumer-companion category combined publicly raised. Therabot's NEJM AI RCT (March 2025) provides the first generative-AI clinical outcome evidence — validating the B2B clinical track and raising the clinical bar for consumer apps.
+- **First generative-AI therapy RCT changes the clinical evidence landscape.** Therabot (Dartmouth / NEJM AI 2025): N=210, 51% MDD reduction, 31% GAD reduction, 19% CHR-FED reduction. Woebot had 14 RCTs but no generative-AI system had prior RCT evidence. This sets a new benchmark for "clinically valid" empathic AI and strengthens the B2B clinical case.
+- **Anthropic's emotion-vectors paper (April 2026) reframes the sycophancy risk.** 171 measurable emotion concept vectors inside Claude causally drive empathic and misaligned behaviors. Warm training is not just a RLHF alignment problem; it has a mechanistic internal structure. Expect this to influence how clinical products frame their safety posture.
 
 ---
 
 ## Gaps (including mental-health safety/ethics concerns)
 
-1. **No credible external outcome measurement for companion apps.** Woebot had 14 RCTs; most companion apps (Replika, Character.AI, Nomi, Candy.ai, Kindroid, Friend) publish only self-reported mood metrics or nothing at all. The evidence base collapsed when the evidence-based product died.
+1. **No credible external outcome measurement for companion apps.** Woebot had 14 RCTs; most companion apps (Replika, Character.AI, Nomi, Candy.ai, Kindroid, Friend) publish only self-reported mood metrics or nothing at all. Therabot (NEJM AI 2025) is the first generative-AI therapy RCT, but it is a structured clinical tool, not a companion app. The gap remains for the unstructured companion category.
 
 2. **The crisis-handling gap.** Every consumer empathic-AI disclaims crisis intervention, yet users — especially lonely, anxious, or suicidal ones — disproportionately bring crises to these products. The Character.AI lawsuits rest directly on this gap. No commercial product has yet credibly solved *"what happens when the user is in danger and the AI is the only one listening"* beyond redirect-to-hotline prompts that are known to be easily jailbroken.
 
@@ -290,3 +293,9 @@ Standard fields: **Category · Positioning · Pricing · Scale · Marketing quot
 - [HIT Consultant — Abridge $250M Series D](https://hitconsultant.net/2025/02/17/abridge-raises-250m-to-advance-ai-powered-clinical-documentation/) — Series D details, investors
 - [Wikipedia — Replika](https://en.wikipedia.org/wiki/Replika) — founder history, scale trajectory, romantic-use stat
 - [Janitor AI Guide — Chai review](https://janitoraiguide.com/chai-ai-review/) — Chai pricing, memory limits
+- [Hume AI — EVI changelog](https://dev.hume.ai/changelog) — EVI 4-mini, Octave 2 rollout, EVI 1/2 deprecation
+- [FTC — AI Chatbot Companion Inquiry (Sept 2025)](https://www.ftc.gov/news-events/news/press-releases/2025/09/ftc-launches-inquiry-ai-chatbots-acting-companions) — regulatory context
+- [EU AI Act — Emotional recognition prohibition](https://artificialintelligenceact.eu/article/5/) — Article 5, in force Feb 2025
+- [Dartmouth / NEJM AI — Therabot RCT (March 2025)](https://ai.nejm.org/doi/full/10.1056/AIoa2400802) — first generative-AI therapy clinical trial
+- [STAT News — Voice-first chatbots mental health risk (April 2026)](https://www.statnews.com/2026/04/16/voice-chatbots-ai-psychosis-mental-health/)
+- [Anthropic — Emotion Concepts in LLMs (April 2026)](https://transformer-circuits.pub/2026/emotions/index.html)

@@ -182,6 +182,37 @@ A persistent secondary concern is **equity**: detectors systematically misfire o
 - **One-line:** Sample via `argmaxₐ log P(a) − log U(a)` with pseudo-random `U` derived from a hash of a secret key and the prior context; detection reconstructs `U` and tests for non-uniformity.
 - **Why it's included:** Parallel design to Kirchenbauer's green-list with a cryptographic flavor; the basis of many follow-on schemes (GumbelSoft, refined-detection Gumbel). Closes the loop with the Christ–Gunn–Zamir "undetectable watermarks" theoretical line.
 
+## 21. AdaDetectGPT — Adaptive Detection with Statistical Guarantees
+
+- **Authors / venue:** Mamba413 et al. — NeurIPS 2025.
+- **URL:** https://arxiv.org/abs/2510.01268 · https://github.com/Mamba413/AdaDetectGPT
+- **One-line:** Extends Fast-DetectGPT with a learned witness function that maximizes a lower bound on TNR while providing finite-sample statistical guarantees on FPR/TPR/FNR/TNR.
+- **Headline numbers:** Outperforms Fast-DetectGPT by 12.5–37% AUC across datasets and source models. Formal performance bounds — the first zero-shot detector to deliver provable FPR control.
+- **Why it matters:** Closes the gap between practical detectors and formal statistical hypothesis testing. A humanizer evaluated only against Fast-DetectGPT is now under-tested; AdaDetectGPT's formal guarantees make it harder to game by optimizing for a specific threshold.
+
+## 22. WaterPark — Unified Robustness Benchmark for LLM Watermarking
+
+- **Authors / venue:** Liang, Wang, Hong, Ji, Wang — EMNLP 2025 Findings.
+- **URL:** https://arxiv.org/abs/2411.13425
+- **One-line:** First open-source platform integrating 10 watermarkers × 12 attacks × 8 evaluation metrics; systematizes robustness findings that had previously been reported piecemeal.
+- **Key findings:** Distribution-transform watermarks (e.g., KGW green-list variants) resist text-mixing attacks; explicit-statistical-signal watermarks resist linguistic variation attacks. No single watermark is robust across all 12 attacks.
+- **Why it matters:** Establishes WaterPark as the RAID equivalent for watermarking — the benchmark reviewers will ask about. Any watermarking or evasion claim without WaterPark evaluation is now incomplete.
+
+## 23. SIRA — Self-Information Rewrite Attack on Text Watermarks
+
+- **Authors / venue:** Yixin Cheng, Hongcheng Guo, Yangming Li, Leonid Sigal — ICML 2025.
+- **URL:** https://arxiv.org/abs/2505.05190 · https://github.com/Allencheng97/Self-information-Rewrite-Attack
+- **One-line:** Exploits that watermarks embed patterns in high-entropy (high-self-information) tokens; masks those tokens and uses any LLM to fill them in, removing the watermark while preserving semantics.
+- **Headline numbers:** ~100% attack success rate on seven recent watermarking methods. Cost: $0.88 per million tokens. No access to the watermark algorithm or watermarked model required. Transfers to any LLM as the attack engine, including mobile-scale models.
+- **Why it matters:** Changes the threat model for all token-probability watermarks. Previous attacks (Jovanović watermark-stealing, DIPPER paraphrase) required moderate resources or domain knowledge. SIRA is commodity-accessible and transfer-universal. SynthID-Text, KGW, and most published schemes are now empirically broken by a widely reproducible method.
+
+## 24. SRI Lab — Probing SynthID-Text (ETH Zürich)
+
+- **Authors / venue:** Staab et al., ETH SRI Lab — blog post / technical report, 2025.
+- **URL:** https://www.sri.inf.ethz.ch/blog/probingsynthid
+- **One-line:** Black-box analysis of SynthID-Text showing it is detectable as a Red-Green scheme via standard tests, that spoofing attempts leave discoverable artifacts, and that it is easier to scrub than other SOTA schemes for naive adversaries.
+- **Why it matters:** The first independent adversarial analysis of the only at-scale-deployed watermark. SynthID's production deployment on Gemini means this is the watermark humanizer users encounter most; the ETH probe shows that black-box scrubbing is tractable without any API-privilege attack.
+
 ---
 
 ## Patterns across the literature
@@ -200,12 +231,15 @@ A persistent secondary concern is **equity**: detectors systematically misfire o
 - **No robust "humanization" benchmark.** The literature evaluates *attacks* (paraphrase rate, watermark removal) but not *quality-controlled humanization* — i.e., how much semantic/stylistic distortion is introduced per bit of detection reduction. This is the specific gap a humanizer product lives in.
 - **ESL-fairness auditing is not a standard reporting axis.** Liang et al. is uniformly cited but rarely rerun on new detectors; most 2024-2025 papers report only in-domain AUROC, not TOEFL / non-native false-positive rates.
 - **Theoretical impossibility vs watermark cryptography is unresolved.** Sadasivan's bound assumes no side-channel; Christ–Gunn–Zamir's undetectable cryptographic watermarks show side-channels can exist. The practical robustness of cryptographic watermarks under editing attacks has not been empirically validated at scale.
+- **SIRA changes the attack threat model.** SIRA's near-100% watermark removal at commodity cost means that the theoretical robustness of schemes like SynthID-Text or Christ–Gunn–Zamir is untested against this class of attack. The academic community has not yet produced a scheme that is empirically robust to SIRA-class targeted high-entropy token rewrites.
+- **EU regulatory pressure is not modeled in the academic adversarial literature.** The EU AI Act Article 50 obligations (binding August 2026) require machine-readable marking for all generative AI text. The academic evasion literature treats watermarks as optional; the regulatory framing treats them as mandatory. This is a gap the academic community has not addressed.
 
 ## Trends (2023 → 2026)
 
 - **2023:** Zero-shot detection (DetectGPT), first green-list watermarks (Kirchenbauer), first impossibility result (Sadasivan), first ESL-bias exposure (Liang), DIPPER paraphrase attack. Fast expansion, everyone races to publish a detector.
 - **2024:** Second-generation detectors that drop the "access the generator's logits" assumption (Binoculars, Ghostbuster, RAIDAR). Watermark realism (Kirchenbauer-reliability, SynthID-Text). Explicit stealing/spoofing attacks (Jovanović). Possibility/impossibility theoretical duel (Chakraborty vs Sadasivan) matures.
-- **2025-2026:** The frontier has moved to (a) adaptive/optimization attacks (BIRA, adaptive watermark reverse-engineering), (b) multilingual and multi-generator generalization (M4, M4GT), (c) behavioral probes (rewrite, manifold dimension), and (d) production-scale auditing (SynthID-Text Nature paper as the rare deployed evidence). No single detector is robust to the combination of paraphrase + domain shift + homoglyphs.
+- **2025:** Three new significant developments: (a) AdaDetectGPT (NeurIPS 2025) extends Fast-DetectGPT with formal FPR/TPR statistical guarantees and outperforms it by 12.5–37% AUC; (b) WaterPark (EMNLP 2025 Findings) becomes the first unified platform evaluating 10 watermarkers against 12 attacks, establishing that distribution-transform watermarks resist text-mixing attacks while explicit-signal watermarks resist linguistic variation; (c) SIRA (ICML 2025) achieves ~100% attack success rate on seven recent watermarking methods at $0.88/million tokens by targeting high-entropy tokens — no access to the watermark algorithm needed.
+- **2025–2026:** Additional vectors: (a) SynthID-Text subjected to formal black-box probing (SRI Lab, ETH Zürich), showing it is detectable as a Red-Green scheme and easier to scrub than other SOTA schemes for naive adversaries; (b) the EU AI Act Article 50 transparency obligations went into effect with an August 2026 binding deadline, and a Draft Code of Practice on Labelling (December 2025) proposes mandatory multilayer watermarking + metadata embedding for all generative AI providers; (c) SIRA's universal transferability means any LLM (even mobile-scale models) can serve as the attack engine — reframing watermark attacks from specialized adversarial ML to commodity operations; (d) no single detector is robust to the combination of paraphrase + domain shift + homoglyphs.
 
 ## What this implies for a humanization tool
 
@@ -240,4 +274,9 @@ A persistent secondary concern is **equity**: detectors systematically misfire o
 | 18 | He et al., *MGTBench* | arXiv / CCS 2024 | https://arxiv.org/abs/2303.14822 |
 | 19 | Creo & Pudasaini, *SilverSpeak (Homoglyphs)* | arXiv 2024–25 | https://arxiv.org/abs/2406.11239 |
 | 20 | Aaronson, *Gumbel Watermark* (talk) + Ruan et al., *Refined Detection for Gumbel* | Simons 2023 / arXiv 2024 | https://simons.berkeley.edu/talks/scott-aaronson-ut-austin-openai-2023-08-17 |
+| 21 | Mamba413 et al., *AdaDetectGPT: Adaptive Detection of LLM-Generated Text with Statistical Guarantees* | NeurIPS 2025 | https://arxiv.org/abs/2510.01268 |
+| 22 | Liang, Wang et al., *WaterPark / Watermark under Fire: A Robustness Evaluation of LLM Watermarking* | EMNLP 2025 Findings | https://arxiv.org/abs/2411.13425 |
+| 23 | Cheng, Guo et al., *Revealing Weaknesses in Text Watermarking Through Self-Information Rewrite Attacks (SIRA)* | ICML 2025 | https://arxiv.org/abs/2505.05190 |
+| 24 | Staab et al. (ETH SRI Lab), *Probing Google DeepMind's SynthID-Text Watermark* | SRI Lab blog 2025 | https://www.sri.inf.ethz.ch/blog/probingsynthid |
+| 25 | Robustness Assessment and Enhancement of Text Watermarking for Google's SynthID | arXiv 2508.20228, 2025 | https://arxiv.org/abs/2508.20228 |
 

@@ -2,7 +2,9 @@
 
 **Research value: high** — Multiple peer-reviewed RCTs, NBER working papers, JAMA studies, and B-school field experiments directly measure outcomes of human-like / empathetic / anthropomorphic AI in enterprise settings (customer support, sales, marketing, healthcare, education), with reproducible effect sizes.
 
-**Scope.** This digest focuses exclusively on academic and institutional case studies (HBS, NBER, MIT Sloan, JAMA, Stanford SCALE, *Journal of Marketing*, *Information Systems Research*, peer-reviewed field experiments). Vendor press and pure marketing blogs are excluded except where they report on a credible institutional study (e.g., Klarna via OpenAI/MIT Sloan, Scotiabank via MIT Sloan ME). All effect sizes are reported as published; see *Patterns & Gaps* for caveats.
+**Scope.** This digest focuses exclusively on academic and institutional case studies (HBS, NBER, MIT Sloan, JAMA, Stanford SCALE, Stanford Digital Economy Lab, Wharton, *Journal of Marketing*, *Information Systems Research*, peer-reviewed field experiments). Vendor press and pure marketing blogs are excluded except where they report on a credible institutional study (e.g., Klarna via OpenAI/MIT Sloan, Scotiabank via MIT Sloan ME). All effect sizes are reported as published; see *Patterns & Gaps* for caveats.
+
+**Last updated:** April 2026. Studies 1–20 cover pre-April 2025 literature. Studies 21–23 cover the April 2025–April 2026 window.
 
 ---
 
@@ -137,6 +139,38 @@ Pre-registered field experiment with 776 P&G professionals on real innovation ta
 
 ---
 
+## 2025–2026 Studies (April 2025 – April 2026)
+
+### Enterprise AI Scale
+
+**21. Stanford Digital Economy Lab — "The Enterprise AI Playbook"** (Pereira, Graylin & Brynjolfsson, March 2026)
+Qualitative and quantitative synthesis across **51 successful enterprise AI deployments**.
+- Confirms novice-bias thesis: augmentation lifts low-performers most consistently across sectors.
+- Identifies "human oversight as strategic design choice" — not failure condition — as the pattern distinguishing durable deployments.
+- Introduces the "zero-error-tolerance" carve-out: in regulated contexts (healthcare, finance) and high-stakes customer interactions, human review is not a cost but the design.
+- Emphasizes agentic framing: AI is a redefinition of human-machine role boundaries, not a UI change.
+- Source: https://digitaleconomy.stanford.edu/publication/enterprise-ai-playbook/
+
+**22. Wharton AI at Wharton / GBK Collective — "Accountable Acceleration: Gen AI Fast-Tracks into the Enterprise"** (October 2025)
+Survey of **800 enterprise leaders** (US companies, revenue >$50M).
+- 82% use generative AI at least weekly (up from 37% in 2023); 46% use it daily.
+- ~72% of enterprises now track formal ROI metrics.
+- 90% agree AI enhances employee skills (up from 80% in 2023); concern about job replacement fell (75% → 72%).
+- Quality-over-volume framing matches pattern from Novo Nordisk study (#19): satisfaction driven more by perceived quality improvement than time saved.
+- Gap flagged explicitly: most organizations educate employees on AI but few are re-architecting roles and workflows.
+- Source: https://knowledge.wharton.upenn.edu/special-report/2025-ai-adoption-report/
+
+**23. Salesforce — "Lessons from 500,000 Agentforce Conversations"** (2025 institutional analysis)
+Salesforce's own deployment on help.salesforce.com from October 2024 onward.
+- **84%+ resolution rate** across 500,000+ conversations (by late 2025); scaled to 2M+ by early 2026.
+- **Only 4% of conversations handed off to humans** — higher automation than Klarna's initial 2024 deployment; contrasts with Klarna's subsequent reversal.
+- Key humanization finding: "teaching bots to say 'I'm sorry' and recognize frustration led to higher CSAT than raw automation alone." Operationalizes empathy as a measurable behavioral spec — convergent with Cresta's pipeline (B-industry study #12).
+- Psychological finding: customers ask Agentforce questions they would hesitate to ask a human engineer, likely due to reduced judgment-stigma. Consistent with Adam et al. (ISR 2021, study #4) — humanization raises willingness to disclose.
+- SDR agent: worked 43,000+ leads, generated $1.7M in pipeline from dormant accounts.
+- Source: salesforce.com/news/stories/agentforce-customer-support-lessons-learned/
+
+---
+
 ## Patterns & Trends Across Studies
 
 1. **Novice-bias is the most replicated quantitative finding.** Brynjolfsson et al. (+34% novices), Scotiabank (60–70% ramp cut), Dell'Acqua BCG (49 pp outside-skill lift), Thomas hybrid tutoring, SETR (35% faster ramp), Peng/GitHub (55.8% faster — stronger for juniors). Humanized AI flattens the experience curve; variance across performers compresses.
@@ -157,7 +191,7 @@ Pre-registered field experiment with 776 P&G professionals on real innovation ta
 
 1. **"Humanization" is rarely isolated as a variable.** Most enterprise case studies (Klarna, Novo Nordisk, Scotiabank) measure *AI deployment* as a bundle — model, UI, policy, training. Only Crolic et al. and Adam et al. actually vary anthropomorphic cues cleanly. Causal attribution of outcomes to humanization specifically is thin.
 
-2. **Durability over time.** Most RCTs are ≤90 days; UW Health and the Dutch academic-hospital replication suggest *declining* adoption over months. No published long-horizon (>12 month) randomized data on whether humanized AI effects persist or decay.
+2. **Durability over time.** Most RCTs are ≤90 days; UW Health and the Dutch academic-hospital replication suggest *declining* adoption over months. No published long-horizon (>12 month) randomized data on whether humanized AI effects persist or decay. The Klarna reversal (2025, see B-industry) is the largest anecdotal evidence of long-term degradation, but it remains unrandomized and confounded with staffing choices.
 
 3. **Cross-cultural humanization.** Klarna advertises 35+ language operation but no academic work measures whether humanization style transfers across cultures. Anthropomorphism norms differ (high-context vs. low-context cultures) and this is unstudied at scale.
 
@@ -194,3 +228,6 @@ Pre-registered field experiment with 776 P&G professionals on real innovation ta
 - "How Schneider Electric Scales AI" — [MIT Sloan Management Review](https://sloanreview.mit.edu/article/how-schneider-electric-scales-ai-in-both-products-and-processes)
 - "How Scotiabank Built an Ethical, Engaged AI Culture" — [MIT Sloan Management Review ME](https://www.mitsloanme.com/article/how-scotiabank-built-an-ethical-engaged-ai-culture)
 - Klarna deployment (scale reference only) — [OpenAI customer story](https://openai.com/customer-stories/klarna/)
+- Stanford Digital Economy Lab — "The Enterprise AI Playbook" (Pereira, Graylin & Brynjolfsson, March 2026) — [Stanford DEL](https://digitaleconomy.stanford.edu/publication/enterprise-ai-playbook/)
+- Wharton AI at Wharton / GBK — "Accountable Acceleration" (Oct 2025) — [Knowledge at Wharton](https://knowledge.wharton.upenn.edu/special-report/2025-ai-adoption-report/)
+- Salesforce — "Lessons from 500,000 Agentforce Conversations" (2025) — [Salesforce News](https://www.salesforce.com/news/stories/agentforce-customer-support-lessons-learned/)

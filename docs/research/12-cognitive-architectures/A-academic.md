@@ -1,6 +1,8 @@
 # Cognitive Architectures — Academic & Scholarly
 
-**Research value: high** — Dense, well-organized academic literature: a canonical LLM-era framework (CoALA) already unifies the field, classical architectures (Soar, ACT-R, CLARION, Sigma, OpenCog, LIDA) are mature and documented, and 2024–2026 work on hybrid LLM+symbolic systems and dual-process LLMs is converging on structures highly relevant to "humanizing" AI thinking (separating fast generation from deliberate reasoning, episodic/semantic/procedural memory, metacognition).
+**Research value: high** — Dense, well-organized academic literature: a canonical LLM-era framework (CoALA) already unifies the field, classical architectures (Soar, ACT-R, CLARION, Sigma, OpenCog, LIDA) are mature and documented, and 2025–2026 work on hybrid LLM+symbolic systems and dual-process LLMs is converging on structures highly relevant to "humanizing" AI thinking (separating fast generation from deliberate reasoning, episodic/semantic/procedural memory, metacognition).
+
+**Last updated: April 2026. Covers April 2025–April 2026.**
 
 ## Executive Summary
 
@@ -40,6 +42,14 @@ The single most important cross-cutting insight for a humanization project: **hu
 
 - **Language-model embeddings inside ACT-R** — Frontiers in Language Sciences (2026, DOI `10.3389/flang.2026.1721326`). Replaces ACT-R's hand-coded spreading-activation similarities with cosine similarities from Word2Vec/BERT embeddings; scales memory-retrieval models without breaking interpretability.
 
+- **Hybrid Personalization Using ACT-R Declarative and Procedural Memory** — arXiv:2505.05083 (May 2025). Integrates ACT-R's two memory modules into an LLM-based recommendation system to model cognitive biases and provide rule-based explanations; closer to production-level integration than prior academic hybrids.
+
+- **Wray, Kirk, Laird — Applying Cognitive Design Patterns to General LLM Agents** — arXiv:2505.07087 (May 2025, rev. Jun 2025). John Laird (Soar) and collaborators catalog *cognitive design patterns* from pre-transformer architectures — ReAct's observe-decide-act cycle, Generative Agents' episodic memory — and identify patterns present in classical arches but absent from current LLM agents. Argues existing LLM-agent work is unconsciously rediscovering classical cog-arch vocabulary. Direct bridge from Soar/ACT-R lineage to 2025 LLM practice.
+
+- **Lebiere — Integrating Cognitive Architectures and Generative Models** — ACT-R Workshop, ICAGM Session (Jul 2025). Survey of augmentation approaches: LLM Chain-of-Thought + cog-arch consistency checking, multimodal LLMs for perception-action, LLMs as world models inside ACT-R loops. Most comprehensive practitioner synthesis of the two paradigms to date.
+
+- **Ganeriwala et al. — Evaluating LLM Translation for Prompt-Enhanced ACT-R and Soar Models** — SBP-BRiMS 2025. Systematic test of whether LLMs can translate natural-language specifications into ACT-R and Soar production rules with preservation of cognitive dynamics; measures failure modes and translation fidelity.
+
 - **NL2GenSym (arXiv:2510.09355, 2025)** — Uses an LLM Generator–Critic loop to synthesize Soar production rules from natural language, executed and refined inside Soar; >86% rule-generation success; solves tasks at 1.98× optimal cycles. Addresses Soar's biggest practical bottleneck (manual rule authoring).
 
 - **CogRec (arXiv:2512.24113, 2025)** — Cognitive recommender fusing Soar's Perception–Cognition–Action cycle with LLM-sourced knowledge; on impasse, LLM proposes a solution that Soar *chunks* into a new production rule — online symbolic learning driven by language.
@@ -76,27 +86,49 @@ The single most important cross-cutting insight for a humanization project: **hu
 
 - **Reasoning on a Spectrum** — NeurIPS 2025 submission (OpenReview `DQuWpKLNwd`). Curates a dataset with valid System-1 and System-2 responses; shows a monotonic accuracy–efficiency trade-off and that interpolation outperforms either extreme.
 
-### Surveys & Recent Framing (2024–2026)
+### Surveys & Recent Framing (2025–2026)
 
 - **Zhang et al. — "A Survey on the Memory Mechanism of LLM-Based Agents"** — arXiv:2404.13501 (2024). Taxonomy of parametric vs. contextual, structured vs. unstructured memory, and six operations (consolidation, updating, indexing, forgetting, retrieval, condensation). Useful mapping to CoALA memory slots.
 
+- **"Memory in the Age of AI Agents: A Survey"** — arXiv:2512.13564 (Dec 2025, updated Jan 2026). Comprehensive treatment of memory as a core capability of foundation-model-based agents. Companion repo `github.com/Shichun-Liu/Agent-Memory-Paper-List`. Covers R3Mem (reversible compression), MemRL (episodic reinforcement), MemEvolve (meta-evolution of memory structures), MAGMA (multi-graph architecture), and MemVerse (multimodal lifelong memory). The most current survey; supersedes Zhang et al. 2024 for 2025 developments.
+
+- **"Graph-Based Agent Memory: Taxonomy, Techniques, and Applications"** — arXiv:2602.05665 (Feb 2026). Organizes the fast-moving graph-memory landscape: vector memory (semantic similarity) vs. graph memory (relational traversal); identifies 2025 as the inflection year when graph memory moved from experimental to production. Companion repo `DEEP-PolyU/Awesome-GraphMemory`.
+
+- **Chhikara et al. — Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory** — arXiv:2504.19413 (Apr 2025); ECAI 2025. Benchmarks ten memory approaches on LOCOMO: full-context achieves 72.9% accuracy at 17.12 s p95 latency with ~26K tokens; Mem0 vector achieves 66.9% at 1.44 s with ~1.8K tokens; Mem0 graph achieves 68.4% at 2.59 s. Establishes the empirical production baseline for selective retrieval vs. full-context approaches.
+
 - **"Agentic AI: Architectures, Taxonomies, Evaluation of LLM Agents"** — arXiv:2601.12560 (2026). Unified six-component taxonomy (Perception, Brain, Planning, Action, Tool Use, Collaboration); traces the shift from fixed APIs to MCP / Native Computer Use.
+
+- **"Agentic AI: A Comprehensive Survey of Architectures, Applications, and Future Directions"** — arXiv:2510.25445 (Oct 2025); Springer AI Review 2025. Dual-paradigm framework classifying agentic systems into Symbolic/Classical and Neural/Generative lineages; 90-paper PRISMA review covering 2018–2025.
 
 - **The Auton Agentic AI Framework** — arXiv:2602.23720 (2026). Separates declarative *Cognitive Blueprint* from execution *Runtime Engine*; formalizes agent execution as an augmented POMDP with latent reasoning space and biologically-inspired hierarchical episodic consolidation.
 
+- **Bertolazzi et al. — Fast, Slow, and Metacognitive Thinking in AI** — npj Artificial Intelligence 2025. Introduces **SOFAI** (Slow and Fast AI), a multi-agent architecture with a fast System-1 solver, a slow System-2 solver, and a separate **metacognitive module** that selects between them and reflects on past choices. Demonstrates emergence of human-like behaviors — skill learning, adaptability, cognitive control — without being explicitly designed in. SOFAI-v2 adds real-time metacognitive governance; SOFAI-LM extends it to coordinate a fast LLM with a slower LRM.
+
+- **Serov — Evolving Cognitive Architectures** — arXiv:2601.05277 (Dec 2025). Proposes evolutionary search over cognitive-architecture configurations as a path toward AGI; explicitly positions CAs as one of the most promising routes to general intelligence.
+
+- **"Truly Self-Improving Agents Require Intrinsic Metacognitive Learning"** — arXiv:2506.05109; ICML 2025. Position paper arguing that metacognitive knowledge (self-assessment of capabilities), metacognitive planning (deciding what to learn), and metacognitive evaluation (reflecting on learning) are all required for genuine self-improvement. Frames metacognition as the missing component in current agent designs.
+
+- **"Language Models Coupled with Metacognition Can Outperform Reasoning Models"** — arXiv:2508.17959 (Aug 2025). Proposes a dual-loop reflection method — extrospection (critique against human reference) + introspection (using that critique to update reasoning). Outperforms standard reasoning models on several benchmarks, suggesting metacognitive scaffolding is a cost-effective alternative to larger reasoning models.
+
+- **"Invisible Architectures of Thought: Toward a New Science of AI as Cognitive Infrastructure"** — arXiv:2507.22893 (2025). Frames AI cognitive architectures as infrastructure that shapes how populations think at scale, not merely how individual agents perform. Argues for a new science of societal-level cognitive effects.
+
 ## Patterns, Trends, Gaps
 
-1. **Convergence on a shared memory typology.** Working, episodic, semantic, procedural — independently named by ACT-R (1990s), Soar (extended ~2008), CoALA (2023), MemGPT (2023), and the 2024 memory survey. Any serious "humanizing" system should expose these four stores explicitly, not collapse them into a single context window.
+1. **Convergence on a shared memory typology.** Working, episodic, semantic, procedural — independently named by ACT-R (1990s), Soar (extended ~2008), CoALA (2023), MemGPT (2023), and the 2025 memory surveys (Zhang 2024, "Memory in the Age of AI Agents" Dec 2025). Any serious "humanizing" system should expose these four stores explicitly, not collapse them into a single context window.
 
-2. **Metacognition and reflection are load-bearing.** CLARION's metacognitive subsystem, LIDA's consciousness phase, Reflexion's verbal RL, and Generative Agents' reflection tree all report step-change gains. Human-likeness correlates with *an agent that re-reads and re-summarizes its own traces*.
+2. **Graph memory has moved from experimental to production (2025).** By early 2026, graph-based agent memory — which preserves relational and temporal dependencies between memory elements — is in production. Pure vector retrieval is now the *legacy* approach; graph memory adds ~1.5% accuracy and handles contradictory beliefs that vector stores cannot represent. The MAGMA, A-Mem, and MemEvolve papers formalize this shift.
 
-3. **Dual-process framing has become the default.** From Tree of Thoughts (explicit System-1 → System-2 augmentation) through Dualformer and ACPO, the field is converging on **adaptive** System-1/2 switching rather than always-on CoT. Over-reasoning is now a named failure mode.
+3. **Metacognition and reflection are load-bearing.** CLARION's metacognitive subsystem, LIDA's consciousness phase, Reflexion's verbal RL, Generative Agents' reflection tree, SOFAI's metacognitive module, and the ICML 2025 "Truly Self-Improving Agents" paper all converge: human-likeness correlates with *an agent that evaluates and modifies its own reasoning process*. The 2025 addition is the empirical result that metacognition outperforms larger reasoning models on some benchmarks, making it cost-effective.
 
-4. **Hybrid neurosymbolic stacks have moved from theory to benchmarks.** 2025 saw concrete speedups and safety gains from LLM-ACTR, NL2GenSym, CogRec, and SCL. The symbolic layer is no longer optional when interpretability or policy compliance matters.
+4. **Dual-process framing has become the default.** From Tree of Thoughts (explicit System-1 → System-2 augmentation) through Dualformer, ACPO, and the "Stop Overthinking" TMLR 2025 survey, the field is converging on **adaptive** System-1/2 switching. Over-reasoning is now a named failure mode with a dedicated survey. SOFAI provides the cleanest architectural instantiation with a separate metacognitive arbitrator.
 
-5. **Grounding in human data beats persona prompting.** Park et al.'s 1,000-people paper directly shows that interview-grounded episodic memory outperforms demographic persona prompts — and reduces racial/ideological bias. Strong implication for humanization: supply *data*, not *adjectives*.
+5. **Hybrid neurosymbolic stacks have moved from theory to benchmarks.** 2025 saw concrete speedups and safety gains from LLM-ACTR, NL2GenSym, CogRec, and SCL. ACT-R+LLM hybrid user modeling (arXiv:2505.05083) and the ACT-R Workshop ICAGM session represent growing practitioner uptake. The symbolic layer is no longer optional when interpretability or policy compliance matters.
 
-6. **Gaps.** (a) No standard benchmark for "human-likeness" at the cognitive-architecture level — papers use believability Turing tests, survey replication, or task accuracy, incomparably. (b) Classical architectures (Sigma, OpenCog, LIDA) remain almost untouched by the LLM-agent wave; most LLM+classical work focuses on Soar and ACT-R. (c) The **motivational / affective** subsystems of CLARION and LIDA have no mainstream LLM analog — emotional modeling remains fragmented and mostly prompt-level, not architectural. (d) **Forgetting** is theorized (Zhang 2024 survey) but rarely implemented beyond ad-hoc context truncation.
+6. **Classical architecture vocabulary is being revived — from practitioners, not labs.** Laird and colleagues (arXiv:2505.07087) formally documented how LLM-agent work is unconsciously rediscovering Soar/ACT-R patterns. The 45th Soar Workshop (May 2025) included Princeton's Jonathan Cohen as keynote speaker, signaling cross-fertilization with LLM research.
+
+7. **Grounding in human data beats persona prompting.** Park et al.'s 1,000-people paper (arXiv:2411.10109) directly shows that interview-grounded episodic memory outperforms demographic persona prompts and reduces racial/ideological bias. Strong implication for humanization: supply *data*, not *adjectives*.
+
+8. **Gaps.** (a) No standard benchmark for "human-likeness" at the cognitive-architecture level — papers use believability Turing tests, survey replication, or task accuracy, incomparably. (b) Classical architectures (Sigma, OpenCog, LIDA) remain almost untouched by the LLM-agent wave; most LLM+classical work focuses on Soar and ACT-R. (c) The **motivational / affective** subsystems of CLARION and LIDA have no mainstream LLM analog — emotional modeling remains fragmented and mostly prompt-level, not architectural. (d) **Forgetting** is theorized (memory surveys 2024–2025) but rarely implemented beyond ad-hoc context truncation; MemEvolve (Dec 2025) makes the first attempt at principled memory structure evolution but does not model graceful forgetting.
 
 ## Relevance to the Humanization Project
 

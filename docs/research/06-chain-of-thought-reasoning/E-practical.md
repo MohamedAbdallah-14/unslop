@@ -177,22 +177,44 @@
 - **Gist:** Three canonical rules from a frontier agent company: (1) don't tell o1 to think out loud, (2) front-load dense context, (3) specify desired output precisely. Widely repeated community shorthand for "how to prompt reasoning models."
 - **Humanization takeaway:** Reinforces the divide between *reasoning elicitation* (dead on modern reasoning models) and *output styling* (where humanization work must shift).
 
+### 21. Wharton GAIL Report — "The Decreasing Value of Chain of Thought" (Jun 2025)
+- **URL:** https://gail.wharton.upenn.edu/research-and-insights/tech-report-chain-of-thought/
+- **Source:** Wharton Generative AI Labs (Meincke, Mollick, Mollick, Shapiro)
+- **Date:** June 8, 2025
+- **Gist:** Empirical study across reasoning and non-reasoning model tiers. Non-reasoning models: modest gains (Gemini Flash 2.0 +13.5%, Sonnet 3.5 +11.7%, GPT-4o-mini +4.4% not significant) but increased variance — CoT can cause errors on easy questions the model would otherwise answer correctly. Reasoning-tier models: **negligible CoT gain** at 20–80% additional time cost (35–600% more seconds). Conclusion: for reasoning models, explicit CoT prompting is not worth the cost.
+- **Example finding:** CoT requests took 5–15 seconds longer. For models that already reason internally, adding "let's think step by step" is noise.
+- **Humanization takeaway:** The strongest empirical confirmation that explicit CoT prompting is now a beginner mistake on reasoning-tier models. Humanization work should operate at the output-style layer, not the reasoning-elicitation layer. This also validates the "overthinking counter-prompt" (#4) and Cognition Labs guidance (#20) as the correct practitioner posture.
+
+### 22. arXiv 2508.01191 — "Is Chain-of-Thought Reasoning a Mirage?" (Aug 2025)
+- **URL:** https://arxiv.org/abs/2508.01191
+- **Source:** arXiv preprint
+- **Gist:** Analysis framed through a data distribution lens: CoT reasoning is brittle when pushed beyond training distributions. Models exploit statistical regularities in training data rather than performing genuine multi-step reasoning. The "mirage" claim: apparent CoT capability may be pattern matching on training distribution, not transferable reasoning skill.
+- **Humanization takeaway:** If CoT is partly an artifact of training distribution, then "making CoT sound human" is styling a performance, not a cognition — which is precisely the Unslop framing. The paper actually supports the case for post-processing the trace: if the trace isn't genuine reasoning, it can be shaped freely without fidelity concerns.
+
+### 23. LightChen233/Awesome-Long-Chain-of-Thought-Reasoning (GitHub, ongoing)
+- **URL:** https://github.com/LightChen233/Awesome-Long-Chain-of-Thought-Reasoning
+- **Source:** GitHub (community-maintained research list)
+- **Gist:** Continuously updated paper tracker for long-CoT and reasoning-model research. Currently the most complete catalog of the 2025 reasoning paper wave — covering latent CoT, budget forcing, overthinking studies, faithfulness audits, and instruction-following in reasoning models.
+- **Humanization takeaway:** A live resource for tracking what's been established vs. still open in the reasoning trace space. Useful for auditing whether any "new" humanization technique is actually already covered by a 2025 paper.
+
 ---
 
 ## Patterns, trends, and gaps
 
 ### Patterns
-- **Two-camp split on "Let's think step by step":** Still universally taught in YouTube/beginner content (IBM, DataCamp, DEV Community, PE Collective), but increasingly rejected by practitioners on r/LocalLLaMA, OpenAI forum, and HN for modern reasoning models.
-- **Magic phrases cluster:** "Take a deep breath", "show your work", "you're overthinking this", "what's the boring solution?", "walk me through your reasoning", "challenge my assumption". All are short, emotionally/cognitively loaded, and re-usable as humanization levers.
-- **Convergent reasoning voice:** R1-distilled models (Qwen, DeepSeek, Kimi) share a recognizable "Wait… Hmm… Actually… Let me check…" first-person register. This is the de facto template for human-sounding internal monologue.
+- **Two-camp split on "Let's think step by step":** Still universally taught in YouTube/beginner content (IBM, DataCamp, DEV Community, PE Collective), but now **empirically deprecated** by the Wharton GAIL report (#21, Jun 2025) for reasoning-tier models. The practitioner consensus has hardened: explicit CoT prompts add latency and variance on o3/GPT-5/Claude 4, with negligible accuracy gain.
+- **Magic phrases cluster:** "Take a deep breath", "show your work", "you're overthinking this", "what's the boring solution?", "walk me through your reasoning", "challenge my assumption". All are short, emotionally/cognitively loaded, and re-usable as humanization levers — valid on non-reasoning models, but increasingly misapplied to reasoning ones.
+- **Convergent reasoning voice:** R1-distilled models (Qwen3, DeepSeek, Kimi K2) share a recognizable "Wait… Hmm… Actually… Let me check…" first-person register. This is the de facto template for human-sounding internal monologue and is now confirmed across the open-weights class.
 - **Structural separation between inner and outer:** Both OpenAI's official guide and community-built prompts (Cognitive Mesh, `<inner-monologue>` tags) converge on keeping deliberation separate from the final answer.
-- **Budgeted reasoning with natural cutoffs:** llama.cpp's experience shows that a natural-language "time to commit" message preserves quality; an abrupt truncation doesn't. The *form* of the stop signal matters.
+- **Budgeted reasoning with natural cutoffs:** llama.cpp's experience (and s1's budget forcing formalization) shows that a natural-language "time to commit" message preserves quality; abrupt truncation degrades it. The *form* of the stop signal matters. "Wait" as an extension token is now a published technique.
 
 ### Trends
 - **From "elicit reasoning" to "shape reasoning":** The community frontier is moving from "how do I get the model to think?" to "the model already thinks — how do I make the thinking shorter, more grounded, more human-voiced, more committed?"
-- **Faithfulness anxiety:** Growing awareness (HN, r/LocalLLaMA, arXiv 2503.08679) that visible CoT is often a performance, not evidence. Teams are starting to design *around* unfaithfulness rather than trust it.
-- **Latent / hidden reasoning rising:** Multiple HN threads highlight latent-space reasoning (recurrent-depth papers, Coconut, etc.) as a capability win but an interpretability loss.
+- **Faithfulness anxiety deepening:** The Wharton empirical study (#21) and arXiv 2503.08679 (#18) together make the practitioner case that visible CoT is often a performance. Teams are designing *around* unfaithfulness rather than trusting the trace. The "CoT is a mirage" framing (#22) adds a data-distribution critique.
+- **CoT prompting officially declared declining value:** The Wharton June 2025 report is the first peer-reviewed empirical study to systematically show that CoT prompts have marginal or no benefit on reasoning-tier models. This closes a debate that had been running since 2023.
+- **Latent / hidden reasoning rising:** Multiple HN threads highlight latent-space reasoning (Coconut, Heima) as a capability win but an interpretability loss. The concern is growing that future models will not *produce* a CoT trace to style.
 - **EQ ≠ IQ axis (Karpathy):** Growing consensus that humanization lives in pretraining vibes, not RL-reasoning. This is an under-discussed strategic cut for the project.
+- **GPT-5 routing opaqueness creating practitioner friction:** HN and r/LocalLLaMA threads (mid-2025 forward) document confusion about when GPT-5 engages deep reasoning — the shift from explicit `model="o3"` to implicit routing removes a control surface practitioners relied on. Workarounds include phrasing queries as hard problems and frontloading complexity signals.
 
 ### Gaps (open research space for the Humanizer project)
 - **No community prompt pattern for humanized-but-faithful reasoning.** Everyone optimizes for one or the other.
@@ -214,3 +236,6 @@
 - YouTube/tutorial corpus: DataCamp, IBM, DEV Community, PE Collective, AppliedAI — canonical "think step by step" teaching
 - H-CoT jailbreak paper (arXiv 2502.12893), CoT faithfulness paper (arXiv 2503.08679) — academic findings that are actively driving the forum backlash
 - Cognition Labs blog ("Prompting o1") — engineering-side rule set the community keeps quoting
+- Wharton GAIL Technical Report — "The Decreasing Value of Chain of Thought in Prompting" (Jun 2025) — https://gail.wharton.upenn.edu/research-and-insights/tech-report-chain-of-thought/
+- arXiv 2508.01191 — "Is Chain-of-Thought Reasoning a Mirage?" (Aug 2025) — https://arxiv.org/abs/2508.01191
+- GitHub: LightChen233/Awesome-Long-Chain-of-Thought-Reasoning — https://github.com/LightChen233/Awesome-Long-Chain-of-Thought-Reasoning

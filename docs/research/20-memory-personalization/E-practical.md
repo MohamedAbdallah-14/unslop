@@ -1,6 +1,9 @@
 # Memory & Personalization — Practical & Forums
 
-**Research value: high** — A rich, opinionated practitioner corpus across Reddit (r/ChatGPT, r/LocalLLaMA, r/LangChain), Hacker News, dev.to, and YouTube has converged on a clear architectural vocabulary (Mem0 / Zep / Letta / LangGraph Store), a clear user-facing debate (transactional vs. relationship-driven), and a clear set of failure modes (context pollution, memory bloat, prompt-injection vectors). Enough independent convergence to trust the patterns; enough controversy to map open questions.
+**Research value: high**
+**Last updated:** 2026-04-21
+
+A rich, opinionated practitioner corpus across Reddit (r/ChatGPT, r/LocalLLaMA, r/LangChain), Hacker News, dev.to, and YouTube has converged on a clear architectural vocabulary (Mem0 / Zep / Letta / LangGraph Store), a clear user-facing debate (transactional vs. relationship-driven), and a clear set of failure modes (context pollution, memory bloat, prompt-injection vectors). Enough independent convergence to trust the patterns; enough controversy to map open questions.
 
 ## Executive Summary
 
@@ -126,6 +129,14 @@ A second cross-cutting pattern: **account-level memory is losing, project-scoped
 
 > "If an agent reads malicious content, those instructions could persist across sessions." — r/LocalLLaMA 1r5q7xd (echoing Rehberger's production attack)
 
+## New Practitioner Signals (Apr 2026 update)
+
+- **ChatGPT memory reliability is degrading.** Reddit threads (r/ChatGPT 1o2pxzs, 1m9bs7r, 1mdbq4y) document mass-reset incidents (Nov 2025), saving-new-memories breaking recall of old memories, and third-party patches now being built to fix what users perceive as first-party regressions. The `Developer Mode` bug (orange chat input silently disabling memory entirely) is widely circulated. OpenAI has not publicly acknowledged the mass-reset incidents.
+- **MIT/Penn State research (CHI 2026) has entered practitioner discourse.** The finding that condensed user profiles in memory are the largest driver of sycophancy is beginning to appear in HN and LangChain forum discussions. Practitioners are starting to ask "does memory make my agent biased toward the user?" rather than just "does it remember?"
+- **GPT-5.4 (Mar 2026) raised the consumer baseline again.** Improved cross-chat memory, Codex agentic coding, new $8/mo Go tier, Record Mode, and 60+ app connectors. Startups building on top of memory layers need to re-benchmark against the current OpenAI consumer experience, not the Feb 2024 launch.
+- **SimpleMem's +64% over Claude-Mem on LoCoMo** is circulating in r/LocalLLaMA as evidence that compression-first memory (distill → consolidate → retrieve) beats extraction-first memory (extract salient facts → append). Practitioners are beginning to evaluate it as an alternative to Mem0 for local deployments.
+- **OWASP Top 10 for Agentic Applications 2026** lists persistent memory as a named risk category. The InjecMEM attack (one-interaction memory poisoning) and memory control flow attacks are now threat-model items in enterprise agent checklists, not just security research curiosities.
+
 ## Emerging Trends
 
 - **Account-level memory is a consensus miss; project-scoped is winning.** HN and r/ChatGPT complaints cluster around cross-project bleed; Anthropic's Claude Projects and ChatGPT's "Memories inside Projects" feature are the fix. Product-direction signal: vendors are retrofitting scoping on top of global memory rather than the other way around.
@@ -151,7 +162,7 @@ A second cross-cutting pattern: **account-level memory is losing, project-scoped
 - **Memory security in the agent-tool setting.** Rehberger's attack shows the risk; no practitioner writeup describes concrete defenses beyond "user messages only, not assistant outputs," which is a partial mitigation at best.
 - **Multi-user / multi-tenant memory in shared agents.** Production teams cite cross-user contamination as a live risk (user-ID hallucination, shared namespace bugs) but the fix ("bake IDs into tool closures") is a workaround, not an architecture.
 - **The relationship between memory and personalization as humanization.** Almost no one in this corpus frames memory as a *humanization* mechanism (the agent sounds more like a real colleague *because* it remembers). The discussion stays stubbornly operational — facts recalled, tokens saved — rather than interpersonal. This is a major conceptual gap the Humanizer project can fill.
-- **Sycophancy vs. memory interaction.** If an agent remembers "user likes feature X," does that increase sycophantic agreement in future turns? No one has studied it.
+- **Sycophancy × memory: now empirically confirmed.** MIT/Penn State CHI 2026 found condensed user profiles in memory are the single largest driver of sycophancy across five LLMs studied. This is no longer a speculation — it is a measured effect. No practitioner guide or framework has yet published a defense architecture. The interaction between "memory that works" and "sycophancy that increases" is the next architectural challenge in the space.
 - **Prompt-engineering for the memory extractor itself.** The "Sentinel prompt" and category schema are load-bearing, but tutorials treat them as one-off engineering, not a reusable artifact.
 
 ## References

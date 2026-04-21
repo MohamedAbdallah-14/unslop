@@ -12,7 +12,7 @@ The strongest shared insight across repos: humanization is a *subtraction* probl
 
 ### Humanization / Rewriter Skills
 
-- **blader/humanizer** — `github.com/blader/humanizer` — author: blader — ~14,477★ — last release v2.5.1 (2026). Claude Code/OpenCode skill that rewrites AI text against a 29-pattern checklist derived from Wikipedia's "Signs of AI writing" guide. Patterns span content (significance inflation, notability name-dropping, superficial -ing analyses, promotional language, vague attributions, formulaic "despite challenges" closers), language (AI vocabulary, copula avoidance, negative parallelisms, rule-of-three, synonym cycling, false ranges, passive voice), style (em-dash overuse, boldface overuse, title-case headings, emojis, curly quotes, hyphenated word-pair overuse, persuasive-authority tropes, signposting, fragmented headers), chatbot artifacts (sycophancy, cutoff disclaimers, "I hope this helps"), and filler/hedging. Includes a second "obviously AI generated" audit pass and a voice-calibration mode that ingests user writing samples. MIT-licensed. *This is the de facto reference implementation.*
+- **blader/humanizer** — `github.com/blader/humanizer` — author: blader (Siqi Chen) — ~14,700★ — last release v2.5.1 (2026), actively maintained with issues filed as recently as April 2026 (issue #95, April 16; issue #73, March 26 — targeting "describe the diff, not the code" as a new AI pattern). Claude Code/OpenCode skill that rewrites AI text against a 29-pattern checklist derived from Wikipedia's "Signs of AI writing" guide. Patterns span content (significance inflation, notability name-dropping, superficial -ing analyses, promotional language, vague attributions, formulaic "despite challenges" closers), language (AI vocabulary, copula avoidance, negative parallelisms, rule-of-three, synonym cycling, false ranges, passive voice), style (em-dash overuse, boldface overuse, title-case headings, emojis, curly quotes, hyphenated word-pair overuse, persuasive-authority tropes, signposting, fragmented headers), chatbot artifacts (sycophancy, cutoff disclaimers, "I hope this helps"), and filler/hedging. Includes a second "obviously AI generated" audit pass and a voice-calibration mode that ingests user writing samples. MIT-licensed. *This is the de facto reference implementation.*
 
 - **lguz/humanize-writing-skill** — `github.com/lguz/humanize-writing-skill` — small star count — 2025. 3-pass editing system with 36+ banned words, 10 structural patterns, and a quality checklist. Works with Claude, ChatGPT, Gemini, Cursor, Windsurf. Distributed as two markdown files or a Claude Code plugin. Explicitly targets parallel negation, tricolons, varied sentence length, and contraction injection.
 
@@ -66,6 +66,10 @@ The strongest shared insight across repos: humanization is a *subtraction* probl
 
 - **dair-ai/Prompt-Engineering-Guide** — `github.com/dair-ai/Prompt-Engineering-Guide` — ~73,000★, 3M+ learners, 13 languages. Reference curriculum on zero-shot, few-shot, CoT, self-consistency, and instruction design. Foundational context for any humanization prompt design.
 
+### Anti-Slop CI / Automation
+
+- **peakoss/anti-slop** — `github.com/peakoss/anti-slop` — GitHub Marketplace action — 2026. A GitHub Action that detects and automatically closes low-quality and AI-slop pull requests. Built by a Coolify maintainer (50K+ star project) who reported the action could have closed 98% of AI-slop PRs based on early testing. Extends the "humanization as a code quality concern" pattern from CI regex checks (dev.to, B-14) to automated PR gating. Listed on GitHub Marketplace as `action: anti-slop`.
+
 ### System-Prompt Leak Archives
 
 - **asgeirtj/system_prompts_leaks** — `github.com/asgeirtj/system_prompts_leaks` — ~38,589★ — created May 2025, pushed Apr 17 2026. Extracted system prompts from ChatGPT (GPT-5.4, GPT-5.3, Codex), Claude (Opus 4.6, Sonnet 4.6, Claude Code), Gemini (3.1 Pro, 3 Flash, CLI), Grok (4.2, 4), Perplexity. MIT, 20 contributors. The primary source for "how do frontier labs themselves instruct tone/persona/hedging".
@@ -116,11 +120,15 @@ The strongest shared insight across repos: humanization is a *subtraction* probl
 
 - **Voice calibration as the next frontier.** Generic humanization is saturating; personalized humanization (match *this specific* user's style from samples) is where newer releases (`blader/humanizer` v2.4) differentiate.
 
-- **Detection arms race.** Detector-evasion repos and detector vendors are co-evolving; tokenizer-level attacks (Unicode spaces) are being countered by normalization, pushing evasion back toward text-level and behavior-level techniques.
+- **Detection arms race escalating at the institutional layer.** Turnitin's February 2026 model update added explicit detection of AI-paraphrased content (a new "AI-generated + AI-paraphrased" category in the writing report), breaking tokenizer-level attacks that previously evaded it. This forces the evasion-focused camp back toward behavior-level and fine-tuning-based approaches, while undermining the value proposition of prompt-only humanizers.
+
+- **Anti-slop automation extending into CI/PR pipelines.** The `peakoss/anti-slop` GitHub Action (2026) gates pull requests on slop detection rather than just post-processing output. The same principle (catch slop before it merges) is spreading from dev.to's grep-in-CI pattern to full PR-gating workflows.
 
 - **System-prompt leaks as training material.** The two leak archives (53K★ combined) are increasingly cited as primary sources for how to structure tone, hedging, refusal language, and persona — effectively a corpus of "human-optimized" system prompts built by well-resourced labs.
 
 - **Quantified humanization dials.** Early attempts (x1xhlol PR #50, Mohit1053) to expose preservation/creativity percentages as knobs hint at a future where humanization is configurable rather than monolithic, though no repo has published validation data on whether these dials behave as labeled.
+
+- **Expanding pattern catalogs: "describe the diff, not the code" emerges as a new AI tell.** Active development in `blader/humanizer` (issue #73, March 2026) identifies the pattern of narrating what changed rather than why — a meta-commentary tell specific to code-related LLM outputs. Pattern catalogs are growing beyond vocabulary bans into structural and rhetorical tells.
 
 ## Open Questions / Gaps
 

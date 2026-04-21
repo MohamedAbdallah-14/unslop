@@ -103,7 +103,7 @@ Fields per entry: **Citation · Venue · Contribution · Method · Key finding �
     - LLM-based agents in multi-agent cooperative tasks show emergent collaboration and higher-order ToM-like behavior, but systematic failures at long-horizon context and hallucinated task states.
     - Recommends explicit belief-state representations and BDI-style scaffolds. Bridge between ToM evaluation and *applied* agentic systems.
 
-### Meta-critique (2025)
+### Meta-critique and new benchmarks (2025–2026)
 
 19. **Soubki & Rambow (2025). "Machine Theory of Mind Needs Machine Validation."** Findings of ACL 2025.
     - Meta-analysis of 16 ToM-in-LLM studies. Almost all perform **human validation** (human raters checking items); fewer than half perform **machine validation** (checking for patterns that simple models can exploit). Among studies that *do* run machine validation, **none** find LMs exceeding humans.
@@ -112,13 +112,45 @@ Fields per entry: **Citation · Venue · Contribution · Method · Key finding �
 20. **Nguyen (2025). "A Survey of Theory of Mind in Large Language Models: Evaluations, Representations, and Safety Risks."** arXiv:2502.06470. (See also: Sarıtaş et al., "A Systematic Review on the Evaluation of Large Language Models in Theory of Mind Tasks," arXiv:2502.08796; and ACL 2025 survey "Theory of Mind in Large Language Models: Assessment and Enhancement," 2025.acl-long.1522.)
     - Three independent 2025 surveys converge on: (a) GPT-4-class models match or exceed humans on a narrow slice of classical tasks; (b) all models fail LLM-hardened benchmarks (BigToM, FANToM, OpenToM, Hi-ToM, ToMBench); (c) internal belief representations exist but remain non-robust; (d) advanced ToM in LLMs introduces safety risks (manipulation, privacy, collective misalignment).
 
+21. **Street et al. (2024/2025). "LLMs achieve adult human performance on higher-order theory of mind tasks."** arXiv:2405.18870; published in *Frontiers in Human Neuroscience* 19, 2025.
+    - Handwritten Multi-Order Theory of Mind Q&A test suite; five LLMs vs. a newly gathered adult human benchmark. GPT-4 and Flan-PaLM reach adult-level and near-adult performance overall. GPT-4 **exceeds adult performance on 6th-order inferences**. Reported interplay between model size and fine-tuning.
+    - Important counterpoint to Hi-ToM's monotonic-decay finding. The difference is in the stimulus type: Street et al. uses natural higher-order reasoning vignettes, while Hi-ToM stacks recursive false-belief clauses mechanically. Also raises the manipulation/persuasion risk: LLMs capable of higher-order ToM can outclass average humans at nested inference.
+
+22. **Sclar et al. (2025). "Position: Theory of Mind Benchmarks are Broken for Large Language Models."** ICML 2025 (IBM Research). arXiv:2412.19726.
+    - Argues that existing ToM benchmarks measure **literal ToM** (predicting behavior of others from static scenarios) but not **functional ToM** (actually adapting in-context to new partners following rational responses to observed behavior). Many open-source LLMs show strong literal ToM but fail functional ToM even with simple partner policies. Literal and functional ToM performance do not correlate.
+    - Calls for benchmarks with an interactive component separating reasoning about mental states from adapting to them. The literal/functional split is the 2025 complement to SimpleToM's explicit/applied split — both point at the same gap from different angles.
+
+23. **Wang et al. (2025). "Rethinking Theory of Mind Benchmarks for LLMs: Towards A User-Centered Perspective."** CHI 2025 HEAL Workshop. arXiv:2504.10839.
+    - Identifies three structural problems in current ToM benchmarks appropriated from human developmental psychology: (a) ToM is multidimensional but has only been tested in one dimension; (b) current tests lack construct validity; (c) evaluations use third-person static scenarios that do not reflect how users actually interact with LLMs. Calls for dynamic, interactional approaches that account for user preferences, needs, and experiences.
+    - Useful methodological anchor for any new humanization eval — the "third-person vignette" critique is the same one FANToM and SimpleToM tried to address; this paper explains why neither fully resolved it.
+
+24. **Pi et al. (2025). "ToM-RL: Reinforcement Learning Unlocks Theory of Mind in Small LLMs."** arXiv:2504.01698.
+    - Rule-based RL applied post-training on a 3,200-question ToM dataset. An RL-trained 7B model reaches **84.50% on Hi-ToM**, surpassing GPT-4o and DeepSeek-v3 on that benchmark. Smaller models (≤3B) suffer reasoning collapse; 7B models maintain stable performance through belief tracking.
+    - Establishes that RL fine-tuning can unlock competitive Hi-ToM performance in small models — but see #25 for the counterpoint on generalization.
+
+25. **Oguntola et al. (2025). "Small LLMs Do Not Learn a Generalizable Theory of Mind via Reinforcement Learning."** arXiv:2507.15788.
+    - Direct challenge to the ToM-RL optimism. Prolonged RL training causes models to **hack statistical patterns** in training distributions; performance improves on in-distribution items but fails to transfer to unseen ToM tasks with different characteristics. The learned behavior is narrow overfitting, not abstract ToM acquisition.
+    - The two papers together define the open question for 2025–2026: can any RL recipe produce *generalizable* ToM, or does every improvement decompose into task-specific pattern matching?
+
+26. **Ramirez et al. (2025). "MoMentS: A Comprehensive Multimodal Benchmark for Theory of Mind."** Findings of EMNLP 2025. arXiv:2507.04415.
+    - 2,300+ multiple-choice questions across seven ToM categories, evaluated on short narrative films with long video context windows and realistic social interactions. Successor direction to MMToM-QA but grounded in cinema narrative rather than household video.
+    - Extends the multimodal ToM stack beyond household activities and into open-domain social narratives — a more realistic proxy for the social contexts where humanization actually matters.
+
+27. **Piatti et al. (2025). "Infusing Theory of Mind into Socially Intelligent LLM Agents" (ToMAgent / ToMA).** arXiv:2509.22887.
+    - Introduces **ToMAgent (ToMA)**: pairs ToM inference with dialogue lookahead to produce mental states maximally useful for achieving dialogue goals. Evaluated on the Sotopia benchmark. Improvements of up to **18.9%** over best base model variant (Qwen2.5-3B) and **6.9%** for Qwen2.5-7B; competitive with GPT-5 nano baseline. ToMA exhibits more strategic, goal-oriented reasoning with better long-horizon adaptation while maintaining partner relationships.
+    - Important shift: ToM inference wired into generation via lookahead, not just evaluated as QA. Closest open work to what a humanization product would actually need to ship.
+
 ### Additional relevant entries (for a fuller reading list)
 
-21. **Jung, Kim, Sclar, Kim, Sap, Choi (2024). "Perceptions to Beliefs: Exploring Precursory Inferences for Theory of Mind in Large Language Models" (PercepToM).** EMNLP 2024. arXiv:2407.06004.
+28. **Jung, Kim, Sclar, Kim, Sap, Choi (2024). "Perceptions to Beliefs: Exploring Precursory Inferences for Theory of Mind in Large Language Models" (PercepToM).** EMNLP 2024. arXiv:2407.06004.
     - Separates **perception inference** (who saw/heard what — LLMs do well) from **perception→belief inference** (LLMs do poorly, lack inhibitory control). Offers a scaffold that combines the two. Releases Percept-ToMi and Percept-FANToM annotations.
 
-22. **Pi, Rebain, Zhang, Shwartz (2024). "Dissecting the Ullman Variations with a SCALPEL: Why do LLMs fail at Trivial Alterations to the False Belief Task?"** arXiv:2406.14737.
+29. **Pi, Rebain, Zhang, Shwartz (2024). "Dissecting the Ullman Variations with a SCALPEL: Why do LLMs fail at Trivial Alterations to the False Belief Task?"** arXiv:2406.14737.
     - Builds **SCALPEL**, an incremental-perturbation tool to isolate *why* LLMs fail Ullman's transparent-access variant. Finds failures stem from missing commonsense inference (transparent container → contents known), not from pure ToM failure.
+
+30. **Martínez et al. (2026). "Understanding Artificial Theory of Mind: Perturbed Tasks and Reasoning in Large Language Models."** arXiv:2602.22072.
+    - Investigates ToM robustness using perturbations on false-belief tasks; examines whether CoT prompting enhances performance and provides faithful explanations. Introduces a handcrafted, richly annotated ToM dataset including classic and perturbed variants, with valid reasoning chains for each. Extends the Ullman/SCALPEL perturbation tradition with explicit reasoning annotation.
+    - Reinforces that even as frontier models get stronger on standard items, perturbation fragility is not resolved.
 
 ---
 
@@ -133,12 +165,15 @@ Fields per entry: **Citation · Venue · Contribution · Method · Key finding �
 - **Psychology vs physics split (OpenToM).** Models track physical-world facts (where the object is) better than psychological-world facts (what the character *feels* about it).
 - **Outstanding paper cluster.** SymbolicToM (ACL 2023), MMToM-QA (ACL 2024), and the wider prominence of Strachan (Nature HB 2024) indicate the field is taken seriously by top venues — useful signal for citation weight.
 
-### Trends (2024–2025)
+### Trends (2024–2026)
 
 - **From behavior to mechanism.** 2023 was about *whether* LLMs have ToM; 2024–2025 is about *how* — probing, causal interventions, symbolic scaffolds.
 - **From narrative to interactive.** FANToM, SimpleToM, and MMToM-QA move evaluation into dialogue and embodied scenarios, which is closer to production humanization use cases than Sally–Anne vignettes.
 - **Machine-validation discipline.** The Soubki & Rambow 2025 meta-analysis is likely to set a new methodological bar: any new ToM dataset without machine-validation checks will be discounted.
-- **Agentic ToM.** Multi-agent LLM work (Hypothetical Minds, "Theory of Mind for Multi-Agent Collaboration," BDI scaffolds) is pushing ToM from a benchmark score into a design primitive for agent loops.
+- **Agentic ToM.** Multi-agent LLM work (Hypothetical Minds, "Theory of Mind for Multi-Agent Collaboration," BDI scaffolds, ToMAgent) is pushing ToM from a benchmark score into a design primitive for agent loops.
+- **Literal vs. functional ToM as the new framing.** The ICML 2025 position paper (Sclar et al.) and the CHI HEAL workshop paper (Wang et al.) both argue that existing benchmarks measure the wrong thing — static prediction vs. in-context adaptation. This "functional ToM" frame is now competing with SimpleToM's explicit/applied split as the primary critique vocabulary.
+- **RL for ToM is contested.** ToM-RL (April 2025) shows a 7B model beating GPT-4o on Hi-ToM via RL post-training. Oguntola et al. (July 2025) shows this generalizes poorly to out-of-distribution tasks. The debate over whether RL instills ToM or merely overfits training distributions is the live empirical question entering 2026.
+- **Higher-order claims are back.** Street et al. (*Frontiers in Human Neuroscience* 2025) report GPT-4 exceeding adult humans at 6th-order belief inference. This reopens the debate Ullman tried to close — but on higher-order rather than first-order tasks.
 
 ### Gaps relevant to humanization
 
@@ -179,6 +214,14 @@ Fields per entry: **Citation · Venue · Contribution · Method · Key finding �
 - arXiv:2502.08796 — Sarıtaş et al., "A Systematic Review on the Evaluation of LLMs in ToM Tasks."
 - arXiv:2407.06004 — Jung et al., "PercepToM," EMNLP 2024.
 - arXiv:2406.14737 — Pi et al., "Dissecting the Ullman Variations with a SCALPEL."
+- arXiv:2405.18870 — Street et al., "LLMs achieve adult human performance on higher-order theory of mind tasks," *Frontiers in Human Neuroscience* 2025.
+- arXiv:2412.19726 — Sclar et al., "Position: Theory of Mind Benchmarks are Broken for LLMs," ICML 2025.
+- arXiv:2504.10839 — Wang et al., "Rethinking Theory of Mind Benchmarks for LLMs: Towards A User-Centered Perspective," CHI 2025 HEAL Workshop.
+- arXiv:2504.01698 — Pi et al., "ToM-RL: Reinforcement Learning Unlocks Theory of Mind in Small LLMs," 2025.
+- arXiv:2507.15788 — Oguntola et al., "Small LLMs Do Not Learn a Generalizable Theory of Mind via Reinforcement Learning," 2025.
+- arXiv:2507.04415 — Ramirez et al., "MoMentS: A Comprehensive Multimodal Benchmark for Theory of Mind," Findings of EMNLP 2025.
+- arXiv:2509.22887 — Piatti et al., "Infusing Theory of Mind into Socially Intelligent LLM Agents (ToMAgent)," 2025.
+- arXiv:2602.22072 — Martínez et al., "Understanding Artificial Theory of Mind: Perturbed Tasks and Reasoning in LLMs," 2026.
 - Le, Boureau, Nickel, "Revisiting the Evaluation of Theory of Mind through Question Answering" (ToMi), EMNLP 2019 — ACL Anthology D19-1598.
 - arXiv:1904.09728 — Sap et al., "SocialIQA," EMNLP-IJCNLP 2019.
 - PMLR v80, Rabinowitz et al., "Machine Theory of Mind," ICML 2018 — arXiv:1802.07740.

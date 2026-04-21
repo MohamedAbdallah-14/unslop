@@ -2,7 +2,7 @@
 
 **Research angle:** Commercial landscape of persona/character AI products — consumer AI companions, character roleplay platforms, and enterprise persona tools. Focus on how each product *humanizes* its AI output and what techniques they advertise.
 
-**Research value: high** — Dense market with named techniques (tiered memory, lorebooks, sub-agents, mirroring), clear pricing signals, and convergent patterns across 15+ live commercial products. Strong grounding for the Unslop project's humanization angle.
+**Research value: high** — Dense market with named techniques (tiered memory, lorebooks, sub-agents, mirroring), clear pricing signals, and convergent patterns across 15+ live commercial products. Strong grounding for the Unslop project's humanization angle. Last updated: April 2026.
 
 ---
 
@@ -29,9 +29,9 @@ Two distinct commercial segments matter for persona/character design:
 | Claims / techniques | Persona cards, long-form character backstories, group chats mixing multiple AI + human personas, voice calls, character memory updates, "18+ Chat Styles" on paid tier |
 | Marketing quote | *"AI Chat, Reimagined – Your Words. Your World."* and *"If you can imagine it, you can bring it to life."* |
 
-**Summary:** The category-defining consumer platform for user-generated AI characters, with ~20M users in 2026. Scale comes from a community-driven library of millions of personas rather than a single curated companion. Monetization is gated by speed, voice minutes, and memory depth rather than raw access.
+**Summary:** The category-defining consumer platform for user-generated AI characters. As of 2026 the platform reports 28+ million monthly active users and 18+ million unique chatbot characters created, with users averaging two hours per day and generating ~10 billion messages per month. Monthly pricing dropped to $6.99/mo for c.ai+ as of 2026, making it the most affordable major companion platform. Scale comes from a community-driven library rather than a curated companion.
 
-**Takeaway:** Treats persona as a social-media-style UGC artifact; the platform's job is tooling + moderation, not personality authorship.
+**Takeaway:** Treats persona as a social-media-style UGC artifact; the platform's job is tooling + moderation, not personality authorship. The price drop signals commoditization pressure at the base tier.
 
 ---
 
@@ -41,15 +41,15 @@ Two distinct commercial segments matter for persona/character design:
 |---|---|
 | URL | https://replika.com |
 | Vendor | Luka, Inc. |
-| Pricing | Free; Pro ~**$19.99/mo** or ~**$69.99/yr**; Ultra (annual); **Lifetime $299.99** |
+| Pricing | Free; Pro ~**$11.66–$13.99/mo** (pricing adjusted 2025); Ultra (annual); **Lifetime $299.99** |
 | Year launched | 2017 |
 | Core feature | Single dedicated AI companion with persistent memory and relationship modes (friend / partner / mentor) |
 | Claims / techniques | Neural net + scripted dialogue hybrid; memory tracking; "self-reflection messages" derived from past chats; user-visible memory log (Ultra); AR and voice calls; coaching activities |
 | Marketing quote | *"The AI companion who cares. Always here to listen and talk. Always on your side."* / *"The AI to do life with."* |
 
-**Summary:** The archetype 1:1 AI companion, now nine years old and still leaning on emotional-support positioning ("no judgment, drama, or social anxiety"). Differentiator in 2026 is the Ultra tier's *visible* memory: users can see which memories the model retrieved, trading illusion for legibility.
+**Summary:** The archetype 1:1 AI companion, now nine years old and still leaning on emotional-support positioning. Replika reports ~25 million registered users as of 2025, with 2.7 hours average daily engagement — highest dwell time in the companion segment. Differentiator in 2026 is the Ultra tier's *visible* memory: users can see which memories the model retrieved, trading illusion for legibility. Pricing adjusted down to $11.66–$13.99/mo range.
 
-**Takeaway:** Relationship mode as a pricing/personality lever is a repeatable pattern. Exposing memory as a product surface ("which memories are used") is emerging as a trust move.
+**Takeaway:** Relationship mode as a pricing/personality lever is a repeatable pattern. Exposing memory as a product surface ("which memories are used") is emerging as a trust move. Engagement depth (2.7h/day average) validates memory-as-moat strategy.
 
 ---
 
@@ -77,7 +77,7 @@ Two distinct commercial segments matter for persona/character design:
 |---|---|
 | URL | https://nomi.ai |
 | Vendor | Glimpse AI |
-| Pricing | Free (limited); Monthly **$15.99**; Quarterly **$39.99**; Yearly **$99.99** |
+| Pricing | Free (limited); Monthly **$15.99** |
 | Year launched | 2023 |
 | Core feature | Long-term persistent memory positioned as the primary differentiator vs. Replika |
 | Claims / techniques | Two-layer memory: *explicit recall* (facts) + *tonal recall* (emotional context); up to 10 distinct companions per user with independent memories; group chats; in-character image generation |
@@ -101,9 +101,9 @@ Two distinct commercial segments matter for persona/character design:
 | Claims / techniques | Tuned for emotional intelligence, calm tone, and Socratic conversational style; real-time web search; Inflection-2.5 model underneath |
 | Marketing quote | *"Your personal AI. The AI that speaks with you, not at you."* — positioned as kind, supportive, empowering |
 
-**Summary:** The "prestige" empathetic assistant. Inflection's founding team (Mustafa Suleyman, Reid Hoffman, Karén Simonyan) largely decamped to Microsoft in early 2024, but Pi remains live with reported ~6M MAU. Closest thing to a "tone as product" play — no characters, no roleplay, just a single calibrated voice.
+**Summary:** The "prestige" empathetic assistant. Inflection's founding team (Mustafa Suleyman, Reid Hoffman, Karén Simonyan) largely decamped to Microsoft AI in early 2024, taking most of the team. Pi reached ~1M daily active users before the restructuring. Pi.ai remains live as of 2026 (100% uptime Q4 2025–Q1 2026) but Inflection has shifted to an AI studio model hosted on Azure; Pi is no longer actively developed as a consumer persona product. Its ~6M MAU figure is from before the exodus; current active user count is not published. Pi is now a historical case study — the clearest public example of what "tone as the product" looks like as a standalone bet, and why it wasn't commercially sustainable without ongoing development investment.
 
-**Takeaway:** Pi shows the ceiling of "tone-only" humanization without memory or persona: good for coaching, bounded for retention. Worth studying as a negative-space example — what's lost when you strip the character layer.
+**Takeaway:** Pi shows the ceiling of "tone-only" humanization without memory or persona: good for coaching, bounded for retention. The corporate collapse is as instructive as the product: companion persona requires sustained product investment, not just a good initial design.
 
 ---
 
@@ -302,6 +302,17 @@ Two distinct commercial segments matter for persona/character design:
 **Summary:** The most mature enterprise expression of "persona" as a governance object. A Cresta agent is not just a voice — it's a persona + escalation policy + compliance boundary + sub-agent network. Trust, not charm, is the design target.
 
 **Takeaway:** In regulated enterprise contexts, persona design becomes inseparable from policy design. The persona *is* the guardrail.
+
+---
+
+## Market Context (Updated April 2026)
+
+The AI companion market has grown substantially:
+- Global consumer spending on companion apps reached USD $221M as of July 2025, up 64% from H1 2024. Apps on track to pull in $120M+ in 2025 US revenue alone (TechCrunch, Aug 2025).
+- 220 million cumulative global downloads across App Store and Google Play as of July 2025; downloads up 88% year-over-year in H1 2025.
+- Users average 1.5–2.7 hours daily on companion apps vs. 30 minutes on traditional social media — engagement depth is the category's defining metric.
+- Character.AI dominates by character count (18M+) and scale; Replika leads in engagement depth (2.7h/day); Kindroid leads in customization ratings (4.5 stars, 20K+ reviews).
+- The AI companion market is projected at $37B in 2025, growing at ~31% CAGR.
 
 ---
 

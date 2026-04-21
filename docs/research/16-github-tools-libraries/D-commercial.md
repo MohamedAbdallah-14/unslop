@@ -13,24 +13,23 @@ Black-box humanizer APIs with hosted infrastructure, API keys, rate limits, and 
 ### 1.1 Undetectable.ai — Humanization API v2
 
 - **Posture:** Market incumbent; closed-source SaaS.
-- **Pricing:** Consumer $9.99–$49.99/mo (10K–50K words, ~$0.20–$1.00 / 1K words); API access bundled in higher tiers. Cited as "$9.99/month" in comparison reviews.
-- **API surface:** `v2`, `v11`, `v11sr` model versions. Parameters include readability levels (High School → Journalist) and strength (Quality / Balanced / More Human).
-- **Claim:** "86% average detection reduction" in independent tests.
-- **Relevance to D:** This is the thing OSS players explicitly position against — most OSS READMEs name it as the target to match.
+- **Pricing:** Consumer $9.99–$49.99/mo (10K–50K words). Mid-tier around $19/mo for 50K words; agency-scale climbs past $80/mo.
+- **API surface:** `v2`, `v11`, `v11sr` model versions. Parameters include readability levels (High School → Journalist → University → Marketing → Essay → Story → Business → General) and purpose settings. Also offers a 50+ language Chrome extension.
+- **Claim:** "86% average detection reduction" in independent tests. **Post-Turnitin August 2025 update:** performs relatively well versus competitors, as its model appears specifically tuned against Turnitin's current signal.
+- **Relevance to D:** This is the thing OSS players explicitly position against — most OSS READMEs name it as the target to match. Remains market incumbent in 2026.
 
 ### 1.2 WriteHuman API (writehuman.ai/api)
 
 - **Posture:** Developer-facing REST API on top of a consumer app.
-- **Pricing:** Standard $29/mo (125K words, 2,000 words/call, 10 req/min), Premium $69/mo (400K words, 4,000 words/call, 60 req/min, "Best of 3" scored outputs). Top-up: $25 / 125K words, non-expiring. ~$0.17/1K words at Premium.
-- **API surface:** `POST /v1/humanize` with bearer auth; tone parameter; ~1.2 s avg response; 40+ languages; built-in AI detection on Premium.
-- **Marketing quote:** *"Humanize AI text with a single API call… Simple REST API with production-ready reliability. Starting at $0.17 per 1K words."*
+- **Pricing (updated 2026):** Starting at ~$18/mo (request-based model). Positioning has shifted to emphasize price-per-content-potential vs Undetectable.ai's word-based model.
+- **API surface:** `POST /v1/humanize` with bearer auth; tone parameter; ~1.2 s avg response; 40+ languages; built-in AI detection.
 - **Relevance to D:** Clearest example of the "managed humanizer API" productization pattern — pricing, SLA, key rotation, usage dashboard all standard.
 
 ### 1.3 StealthGPT API (stealthgpt.ai/stealthapi)
 
 - **Posture:** Commercial API with generate-or-rephrase endpoint.
-- **Pricing:** `$0.20 / 1K words` (Stealth Pro), `$2.00 / 1K words` (Stealth Business), custom Enterprise. Consumer plan from $9.99/mo (~74% detection drop).
-- **API surface:** `/api/stealthify` — tone (`Standard`, `HighSchool`, `College`, `PhD`), quality/speed modes, max 3,000 words/req, auto language detection, returns a 0–100 detection score.
+- **Pricing (updated 2026):** Core plan ~$14.99/mo (100K words); Pro ~$19.99/mo (500K words); optional "Samurai" add-on $4.99/mo extra. Per-word API pricing at ~$0.20–$2.00/1K words depending on tier. Consumer plan from ~$32/mo in some billing configurations.
+- **API surface:** `/api/stealthify` — tone (`Standard`, `HighSchool`, `College`, `PhD`), quality/speed modes, max 3,000 words/req, auto language detection, returns a 0–100 detection score. Claims multilingual API support.
 - **Relevance to D:** The "student-facing" flavor of the managed service — the tone ladder (HS→PhD) is a copyable UX primitive.
 
 ### 1.4 HumanizerAI (humanizerai.com)
@@ -124,7 +123,21 @@ Black-box humanizer APIs with hosted infrastructure, API keys, rate limits, and 
 - **API surface:** v2, task-based architecture, multi-detector profiles (Turnitin, GPTZero, Winston AI, Originality.ai), 10K char/request cap.
 - **Relevance to D:** "Detector profile" as a first-class API parameter is an unusually honest design — makes the tuning explicit instead of hiding behind "aggressiveness".
 
-### 1.18 Apify AI Text Humanizer (apify.com)
+### 1.18 Walter Writes (walterwrites.ai) *(new entrant, 2025–2026)*
+
+- **Posture:** Consumer SaaS; specialist in structural sentence restructuring. Free tier (300–500 words/day, no login required).
+- **Pricing:** From $8–$12.99/mo for 30K words.
+- **Performance:** Surged 517% YoY in search interest in Q1 2026 due to TikTok/YouTube tutorials. Praised for consistent structural rewriting. **Post-Turnitin August 2025 update:** leaves 38% of content flagged (per third-party tests). Originality.ai still catches ~45%.
+- **Relevance to D:** The clearest recent example of organic social-media-driven growth outpacing detector robustness. Rapid rise and partial fall demonstrates how shallow the moat is for any tool that does not continuously retrain against live detector updates.
+
+### 1.19 AuraWrite AI (aurawriteai.com) *(new entrant, 2025–2026)*
+
+- **Posture:** Consumer SaaS positioning itself as the top-rated Walter Writes and Undetectable.ai alternative.
+- **Pricing:** Transparent pricing; no expiring credits claimed.
+- **Performance claim:** <5% AI detection across Turnitin, Originality.ai, GPTZero, Copyleaks, ZeroGPT. Self-reported; independently ranked #1 in several 2026 roundups post-Turnitin-update.
+- **Relevance to D:** New entrant that did not exist in the 2024 scan. Now occupies the top position in multiple affiliate-site rankings. Worth monitoring; claims are self-reported.
+
+### 1.20 Apify AI Text Humanizer (apify.com)
 
 - **Posture:** Third-party Actor on Apify's marketplace, not a standalone SaaS.
 - **Pricing:** $0.003 per text, sub-500 ms processing.
@@ -209,10 +222,20 @@ The OSS side of Angle D. Most are recent (post-2024), small (often <20 stars), M
 
 ### Pricing structure
 
-- **Consumer floor:** $8–$15/mo for 20–50K words. Commoditized.
+- **Consumer floor:** $8–$15/mo for 20–50K words. Commoditized. Walter Writes at $8–$12.99/mo is currently the lowest named-brand consumer entry.
 - **Mid-API tier:** $29/mo for ~100–125K words (AI Humanizer API, WriteHuman Standard) — the de-facto "$29 / 100K words" anchor.
 - **Per-1K floor:** ~$0.17 (WriteHuman Premium) on the mainstream side; ~$0.003 (Apify) on the rules-engine side; ~$0.07 (unmask-ai BYO-key) on the self-hosted side. **Two orders of magnitude of spread** — SaaS margins are defensible only through UX and detection-tuning, not compute.
 - **Enterprise tier:** Custom pricing consistently gates SSO, VPC, 99.99% SLA — nobody publishes enterprise numbers.
+
+### Market disruption event: Turnitin August 2025
+
+Turnitin launched anti-humanizer detection in August 2025, explicitly training on outputs from known humanization tools. This created a new detection category: "AI-generated text that was AI-paraphrased." Impact by tool:
+- **Walter Writes:** 38% flagged post-update (from near-universal bypass before).
+- **AuraWrite:** claims <5% post-update — either genuinely robust or not yet in Turnitin's training data.
+- **Undetectable.ai:** performs relatively well, suggesting ongoing detector-aware retraining.
+- **OSS repos:** none have published post-August-2025 Turnitin numbers; all pre-existing bypass claims should be treated as pre-update benchmarks.
+
+This event demonstrates that "bypass rate" is a point-in-time measurement, not a durable product property. Any commercial humanizer not actively retraining against live detector updates has a shelf life.
 
 ### Product surface conventions
 
@@ -267,3 +290,8 @@ The OSS side of Angle D. Most are recent (post-2024), small (often <20 stars), M
 - https://github.com/abdibrokhim/humanaize — Next.js humanizer tutorial with Clerk/Vercel/AI-ML API.
 - https://github.com/RasaHQ/paraphraser — OSS transformer paraphraser, Docker, 30 languages — building block.
 - https://github.com/PrithivirajDamodaran/Parrot_Paraphraser — OSS paraphraser, ~915 stars — building block.
+- https://walterwrites.ai/pricing/ — Walter Writes pricing (new 2025–2026 entrant).
+- https://aurawriteai.com/ — AuraWrite AI (new 2025–2026 entrant; top-ranked post-Turnitin-update).
+- https://www.turnitin.com/press/turnitin-expands-capabilities-amid-rising-threats-posed-by-ai-bypassers — Turnitin anti-humanizer announcement (Aug 2025).
+- https://aurawriteai.com/blog/best-ai-humanizer-tools-2026 — 2026 post-Turnitin humanizer rankings.
+- https://www.undetectedgpt.ai/blog/undetectable-ai-review — Undetectable AI 2026 review with updated pricing details.

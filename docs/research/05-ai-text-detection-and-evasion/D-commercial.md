@@ -11,16 +11,16 @@ Scope: 9 detectors + 9 humanizers = **18 products** profiled. Pricing and claims
 ### 1. GPTZero
 - **Positioning / Origin**: Built Dec 2022 by Princeton undergrad Edward Tian as a senior thesis; the one major detector whose "built for educators" framing is original, not retrofit. ~$20M ARR mid-2025, 380K+ teacher users. [3][15]
 - **Pricing**: Free tier 10K words/mo; paid from ~$10/mo (annual) up through classroom/institution tiers. [1][3]
-- **Claimed performance**: "99.3% raw accuracy, 0.24% false-positive rate" on unedited AI text. [1]
-- **Underlying technique**: Perplexity + burstiness (variance of per-sentence perplexity) as the headline signals, now layered with fine-tuned classifiers and writing-process replay. [1][15][17]
-- **Marketing frame**: "#1 AI detector for teachers" — shifted post-2025 toward "responsible classroom AI use" rather than pure catch-the-cheater. [15]
+- **Claimed performance**: Version 4.1b: 99.39% overall accuracy, 98.78% recall, 0.00% FPR on own 2026 benchmark (1,000 human + 1,000 AI texts). Chicago Booth 2026 (third-party): 99.3% recall at 0.1% FPR — now the most-cited external benchmark replacing Scribbr's 2024 ranking. Independent real-world testing (MPG ONE, 2026): 88–95% on raw AI text, drops to 60–80% on paraphrased/edited content. [1][21]
+- **Underlying technique**: Perplexity + burstiness as baseline, now layered with fine-tuned classifiers, writing-process replay, and a humanizer-awareness layer that maintains a greylist of known bypass methods and patches within days. [1][15][17][23]
+- **Marketing frame**: "#1 AI detector for teachers" and "most accurate commercial AI detector" per Chicago Booth 2026. Humanizer-aware detection is now an explicit product line (Jan 2026 post). Shifted post-2025 toward "responsible classroom AI use" rather than pure catch-the-cheater. [15]
 
 ### 2. Originality.ai
 - **Positioning**: Built for SEO agencies / publishers; no free tier, sells on enterprise credibility. [2]
 - **Pricing**: Pro $12.95/mo annual ($14.95 monthly), 2,000 credits (1 credit = 100 words); Enterprise $136.58/mo; pay-as-you-go $30 for 3,000 credits. [2]
-- **Claimed performance**: Turbo 3.0.2 "99%+ on flagship models, up to 97% on humanized content, 1.5% FP"; new Academic 0.0.5 model targets <1% FP. Independent reviewers peg real-world FP at 14–28% on edited content. [1][2]
-- **Underlying technique**: Fine-tuned transformer classifiers, now explicitly marketed as "humanizer-aware" (trained on humanizer outputs). Bundled plagiarism, readability, fact-check. [2]
-- **Marketing frame**: "99% accuracy in detecting AI" — leans on published internal benchmark studies. [2]
+- **Claimed performance**: Three model variants as of early 2026: Lite (fastest, 0.5% claimed FP), Turbo (97% on humanized AI at 1.5% FP), Academic (92% accuracy, <1% FP). November 2025 independent study: 96% accuracy, lowest FP of all commercial tools tested. January 2026 study: 100% across ChatGPT, DeepSeek, Gemini, Grok, and human texts. Consistently the detector humanizers fail against most often — referenced as the "benchmark to beat" by multiple humanizer products. [1][2][5]
+- **Underlying technique**: Fine-tuned transformer classifiers, explicitly retrained monthly against humanizer corpora. Lite 1.0.1 (June 2025) added humanizer-resistance capabilities; Lite 1.0.2 / Turbo 3.0.2 / Academic 0.0.5 (September 2025) further tightened against latest humanizer tools. Bundled plagiarism, readability, fact-check, and now also an AI humanizer tool on the same platform. [2][5]
+- **Marketing frame**: "99% accuracy in detecting AI" and "most accurate on RAID adversarial benchmark." Ranked #1 in UPenn/CMU RAID study, winning 9 of 11 adversarial attack tests. [2]
 
 ### 3. Copyleaks
 - **Positioning**: Multilingual + code plagiarism incumbent; sells the combined AI+plagiarism+code report as one product. [4]
@@ -32,9 +32,9 @@ Scope: 9 detectors + 9 humanizers = **18 products** profiled. Pricing and claims
 ### 4. Turnitin
 - **Positioning**: Institutional standard bundled into university LMS contracts; not sold per-seat to consumers. [1]
 - **Pricing**: Institutional only; effectively "included" from the student's view. [1]
-- **Claimed performance**: "98% accuracy, <1% FP on submissions >300 words." Accuracy collapses on short or paraphrased text. [1][6]
-- **Underlying technique**: Proprietary classifier fine-tuned on academic corpora; weakest on humanized/paraphrased content where independent tests show 20–50% detection. [1]
-- **Marketing frame**: Quiet, institutional — rare public marketing quotes; trust comes from LMS integration, not ads.
+- **Claimed performance**: "98% accuracy, <1% FP on submissions >300 words." Independent 2025–2026 testing: 92–100% on raw AI text; drops to 60–85% on manually edited or paraphrased content; 70–80% on AI text with minor human edits (University of Chicago Booth data, late 2025). Stanford HAI study: non-native English misclassified 2–5× more often than native English, up to 32% of non-native essays flagged. [1][6]
+- **Underlying technique**: Proprietary classifier fine-tuned on academic corpora; April 2025 update added Japanese-language detection. 2026 model targets "AI humanizer tool" outputs specifically. October 2025 update softened verdicts and hid 1–19% scores by default due to false-positive incidence. [1][6]
+- **Marketing frame**: Quiet, institutional — rare public marketing quotes; trust comes from LMS integration. Roadmap for 2026 includes explicit humanizer-resistant detection layer.
 
 ### 5. Winston AI
 - **Positioning**: Consumer-facing detector bundled with AI image/deepfake detection and plagiarism; pushes "HUMN-1" website certification badge. [5]
@@ -77,9 +77,9 @@ Scope: 9 detectors + 9 humanizers = **18 products** profiled. Pricing and claims
 
 ### 10. Undetectable.ai
 - **Pricing**: $19/mo for 10K words → $199.50/mo for 1M words; 250-word free trial. [10]
-- **Claimed performance**: 96% AI → human against GPTZero in 2026 head-to-head, beating WriteHuman, BypassGPT, StealthGPT (all scored 100% AI in same test). [10]
+- **Claimed performance**: 96% AI → human against GPTZero in 2026 head-to-head, beating WriteHuman, BypassGPT, StealthGPT (all scored 100% AI in same test). Independent 2026 testing: 87–88% average bypass rate across Turnitin, GPTZero, Copyleaks, Originality.ai — strong but fails to consistently pass all detectors simultaneously. 22M+ users as of 2026 (up from 15M in Feb 2025 per Reuters). [10]
 - **Underlying technique**: NLP pipeline that restructures sentences, adjusts vocabulary, calibrates tone by selectable mode (University, Journalist, Marketing, etc.); three stealth-intensity levels; bundled TruthScan detector; 50+ languages; Chrome + Zapier + API. [10]
-- **Marketing frame**: "Undetectable by *any* AI detector" — positions as category leader and prices accordingly.
+- **Marketing frame**: "Undetectable by *any* AI detector" — positions as category leader and prices accordingly. The 22M user milestone makes it the most widely used humanizer by a significant margin.
 
 ### 11. Humanize AI Pro / Humanize AI
 - **Pricing**: Core web tool **$0/mo, unlimited, no signup** (ad + upsell model). Sister product `humanizeai.io` runs $4/mo intro → $20/mo annual for 600K words/yr. [11][13]
@@ -136,7 +136,7 @@ Scope: 9 detectors + 9 humanizers = **18 products** profiled. Pricing and claims
 
 **1. Converging technique stack.** Detectors all layer (a) perplexity + burstiness, (b) stylometric features (lexical diversity, readability), and (c) a fine-tuned transformer classifier. [17] Humanizers all layer (a) sentence-structure reshuffling, (b) vocabulary substitution, (c) deliberate burstiness injection, and (d) tone/persona modes. Technical differentiation is narrowing fast — the real differentiation now lives in brand trust, pricing, and integrations.
 
-**2. "99%" is a marketing primitive, not a fact.** Every detector and most humanizers cluster around a 97–99.8% claim. Independent 2026 benchmarks consistently show real-world accuracy of 68–91% for detectors and 17–96% bypass rates for humanizers, with double-digit FP rates on edited, non-native, or creative text. [1][5][6][7][11]
+**2. "99%" is a marketing primitive, not a fact.** Every detector and most humanizers cluster around a 97–99.8% claim. Independent 2026 benchmarks show: GPTZero 88–95% (raw), 60–80% (humanized); Originality 96% (most consistent); Turnitin 92–100% (raw), 60–85% (edited). Humanizer bypass rates: Undetectable.ai 87–88%; BypassGPT 67%; QuillBot alone 34%. Claims cluster at 99% regardless of actual measured performance. [1][5][6][7][11][21]
 
 **3. Detector vendors are the #1 use-case for humanizer vendors.** Multiple humanizers (Undetectable.ai, Phrasly, BypassGPT, HIX Bypass, AIHumanize) **ship their own built-in detector dashboards** so users can pre-check against 6–7 detectors before submitting. The arms race is now co-located inside each humanizer's UI.
 
@@ -150,12 +150,15 @@ Scope: 9 detectors + 9 humanizers = **18 products** profiled. Pricing and claims
 
 **6. The "authorship" pivot.** Grammarly's 2025–2026 rebrand from "AI detector" to "Authorship" (provenance via keystroke tracking) is the first major vendor to concede classifier-based detection is a losing long-term bet. This is the clearest strategic signal that the detection side of the arms race is structurally weakening.
 
-**7. Under-served gaps.**
-   - **Multilingual humanization quality** — detectors publicly admit 74–84% accuracy on non-English; humanizers claim 50+ languages but none publish quality benchmarks on non-English output.
+**7. EU regulatory watermarking deadline is an unpriced event.** The EU AI Act Article 50 transparency obligations become binding in August 2026 for all generative AI providers, requiring machine-readable marking of AI-generated text. No commercial detector or humanizer has updated positioning to account for a mandatory-watermarking landscape. This is the most significant structural change to the market in 2026.
+
+**8. Under-served gaps.**
+   - **Multilingual humanization quality** — detectors publicly admit 74–84% accuracy on non-English; Turnitin added Japanese detection in April 2025 but humanizers claim 50+ languages while publishing no non-English quality benchmarks.
    - **Long-form coherence after humanization** — every independent reviewer flags meaning drift, fact corruption, and awkward phrasing; no tool markets "we preserve semantics" as a headline claim.
    - **Auditability / provenance for the writer's side** — Grammarly Authorship is the only product in this space. The symmetric opportunity (a tool that *proves* human authorship to a reader/grader, decoupled from detection) is effectively uncontested.
-   - **Academic-aware humanization** — Originality launched an "Academic" detector model; no humanizer has launched a matched "Academic" mode trained to preserve citation integrity and disciplinary tone.
+   - **Academic-aware humanization** — Originality launched an "Academic" detector model (September 2025); no humanizer has launched a matched "Academic" mode trained to preserve citation integrity and disciplinary tone.
    - **Enterprise/compliance angle** — almost all humanizer marketing is consumer/student-facing; none have built a B2B narrative around compliance-friendly "voice normalization" (e.g. legal, medical) even though the underlying tech fits.
+   - **SIRA-capable SynthID bypass** — SIRA's ~100% watermark removal at commodity cost is publicly available (ICML 2025, GitHub). No commercial humanizer has incorporated it, creating a first-mover opportunity in a market where Gemini is the dominant consumer AI output source.
 
 **8. Guarantee-as-marketing is emerging.** AIHumanize's "credit-back if detected" is the clearest sign humanizers are commoditizing and must compete on risk-transfer rather than raw performance. Expect this to spread.
 
@@ -180,3 +183,9 @@ Scope: 9 detectors + 9 humanizers = **18 products** profiled. Pricing and claims
 15. Observer, *GPTZero Shifts Focus to Responsible Classroom A.I.* (Aug 2025) + GPTZero educators page.
 16. surferseo.com/ai-humanizer + changelog (custom voice, API).
 17. dev.to / Stack Junkie / UndetectedGPT — explainers on perplexity, burstiness, stylometry, watermarking, DetectGPT.
+18. Cybernews, *Undetectable AI review April 2026* — https://cybernews.com/ai-tools/undetectable-ai-review/
+19. GPTZero, *GPTZero Tops Accuracy on Chicago Booth Benchmark in 2026* — https://gptzero.me/news/chicago-booth-2026/
+20. MPG ONE, *Is GPTZero Accurate? Our 2026 Test Results* — https://mpgone.com/is-gptzero-accurate-our-2025-test-results-here/
+21. BestHumanize, *Are AI Detectors Accurate in 2026? Independent Data* — https://besthumanize.com/blog/are-ai-detectors-accurate-in-2026-independent-data
+22. Turnitin, *AI Detector Roadmap: Features Coming in 2026* — https://turnitin.app/blog/Turnitin-AI-Detector-Roadmap-Features-Coming-in-2026.html
+23. GPTZero, *Detecting AI-Humanized Text: How GPTZero Stays Ahead* (Jan 2026) — https://gptzero.me/news/detecting-ai-humanized-text-how-gptzero-stays-ahead/

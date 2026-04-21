@@ -6,6 +6,8 @@
 
 **Project context:** Humanizing AI output and thinking. This vertical is the single richest commercial source of voice-preservation and anti-slop techniques outside the humanizer-tool category itself. Unlike general humanizers, fiction tools must preserve *two* voices simultaneously (the narrator's and each character's) across 80k–120k words, which forces deeper architectural answers than text-swap humanizers.
 
+**Last updated: April 2026.**
+
 ---
 
 ## Product Landscape (17 products)
@@ -14,25 +16,28 @@
 
 - **Vendor / URL:** Sudowrite, Inc. — sudowrite.com
 - **Positioning:** "The AI writing tool with unparalleled story smarts" — fiction-only co-writer.
-- **Core tech:** Proprietary **Muse 1.5** model, "built just for fiction" and trained on published novels and short stories to "remove clichés and match writer voice."
+- **Core tech:** Proprietary **Muse 1.5** model (entered public availability mid-2025 after months in private beta), "built just for fiction" and trained on published novels and short stories to "remove clichés and match writer voice." In blind tests, Muse 1.5 was preferred 2× over Claude 3.7 Sonnet for fiction prose. Platform also offers access to Gemini 3.1 Pro, Claude Sonnet 4.6, and GPT 5.4 for users who prefer frontier models.
 - **Voice-preservation mechanics:**
   - **Style Examples** — user pastes writing samples; Muse mimics cadence, vocabulary, rhythm.
   - **Story Bible** — centralized characters/worldbuilding/synopsis threaded into every generation to hold consistency across 100k+ words.
+  - **Story Engine 3.0** (2026) — flagship full-novel feature: input Braindump + Genre + Style + Character List → generates chapter beats → expands each beat into full chapters.
+  - **Canvas 2.0** — spatial brainstorming board for non-linear story planning (upgraded in 2026).
   - **Write / Guided Write / Auto Write** — 300–500 word continuations "in your voice."
   - **Rewrite** tool specifically trained for show-don't-tell transformations.
-- **Pricing:** From **$10/mo** (annual); 10,000 free credits trial.
+  - Integration with Zapier and Make.com for workflow automation.
+- **Pricing:** Hobby $10/mo (annual) / $19/mo (monthly); Professional $22/$29; Max $44/$59. Unused credits expire monthly except on Max (12-month rollover). 10,000 free credits trial.
 - **Marketing quotes:**
   - "It's scary good." — Hugh Howey (author of *Silo*)
   - "Sudowrite may well be a salvation." — Stephen Marche, *The New York Times*
   - "…convinced journalism legend Gay Talese it could imitate him." — Steven Zeitchik
   - "AI is a phenomenal collaborator, not a destroyer of worlds."
-- **Signal for Unslop:** Best-in-class example of *training data provenance as marketing* ("trained on published fiction to remove clichés"). Style Examples is the clearest commercial pattern for single-author voice cloning.
+- **Signal for Unslop:** Best-in-class example of *training data provenance as marketing* ("trained on published fiction to remove clichés"). Style Examples is the clearest commercial pattern for single-author voice cloning. Story Engine 3.0 is the clearest example of an end-to-end hierarchical pipeline as a user-facing product.
 
 ### 2. NovelCrafter
 
 - **Vendor / URL:** Independent — novelcrafter.com
-- **Positioning:** "The Master Blueprint" — planner's tool with BYOK AI layer. 157k+ authors.
-- **Core tech:** **BYOK (bring-your-own-key)** — connects to OpenAI GPT-5, Anthropic Claude, Gemini, Llama, Mistral, OpenRouter (300+ models), LM Studio, Ollama (local).
+- **Positioning:** "The Master Blueprint" — planner's tool with BYOK AI layer. 157k+ authors (figure as of early 2025; likely higher by April 2026).
+- **Core tech:** **BYOK (bring-your-own-key)** — connects to OpenAI GPT-5/5.1/5.4, Anthropic Claude Sonnet 4.6, Gemini, Llama, Mistral, OpenRouter (300+ models), LM Studio, Ollama (local). NovelCrafter's own testing found GPT-5 "excels at style mimicry and dialogue but tends to veer off-plot" — useful calibration data for model choice within the platform.
 - **Voice-preservation mechanics:**
   - **Codex** — wiki that auto-links characters, places, lore; AI is forced to consult it during generation.
   - Customizable prompt system so writers can hand-tune voice preservation per-scene.
@@ -48,15 +53,16 @@
 
 - **Vendor / URL:** Anlatan Inc. — novelai.net
 - **Positioning:** Creative freedom + fine-tuned storytelling models; "uncensored" prose.
-- **Core tech:** Own fine-tuned LLMs (Kayra, Clio-Pro, and Opus-tier **Xialong** — "our largest and most formidable text generation model"), up to **128k context**, lorebook, granular sampler controls (temperature, top-p, repetition penalty).
+- **Core tech:** Own fine-tuned LLMs: Kayra (13B), Clio-Pro, Erato (Llama 3 70B base, released Sep 23 2024), and Opus-tier **Xialong** (GLM-4.6 base, 2026 — "our most high-performance text generation model"). Xialong represents a significant departure: the first major commercial fiction LLM based on Zhipu AI's GLM-4.6 architecture rather than the Llama family. RL-trained to avoid repetition, eliminating the need for repeat-penalty presets. Supports ATTG metadata tags, Memory, Lorebook, and en-space quoting. Up to **128k context**, lorebook, granular sampler controls.
 - **Voice-preservation mechanics:**
   - Fiction-fine-tuned base models (vs. RLHF'd general models that flatten voice).
   - Lorebook + metadata tags for continuity.
   - Exposed decoding parameters — users tune "burstiness" directly.
-- **Pricing:** **$10 / $15 / $25** per month (Tablet / Scroll / Opus).
+  - Xialong: RL-based repetition avoidance preserves creative variation without manual repeat-penalty tuning.
+- **Pricing:** **$10 / $15 / $25** per month (Tablet / Scroll / Opus). Xialong available Opus tier only.
 - **Marketing quotes:**
   - "Unleash the power of AI… to easily bring your imagination to life without limits."
-- **Signal for Unslop:** Demonstrates the market appetite for *exposed sampling controls* as a humanization lever — something RLHF'd chat models hide.
+- **Signal for Unslop:** Demonstrates the market appetite for *exposed sampling controls* as a humanization lever — something RLHF'd chat models hide. Xialong's shift to GLM-4.6 base is a signal that the fiction-model space is no longer Llama-family-only.
 
 ### 4. AI Dungeon (Latitude)
 
@@ -193,7 +199,8 @@
 - **StorySmith** — Custom models maintaining character voice and plot across full novels.
 - **Manuscripts.ai Humanizer** — Frames itself as preserving "character's subtext, chapter's tension, and the voice that makes your story yours."
 - **VSProse** — "AI Novel Editing Software That Preserves Your Voice… editors never take the pen from your hand."
-- **Novarrium, SidekickWriter, Inkfluence AI** — Newer 2025–2026 entrants explicitly benchmarked on the 25-chapter-consistency test.
+- **Novarrium, SidekickWriter, Inkfluence AI** — 2025–2026 entrants explicitly benchmarked on the 25-chapter-consistency test. Novarrium's 25-chapter stress test remains one of the few available long-form consistency evaluations even though it is not public.
+- **Kimi K2** (Moonshot AI) — Emerging as a cost-competitive option for creative writing. EQ-Bench Creative score ~1700 (vs Claude Sonnet 4.6 at 1936) at $0.60 input / $2.50 output per 1M tokens (~5× cheaper). Positioned as the best performance-per-dollar for writing in early 2026 aggregated leaderboards.
 
 ---
 
@@ -245,3 +252,10 @@
 - [LivingWriter AI Features](https://livingwriter.com/en/ai-features) — optional AI, "never stored or used to train."
 - [Smallhandsbigideas: 2026 landscape](https://smallhandsbigideas.com/the-ai-storytelling-tools-landscape-in-early-2026-how-novelai-sudowrite-and-sillytavern-serve-different-writer-archetypes/) — archetype framing for the three-horse market.
 - [Cordecho](https://cordecho.com/) — "voice-aware generation" marketing language.
+- [Sudowrite Story Engine 3.0 changelog](https://feedback.sudowrite.com/changelog) — 2026 flagship feature.
+- [Sudowrite Pricing 2026 (CheckThat.ai)](https://checkthat.ai/brands/sudowrite/pricing) — updated plan structure.
+- [NovelAI Xialong model announcement](https://blog.novelai.net/novelai%E6%9C%80%E6%96%B0%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E7%94%9F%E6%88%90%E3%83%A2%E3%83%87%E3%83%AB-xialong-%E3%81%8C%E7%99%BB%E5%A0%B4-8a4ec11895ea) — GLM-4.6 based, 2026.
+- [NovelCrafter blog: Is GPT-5 any good for writing fiction?](https://www.novelcrafter.com/blog/is-gpt-5-any-good-for-writing-fiction) — GPT-5 evaluation.
+- [Character.AI April 2026 CEO update / PipSqueak 2](https://blog.character.ai/pipsqueak2-and-more/) — PSQ2 rollout, DeepSqueak 2 roadmap.
+- [EQ-Bench Creative Writing v3 Leaderboard](https://eqbench.com/creative_writing.html) — Claude Sonnet 4.6 Elo 1936, Claude Opus 4.6 Elo 1932, as of March 2026.
+- [Best AI for Creative Writing April 2026 (buildmvpfast.com)](https://www.buildmvpfast.com/articles/best-llms-2026-guide/creative-writing-ai) — aggregated leaderboard with Kimi K2 cost analysis.

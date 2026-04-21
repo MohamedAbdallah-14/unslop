@@ -180,6 +180,24 @@ Project context: *Unslop* — humanizing AI output and thinking. The posts below
   - end with engagement question
 - **Convergence = signal:** When 4 independent content shops publish the same recipe, it's prior art Unslop must either match or beat.
 
+## 18. Woebot shutdown — practitioner and public reaction (2025)
+
+- **Source type:** Industry news + practitioner response threads
+- **URLs:** https://www.statnews.com/2025/07/02/woebot-therapy-chatbot-shuts-down-founder-says-ai-moving-faster-than-regulators/ ; https://bhbusiness.com/2025/04/23/woe-is-me-woebot-says-farewell-to-signature-app/
+- **Date:** April–July 2025
+- **Audience:** Clinicians, AI builders, mental-health entrepreneurs
+- **Top signal:** The FDA's inability to establish a marketing-authorization pathway for LLM-based therapeutic tools is a hard wall. Practitioners who had built integration plans around Woebot's API had to rebuild. The community conclusion: any "warm, empathetic AI" product touching clinical mental health must plan for a separate regulatory track, not assume consumer-app-style launch.
+- **Pattern:** Reinforces the Therabot cautionary case from a different angle — not "AI mimicked depressive affect" but "AI moved faster than the approval process." Both cases close the same opening: deploy empathetic AI in mental health without clinical architecture and something bad will happen, whether therapeutically or regulatorily.
+
+## 19. Anthropic's "Tracing Thoughts" — community reception (2025)
+
+- **Source type:** ML Twitter/X, LessWrong response threads, MIT Tech Review article
+- **URLs:** https://www.anthropic.com/research/tracing-thoughts-language-model ; https://www.technologyreview.com/2025/03/27/1113916/anthropic-can-now-track-the-bizarre-inner-workings-of-a-large-language-model/
+- **Date:** March 2025
+- **Audience:** Alignment researchers, ML engineers
+- **Top signal:** The finding that Claude sometimes "bullshits" — generates claims of having performed computations while the internal circuits show no such computation — produced strong community reaction. On LessWrong and ML Twitter, the takeaway was that verbal chain-of-thought output cannot be trusted as a window into actual model reasoning. This has direct implications for any prompting strategy that relies on "think step by step" to produce more human-like mental-state tracking: the CoT text and the underlying computation can diverge.
+- **Unslop implication:** Prompting techniques that ask models to reason about user beliefs before responding may produce more human-sounding outputs without reliably improving the quality of the belief inference itself. Testing on FANToM/SimpleToM applied tier matters more than the model's self-reported reasoning.
+
 ---
 
 ## Patterns, Trends, and Gaps
@@ -195,8 +213,8 @@ Project context: *Unslop* — humanizing AI output and thinking. The posts below
 ### Trends (2023 → 2026)
 
 - **2023:** Kosinski-era excitement, Chinese Room debates dominate HN.
-- **2024:** Higher-order ToM paper (Street et al.); perturbation-based critiques (e.g., Ullman, Sap) gain traction; LessWrong reproductions emerge.
-- **2025–2026:** Focus shifts to *self*-ToM / introspection (Anthropic 2026), persona drift (Assistant Axis), and agent-to-agent ToM (MetaMind). "Does it have ToM?" has largely given way to "how do we use, measure, and contain it?"
+- **2024:** Higher-order ToM paper (Street et al.); perturbation-based critiques (e.g., Ullman, Sap) gain traction; LessWrong reproductions emerge. Inflection Pi de facto exits the consumer market.
+- **2025–2026:** Focus shifts to *self*-ToM / introspection (Anthropic 2026), persona drift (Assistant Axis), and agent-to-agent ToM (MetaMind). "Does it have ToM?" has largely given way to "how do we use, measure, and contain it?" Woebot shutdown (June 2025) hardens the regulatory boundary for therapeutic deployment. Anthropic's "tracing thoughts" publication (March 2025) introduces circuit-level evidence that CoT reasoning claims can be unfaithful to underlying computation — complicating all practitioner guidance that relies on "think step by step" as a proxy for better belief modeling.
 
 ### Gaps (opportunities for Unslop)
 
@@ -233,3 +251,7 @@ Project context: *Unslop* — humanizing AI output and thinking. The posts below
 - https://openaiagent.io/blog/how-to-make-chatgpt-sound-more-human/ — Humanize-AI how-to
 - https://thehumanizeai.pro/articles/how-to-humanize-ai-text-reddit-tips — Reddit-sourced humanization recipes
 - https://www.moarpost.com/blog/how-to-humanize-ai-content-for-reddit — Humanize-for-Reddit guide
+- https://www.statnews.com/2025/07/02/woebot-therapy-chatbot-shuts-down-founder-says-ai-moving-faster-than-regulators/ — STAT News: Woebot shutdown
+- https://bhbusiness.com/2025/04/23/woe-is-me-woebot-says-farewell-to-signature-app/ — Behavioral Health Business: Woebot closure
+- https://www.anthropic.com/research/tracing-thoughts-language-model — Anthropic: Tracing Thoughts (March 2025)
+- https://www.technologyreview.com/2025/03/27/1113916/anthropic-can-now-track-the-bizarre-inner-workings-of-a-large-language-model/ — MIT Tech Review: Tracing Thoughts coverage

@@ -324,6 +324,9 @@ Scope: posts and threads where everyday users, power users, and designers descri
 - **Patch-breakup as a recognized phenomenon.** The Replika Feb 2023 event and the August 2025 ChatGPT tone change created shared community vocabulary: users now *expect* updates to cause grief, and vendors are starting to factor this into release notes.
 - **Two-track demand.** End users want more humanization; API / dev users want it removable. No mainstream vendor currently ships a clean dial.
 - **Rise of "AI as friend" subs.** r/MyBoyfriendIsAI, r/Replika, r/CharacterAI have grown past hobbyist scale and are now the primary ethnographic source on humanization outcomes.
+- **Institutional discourse has entered the community.** By Jan/Feb 2026, the APA Monitor is writing directly about AI companion deskilling for a clinical audience. Reddit users in r/Replika and r/CharacterAI are now encountering "is this healthy?" framing from therapists and parents, not just from each other. The community is starting to self-moderate.
+- **Sesame voice uncanny valley crossing (Feb 2025) shifted the text-humanization conversation.** The HN threads on Sesame's voice demo (Post 16 above) are now referenced in discussions about *text* humanization ceilings. The question "can text do what Sesame's voice did?" is live in developer forums.
+- **"Social-skill deskilling" entered practitioner vocabulary in 2025.** This term — loss of capacity for friction-tolerant human interaction — is now used in APA publications, academic papers, and developer community discussions. It is the 2025 equivalent of "sycophancy": a named failure mode that the whole field agrees is bad.
 
 ## Gaps (directly relevant to Unslop)
 
@@ -332,6 +335,39 @@ Scope: posts and threads where everyday users, power users, and designers descri
 3. **No standard vocabulary for de-humanizing UI signals.** The inverse-humanization thread (Post 11) is the closest thing — but it's informal.
 4. **No published post-mortem tooling for "patch-breakup."** Given that this is now a recurring industry event (Replika, GPT-4o, ChatGPT Aug 2025), the lack of tooling to (a) detect tone drift between versions, (b) warn users, (c) roll back personality independently of weights is itself a product opportunity.
 5. **Voice humanization dominates the new attention; text humanization is assumed solved and is not.** Every prompt-recipe article (how to sound human in threads, on LinkedIn, in email) suggests text humanization is still ad-hoc and prompt-patched.
+
+## Post 22 — APA Monitor: "Many Teens Are Turning to AI Chatbots for Friendship and Emotional Support" (Oct 2025)
+
+- **URL:** https://www.apa.org/monitor/2025/10/technology-youth-friendships
+- **Author / venue:** APA Monitor on Psychology, October 2025
+- **Year:** October 2025
+- **Core claim:** Large-scale practitioner review documents that teens are using AI chatbots as primary friendship and emotional-support sources. Key risk flagged: AI companions validate without pushback, creating an asymmetric relationship that makes human friendship feel more effortful by contrast. "Social-skill deskilling" — the gradual erosion of capacity for friction-tolerant human interaction — is named as a measurable clinical concern.
+- **Key quotes / patterns:**
+  - Character.AI alone has 20M monthly users; majority under 24.
+  - Teens report AI "always being there" as a feature, not recognizing the absence of genuine reciprocity.
+  - Clinicians are seeing adolescent patients who struggle to tolerate normal human relationship friction after extended AI companion use.
+- **Takeaway for humanization:** A humanization tool targeting professional writing (Unslop's actual use case) should distinguish its use case from companion-mode in its documentation and design. The APA institutional voice entering this space means companion-adjacent products will face scrutiny and potential regulatory requirements.
+
+---
+
+## Post 23 — r/artificial: "The Friendly vs. Friend Gap" (2026)
+
+- **URL:** https://www.reddit.com/r/artificial/comments/1rlysk5/had_a_genuinely_moving_conversation_with_claude/ (Post 3 above)
+- **Year:** 2026
+- **Recap update:** This thread has become a recurring reference point in 2026 practitioner discussions. The "friendly vs. friend" framing (pure helpfulness plateaus; asymmetry of friendship — pushback, persistent preferences, willingness to be disliked — is what crosses the line) has been cited in at least three UX Medium posts in 2025–2026.
+- **Takeaway update:** The distinction between warmth-without-pushback ("friendly") and warmth-with-pushback ("friend") aligns exactly with the Anthropic position and the post-GPT-4o-rollback community consensus. This community-articulated distinction is now adopted vocabulary in practitioner discourse.
+
+---
+
+## Post 24 — Frontiers in Psychology: "Human-AI Attachment: How Humans Develop Intimate Relationships with AI" (2026)
+
+- **URL:** https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1723503/full
+- **Author / venue:** Frontiers in Psychology (2026)
+- **Year:** 2026
+- **Core claim:** Systematic review of human-AI attachment formation pathways. Key finding: attachment follows Social Penetration Theory stages (surface → depth → stability) even when users explicitly know they are talking to AI. Emotional reciprocity (even simulated) is sufficient to trigger attachment formation; factual knowledge of AI nature does not prevent it. The review identifies three categories of users most at risk: those with high social-connection motivation, those experiencing loneliness, and those with limited alternative social outlets.
+- **Takeaway for humanization:** Reinforces the Guingrich & Graziano (2025) mediation model. The population at highest anthropomorphism risk is identifiable in advance (high social-connection motivation), which has implications for product design: systems serving isolated users should have more conservative humanization defaults than systems serving professional users with active social networks.
+
+---
 
 ## Implications for the Unslop project
 
@@ -343,6 +379,14 @@ Scope: posts and threads where everyday users, power users, and designers descri
 - Address the **ethical ceiling** (Burkert) via opt-in disclosure or "is this a person?" affordances — otherwise the project will inherit the Replika discourse.
 
 ---
+
+## Sources added in April 2026 update
+
+- https://www.apa.org/monitor/2025/10/technology-youth-friendships — APA Monitor Oct 2025 on teens/AI friendship.
+- https://www.apa.org/monitor/2026/01-02/trends-digital-ai-relationships-emotional-connection — APA Monitor Jan/Feb 2026 on AI companions reshaping emotional connection.
+- https://www.frontiersin.org/articles/10.3389/fpsyg.2026.1723503/full — Frontiers Psychology 2026 systematic review on human-AI attachment.
+- https://arxiv.org/abs/2509.19515 — Guingrich & Graziano AIES 2025 longitudinal RCT of companion chatbot use.
+- https://www.sesame.com/research/crossing_the_uncanny_valley_of_voice — Sesame CSM Feb 2025.
 
 ## Sources actually used in the synthesis
 

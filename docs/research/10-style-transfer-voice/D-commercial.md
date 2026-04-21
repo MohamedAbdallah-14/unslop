@@ -13,10 +13,11 @@
 - **URL:** jasper.ai/pricing · jasper.ai (Brand Voice feature page)
 - **Category:** Marketing content suite with brand-voice slot
 - **Pricing (2026):** Pro $69/mo/seat ($59 annual), 2 Brand Voices included; Business custom, unlimited voices.
-- **How voice is captured:** Upload style guide + past content + tone preferences; Jasper trains a "Brand Voice" used across social, email, landing pages.
+- **How voice is captured:** Upload text, files, or URLs → Jasper infers brand voice. Users can also manually specify tone preferences.
+- **2025 scale data:** Users created over **69,500 unique Brand Voices** in 2025 — the most-used Jasper feature by volume. Teams are now encoding CEO voice, marketing voice, and support voice separately, treating Brand Voice as a "living framework" rather than a static style guide. Jasper partnered with Semrush for SEO-compliant brand voice content.
 - **Target user:** Mid-market marketing teams, agencies.
 - **Marketing quote:** Positioned as helping "coordinate multiple writers by ensuring they all produce content that aligns with a single, carefully controlled brand identity."
-- **Strengths:** Workflow integration, multiple voices per org, audience targeting, knowledge assets.
+- **Strengths:** Workflow integration, multiple voices per org, audience targeting, knowledge assets. Volume figures confirm per-author (not just per-brand) voice as standard user expectation.
 - **Gap vs. humanization:** Voice = *brand* voice for marketing copy, not individual writer fingerprint. Output still reads as confident AI marketing prose.
 
 ## 2. Writer.com — Palmyra + Personality Profiles
@@ -30,16 +31,17 @@
 - **Strengths:** Own LLM (Palmyra X5, 1M tokens) trained on business writing; treats voice as *governance*, not just a prompt prefix; applies across agents, rewrite, browser extension.
 - **Gap vs. humanization:** Designed for *conformity* to brand; actively smooths idiosyncrasy. Opposite direction from "sound more like the messy human."
 
-## 3. Grammarly — Tone Rewrite + Brand Tones + Personalized Voice
+## 3. Grammarly — Tone Rewrite + Brand Tones + Personalized Voice + Superhuman Suite
 
 - **URL:** grammarly.com/features · grammarly.com/business/brand-tones
-- **Category:** Horizontal writing assistant (consumer + business)
-- **Pricing (2026):** Pro/Plus consumer tiers; Business & Enterprise custom per seat.
-- **How voice is captured:** Two layers. (a) **Personal voice profile** — auto-detected from user's own writing and "continuously updated as users write," with separate profiles for documents vs. messages. (b) **Brand Tones** — orgs upload style guides, select approved/disallowed tones, system gives real-time tone feedback.
+- **Category:** Horizontal writing assistant (consumer + business). **Note:** Grammarly's parent company rebranded as "Superhuman" in October 2025, bundling Grammarly + Coda + Superhuman Mail + Superhuman Go into the Superhuman Suite. The Grammarly product retains its name and existing features.
+- **Pricing (2026):** Pro/Plus consumer tiers; Business & Enterprise custom per seat (unchanged from pre-Superhuman rebrand).
+- **How voice is captured:** Two layers. (a) **Personal voice profile** — auto-detected from user's own writing and "continuously updated as users write," with separate profiles for documents vs. messages. Users can modify their profiles by removing elements that don't accurately represent their writing. (b) **Brand Tones** — orgs upload style guides, select approved/disallowed tones, system gives real-time tone feedback.
+- **2025 updates:** Eight specialized AI agents launched (Aug 2025), including a **Paraphraser agent** that evaluates tone and style and adapts writing for intended audience, with custom voice creation. The voice feature is now agentic, not just inline.
 - **Target user:** Every knowledge worker; enterprise comms/support teams.
-- **Marketing quote:** "Real-time feedback helps teams adjust their tone to match any situation or audience so every message accurately represents your brand." Datacricks testimonial: "unify language globally across teams… especially where English isn't the first language."
-- **Strengths:** Ubiquity (1M+ apps/sites), continuous learning, dual personal/brand profiles.
-- **Gap vs. humanization:** Tone sliders are high-level (formal/friendly/confident). Personal voice profile is largely a recommendation engine on top of generated text; doesn't reproduce sentence-level quirks.
+- **Marketing quote:** "Real-time feedback helps teams adjust their tone to match any situation or audience so every message accurately represents your brand."
+- **Strengths:** Ubiquity (1M+ apps/sites), continuous learning, dual personal/brand profiles, now agentic (multi-step) voice enforcement.
+- **Gap vs. humanization:** Tone sliders are still high-level (formal/friendly/confident). Personal voice profile is largely a recommendation engine on top of generated text; doesn't reproduce sentence-level idiosyncratic quirks. Superhuman rebrand adds productivity layer but does not deepen voice fidelity.
 
 ## 4. Copy.ai — Brand Voice
 
@@ -260,25 +262,29 @@ The only products openly marketed as "humanizing AI text" (Undetectable.ai, Stea
 
 ## Trends (2026)
 
-1. **Agentic drift.** Writer, Typeface, Jasper, Lindy are all pivoting copy from "generate text" → "run a multi-step workflow." Voice becomes a *constraint* the agent must respect across steps, not the main feature.
+1. **Agentic drift.** Writer, Typeface, Jasper, Lindy are all pivoting copy from "generate text" → "run a multi-step workflow." Voice becomes a *constraint* the agent must respect across steps, not the main feature. Grammarly's 2025 agent suite is the clearest example: a Paraphraser agent evaluates tone and adapts style across agentic steps.
 2. **Passive learning over explicit training.** Grammarly's personal voice profile, Lindy's "observes how you write over time," Mem's "more notes = more voice" all remove the explicit onboarding step.
-3. **Author-level voice inside enterprises.** Typeface and Writer offer per-author profiles — recognizing that even within one brand, the CEO, the SVP of Product, and the support lead should not sound identical.
+3. **Author-level voice inside enterprises.** Typeface and Writer offer per-author profiles — recognizing that even within one brand, the CEO, the SVP of Product, and the support lead should not sound identical. Jasper's 69,500+ Brand Voices in 2025, many encoding individual author voices, confirms this is now a standard enterprise pattern.
 4. **Split personal vs. work profiles.** Grammarly's documents-vs-messages split is likely a template other tools follow.
 5. **Compliance/governance as moat.** Persado's ISO/SOC II and Writer's HIPAA BAA are now selling points *for voice products* — voice consistency is inseparable from compliance in regulated industries.
 6. **BYO-LLM.** Instantly and others are opening to user-supplied API keys, decoupling voice tooling from model choice.
+7. **First-party style capture is now table stakes.** Anthropic (Claude Styles), OpenAI (Custom Instructions + Custom GPTs), Grammarly (continuous personal voice profile) all ship style capture to all users. The baseline moved in 2025. Products competing here must differentiate on depth of fidelity, not on mere existence of the feature.
+8. **Copyright and training-data provenance are entering the conversation.** Anthropic's $1.5B copyright settlement (Aug 2025, largest in US history) and the EU AI Act's training-data transparency requirements are beginning to affect how voice-model vendors describe their training data. Vendors with privacy-first (Delphi, Athena, GHOSTYPE local-only) positioning now have a legal-risk argument in addition to a privacy argument.
+9. **Academic research is catching up with the commercial fidelity gap.** EMNLP 2025 "Catch Me If You Can" confirms that even GPT-4o fails at implicit personal-style imitation from few samples. This gives vendors that invest in fine-tuning (Hypotenuse, Typeface) a stronger empirical argument vs. prompt-only competitors.
 
 ---
 
 ## Gaps / whitespace (relevant to Unslop)
 
-1. **No credible commercial product specializes in making AI output sound *more* like a specific human writer.** Brand voice tools smooth toward brand consistency; humanizer tools smooth toward "undetectable but generic." There is no strong incumbent on "sound like *me*, including my roughness."
-2. **Cold-start voice capture is weak everywhere.** Most tools require 300–15,000 words. A product that produces a convincing voice profile from 2–3 short samples would leapfrog the SMB/creator segment.
+1. **No credible commercial product specializes in making AI output sound *more* like a specific human writer.** Brand voice tools smooth toward brand consistency; humanizer tools smooth toward "undetectable but generic." There is no strong incumbent on "sound like *me*, including my roughness." Academic research (EMNLP 2025) confirms that even frontier models fail at this — so the gap is real, not just a marketing framing issue.
+2. **Cold-start voice capture is weak everywhere.** Most tools require 300–15,000 words. A product that produces a convincing voice profile from 2–3 short samples would leapfrog the SMB/creator segment. Profile-to-PEFT (arXiv 2025) is the most credible academic attack on this but has no commercial implementation yet.
 3. **No tool exposes user-controllable authenticity knobs.** Users cannot say "be 20% more casual than my default, keep my sentence fragments, don't sanitize my em-dash habit." Controls today are tone descriptors, not fingerprint dials.
 4. **"Humanize" is ceded to detector-evasion vendors.** The term is contaminated. A product framed around **thinking + voice authenticity** (not evasion) would have linguistic room it doesn't currently occupy.
 5. **No explicit separation of *thinking* from *voice*.** Every product collapses "what to say" and "how to say it" into one pass. Tools that let the user steer reasoning separately from stylistic rendering are absent.
-6. **Personal-voice on top of team-brand.** Enterprises want author-level voice, but no tool meaningfully blends "Writer.com brand profile" ∩ "my personal writing fingerprint" for a single employee drafting in both contexts.
+6. **Personal-voice on top of team-brand.** Enterprises want author-level voice, but no tool meaningfully blends "Writer.com brand profile" ∩ "my personal writing fingerprint" for a single employee drafting in both contexts. Jasper's 69,500 brand voices suggests demand; no product has solved the composable-profiles problem.
 7. **Voice for *conversation*, not content.** Most tools target marketing/long-form. Fewer are good at Slack messages, comments, PR reviews — the texture where humanization matters most for knowledge workers.
 8. **Feedback loops that degrade voice over time.** Products tuned to reply rate / CTR drift toward sameness. A product whose loss function includes *preserving* idiosyncrasy would differentiate.
+9. **Copyright-safe training provenance for voice models.** Post Anthropic's 2025 settlement and the EU AI Act, vendors will need to explain what their voice model was trained on. Products built on user-provided writing (Delphi, Lindy's observational model) have a cleaner story than those that train on scraped web data and then fine-tune on user examples.
 
 ---
 
@@ -304,3 +310,7 @@ The only products openly marketed as "humanizing AI text" (Undetectable.ai, Stea
 - LinkedIn Premium AI: linkedin.com/help (AI writing assistant articles)
 - Mem 2.0: get.mem.ai/blog/introducing-mem-2-0; get.mem.ai/blog/introducing-the-worlds-first-knowledge-aware-ai-assistant
 - Humanizer/detection-evasion landscape: nerdbot.com (2026 humanizer evaluation); technology.org (humanizer vs. detector); humanifylab.com; evadegpt.ai
+- **[NEW]** Grammarly AI agents + Superhuman rebrand (Aug–Oct 2025): grammarly.com/blog/company/grammarly-launches-ai-agents/
+- **[NEW]** Jasper 2025 in review (69,500+ Brand Voices): jasper.ai/blog/jasper-in-review
+- **[NEW]** Claude custom Styles: support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features
+- **[NEW]** Anthropic copyright settlement (Aug 2025): aimultiple.com/generative-ai-copyright (context on legal landscape)

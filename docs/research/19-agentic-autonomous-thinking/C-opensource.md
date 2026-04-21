@@ -179,10 +179,13 @@ Stars are approximate as of April 2026; see "Sources" for verification links.
 
 ## Trends
 
-- **Market consolidation is underway.** AgentGPT archived (Jan 2026), Swarm retired in favor of OpenAI Agents SDK, LangGraph dominating production deployments, OpenHands dominating coding-agent mindshare at ~71k stars. The "thousand frameworks" era is ending.
+- **Market consolidation is underway.** AgentGPT archived (Jan 2026), Swarm retired in favor of OpenAI Agents SDK, LangGraph dominating production deployments (~91% task completion with verification nodes; reached v1.0 in late 2025 and v1.1.3 in 2026 with distributed runtime support), OpenHands dominating coding-agent mindshare at ~70k+ stars. The "thousand frameworks" era is ending.
 - **Research → runtime migration.** MemGPT → Letta, SWE-agent → OpenHands integration, Voyager's skill-library idea absorbed by CAMEL and others. Research ideas now reach production runtimes within ~12 months.
-- **2026 frameworks ship evaluation harnesses.** SWE-bench, AgentBench, τ-bench are now assumed; "does it run on SWE-bench?" has become a de-facto credibility test.
-- **Thinking-as-artifact is a small but distinct substrand.** Thoughtful Agents (CHI 2025), AgentKit, TreeThinkerAgent, SUBIT-64 all treat *how the agent thinks* (not what it produces) as the primary output. Directly on-thesis for Unslop.
+- **2026 frameworks ship evaluation harnesses.** SWE-bench, AgentBench, τ-bench are now assumed; "does it run on SWE-bench?" has become a de-facto credibility test. OpenHands shipped the OpenHands Index (January 2026) to broaden beyond SWE-bench: issue resolution, greenfield app dev, frontend tasks, and testing.
+- **Thinking-as-artifact is a small but distinct substrand.** Thoughtful Agents (CHI 2025), AgentKit, TreeThinkerAgent all treat *how the agent thinks* (not what it produces) as the primary output. Directly on-thesis for Unslop.
+- **New framework entrants from frontier labs.** 2025 saw three major new SDKs: OpenAI Agents SDK (March 2025, production successor to the educational Swarm repo), Google Agent Development Kit / ADK (April 2025, A2A-native), and Anthropic Claude Agent SDK (April 2026, same tools as Claude Code, programmable in Python/TypeScript). These are not community projects — they are officially supported production runtimes backed by the frontier model providers. Developers adopting them trade framework flexibility for first-class model integration.
+- **Security tooling is arriving.** Microsoft released the Agent Governance Toolkit (April 2026) as open-source runtime security for agents, framework-agnostic with hooks into LangChain, CrewAI, and Google ADK. The prior absence of this layer was a known gap; its arrival marks agents entering enterprise compliance and security workflows.
+- **MCP as universal tool-use protocol.** Anthropic's Model Context Protocol (MCP, November 2024) crossed 97M monthly SDK downloads and 5,800+ servers by late 2025. OpenAI, Google, and Microsoft all adopted it; it was donated to the Linux Foundation's Agentic AI Foundation in December 2025. Most frameworks now treat MCP servers as the standard tool interface rather than bespoke function schemas.
 
 ## Gaps (Unslop opportunities)
 

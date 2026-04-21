@@ -156,7 +156,7 @@ Standard fields: **Pitch · Naturalness claim · Technique claimed · Underlying
 
 **P5 — Fine-tuning claims are usually light.** Very few vendors disclose actual training methodology. "Fine-tuned for X" often means *a system prompt, retrieval context, and templating* over a foundation model — not weight-level fine-tuning. BrandWell claiming "proprietary stack of 3+ LLMs" and AI21/Sudowrite (actually training their own models) are exceptions.
 
-**P6 — Detection-evasion has become an explicit product category.** In 2023–2024 this was mostly adjacent tooling; in 2026, humanizers are a mature, priced, rank-ordered category with third-party benchmarks and feature parity (Fast/Aggressive/Latest modes). Their existence pressures mainstream tools — Grammarly's own disclosure that GrammarlyGO output "can be detected by AI detectors" is a notable (and rare) transparency move.
+**P6 — Detection-evasion has become an explicit product category — and is entering regulatory risk.** In 2023–2024 this was mostly adjacent tooling; in 2026, humanizers are a mature, priced, rank-ordered category with third-party benchmarks and feature parity (Fast/Aggressive/Latest modes). Their existence pressures mainstream tools — Grammarly's own disclosure that GrammarlyGO output "can be detected by AI detectors" is a notable (and rare) transparency move. However, the EU AI Act Article 50 (effective August 2026) explicitly prohibits ToS-level removal of AI watermarks and requires providers to implement detectors. Detection-bypass products (Undetectable.ai, HIX Bypass, QuillBot, StealthGPT) operating in the EU face direct compliance exposure.
 
 **P7 — Foundation-model personality is being *productized*.** Grok's 30+ persona modes and Grok 4.1's explicit "coherent personality" and "emotional intelligence" framing signal a new marketing axis: humanness as *character*, not just prose quality. ChatGPT's earlier "custom personalities" and Anthropic's "character training" are the adjacent moves, but Grok has gone furthest in commercializing it.
 
@@ -177,6 +177,10 @@ Standard fields: **Pitch · Naturalness claim · Technique claimed · Underlying
 **G5 — "Human-in-the-loop" is collapsing, not growing.** Wordtune's "enhance, don't replace" framing is increasingly rare in 2026 pitches — most vendors now push full-draft generation with post-hoc brand-voice checks. Market signal: users prefer speed over authorship, which may be the actual root cause of "AI smell."
 
 **G6 — Detector-humanizer arms race is venue-specific.** Most humanizers optimize against the 3–5 best-known detectors (GPTZero, Originality, Turnitin, Content at Scale, Copyleaks). Domain-specific detectors (academic LMS integrations, publisher editorial tooling) are less covered — pricing/features suggest upstream B2B integration is the next frontier.
+
+**G7 — Frontier model creative writing quality has narrowed the gap.** Claude Opus 4.6 is now rated the best pure creative writer in independent 2026 comparisons, with "natural rhythm, authentic dialogue, and structural coherence" distinguishing it from GPT-5.4 (polished but predictable) and Gemini 2.5 Pro (competent but lacking distinctiveness). As frontier models improve at baseline naturalness, post-hoc humanizers must target a higher bar to deliver marginal value.
+
+**G8 — LLM-judge evaluation claims need bias disclosure.** Anyword's "82% vs. 52%" claim, Sudowrite's "40% fewer revision passes," and any benchmark using LLM-as-judge now need to disclose: which judge, what bias-mitigation protocol, and what position/verbosity correction was applied. The CALM framework (2025) establishes that verbosity inflation alone (~15%) can manufacture apparent quality improvements.
 
 ---
 

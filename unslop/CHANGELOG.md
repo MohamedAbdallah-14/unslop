@@ -1,3 +1,51 @@
+## 0.5.1 — 2026-04-21
+
+Research-sync release. Ports the April 2026 update of `docs/research/`
+(20 categories) into code, rules, and docs. No behavioral break. AI-ism
+reduction at balanced moves from 89.1% to **92.0%** on the nine-fixture
+benchmark.
+
+### Added
+
+- Persona-drift reinforcement hook (`hooks/unslop-mode-tracker.js`): per-session
+  turn counter fires an expanded drift-check banner at turns 8, 16, 24, 32,
+  then every 16 turns thereafter. Calibrated against RMTBench and
+  HorizonBench (arXiv 2604.17283). Counter resets on session start and on
+  "stop unslop". Three new integration tests.
+- AI-ism vocabulary expansion in `STOCK_VOCAB` + `AI_ISMS`: `meticulous(ly)`,
+  `bustling`, `paradigm shift`, `game-changer/changing`, `revolutionize`,
+  `transformative`, `unprecedented` (connective-adjective context only),
+  `myriad`, `plethora`, `uncharted territory/waters/ground/area/domain`,
+  `nuanced` (as connective filler), `synergy/synergies/synergize`. Six new
+  tests including a factual-context guard for `unprecedented`.
+- LLM-as-judge bias mitigations in `evals/perceived_humanness.py`:
+  `--judges` comma-separated multi-model jury (Claude + OpenAI),
+  `--counterbalance` flag (default on) for position-bias averaging,
+  `length_delta_chars` tracking for verbosity-bias audit, per-judge win
+  rates in summary. Four new tests.
+- Detector-feedback ladder exhaustion now prints a structured cross-model
+  paraphrase recommendation naming TempParaphraser (EMNLP 2025) and
+  Adversarial Paraphrasing (NeurIPS 2025), with an explicit warning
+  against watermark removal (EU AI Act Article 50).
+- Style-memory security hardening: 64 KB file-size cap on load, expanded
+  docstring documenting the OWASP Top 10 for Agentic Applications 2026
+  memory-risk class and the MIT/Penn State CHI 2026 sycophancy × memory
+  finding.
+
+### Fixed
+
+- Static-typing failures in `structural.py` (`Callable` annotation) and
+  `detector.py` (explicit `str()` on `tokenizer.decode()` results).
+
+### Changed
+
+- `--judge-model` deprecated in favor of `--judges` (backward compatible
+  through the 0.5.x line).
+
+For the full repo-level changelog (hooks, skill, docs, benchmarks,
+IMPLEMENTATION_TRACE rows, commercial-humanizer landscape, etc.) see
+[`/CHANGELOG.md`](../CHANGELOG.md) at the repo root.
+
 ## 0.4.1 — 2026-04-20
 
 Pure infrastructure / packaging release. No runtime changes — all behavior

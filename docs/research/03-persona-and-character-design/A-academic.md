@@ -1,8 +1,8 @@
 # Persona & Character Design — Academic & Scholarly
 
-*Research digest for "Humanizing AI output and thinking." Scope: peer-reviewed and arXiv literature on persona-grounded dialogue, role-playing LLMs, Big-Five personality conditioning, persona drift, character hallucination, and psychometric evaluation of synthetic personality.*
+*Research digest for "Humanizing AI output and thinking." Scope: peer-reviewed and arXiv literature on persona-grounded dialogue, role-playing LLMs, Big-Five personality conditioning, persona drift, character hallucination, and psychometric evaluation of synthetic personality. Last updated: April 2026.*
 
-**Research value: high** — A mature academic thread exists, spanning a foundational 2018 persona dataset, the 2020 pretrained-chatbot era (Meena, Blender), a 2023–2025 wave of role-playing LLM benchmarks (Character-LLM, RoleLLM, CharacterEval, InCharacter, PersonaGym), and a psychometrically grounded personality-conditioning subfield (PersonaLLM, Google DeepMind's *Personality Traits in LLMs*, BIG5-CHAT). Together they provide concrete techniques, numerical findings, and named failure modes directly applicable to building humanized AI output.
+**Research value: high** — A mature academic thread exists, spanning a foundational 2018 persona dataset, the 2020 pretrained-chatbot era (Meena, Blender), a 2023–2025 wave of role-playing LLM benchmarks (Character-LLM, RoleLLM, CharacterEval, InCharacter, PersonaGym), and a psychometrically grounded personality-conditioning subfield (PersonaLLM, Google DeepMind's *Personality Traits in LLMs*, BIG5-CHAT). 2025–2026 added a comprehensive survey (arXiv 2601.10122), new evaluation frameworks (RPEval, CharacterBox, RoleRAG), the Anthropic Persona Selection Model, and the NeurIPS 2025 PersonaLLM workshop establishing the subfield's institutional presence. Together they provide concrete techniques, numerical findings, and named failure modes directly applicable to building humanized AI output.
 
 ---
 
@@ -230,6 +230,73 @@ A recurring empirical signal: **bigger is not better for persona fidelity.** Per
 
 ---
 
+## New Sources (Added April 2026)
+
+### 24. The Persona Selection Model — Anthropic
+- **URL:** https://www.anthropic.com/research/persona-selection-model
+- **Authors / Org:** Anthropic
+- **Year / Venue:** February 2026
+- **Core claim:** LLMs learn to simulate diverse characters during pre-training (real humans, fictional characters, real and fictional AI systems). Post-training refines the LLM's model of a specific "Assistant" persona. Interactions with an AI assistant are interactions with the Assistant — something roughly like a character in an LLM-generated story.
+- **Techniques:** Surveys behavioral, generalization, and interpretability-based evidence. Recommends anthropomorphic reasoning about AI psychology and introduction of positive AI archetypes into training data as a deliberate engineering lever.
+- **Takeaways:** The PSM frames persona not as a fine-tuning artifact but as an instance-selection process from a latent character space learned during pretraining. This reframes humanization: rather than installing traits via post-training, you are selecting and stabilizing a persona that already exists in the weight distribution. Important open question: whether there are sources of agency external to the selected Assistant persona.
+- **Summary:** Anthropic's theoretical account of *why* LLMs have personalities at all — and why those personalities can be steered. Companion theory to the Assistant Axis interpretability paper (arXiv:2601.10387), published one month later.
+
+### 25. Role-Playing Agents Driven by Large Language Models: Current Status, Challenges, and Future Trends
+- **URL:** https://arxiv.org/abs/2601.10122
+- **Authors / Org:** Ye Wang, Jiaxing Chen, Hongjiang Xiao
+- **Year / Venue:** January 2026 / arXiv
+- **Core claim:** Comprehensive survey of role-playing language agents (RPLAs). Reviews technological evolution from rule-based templates → language-style imitation → cognitive simulation (personality modeling + memory mechanisms). Identifies critical technical pathways: psychological scale-driven character modeling, memory-augmented prompting, and motivation-situation-based behavioral decision control.
+- **Techniques:** Literature synthesis across data construction, character modeling, memory mechanisms, and evaluation. Covers applications in NPCs, virtual anchors, digital humans, educational tutoring, and psychological companionship.
+- **Takeaways:** The most current comprehensive survey of the RPLA field as of early 2026. Highlights that the field still lacks a unified paradigm for constructing consistent and sustainable character settings — confirming that persona design remains an open engineering and research problem.
+- **Summary:** The go-to 2026 update to Neph0s et al.'s TMLR 2024 survey. Covers the complete arc of the field and is especially useful for situating any new persona system against the state of the art.
+
+### 26. CharacterBox: Evaluating the Role-Playing Capabilities of LLMs in Text-Based Virtual Worlds
+- **URL:** https://arxiv.org/abs/2412.05631 (NAACL 2025)
+- **Authors / Org:** Haoxuan Li et al. (Peking University)
+- **Year / Venue:** 2024 preprint / NAACL 2025
+- **Core claim:** A simulation sandbox that generates situational, fine-grained character behavior trajectories — enabling more comprehensive evaluation of role-playing than static test sets. Two agents: a character agent grounded in psychological and behavioral science, and a narrator agent that coordinates interactions and environmental changes.
+- **Techniques:** Dynamic world simulation; trajectory-based behavioral evaluation; dual-agent (character + narrator) architecture.
+- **Takeaways:** Moving evaluation beyond static QA into dynamic world-simulation is necessary to capture nuanced humanlike persona behavior. Complements PersonaGym's environment-sampling approach with an explicitly narrative/world-state framing.
+- **Summary:** A simulation-based evaluation framework that creates text-world environments to probe character behavior. Extends the dynamic evaluation paradigm.
+
+### 27. RPEval: Role-Playing Evaluation for Large Language Models
+- **URL:** https://arxiv.org/abs/2505.13157
+- **Authors / Org:** (multiple institutions)
+- **Year / Venue:** May 2025 / arXiv
+- **Core claim:** Four key dimensions for role-playing evaluation: emotional understanding, decision-making, moral alignment, and in-character consistency. Existing benchmarks leave gaps in emotional and moral dimensions.
+- **Techniques:** New benchmark dataset; multi-dimensional scoring rubric; evaluation across several frontier models.
+- **Takeaways:** Adds emotional and moral alignment as first-class evaluation axes — the two dimensions most relevant to companion and humanization use cases, and the two most underserved in prior benchmarks.
+- **Summary:** Fills the gap between consistency-focused benchmarks (PersonaGym, CharacterEval) and the affective/ethical dimensions that actually determine whether a persona feels human.
+
+### 28. RoleRAG: Enhancing LLM Role-Playing via Graph Guided Retrieval
+- **URL:** https://arxiv.org/abs/2505.18541
+- **Authors / Org:** (multiple institutions)
+- **Year / Venue:** May 2025 / arXiv
+- **Core claim:** A retrieval-based framework combining entity disambiguation for knowledge indexing with a boundary-aware retriever. Extracting contextually appropriate information from a structured knowledge graph improves character knowledge accuracy and reduces hallucinated responses in role-play.
+- **Techniques:** Knowledge graph construction; entity disambiguation; boundary-aware retrieval; retrieval-augmented generation applied to character knowledge.
+- **Takeaways:** Addresses the knowledge-boundary hallucination problem (see RoleFact) from the retrieval side rather than the training side. A promising complement to confidence-gating approaches.
+- **Summary:** RAG applied specifically to character knowledge management. Directly applicable to historical figures, IP characters, and any persona with a bounded, verifiable knowledge domain.
+
+### 29. Systematizing LLM Persona Design: A Four-Quadrant Technical Taxonomy for AI Companion Applications
+- **URL:** https://arxiv.org/abs/2511.02979
+- **Authors / Org:** Esther Sun et al.
+- **Year / Venue:** November 2025 / arXiv (NeurIPS 2025 PersonaLLM Workshop)
+- **Core claim:** Proposes a four-quadrant taxonomy of AI companion applications along two axes — Virtual vs. Embodied and Emotional Companionship vs. Functional Augmentation. Each quadrant has distinct technical requirements and failure modes.
+- **Techniques:** Literature synthesis; quadrant classification; per-quadrant challenge analysis (Quadrant I: virtual idols/romantic companions/story characters; Quadrant II: functional virtual assistants — work/gaming/mental health; Quadrants III & IV: embodied intelligence including home robots and vertical-domain assistants).
+- **Takeaways:** Provides a systematic map for researchers and policymakers to navigate persona design space. Unfiltered companion, functional assistant, and embodied agent personas require different engineering stacks and have different risk profiles. Validates the need for content-policy-aware taxonomy.
+- **Summary:** The clearest published framework for categorizing the AI companion landscape as of late 2025. Directly useful for situating Unslop's design space.
+
+### 30. NeurIPS 2025 PersonaLLM Workshop
+- **URL:** https://personallmworkshop.github.io/
+- **Authors / Org:** NeurIPS 2025 organizing committee + interdisciplinary contributors
+- **Year / Venue:** December 2025 / NeurIPS 2025 Workshop
+- **Core claim:** LLM persona modeling is now an interdisciplinary subfield warranting a dedicated NeurIPS venue, bringing together AI, psychology, cognitive science, and HCI perspectives.
+- **Techniques:** Workshop format; position papers, contributed talks, panel discussions. Natasha Jaques presented "Consistently Simulating Human Personas with Multi-Turn Reinforcement Learning" — reporting >55% reduction in persona unfaithfulness across tasks using multi-turn RL with consistency rewards.
+- **Takeaways:** Institutional establishment of persona modeling as a recognized research area (not just an application of general LLM work). The Jaques multi-turn RL result independently corroborates PCL (arXiv:2503.17662) on the value of consistency-targeted training.
+- **Summary:** Marks the field's coming-of-age moment. The workshop signals that persona research has its own community, evaluation norms, and ethical debates distinct from general LLM capability research.
+
+---
+
 ## Key Techniques / Patterns
 
 **Persona conditioning: three generations.**
@@ -283,11 +350,14 @@ A recurring empirical signal: **bigger is not better for persona fidelity.** Per
 
 1. **From prompt cards to training pipelines.** Every 2024–25 SOTA result (BIG5-CHAT, OpenCharacter, Orca, RoleLLM) is training-based. Prompt-only personas are increasingly treated as a *baseline*, not a solution.
 2. **Personality ≠ character.** The field is consolidating on two separable signals — *trait vectors* (Big Five, HEXACO) and *character identity* (biography, knowledge boundary, voice) — and combining them explicitly (Orca, InCharacter + RoleLLM).
-3. **Behavioral evaluation replacing questionnaire evaluation.** InCharacter and PersonaGym signal a shift away from "ask the model to fill out the BFI" toward "put the model in scenarios and score its behavior against psychometric criteria."
-4. **Hallucination taxonomy maturing.** 2024 crystallized three role-play-specific hallucination types — interactive, role-query conflict, temporal — each with named benchmarks and dedicated defenses.
+3. **Behavioral evaluation replacing questionnaire evaluation.** InCharacter and PersonaGym signal a shift away from "ask the model to fill out the BFI" toward "put the model in scenarios and score its behavior against psychometric criteria." CharacterBox and RPEval extend this further into world-simulation and moral/emotional dimensions.
+4. **Hallucination taxonomy maturing.** 2024 crystallized three role-play-specific hallucination types — interactive, role-query conflict, temporal — each with named benchmarks and dedicated defenses. RoleRAG (2025) adds a retrieval-side complement to training-side mitigations.
 5. **Persona faithfulness decouples from general capability.** Multiple benchmarks (PersonaGym, CharacterEval) show large closed models tying or losing to smaller or Chinese-specialized open models. Persona is now its own capability axis.
 6. **Data-synthesis at 100K–1M scale.** Synthetic-Persona-Chat, BIG5-CHAT, OpenCharacter all use LLM-generated persona data with consistency critics. Human-curated persona data is effectively legacy.
 7. **Convergence with safety and alignment.** RoleBreak reframes persona breakage as jailbreak; PERSONA links persona research to pluralistic alignment; this will likely become one combined research area.
+8. **Pretraining as persona source.** Anthropic's Persona Selection Model (PSM, Feb 2026) argues that character diversity originates in pretraining data, not post-training. This reframes humanization from "installing traits" to "selecting and stabilizing a latent character from the pretraining distribution." Has significant implications for what training data to include.
+9. **Institutional recognition.** The NeurIPS 2025 PersonaLLM Workshop established persona modeling as a recognized research subfield with dedicated evaluation norms, ethical debates, and a cross-disciplinary community (AI + psychology + HCI + cognitive science).
+10. **Retrieval-augmented persona (RAP).** RoleRAG applies RAG specifically to character knowledge graphs. As knowledge-boundary hallucination becomes a central problem, RAP is emerging as a practical complement to training-based and prompt-based approaches.
 
 ---
 
@@ -330,3 +400,10 @@ A recurring empirical signal: **bigger is not better for persona fidelity.** Per
 21. Castricato, L., et al. (2024). *PERSONA: A Reproducible Testbed for Pluralistic Alignment.* arXiv:2407.17387. https://arxiv.org/abs/2407.17387
 22. (2025). *OpenCharacter: Training Customizable Role-Playing LLMs with Large-Scale Synthetic Personas.* arXiv:2501.15427. https://huggingface.co/papers/2501.15427
 23. (2024). *Orca: Enhancing Role-Playing Abilities of Large Language Models by Integrating Personality Traits.* arXiv:2411.10006. https://arxiv.org/abs/2411.10006
+24. Anthropic. (2026, February). *The Persona Selection Model.* https://www.anthropic.com/research/persona-selection-model
+25. Wang, Y., Chen, J., & Xiao, H. (2026, January). *Role-Playing Agents Driven by Large Language Models: Current Status, Challenges, and Future Trends.* arXiv:2601.10122. https://arxiv.org/abs/2601.10122
+26. Li, H., et al. (2025). *CharacterBox: Evaluating the Role-Playing Capabilities of LLMs in Text-Based Virtual Worlds.* NAACL 2025. arXiv:2412.05631. https://arxiv.org/abs/2412.05631
+27. (2025, May). *Role-Playing Evaluation for Large Language Models (RPEval).* arXiv:2505.13157. https://arxiv.org/abs/2505.13157
+28. (2025, May). *RoleRAG: Enhancing LLM Role-Playing via Graph Guided Retrieval.* arXiv:2505.18541. https://arxiv.org/abs/2505.18541
+29. Sun, E., et al. (2025, November). *Systematizing LLM Persona Design: A Four-Quadrant Technical Taxonomy for AI Companion Applications.* arXiv:2511.02979. NeurIPS 2025 PersonaLLM Workshop. https://arxiv.org/abs/2511.02979
+30. NeurIPS 2025 PersonaLLM Workshop. https://personallmworkshop.github.io/

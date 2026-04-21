@@ -26,6 +26,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
+from .soul import SoulReport, humanize_soul
+from .structural import StructuralReport, humanize_structural
 from .validate import ValidationResult, validate
 
 MAX_RETRIES = 2
@@ -62,6 +64,8 @@ class HumanizeReport:
     replacements: list[Replacement] = field(default_factory=list)
     em_dashes_before: int = 0
     em_dashes_after: int = 0
+    structural: StructuralReport = field(default_factory=StructuralReport)
+    soul: SoulReport = field(default_factory=SoulReport)
 
     @property
     def counts_by_rule(self) -> dict[str, int]:
@@ -86,6 +90,8 @@ class HumanizeReport:
             "counts_by_rule": self.counts_by_rule,
             "em_dashes_before": self.em_dashes_before,
             "em_dashes_after": self.em_dashes_after,
+            "structural": self.structural.to_dict(),
+            "soul": self.soul.to_dict(),
         }
 
 
@@ -246,6 +252,16 @@ STOCK_VOCAB = [
     (re.compile(r"\bdelved\b", re.IGNORECASE), "looked at"),
     (re.compile(r"\bdelve\b", re.IGNORECASE), "look at"),
     (re.compile(r"\btapestry\b", re.IGNORECASE), "blend"),
+    # "stands/stood/standing as a testament to" — must run before the other
+    # testament-variants so it consumes the full phrase; otherwise the shorter
+    # `(?:a|the)\s+testament\s+to` pattern leaves "stands as" stranded.
+    (
+        re.compile(
+            r"\b(?:stand(?:s|ing)?|stood)\s+as\s+(?:a|an|the)\s+testament\s+to\b",
+            re.IGNORECASE,
+        ),
+        "shows",
+    ),
     (re.compile(r"\bhas\s+been\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "shows"),
     (re.compile(r"\bhave\s+been\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "show"),
     (re.compile(r"\b(?:is|was)\s+(?:a|the)\s+testament\s+to\b", re.IGNORECASE), "shows"),
@@ -307,6 +323,59 @@ STOCK_VOCAB = [
     (re.compile(r"\bever[- ]changing\b", re.IGNORECASE), "changing"),
     (re.compile(r"\bin today'?s (?:digital )?(?:world|age|landscape|era)\b", re.IGNORECASE), "today"),
     (re.compile(r"\bdynamic landscape\b", re.IGNORECASE), "world"),
+    # 2026-04 additions (Wikipedia:Signs_of_AI_writing + blader taxonomy
+    # follow-up). These are the classic "purple AI" vocabulary tells that
+    # routinely survive a first humanization pass.
+    #
+    # `meticulous(ly)` — almost never justified; "careful" or plain omission
+    # reads human.
+    (re.compile(r"\bmeticulously\b", re.IGNORECASE), "carefully"),
+    (re.compile(r"\bmeticulous\b", re.IGNORECASE), "careful"),
+    # `bustling` as a setting adjective ("bustling city", "bustling market").
+    # Always AI-purple; "busy" is the human word.
+    (re.compile(r"\bbustling\b", re.IGNORECASE), "busy"),
+    # `paradigm shift` — dead metaphor since the 1990s; shorten to "shift".
+    (re.compile(r"\bparadigm\s+shift\b", re.IGNORECASE), "shift"),
+    # `game-changer` / `game-changing` — cliché. Drop to "important change"
+    # or "major". Guard: only when used as noun/adj phrase, not in literal
+    # game contexts (`a game-changing play in the final quarter`).
+    (re.compile(r"\bgame[- ]?changers?\b(?!\s+(?:play|move|goal|call))", re.IGNORECASE), "major change"),
+    (re.compile(r"\bgame[- ]?changing\b(?!\s+(?:play|move|goal|call))", re.IGNORECASE), "major"),
+    # `revolutionize/s/d/ing` — verb-level hype. "change" carries the actual
+    # claim; the reader can judge magnitude from the surrounding facts.
+    (re.compile(r"\brevolutioniz(?:es|ed|ing)\b", re.IGNORECASE),
+     lambda m: {"revolutionizes": "changes", "revolutionized": "changed", "revolutionizing": "changing"}.get(m.group(0).lower(), "changes")),
+    (re.compile(r"\brevolutionize\b", re.IGNORECASE), "change"),
+    # `transformative` — the adjective form of the same hype; "big" or
+    # "major" conveys the same magnitude without the brochure tone.
+    (re.compile(r"\btransformative\b", re.IGNORECASE), "major"),
+    # `unprecedented` — flagged by AP, Reuters, and Wikipedia style. Guard:
+    # keep the word in strict factual context (e.g. "unprecedented
+    # {scale,levels,volume,rate,drought,heat wave}") where it genuinely
+    # quantifies. Strip only the generic adjective-before-noun form in
+    # connective prose.
+    (re.compile(r"\bunprecedented(?=\s+(?:opportunity|opportunities|challenge|challenges|growth|success|impact|change)\b)", re.IGNORECASE), "major"),
+    # `myriad (of)` / `plethora of` — dress-up words for "many" / "lots of".
+    # Two forms of `myriad`: noun ("a myriad of X") and adjective
+    # ("myriad X"). Both collapse to "many X".
+    (re.compile(r"\ba\s+myriad\s+of\b", re.IGNORECASE), "many"),
+    (re.compile(r"\bmyriad\s+(?=\w)", re.IGNORECASE), "many "),
+    (re.compile(r"\ba\s+plethora\s+of\b", re.IGNORECASE), "many"),
+    # `uncharted territory/waters/ground` — cliché. Prefer "new ground" or
+    # plain "new {territory/area}".
+    (re.compile(r"\buncharted\s+territory\b", re.IGNORECASE), "new ground"),
+    (re.compile(r"\buncharted\s+waters\b", re.IGNORECASE), "new territory"),
+    (re.compile(r"\buncharted\s+(?=ground|area|domain)\b", re.IGNORECASE), "new "),
+    # `nuanced` as a connective adjective ("nuanced understanding",
+    # "nuanced view"). Collapse to "detailed" which claims less.
+    (re.compile(r"\bnuanced\b(?=\s+(?:understanding|view|perspective|approach|analysis|take))", re.IGNORECASE), "detailed"),
+    # `synergy` / `synergies` / `synergize(s/d/ing)` — McKinsey-deck hype.
+    # Collapse to neutral replacements.
+    (re.compile(r"\bsynergies\b", re.IGNORECASE), "shared benefits"),
+    (re.compile(r"\bsynergy\b", re.IGNORECASE), "shared benefit"),
+    (re.compile(r"\bsynergiz(?:es|ed|ing)\b", re.IGNORECASE),
+     lambda m: {"synergizes": "works well with", "synergized": "worked well with", "synergizing": "working well with"}.get(m.group(0).lower(), "works well with")),
+    (re.compile(r"\bsynergize\b", re.IGNORECASE), "work well with"),
 ]
 
 # Authority tropes (blader/unslop #27). Persuasive framing that signals
@@ -375,6 +444,155 @@ NEGATIVE_PARALLELISM = [
 PERFORMATIVE = [
     (re.compile(r",\s*however,\s*", re.IGNORECASE), ". "),
     (re.compile(r"(^|(?<=[.!?]\s))However,\s+", re.MULTILINE), r"\1"),
+]
+
+# --- Phase 2 new lexical families (2026-04-21) ---
+#
+# Source: blader/humanizer taxonomy (MIT) + Wikipedia "Signs of AI writing"
+# maintained by WikiProject AI Cleanup. Each family mirrors a category named in
+# that taxonomy that unslop previously did not cover. Credit due to those
+# sources; original regex implementations here.
+#
+# Conservative stance: each pattern needs a clear semantic bound so we never
+# destroy meaning. Where a pattern is borderline, we only flag in the validator
+# and leave rewrite to LLM mode.
+
+# SIGNIFICANCE_INFLATION: phrases that inflate historical importance without
+# evidence. The Wikipedia article names this the single most common AI-writing
+# tell on encyclopedic content. Strip the inflated framing; leave the fact.
+SIGNIFICANCE_INFLATION = [
+    # "marks a pivotal moment in" / "represents a defining moment in" → "happened in"
+    (
+        re.compile(
+            r"\b(?:marks?|represents?|stands?\s+as)\s+"
+            r"(?:a|an|the)\s+(?:pivotal|defining|critical|key|watershed|seminal)\s+"
+            r"(?:moment|turning\s+point|milestone|chapter)\s+(?:in|for)\s+",
+            re.IGNORECASE,
+        ),
+        "happened in ",
+    ),
+    # "underscores its importance" / "emphasizes the significance of X" →
+    # strip the inflation; the remaining noun stands on its own.
+    (
+        re.compile(
+            r",?\s+(?:underscor(?:es|ing)|emphasiz(?:es|ing)|highlight(?:s|ing))\s+"
+            r"(?:the|its|their|his|her)\s+"
+            r"(?:importance|significance|role|impact|value|relevance|necessity)"
+            r"(?=[,.\s])",
+            re.IGNORECASE,
+        ),
+        "",
+    ),
+    # "an enduring legacy" / "lasting legacy" → "a legacy"
+    (
+        re.compile(r"\b(?:an\s+)?(?:enduring|lasting|indelible)\s+legacy\b", re.IGNORECASE),
+        "a legacy",
+    ),
+    # "leaves an indelible mark on" → "affects"
+    (
+        re.compile(r"\bleaves?\s+an?\s+indelible\s+mark\s+on\b", re.IGNORECASE),
+        "affects",
+    ),
+    # "deeply rooted in" → "rooted in"
+    (re.compile(r"\bdeeply\s+rooted\s+in\b", re.IGNORECASE), "rooted in"),
+    # "contributing to the broader" / "shaping the broader narrative" —
+    # paragraph-inflation clauses. Strip the trailing fragment.
+    (
+        re.compile(
+            r",?\s+(?:contributing\s+to|shaping|influencing)\s+"
+            r"the\s+(?:broader|wider|ongoing)\s+"
+            r"(?:narrative|landscape|conversation|discourse|trajectory|movement)"
+            r"(?=[,.\s])",
+            re.IGNORECASE,
+        ),
+        "",
+    ),
+]
+
+# NOTABILITY_NAMEDROPPING: "cited in <list of outlets>", "leading expert",
+# "active social media presence". Classic encyclopedic puffery. Conservative:
+# only the formulaic phrases, not any mention of a source.
+NOTABILITY_NAMEDROPPING = [
+    # "maintains an active social media presence" → removed (adds nothing)
+    (
+        re.compile(
+            r"\b(?:maintains?|has)\s+an\s+active\s+"
+            r"(?:social\s+media\s+)?presence\b"
+            r"(?:\s+on\s+[A-Z][A-Za-z]+(?:\s+and\s+[A-Z][A-Za-z]+)?)?",
+            re.IGNORECASE,
+        ),
+        "is active online",
+    ),
+    # "a leading expert in X" / "a leading voice on X" → "an expert on X"
+    (
+        re.compile(
+            r"\ba\s+leading\s+(?:expert|voice|authority|figure)\s+(?:in|on)\b",
+            re.IGNORECASE,
+        ),
+        "an expert on",
+    ),
+    # "renowned for his/her/their work on X" → "known for work on X"
+    (
+        re.compile(
+            r"\brenowned\s+for\s+(?:his|her|their)\s+work\s+(?:on|in|with)\b",
+            re.IGNORECASE,
+        ),
+        "known for work on",
+    ),
+    # "has been / is / was / are / were widely cited in" → "appeared in".
+    # The match consumes the preceding auxiliary so we don't leave "is has
+    # appeared" or "are appeared" behind.
+    (
+        re.compile(
+            r"\b(?:(?:is|are|was|were|has\s+been|have\s+been|had\s+been)\s+)?"
+            r"widely\s+(?:cited|featured|covered)\s+(?:in|by)\b",
+            re.IGNORECASE,
+        ),
+        "appeared in",
+    ),
+    # "recognized globally as" / "internationally recognized as" → "known as"
+    (
+        re.compile(
+            r"\b(?:internationally|globally)\s+recogni[sz]ed\s+as\b", re.IGNORECASE
+        ),
+        "known as",
+    ),
+]
+
+# SUPERFICIAL_ING: trailing participle clauses that claim analysis without
+# adding content. Wikipedia: "Superficial -ing analyses." Very conservative:
+# only strip when the participle phrase is clearly filler (, VERBing the/its
+# importance/significance/role/impact/need), i.e. the tail adds no new concrete
+# information. Any tail containing a specific noun is left alone.
+SUPERFICIAL_ING = [
+    (
+        re.compile(
+            r",\s+(?:highlighting|underscoring|emphasizing|illustrating|"
+            r"reflecting|showcasing|demonstrating|revealing)\s+"
+            r"(?:the|its|their|his|her|a|an)\s+"
+            r"(?:importance|significance|role|impact|value|need|necessity|"
+            r"relevance|nature|essence|complexity|depth|breadth)"
+            r"(?:\s+of\s+(?:the|this|that|these|those|its|their|his|her))?"
+            r"(?=[.!?\n])",
+            re.IGNORECASE,
+        ),
+        "",
+    ),
+]
+
+# COPULA_AVOIDANCE: Latinate appositive ", being a/an/the X," used where simple
+# "is" would do. Wikipedia lists this as a sign of AI-generated prose trying
+# to sound formal. Only the appositive comma-bound form; bare "being" (gerund)
+# is untouched.
+COPULA_AVOIDANCE = [
+    # ", being a reliable platform," → ", a reliable platform,"
+    # Drop the "being" word; the remaining appositive is idiomatic English.
+    (
+        re.compile(
+            r",\s+being\s+(?=(?:a|an|the)\s+[a-z])", re.IGNORECASE
+        ),
+        ", ",
+    ),
 ]
 
 # Em-dash per-paragraph cap. Research (Cat 04, Cat 05) says em-dash pileups are a
@@ -501,22 +719,50 @@ def _tracking_sub(
     return pattern.sub(track, text)
 
 
+def _resolve_toggles(
+    intensity: Intensity, structural: bool | None, soul: bool | None
+) -> tuple[bool, bool]:
+    """Intensity-driven defaults for Phase 1 (structural) and Phase 5 (soul).
+
+    After the Phase 6 humanness benchmark showed 100% win rate with
+    structural + soul on at `balanced`, both features became part of the
+    `balanced` and `full` defaults. `subtle` remains lexical-only.
+
+    Explicit True/False overrides the intensity default. `None` falls back
+    to the intensity-driven value.
+    """
+    intensity_wants_them = intensity in ("balanced", "full")
+    resolved_structural = intensity_wants_them if structural is None else structural
+    resolved_soul = intensity_wants_them if soul is None else soul
+    return resolved_structural, resolved_soul
+
+
 def humanize_deterministic(
     text: str,
     *,
     intensity: Intensity = "balanced",
+    structural: bool | None = None,
+    soul: bool | None = None,
 ) -> str:
     """Pure regex pass. Preserves code/URLs via placeholders; strips canonical AI-isms.
 
     `intensity` gates which rule families run:
-      - subtle:   stock vocab only.
+      - subtle:   stock vocab only. Lexical-only; no structural or soul pass.
       - balanced: sycophancy, hedging openers, transition tics, stock vocab,
                   performative balance, authority tropes, signposting,
-                  em-dash cap.
-      - full:     everything balanced does, plus filler phrases and
-                  negative-parallelism knockouts.
+                  em-dash cap, significance-inflation, notability-namedropping,
+                  copula-avoidance, plus Phase 1 structural and Phase 5 soul.
+      - full:     everything balanced does, plus filler phrases,
+                  negative-parallelism, superficial-ing.
+
+    `structural` and `soul` default to None and are resolved by intensity
+    (on for balanced/full, off for subtle). Pass True/False to override.
+    Phase 6 benchmark: balanced with both defaults wins 100% blind LLM-judge
+    preference vs the original AI text.
     """
-    result, _report = humanize_deterministic_with_report(text, intensity=intensity)
+    result, _report = humanize_deterministic_with_report(
+        text, intensity=intensity, structural=structural, soul=soul
+    )
     return result
 
 
@@ -524,6 +770,8 @@ def humanize_deterministic_with_report(
     text: str,
     *,
     intensity: Intensity = "balanced",
+    structural: bool | None = None,
+    soul: bool | None = None,
 ) -> tuple[str, HumanizeReport]:
     """Like `humanize_deterministic` but returns an audit trail of every
     replacement made. Used by the CLI's `--report` and `--json` output."""
@@ -531,6 +779,8 @@ def humanize_deterministic_with_report(
         raise ValueError(
             f"unknown intensity {intensity!r}; expected one of {VALID_INTENSITIES}"
         )
+
+    structural, soul = _resolve_toggles(intensity, structural, soul)
 
     report = HumanizeReport(intensity=intensity)
     log = report.replacements
@@ -548,6 +798,10 @@ def humanize_deterministic_with_report(
     run_authority = intensity in ("balanced", "full")
     run_signposting = intensity in ("balanced", "full")
     run_em_dash_cap = intensity in ("balanced", "full")
+    run_significance_inflation = intensity in ("balanced", "full")
+    run_notability_namedropping = intensity in ("balanced", "full")
+    run_copula_avoidance = intensity in ("balanced", "full")
+    run_superficial_ing = intensity == "full"
     run_filler = intensity == "full"
     run_negative_parallelism = intensity == "full"
 
@@ -581,6 +835,30 @@ def humanize_deterministic_with_report(
     for pattern, repl in STOCK_VOCAB:
         protected = _tracking_sub(pattern, repl, protected, rule="stock_vocab", log=log)
 
+    if run_significance_inflation:
+        for pattern, repl in SIGNIFICANCE_INFLATION:
+            protected = _tracking_sub(
+                pattern, repl, protected, rule="significance_inflation", log=log
+            )
+
+    if run_notability_namedropping:
+        for pattern, repl in NOTABILITY_NAMEDROPPING:
+            protected = _tracking_sub(
+                pattern, repl, protected, rule="notability_namedropping", log=log
+            )
+
+    if run_copula_avoidance:
+        for pattern, repl in COPULA_AVOIDANCE:
+            protected = _tracking_sub(
+                pattern, repl, protected, rule="copula_avoidance", log=log
+            )
+
+    if run_superficial_ing:
+        for pattern, repl in SUPERFICIAL_ING:
+            protected = _tracking_sub(
+                pattern, repl, protected, rule="superficial_ing", log=log
+            )
+
     if run_filler:
         for pattern, repl in FILLER_PHRASES:
             protected = _tracking_sub(pattern, repl, protected, rule="filler_phrase", log=log)
@@ -594,6 +872,20 @@ def humanize_deterministic_with_report(
     if run_performative:
         for pattern, repl in PERFORMATIVE:
             protected = _tracking_sub(pattern, repl, protected, rule="performative", log=log)
+
+    # Phase 1 structural pass — sentence-length rebalancer + bullet-soup merger.
+    # Runs after lexical scrubbing because the lexical passes remove openers and
+    # phrases that would otherwise skew word counts, and before the em-dash cap
+    # because splitting a long sentence can move an em-dash into its own clause
+    # where it's no longer an offender. Gated off by default — see flag doc.
+    if structural:
+        protected = humanize_structural(protected, report=report.structural)
+
+    # Phase 5 soul-injection pass — contraction lift. Token-distribution lever
+    # for detector resistance. Runs after lexical + structural so the
+    # contractions apply to the final prose shape. Opt-in.
+    if soul:
+        protected = humanize_soul(protected, report=report.soul)
 
     if run_em_dash_cap:
         protected = _cap_em_dashes_per_paragraph(protected, max_dashes=2)
@@ -681,11 +973,61 @@ _INTENSITY_PROMPT_GUIDANCE: dict[str, str] = {
 }
 
 
-def _build_humanize_prompt(original: str, intensity: Intensity = "balanced") -> str:
+def _format_voice_targets(profile) -> str:
+    """Render a StyleProfile as the 'VOICE SAMPLE TARGETS' prompt block.
+    Separated from measurement so the same block renders for both a
+    freshly-measured sample and a persisted profile from style memory."""
+    return f"""
+VOICE SAMPLE TARGETS (measured — match these):
+- Sentence-length mean: {profile.sentence_length_mean} words (σ {profile.sentence_length_stdev})
+- Fragments (<5 words): {profile.fragment_rate * 100:.0f}% of sentences
+- Contractions per 1k words: {profile.contraction_rate}
+- Em-dash / semicolon / colon / paren rate per 1k: {profile.em_dash_rate} / {profile.semicolon_rate} / {profile.colon_rate} / {profile.parenthetical_rate}
+- First-person / second-person rate per 1k: {profile.first_person_rate} / {profile.second_person_rate}
+- Starts-with-And/But fraction: {profile.starts_with_and_but * 100:.0f}%
+- Latinate-suffix ratio: {profile.latinate_ratio * 100:.1f}%
+
+Match the numeric profile, not just the surface feel. If the sample is
+fragment-heavy and the input text is long-sentence-heavy, cut sentences.
+If the sample uses 40 contractions per 1k words and the input has none,
+contract where grammatical.
+"""
+
+
+def _build_voice_block(sample_text: str | None, profile=None) -> str:
+    """If a voice sample or profile is provided, return a prompt block with
+    explicit numeric targets. Empty string otherwise.
+
+    Sample text takes precedence — it's fresh measurement. Profile-only is
+    the style-memory path: the user saved a profile and we rehydrate it
+    without re-reading the original sample."""
+    if profile is not None:
+        return _format_voice_targets(profile)
+    if not sample_text:
+        return ""
+    from .stylometry import analyze
+
+    profile = analyze(sample_text)
+    if profile.total_words < 50:
+        return (
+            "\nVOICE SAMPLE (too short to extract reliable signals): "
+            "treat as rough tone guidance only.\n"
+        )
+    return _format_voice_targets(profile)
+
+
+def _build_humanize_prompt(
+    original: str,
+    intensity: Intensity = "balanced",
+    voice_sample: str | None = None,
+    voice_profile=None,
+) -> str:
     guidance = _INTENSITY_PROMPT_GUIDANCE.get(intensity, _INTENSITY_PROMPT_GUIDANCE["balanced"])
+    voice_block = _build_voice_block(voice_sample, profile=voice_profile)
     return f"""Humanize this markdown so it reads like a careful human wrote it.
 
 {guidance}
+{voice_block}
 
 STRICT RULES (preservation):
 - Do NOT modify anything inside ``` code blocks
@@ -709,8 +1051,12 @@ HUMANIZATION RULES (only on natural-language prose between code regions):
 - Vary paragraph length — no tidy five-paragraph essay shape
 - Prefer active voice; avoid subjectless AI fragments ("Works great." by itself — add a subject)
 
+ANTI-BLANDIFICATION (critical):
+- Do NOT neutralize distinctive claims, opinions, or stylistic choices from the original. LLM-assisted rewrites neutralize ~70% of author voice on average (arXiv 2603.18161). Your job is to remove AI-isms, not to sand down the original's personality.
+- If the original has a strong stance, keep it. If it has an unusual metaphor, keep it. Strip the slop; preserve the signal.
+
 TWO-PASS SELF-AUDIT (required):
-1. After your first rewrite, silently ask yourself: "What in the draft above still reads as obviously AI-generated?"
+1. After your first rewrite, silently ask yourself: "What in the draft above still reads as obviously AI-generated? Did I accidentally neutralize the original's voice or opinions?"
 2. Revise in place, then return the revised version only.
 Do NOT include the audit in the output. Return the final text directly.
 
@@ -771,8 +1117,19 @@ def _call_claude_cli(prompt: str) -> str | None:
     return proc.stdout.strip()
 
 
-def humanize_llm(text: str, *, intensity: Intensity = "balanced") -> str:
-    prompt = _build_humanize_prompt(text, intensity=intensity)
+def humanize_llm(
+    text: str,
+    *,
+    intensity: Intensity = "balanced",
+    voice_sample: str | None = None,
+    voice_profile=None,
+) -> str:
+    prompt = _build_humanize_prompt(
+        text,
+        intensity=intensity,
+        voice_sample=voice_sample,
+        voice_profile=voice_profile,
+    )
     result = _call_anthropic_sdk(prompt) or _call_claude_cli(prompt)
     if result is None:
         raise RuntimeError(
@@ -841,10 +1198,23 @@ def humanize_file_ex(
     intensity: Intensity = "balanced",
     backup: bool = True,
     write: bool = True,
+    structural: bool | None = None,
+    soul: bool | None = None,
+    voice_sample: str | None = None,
+    voice_profile=None,
 ) -> HumanizeOutcome:
     """Rich entry point. Returns the full outcome (humanized text, report,
     validation) regardless of whether we actually wrote to disk. The CLI uses
-    `write=False` for `--dry-run` and `--diff`."""
+    `write=False` for `--dry-run` and `--diff`.
+
+    `structural=True` enables the Phase 1 structural pass (sentence splitting
+    and bullet-soup merging). Opt-in until we default it on for `balanced`
+    after benchmark validation.
+
+    `soul=True` enables the Phase 5 soul pass (contraction lift).
+
+    `voice_sample` (LLM mode only) is a text sample whose stylometric profile
+    the rewrite should match. Ignored in deterministic mode."""
     original_text = path.read_text(encoding="utf-8")
     backup_path = path.with_name(path.stem + ".original.md")
 
@@ -861,7 +1231,7 @@ def humanize_file_ex(
 
     if deterministic:
         humanized, report = humanize_deterministic_with_report(
-            original_text, intensity=intensity
+            original_text, intensity=intensity, structural=structural, soul=soul
         )
         result = validate(original_text, humanized)
         if not result.ok:
@@ -890,7 +1260,14 @@ def humanize_file_ex(
         backup_path.write_text(original_text, encoding="utf-8")
 
     try:
-        humanized = humanize_llm(original_text, intensity=intensity)
+        # Only pass voice_sample when set so legacy test mocks that don't
+        # accept the kwarg continue to work.
+        llm_kwargs: dict = {"intensity": intensity}
+        if voice_sample is not None:
+            llm_kwargs["voice_sample"] = voice_sample
+        if voice_profile is not None:
+            llm_kwargs["voice_profile"] = voice_profile
+        humanized = humanize_llm(original_text, **llm_kwargs)
     except RuntimeError as exc:
         if backup and write:
             backup_path.unlink(missing_ok=True)

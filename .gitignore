@@ -67,6 +67,9 @@ desktop.ini
 .cursor/settings.json
 ideations/
 
+# --- Graphify caches / renders (knowledge-graph tool, machine-local) ---
+graphify-out/
+
 # --- Benchmark ad-hoc runs ---
 # Only latest.json + llm-mode-baseline.json are tracked; all timestamped
 # runs (e.g. 20260419T205739Z.json) are machine-local.

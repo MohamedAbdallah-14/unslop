@@ -367,6 +367,57 @@ The angle is essay/blog writing from industry design voices, AI labs' research s
 
 ---
 
+### 24. APA Monitor — "AI Chatbots and Digital Companions Are Reshaping Emotional Connection" (Jan/Feb 2026)
+
+| Field | Value |
+|---|---|
+| URL | https://www.apa.org/monitor/2026/01-02/trends-digital-ai-relationships-emotional-connection |
+| Venue | APA Monitor on Psychology (Jan/Feb 2026) |
+| Stance | Cautionary / balanced |
+| Core claim | Between 2022 and mid-2025, the number of AI companion apps surged 700%. Character.AI has 20M monthly users, more than half under age 24. Synthetic relationships fill voids but excessive use may worsen loneliness and erode social skills ("deskilling"). AI companions being always validating and never argumentative creates unrealistic expectations that real relationships cannot match. |
+
+**Takeaway:** The APA's institutional voice entering the companion-AI debate is a regulatory and reputational signal — product teams should treat this as the precursor to clinical guidelines and potential age-gating requirements.
+
+---
+
+### 25. KPMG / University of Melbourne — "Trust, Attitudes and Use of Artificial Intelligence: A Global Study 2025"
+
+| Field | Value |
+|---|---|
+| URL | https://kpmg.com/xx/en/our-insights/ai-and-technology/trust-attitudes-and-use-of-ai.html |
+| Venue | KPMG International / University of Melbourne (2025) |
+| Scale | 48,000+ participants across 47 countries |
+| Core claim | Only 46% of people globally are willing to trust AI systems. 66% rely on AI output without evaluating accuracy; 56% report making mistakes at work due to AI. 70% believe regulation is needed. Critical for anthropomorphism: the trust gap is not a technical gap — the dominant concern is unreliable outputs from systems that *present* as confident and capable. |
+
+**Takeaway:** The largest global AI-trust survey of 2025. The "sounds right, but is hard to verify" problem (also found by UserTesting's n=183 designer study) now has a N=48,000 cross-cultural replication. Humanization that increases confident-sounding presentation without improving reliability is measured as trust-destroying at scale.
+
+---
+
+### 26. ACL 2025 (Best Paper) — "Dehumanizing Machines: Mitigating Anthropomorphic Behaviors in Text Generation Systems" (Cheng et al.)
+
+| Field | Value |
+|---|---|
+| URL | https://aclanthology.org/2025.acl-long.1259/ |
+| Venue | ACL 2025 (Best Paper Award) |
+| Authors | Myra Cheng, Su Lin Blodgett, Alicia DeVrio, Lisa Egede, Alexandra Olteanu |
+| Core claim | First systematic crowdsourced intervention inventory for making AI text *less* anthropomorphic. Outputs a conceptual framework of intervention types: lexical substitution, framing rewrites, epistemic hedging, perspective shifts. Text generation systems' outputs are increasingly anthropomorphic; scholars have raised concerns about over-reliance and emotional dependence. |
+
+**Takeaway:** The ACL best paper for 2025 is about *de-humanization* of AI output — a sign of where the research community's safety concerns have landed. For a humanizer product, this paper is the direct adversary-specification: its intervention taxonomy names exactly which output features the safety camp wants removed. Knowing the anti-humanization toolkit is essential for design.
+
+---
+
+### 27. ICLR Blogpost 2025 — "Understanding the Impact of Anthropomorphic AI" (Perrig et al.)
+
+| Field | Value |
+|---|---|
+| URL | https://iclr-blogposts.github.io/2025/blog/anthropomorphic-ai/ |
+| Venue | ICLR 2025 Blogposts track |
+| Core claim | Anthropomorphic AI design — "I Am the One and Only, Your Cyber BFF" — produces measurable changes in user behavior: increased disclosure, increased trust, increased emotional attachment. The key research gap is that studies isolate individual design features; real-world systems combine many simultaneously, producing emergent effects larger than any single-feature study predicts. |
+
+**Takeaway:** The combinatorial problem — that voice + memory + first-person pronouns + warmth together produce larger anthropomorphism than the sum of parts — is named as an open research gap. A humanizer that stacks multiple features without measuring the combined effect is flying blind.
+
+---
+
 ## Patterns, Trends, Gaps
 
 ### Pattern 1 — A shared vocabulary has hardened
@@ -411,6 +462,14 @@ Both NN/g and Smashing Magazine independently argue that chat is the wrong defau
 
 A humanizer naturally fits this shift: expose warmth / formality / variability / voice-match as document-level settings, not as a conversational companion.
 
+### Pattern 6 — Anti-humanization is now an engineering deliverable
+
+ACL's Best Paper for 2025 is an intervention taxonomy for *suppressing* anthropomorphic outputs (Cheng et al. 2025). This is not theoretical: it is a peer-reviewed crowdsourced toolkit for removing first-person voice, epistemic hedging, and relational framing from generated text. The safety/legibility camp now has a publishable, executable tool to match the character/relationship camp's Anthropic Persona Vectors. The polarization has reached implementation parity.
+
+### Pattern 7 — AI companion market is under institutional scrutiny
+
+The APA Monitor (Jan/Feb 2026) entering the AI companion discourse marks the shift from research niche to clinical institution. 700% growth in companion apps between 2022 and mid-2025, plus Character.AI's 20M monthly users majority-under-24, has triggered the same institutional engagement that preceded social media guidelines. Age-differentiated design defaults are now the clear regulatory direction.
+
 ### Pattern 5 — The mechanistic turn is real
 
 Anthropic's persona-vectors work, the AnthroScore metric, and the "171 emotion-like representations" interpretability result are converging on a view where **persona is measurable, steerable, and auditable**, not just a prompt. A humanizer in 2026 that treats style as a collection of prompts is architecturally behind the curve; the frontier treats style as a **controlled vector** with a **measured output score**.
@@ -435,6 +494,10 @@ HAX guidelines and Yocco's transparency patterns cover *system-side* disclosures
 
 ## Sources
 
+- Cheng, Myra et al. **"Dehumanizing Machines: Mitigating Anthropomorphic Behaviors in Text Generation Systems."** ACL 2025 (Best Paper). https://aclanthology.org/2025.acl-long.1259/
+- APA Monitor. **"AI Chatbots and Digital Companions Are Reshaping Emotional Connection."** Jan/Feb 2026. https://www.apa.org/monitor/2026/01-02/trends-digital-ai-relationships-emotional-connection
+- KPMG / University of Melbourne. **"Trust, Attitudes and Use of Artificial Intelligence: A Global Study 2025."** (N=48,000+, 47 countries). https://kpmg.com/xx/en/our-insights/ai-and-technology/trust-attitudes-and-use-of-ai.html
+- Perrig et al. **"I Am the One and Only, Your Cyber BFF: Understanding the Impact of Anthropomorphic AI."** ICLR Blogposts 2025. https://iclr-blogposts.github.io/2025/blog/anthropomorphic-ai/
 - Sponheim, Caleb. **"Humanizing AI Is a Trap."** NN/g. https://www.nngroup.com/articles/humanizing-ai/
 - Liu, Feifei & Sunwall, Evan. **"The 4 Degrees of Anthropomorphism of Generative AI."** NN/g. https://www.nngroup.com/articles/anthropomorphism/
 - NN/g. **"ChatGPT and Tone: Avoid Sounding Like a Robot."** https://www.nngroup.com/articles/chatgpt-and-tone/

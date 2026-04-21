@@ -160,22 +160,53 @@ For each entry: **Title · Outlet / author · Date · URL · Thesis · Evidence 
 
 ### 20. "The Arms Race Between AI Detectors and Humanizers Is Unwinnable"
 - **Outlet:** Medium · **Author:** Hayim Salomon · **Date:** Apr 2026
-- **URL:** https://medium.com/@hayimsalomon/the-arms-race-between-ai-detectors-and-humanizers-is-unwinnable-...
+- **URL:** https://medium.com/@hayimsalomon/the-arms-race-between-ai-detectors-and-humanizers-is-unwinnable-ec8a1d94a129
 - **Thesis:** The detector ↔ humanizer loop is structurally unstable: each detector ships at claimed 98% accuracy, independent testing lands at 70–80%, humanizers update, detectors retrain, and bypass rates recover within weeks.
 - **Evidence:** Three humanizer passes reduce GPTZero detection to ~18%; Undetectable.AI passed 15M users in Feb 2025 (Reuters).
 - **Relevance:** Confirms the weeks-scale retraining cadence already visible in Originality's own changelog. Plan for continuous adaptation, not a shipped-and-done humanizer.
+
+### 21. "GPTZero Tops Accuracy on Chicago Booth Benchmark in 2026"
+- **Outlet:** GPTZero News · **Date:** Early 2026
+- **URL:** https://gptzero.me/news/chicago-booth-2026/
+- **Thesis:** GPTZero version 4.1b achieves 99.3% recall, 0.1% FPR on the University of Chicago Booth benchmark — the most credible third-party benchmark in the commercial market; also claims top position on RAID among commercial detectors at 95.7% TPR / 1% FPR.
+- **Evidence:** Internal and external validation; Originality.ai scores 83%, Copyleaks 90.7% on same benchmark per vendor reporting. Independent MPG ONE testing (2026) confirms 88–95% accuracy on raw AI text, dropping to 60–80% on paraphrased/edited content.
+- **Relevance:** This is the reference stat for any "beat GPTZero" marketing claim in 2026. The Booth benchmark is clean-domain; real-world drops to 60–80% on humanized content match the pattern across all previous RAID results. The 2026 claim supersedes the old D-commercial "claimed 99.3%/0.24% FP" figure — the FPR benchmark has tightened to 0.1%.
+
+### 22. "EU AI Act Article 50 Draft Code of Practice on AI Content Labelling"
+- **Outlet:** European Commission / Digital Strategy · **Date:** December 17, 2025
+- **URL:** https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content
+- **Thesis:** The EU published the first draft Code of Practice on transparency and watermarking for AI-generated content, with binding obligations taking effect August 2026.
+- **Evidence:** Proposes mandatory multi-layer approach: metadata embedding + imperceptible watermarks + fingerprinting/logging for all generative AI providers. Targets both providers (must mark all AI-generated content) and deployers (must label deepfakes and public-interest text). Voluntary until August 2026 deadline when obligations become binding.
+- **Relevance:** First binding regulatory watermarking mandate covering major AI providers. Providers who ignore it face EU AI Office scrutiny. This is the structural force that may finally push OpenAI and Anthropic to ship watermarks — not product preference. Any humanizer positioning on "evading watermarks" will face increasing regulatory headwind in the EU market.
+
+### 23. "Detecting AI-Humanized Text: How GPTZero Stays Ahead"
+- **Outlet:** GPTZero News · **Date:** Jan 26, 2026
+- **URL:** https://gptzero.me/news/detecting-ai-humanized-text-how-gptzero-stays-ahead/
+- **Thesis:** GPTZero has built a dedicated "humanizer-aware" detection layer, maintains a live greylist of known bypass methods, and patches within days.
+- **Evidence:** Claims 99.3% recall on Chicago Booth 2026; maintains greylist of bypass approaches; only concedes that "rewriting in your own words as a human" genuinely evades. Updated detector stack includes writing-process replay signals in addition to perplexity + burstiness.
+- **Relevance:** Updated entry — previously filed as source #3 with minimal detail. The Jan 2026 post makes the adversarial fine-tuning and greylist process explicit. Any humanizer that its outputs through the same prompts repeatedly will be classified and greylisted faster than a user who edits by hand.
+
+### 24. "IETF AI Content Disclosure Header (AICDH) Proposal"
+- **Outlet:** IETF Internet-Draft (draft-abaris-aicdh-00) · **Date:** April 30, 2025
+- **URL:** https://datatracker.ietf.org/doc/draft-abaris-aicdh/ · https://auto-post.io/blog/ietf-proposes-ai-content-disclosure-header
+- **Thesis:** A proposed HTTP response header (AI-Disclosure) would give web crawlers, archiving systems, and user agents a machine-readable signal about AI involvement in content — without needing to analyze the text itself.
+- **Evidence:** Draft expired November 2025; not yet an RFC. Proposed fields: mode (none/ai-modified/ai-originated/machine-generated), model, provider, reviewed-by, date.
+- **Relevance:** If adopted, this would create a parallel provenance layer orthogonal to text analysis — meaning a humanizer could perfectly evade text detectors while still being flagged by a compliant HTTP header. Low probability of adoption in this specific form, but signals that infrastructure-level disclosure (not just watermarking) is being explored.
 
 ---
 
 ## Patterns, trends, and gaps
 
-### Pattern 1 — Every vendor claims ~99%. No independent test exceeds ~88%.
-| Claim | Independent test |
+### Pattern 1 — Every vendor claims ~99%. No independent test on humanized content exceeds ~90%.
+| Claim | Independent test (2025–2026) |
 |---|---|
-| Turnitin: <1% false positive, 97% detection | Washington Post: 50% false positive on some essay sets; Bloomberg: 1–2% on bulk essays, far higher for ESL |
-| Originality.AI: 99% / 97% on humanized | Third-party 1,000-sample tests: 88% overall, 7% false positive |
-| Copyleaks: 99%+ / 0.2% false positive | 77.5–88% on 200+ sample tests; 14% false positive on structured academic prose |
-| OpenAI watermark: 99.9% | OpenAI's own blog: "trivial to circumvention by bad actors" |
+| Turnitin: <1% FP, 98% detection | Drops to 60–85% on paraphrased/edited AI text; April 2025 Japanese-language detection added; 2026 model targets humanizer tools specifically |
+| GPTZero: 99.3% recall / 0.24% FP | Chicago Booth 2026: 99.3% on clean AI text, 0.1% FPR — best in class; drops to 60–80% on humanized content (MPG ONE, 2026) |
+| Originality.AI: 99% / 97% on humanized | November 2025 study: 96% accuracy, lowest FP of commercial tools; Lite 1.0.2 (Sep 2025) now targets humanizer corpora; Turbo claims 97% on humanized at 1.5% FP |
+| Copyleaks: 99%+ / 0.2% false positive | 77.5–88% on 200+ sample tests; 14% FP on structured academic prose — unchanged |
+| OpenAI watermark: 99.9% | OpenAI's own blog: "trivial to circumvention by bad actors"; still not deployed as of April 2026 |
+
+**Signal:** GPTZero's Chicago Booth result is now the most-cited external benchmark in the commercial space, replacing Scribbr's older ranking. The prior Scribbr ranking (Scribbr Premium 84% > Originality 76% > GPTZero 52%) is now stale — GPTZero has substantially improved since that test and all three tools have updated their models at least twice.
 
 **Signal:** Vendor-claimed numbers are measured on in-distribution benchmarks; humanizers act *out of distribution*. Any product claim that cites vendor accuracy should be treated as marketing, not baseline.
 
@@ -203,9 +234,11 @@ Originality's own 2025 recap shows Lite / Turbo / Academic refreshes every 1–3
 1. **No vendor publishes a confusion matrix by content type *and* by writer demographic at once.** ESL + content-type cross-tabulation is missing; humanizer marketing could commission and publish this.
 2. **No blog-level content on the "hybrid" case** (50% human / 50% AI), even though Scribbr flagged that detectors return bimodal verdicts on it. This is the most realistic use mode (AI draft + human editing) and is under-discussed.
 3. **No serious vendor post on the *cost* of false positives.** Bloomberg did the human-interest version. There is no peer-style quantitative essay on "expected value of a detector at a given FPR for a class of 200 students" — a humanizer company could own that analytical niche.
-4. **Watermark-removal tooling is discussed in academia but not branded in the industry press.** A humanizer that explicitly markets SynthID-aware passes would be a first-mover in that sub-niche — with the caveat that doing so invites regulatory attention under the EU AI Act.
-5. **Little coverage of non-English detection.** OpenAI's own post admits poor non-English performance, but the humanizer press corpus is overwhelmingly English-language. Multilingual humanization is an open category.
+4. **Watermark-removal tooling is discussed in academia but not branded in the industry press.** A humanizer that explicitly markets SynthID-aware passes would be a first-mover in that sub-niche — with the caveat that doing so invites regulatory attention under the EU AI Act (binding August 2026).
+5. **Little coverage of non-English detection.** Turnitin added Japanese detection in April 2025, but the humanizer press corpus is overwhelmingly English-language. Multilingual humanization is an open category.
 6. **No side-by-side comparison of humanizer *architectures*** (second-pass LLM vs. token-level perturbation vs. retrieval-grounded rewrite) in mainstream outlets — only brand-level reviews. This is the kind of piece a humanizer company could pitch to MIT Tech Review or The Verge to define the category on its own terms.
+7. **EU regulatory deadline is not being covered as a product story.** The August 2026 Article 50 binding obligation for all generative AI providers to watermark content is a major market event. No mainstream technology outlet has framed this as a humanizer product threat. A humanizer company could own the "what EU watermarking means for your content workflow" narrative before it becomes mainstream.
+8. **Undetectable.ai's user count has grown to 22 million by 2026** (from 15M in Feb 2025 per Reuters). The scale is now comparable to mid-tier SaaS — the humanizer category is mainstream, not niche.
 
 ---
 
@@ -241,3 +274,9 @@ The industry writing on AI text detection converges on three durable facts: (1) 
 - Seven Solvers, "How to Humanize AI Content in 2026" — https://www.sevensolvers.com/blog/how-to-humanize-ai-content-in-2026-9-proven-strategies-that-actually-work-for-seo
 - Hayim Salomon, Medium, "The Arms Race Between AI Detectors and Humanizers Is Unwinnable" (Apr 2026) — https://medium.com/@hayimsalomon/the-arms-race-between-ai-detectors-and-humanizers-is-unwinnable-ec8a1d94a129
 - Ars Technica, "OpenAI discontinues its AI writing detector due to 'low rate of accuracy'" (Jul 2023) — https://arstechnica.com/information-technology/2023/07/openai-discontinues-its-ai-writing-detector-due-to-low-rate-of-accuracy/
+- GPTZero, "GPTZero Tops Accuracy on Chicago Booth Benchmark in 2026" — https://gptzero.me/news/chicago-booth-2026/
+- GPTZero, "Detecting AI-Humanized Text: How GPTZero Stays Ahead" (Jan 2026) — https://gptzero.me/news/detecting-ai-humanized-text-how-gptzero-stays-ahead/
+- European Commission, "Code of Practice on Marking and Labelling of AI-Generated Content" (Dec 17, 2025) — https://digital-strategy.ec.europa.eu/en/policies/code-practice-ai-generated-content
+- IETF, "AI Content Disclosure Header" draft (Apr 2025) — https://datatracker.ietf.org/doc/draft-abaris-aicdh/
+- MPG ONE, "Is GPTZero Accurate? Our 2026 Test Results" — https://mpgone.com/is-gptzero-accurate-our-2025-test-results-here/
+- Turnitin, "AI Detector Roadmap: Features Coming in 2026" — https://turnitin.app/blog/Turnitin-AI-Detector-Roadmap-Features-Coming-in-2026.html

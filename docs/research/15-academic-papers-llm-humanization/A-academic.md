@@ -54,10 +54,15 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 - **[Repro: medium]** — methodology clear; depends on detector API quotas.
 - **Project relevance:** shows humanization can be trained against *black-box* commercial detectors, not only open ones.
 
-### 1.10 Kalemaj et al., *Please Make It Sound Like Human: Encoder-Decoder vs. Decoder-Only Transformers for AI-to-Human Text Style Transfer* (arXiv:2604.11687, 2026)
-- **Contribution:** Builds a 25,140-pair AI↔human parallel corpus and identifies 11 measurable stylistic markers. BART-large beats Mistral-7B (BERTScore F1 0.924) with far fewer params.
+### 1.10 Kalemaj et al., *Please Make It Sound Like Human: Encoder-Decoder vs. Decoder-Only Transformers for AI-to-Human Text Style Transfer* (arXiv:2604.11687, Apr 2026)
+- **Contribution:** Builds a 25,140-pair AI↔human parallel corpus and identifies 11 measurable stylistic markers (including contraction rate: AI averages 0.00 contractions/chunk vs. human 0.17). BART-large beats Mistral-7B-Instruct with QLoRA (BERTScore F1 0.924, ROUGE-L 0.566, chrF++ 55.92) with 17× fewer parameters.
 - **[Repro: high]** — parallel corpus + fine-tuning recipe; modest compute footprint.
 - **Project relevance:** evidence that humanization does not require frontier-scale models; a 400M encoder-decoder is competitive.
+
+### 1.11b TempParaphraser — Huang et al. (EMNLP 2025, aclanthology.org/2025.emnlp-main.1607)
+- **Contribution:** Simulates high-temperature sampling effects through multiple normal-temperature generations, effectively defeating curvature-based detectors. Reduces average detector accuracy by 82.5% while preserving text quality. Augmenting detectors with TempParaphraser outputs partially restores robustness.
+- **[Repro: high]** — code at `HJJWorks/TempParaphraser` on GitHub; all resources public.
+- **Project relevance:** adds a cheap, training-free evasion primitive based on sampling diversity rather than semantic rewriting — complementary to DIPPER and Adversarial Paraphrasing.
 
 ### 1.11 Horvitz et al., *ParaGuide: Guided Diffusion Paraphrasers for Plug-and-Play Textual Style Transfer* (AAAI 2024, arXiv:2308.15459)
 - **Contribution:** Guided diffusion over paraphrases with gradient signals from classifiers and style embedders. Arbitrary target style at inference time without retraining.
@@ -72,6 +77,11 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 ---
 
 ## 2. Benchmarks & evaluation frameworks for humanization
+
+### 2.0b Ayoobi et al., *Beyond Easy Wins: A Text Hardness-Aware Benchmark for LLM-generated Text Detection* (arXiv:2507.15286, Jul 2025)
+- **Contribution:** Introduces SHIELD, a post-hoc hardness-aware evaluation framework for AI-text detectors. Current benchmarks over-report performance by mixing trivially-detectable samples with hard ones; SHIELD integrates reliability and stability into a single unified metric and includes a model-agnostic humanification framework with a controllable hardness parameter.
+- **[Repro: high]** — paper + benchmark code public.
+- **Project relevance:** exposes the gap between AUROC-centric benchmark wins and real-world performance; the hardness parameter is directly useful for calibrating humanizer difficulty.
 
 ### 2.1 Liu et al., *TH-Bench: Evaluating Evading Attacks via Humanizing AI Text on Machine-Generated Text Detectors* (arXiv:2503.08708, 2025)
 - **Contribution:** First systematic humanization benchmark. 6 SOTA humanization attacks × 13 detectors × 6 datasets × 19 domains × 11 generator LLMs. Measures three axes: evasion effectiveness, text-quality preservation, compute overhead.
@@ -96,6 +106,17 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 ### 2.5 Guo et al., *How Close is ChatGPT to Human Experts? HC3 Corpus* (2023)
 - **Contribution:** Earliest widely-used human↔ChatGPT parallel corpus (QA, academic, medical, finance). Still a default reference dataset in downstream humanization work.
 - **[Repro: high]** — dataset public on HuggingFace (`Hello-SimpleAI/HC3`).
+
+### 2.5b Basani et al., *DivEye: Diversity Boosts AI-Generated Text Detection* (arXiv:2509.18880, Sep 2025 → TMLR 2026)
+- **Contribution:** Captures how surprisal (unpredictability) fluctuates across a text using interpretable statistical features. Outperforms existing zero-shot detectors by up to 33.2% and improves fine-tuned baselines by up to 18.7% when used as an auxiliary signal. Robust to paraphrasing and adversarial attacks; interpretable because it pinpoints *which rhythm patterns* triggered the flag.
+- **Key insight:** LLM text has narrower surprisal variance than human text — the opposite of what early perplexity-only detectors assumed.
+- **[Repro: high]** — code at `IBM/diveye` (GitHub), HF demo space `pinyuchen/Diveye_AI_text_detector`.
+- **Project relevance:** a humanizer that widens its own intra-document surprisal variance will evade DivEye; measuring burstiness as a training objective rather than an offline metric.
+
+### 2.5c Pudasaini et al., *Why AI-Generated Text Detection Fails: Evidence from Explainable AI Beyond Benchmark Accuracy* (arXiv:2603.23146, Mar 2026)
+- **Contribution:** Trains detectors on 30 linguistic features and evaluates on PAN CLEF 2025 and COLING 2025 (F1 0.9734 in-domain). Cross-domain and cross-generator evaluation shows substantial generalization failure: in-domain excellence does not transfer under distribution shift. Proposes an explainable-AI diagnostic framework for understanding *why* any given detector fails.
+- **[Repro: medium]** — feature set documented; cross-domain test data requires alignment with PAN/COLING releases.
+- **Project relevance:** confirms that humanizer evaluation must include out-of-domain tests; in-domain AUROC numbers are systematically misleading.
 
 ### 2.6 Tulchinskii et al. / DAMAGE (2025, ACL GenAIDetect workshop)
 - **Contribution:** Qualitatively studies **19 real commercial humanizer/paraphraser tools** (GPT-guard, Undetectable.ai, StealthGPT, etc.), then trains a data-centric augmented detector that generalizes across humanizers. Argues detection robustness should be treated as a learned invariance, not a per-humanizer patch.
@@ -125,6 +146,12 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 
 ---
 
+## 4b. New adversarial defense (2026)
+
+### 4.5 DivEye (TMLR 2026) — see §2.5b above. The surprisal-variance framing is both a detector and a defense; augmenting training data with DivEye-hard samples is the current recommended robustness recipe.
+
+---
+
 ## 5. Stylistic / linguistic studies of the human–AI boundary
 
 ### 5.1 Reinhart et al., *Do LLMs Write Like Humans? Variation in Grammatical and Rhetorical Styles* (PNAS 2025)
@@ -135,9 +162,21 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 - Phonological, morphological, and modifier-level differences. Explicit feature list usable as humanizer training signal.
 ### 5.4 Kumarage et al., *StyloAI* (arXiv:2405.10129) — 31 stylometric features + Random Forest; 81–98% accuracy. Useful as a cheap auxiliary detector for humanizer evaluation.
 
+### 5.5 Rallapalli et al., *Interpretable Stylistic Variation in Human and LLM Writing Across Genres, Models, and Decoding Strategies* (arXiv:2604.14111, Apr 2026)
+- Large-scale analysis of 11 LLMs × 8 genres × 4 decoding strategies using Douglas Biber's lexicogrammatical and functional features. Extends the Reinhart / Sardinha line of work by adding decoding strategy as an explicit variable: temperature and top-p sampling settings produce measurable stylistic shifts separate from model identity.
+- **Project relevance:** decoding strategy is a cheap humanization lever; choosing higher-temperature sampling produces stylistically more varied (hence harder-to-detect) output even without rewriting.
+
+### 5.6 Xiao et al., *Humanizing Machines: Rethinking LLM Anthropomorphism Through a Multi-Level Framework of Design* (arXiv:2508.17573, EMNLP 2025)
+- Proposes a four-dimension cue taxonomy for anthropomorphism: perceptive, linguistic, behavioral, cognitive. Argues the field over-indexes on risk framing and neglects design guidance. Provides a structured vocabulary for describing *which* humanization interventions operate at which level.
+- **Project relevance:** the four-cue taxonomy is a practical design checklist: does the humanizer address linguistic cues (word choice, punctuation), behavioral cues (hedging, sycophancy removal), cognitive cues (reasoning traces), and perceptive cues (formatting, length)? Most open humanizers cover only linguistic.
+
 ---
 
 ## 6. Surveys
+
+### 6.0b Dong et al., *Humanizing LLMs: A Survey of Psychological Measurements with Tools, Datasets, and Human-Agent Applications* (arXiv:2505.00049, Apr 2025)
+- Covers six dimensions: assessment tools, LLM-specific psychological datasets, evaluation metrics (consistency and stability), empirical findings, personality simulation methods, and LLM-based behavior simulation (social experiments, game simulations, interactive negotiation). Distinct from the detection-evasion survey track — this surveys the *psychological alignment* research stream (Big-Five, MBTI, emotional intelligence), which is the academic counterpart to the industry "character training" literature.
+- **Project relevance:** the personality simulation section is the most complete academic catalogue of open-source persona conditioning approaches; cross-references with arXiv:2502.14155 (Big-Five genetic algorithm) and the HumanLLM benchmark (arXiv:2601.10198).
 
 ### 6.1 Wu et al., *A Survey on LLM-Generated Text Detection: Necessity, Methods, and Future Directions* (Computational Linguistics, 2025, aclanthology.org/2025.cl-1.8)
 - Taxonomy: watermarking vs statistical vs neural vs human-assisted. Explicit section on evasion/humanization as an open problem.
@@ -155,7 +194,7 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 2. **Transferability across detectors is the rule, not the exception.** Attacks trained against one detector (or ensemble subset) transfer to held-out detectors (StealthRL, RAFT, Adversarial Paraphrasing). This is a *product* signal: a humanizer does not need to track every commercial detector individually.
 3. **Humanization quality ≠ evasion quality.** TH-Bench makes this explicit and every attack paper hits a Pareto frontier between (a) detector evasion, (b) semantic preservation, (c) stylistic naturalness, (d) compute cost.
 4. **Watermarks are fragile.** SIRA and similar cheap rewrites defeat nearly every published watermark; watermark-only defenses should be treated as table stakes, not a moat.
-5. **Stylometric asymmetries are real and measurable.** The Reinhart / Sardinha / StyloAI line of work agrees: LLMs are over-nominal, under-varied, and over-clustered. A humanizer with explicit stylistic targets (burstiness, genre adaptation, lexical heterogeneity) is better grounded than a pure detector-reward humanizer.
+5. **Stylometric asymmetries are real and measurable.** The Reinhart / Sardinha / StyloAI / DivEye / Rallapalli et al. line of work converges: LLMs are over-nominal, under-varied, and over-clustered. DivEye (TMLR 2026) adds *intra-document surprisal variance* as a key signal — LLM text has narrower rhythmic variance than human text, the inverse of what early perplexity detectors assumed. A humanizer with explicit stylistic targets (burstiness, genre adaptation, lexical heterogeneity, surprisal variance) is better grounded than a pure detector-reward humanizer. Rallapalli et al. (2026) further show decoding temperature is itself a stylistic variable distinct from model identity.
 6. **"Paraphrase + grammar polish" is a surprisingly strong baseline.** Multiple papers (DIPPER, AuthorMist, RAFT) find that a capable paraphraser plus a light surface-form cleanup matches or beats more elaborate pipelines.
 
 **Reproducibility landscape.**
@@ -170,7 +209,9 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 3. **Style-conditioned humanization.** Current humanizers optimize *away from AI*, not *toward a specific human voice*. Conditioning on authorial style (ParaGuide, style-transfer work) is nascent.
 4. **Agentic / multi-turn humanization.** All published humanizers are single-pass. Iterative humanization with editing feedback (self-critique, Raidar-style asymmetry inversion) is barely explored.
 5. **Quality evaluation beyond BERTScore.** Field still leans on BERTScore/BLEU for semantic preservation. Human-judgment-level fidelity metrics (LLM-as-judge with calibrated rubrics, factuality checks) are missing from most humanization papers.
-6. **The "authorship obfuscation vs. plagiarism evasion" asymmetry** (arXiv:2511.00416) — detectors catch humanized LLM text better than humanized human text. This is a surprising result that implies a humanizer aiming at the "human paraphrasing human" regime is genuinely harder to detect than one starting from AI text.
+6. **The "authorship obfuscation vs. plagiarism evasion" asymmetry** (arXiv:2511.00416) — detectors catch humanized LLM text better than humanized human text. This implies a humanizer aiming at the "human paraphrasing human" regime is genuinely harder to detect than one starting from AI text.
+7. **Surprisal-variance as a training objective.** DivEye (TMLR 2026) exposes intra-document rhythmic unpredictability as a key detection signal not currently targeted by any open humanizer. A loss term that maximizes surprisal variance would directly close this gap.
+8. **Benchmark hardness stratification.** SHIELD (arXiv:2507.15286) shows current humanizer evaluation conflates easy and hard examples. The field needs hardness-stratified reporting analogous to TH-Bench's three-axis Pareto.
 
 ---
 
@@ -210,3 +251,10 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 - arXiv:2402.01642 — Tang et al., Detection of Machine-Generated Text Survey
 - IEEE 2025 — Machine-Human Boundary survey
 - arXiv:2511.00416 — Authorship obfuscation vs plagiarism evasion asymmetry
+- aclanthology.org/2025.emnlp-main.1607 — TempParaphraser (Huang et al., EMNLP 2025)
+- arXiv:2507.15286 — Beyond Easy Wins / SHIELD benchmark (Ayoobi et al., Jul 2025)
+- arXiv:2509.18880 — DivEye: Diversity Boosts AI-Generated Text Detection (Basani et al., TMLR 2026)
+- arXiv:2603.23146 — Why AI-Generated Text Detection Fails (Pudasaini et al., Mar 2026)
+- arXiv:2604.14111 — Interpretable Stylistic Variation (Rallapalli et al., Apr 2026)
+- arXiv:2508.17573 — Humanizing Machines / Multi-Level Anthropomorphism Framework (Xiao et al., EMNLP 2025)
+- arXiv:2505.00049 — Humanizing LLMs: A Survey of Psychological Measurements (Dong et al., Apr 2025)

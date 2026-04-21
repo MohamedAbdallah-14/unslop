@@ -139,6 +139,33 @@ Standard fields per repo: **URL · Stars · License · Primary language · Last 
 - **Humanization relevance:** Fills the gaps left by DeepSeek's release — especially *data curation for reasoning traces*, which is exactly where "humanlike thinking" is shaped.
 - **Project goals (README):** Reproduce R1-Distill models, replicate the R1-Zero pure-RL pipeline, and demonstrate multi-stage training from base → RL-tuned.
 
+### 2.13b simplescaling/s1 — budget-forced test-time scaling
+
+- **URL:** https://github.com/simplescaling/s1
+- **License:** Apache-2.0 · **Language:** Python
+- **Paper:** [arXiv:2501.19393](https://arxiv.org/abs/2501.19393) · EMNLP 2025 / ICLR 2025 workshop (Stanford et al.)
+- **One-liner:** SFT Qwen2.5-32B on 1,000 curated reasoning traces (s1K) then **budget force** at inference to control thinking depth.
+- **Reasoning mechanism:** Budget forcing appends "Wait" tokens when the model tries to close its thinking block early (extending thought) or hard-truncates (shortening thought). s1-32B beats o1-preview by up to 27% on MATH and AIME24.
+- **Humanization relevance:** "Wait" as a budget-extension signal is the naturalistic hesitation token that humans produce mid-deliberation. The paper formalizes a phenomenon practitioners already observed with llama.cpp `--reasoning-budget-message`. Budget forcing is now a first-class inference-time humanization lever.
+
+### 2.13c MoonshotAI/Kimi-K2 / Kimi-K2-Thinking — open-weights trillion-parameter reasoning
+
+- **URL:** https://huggingface.co/moonshotai/Kimi-K2-Thinking · https://github.com/MoonshotAI/Kimi-K2.5
+- **License:** Modified MIT · **Language:** Python (inference); weights on HuggingFace
+- **Release:** November 2025
+- **One-liner:** 1-trillion-parameter MoE reasoning model (32B active per pass) with native tool-calling fused into the thinking pass; transparent `<think>` blocks.
+- **Reasoning mechanism:** Kimi K2 Thinking fuses tool invocations directly into the reasoning trace rather than deferring tool use to after thinking completes — enabling 200–300 sequential tool calls with coherent mid-reasoning grounding. Sets SOTA on Humanity's Last Exam (HLE) and BrowseComp.
+- **Humanization relevance:** Tool-calling-in-thinking is the most humanlike agent architecture yet — humans interrupt their deliberation to look things up, not just at the end. The transparent `<think>` blocks are accessible for styling. r/LocalLLaMA threads note that Kimi K2's CoT "voice" is among the most natural-sounding of the open-weights class (not just the "Wait… Hmm…" loops of R1 distills).
+
+### 2.13d facebookresearch/coconut — reasoning in continuous latent space
+
+- **URL:** https://github.com/facebookresearch/coconut
+- **License:** CC-BY-NC · **Language:** Python (PyTorch)
+- **Paper:** [arXiv:2412.06769](https://arxiv.org/abs/2412.06769) · ICLR 2025
+- **One-liner:** Replace discrete token-level reasoning steps with continuous hidden-state feedback loops — "Chain of Continuous Thought."
+- **Reasoning mechanism:** Last hidden state is fed back as next input embedding; no token decoding between reasoning steps. Enables BFS-style multi-path exploration in latent space. Multi-stage curriculum progressively replaces language steps with latent steps.
+- **Humanization relevance:** Coconut makes explicit what the Unslop project assumes implicitly: the visible trace is a *rendering* of something deeper. If reasoning migrates fully to latent space, the surface CoT becomes a wholly synthetic product — the same design space Unslop operates in. Interpretability trade-off: better reasoning, zero trace to read.
+
 ### 2.14 Jiayi-Pan/TinyZero — minimal R1-Zero reproduction
 
 - **URL:** https://github.com/Jiayi-Pan/TinyZero
@@ -188,21 +215,24 @@ Standard fields per repo: **URL · Stars · License · Primary language · Last 
 
 ## 3. Patterns
 
-1. **Thought structure has been generalized from *chain* → *tree* → *graph*.** CoT (linear) → ToT (branch + backtrack) → GoT (merge + refine + loop). Each jump maps to a more humanlike mode of deliberation (narration → exploration → synthesis).
+1. **Thought structure has been generalized from *chain* → *tree* → *graph* → *latent*.** CoT (linear) → ToT (branch + backtrack) → GoT (merge + refine + loop) → Coconut/latent-space BFS (no surface tokens at all). Each jump maps to a more humanlike mode of deliberation, but with decreasing interpretability.
 2. **Self-critique is now a reusable primitive.** Reflexion's *Actor / Evaluator / Self-Reflection* split shows up (renamed) in LangGraph subgraphs, DSPy `Refine`, CrewAI manager agents, and the "reflection + self-verification" behavior emergent in DeepSeek-R1. The humanization-relevant insight is that *visible* self-criticism text increases user trust.
 3. **Reasoning has moved from prompt-time to train-time.** 2023 was dominated by prompting tricks (ToT, ReAct, Reflexion). 2025 is dominated by RL recipes (DeepSeek-R1, Open-R1, TinyZero, SimpleRL-Zoo, Open-Reasoner-Zero, PRIME). The "long humanlike CoT with aha moments" can now be *trained into* a model, not just elicited.
 4. **Process rewards are converging on "implicit" variants.** PRM800K proved step-level supervision works; PRIME removed the human-annotation bottleneck; SimpleRL-Zoo and Open-Reasoner-Zero then asked whether you even need a PRM. The field is actively triangulating.
 5. **Agent frameworks have consolidated around ReAct + persistent state + human-in-the-loop.** LangGraph, LlamaIndex workflows, AutoGen/MAF, CrewAI, and OpenAgents all converge on the same mental model: a stateful graph of specialized, tool-using agents with explicit interrupt points. ReAct is the shared core.
-6. **Open-weights reasoning is the new normal.** DeepSeek-R1 (MIT, 671B + 6 distilled sizes), Open-Reasoner-Zero, SimpleRL, and HF Open-R1 mean that by 2026 any serious team can self-host a reasoning model; licensing is no longer the blocker for humanization research.
+6. **Open-weights reasoning is the new normal.** DeepSeek-R1 (MIT, 671B + 6 distilled sizes), Open-Reasoner-Zero, SimpleRL, HF Open-R1, and now Kimi K2 Thinking (1T-parameter MoE, Modified MIT) mean that by 2026 any serious team can self-host a reasoning model; licensing is no longer the blocker for humanization research.
+7. **Budget forcing is now a standard inference primitive.** s1 (simplescaling) formalized the "Wait" token trick into a reproducible method. The naturalness of the budget stop signal matters — "Wait" outperforms hard truncation, confirming practitioner findings from llama.cpp.
 
 ## 4. Trends
 
-- **Visible "thinking" as a product feature.** `<think>...</think>` style tags (DeepSeek-R1) and streamed ReAct traces (LlamaIndex, LangGraph) are turning internal monologue into part of the UX — the humanization frontier.
+- **Visible "thinking" as a product feature.** `<think>...</think>` style tags (DeepSeek-R1, Kimi K2) and streamed ReAct traces (LlamaIndex, LangGraph) are turning internal monologue into part of the UX — the humanization frontier.
+- **Tool use fused into the reasoning trace.** Kimi K2 Thinking (and Claude 4's interleaved thinking) merge tool calls into the CoT pass rather than deferring them. This produces reasoning traces that read like a researcher browsing sources mid-thought — more humanlike than the two-phase (think → act) pattern.
 - **Role/persona-first agent design.** CrewAI's `role/goal/backstory` pattern and AutoGen's named experts make *voice* a first-class attribute alongside capability.
 - **Programmable reasoning.** DSPy's `ChainOfThought` module + optimizers (MIPROv2, GEPA) mean reasoning style can be *learned* rather than hand-prompted — the missing link between humanization evals and training.
-- **Reasoning distillation down-market.** DeepSeek-R1-Distill-Qwen-1.5B/7B and OpenR1-Distill-7B bring humanlike CoT behavior to edge/consumer-scale models.
+- **Reasoning distillation down-market.** DeepSeek-R1-Distill-Qwen-1.5B/7B, OpenR1-Distill-7B, and Qwen3 MoE series bring humanlike CoT behavior to edge/consumer-scale models. Qwen3-30B-A3B activates only 3B parameters per pass.
 - **Convergence on GRPO/PPO with rule-based rewards.** The 2025 recipes are converging on the same backbone (verifier-style reward, PPO/GRPO, vLLM rollout, Ray cluster). Implementation fragmentation is decreasing.
-- **Framework-level framework fatigue.** AutoGen's move to maintenance mode (→ Microsoft Agent Framework) signals the agent-framework category is re-consolidating around a smaller number of primitives (state graphs + tools + A2A/MCP interop).
+- **Framework-level re-consolidation.** AutoGen's move to maintenance mode (→ Microsoft Agent Framework) signals the category is compressing around state graphs + tools + A2A/MCP interop. LangGraph is increasingly the default stateful graph layer.
+- **Latent reasoning as the next leap.** Coconut (ICLR 2025), Heima (single-token CoT compression), and the Latent CoT Survey (arXiv 2505.16782) point toward reasoning that produces no surface trace. Humanization work will need to address a world where the CoT to style doesn't exist.
 
 ## 5. Gaps (directly relevant to "humanizing AI thinking")
 
@@ -225,13 +255,16 @@ Standard fields per repo: **URL · Stars · License · Primary language · Last 
 | 4 | ysymyth/ReAct | Prompting pattern | — | MIT |
 | 5 | noahshinn/reflexion | Self-reflective agents | 3.1k | MIT |
 | 6 | stanfordnlp/dspy | Programmable reasoning | — | MIT |
-| 7 | langchain-ai/langgraph | Agent framework | 28.7k | MIT |
+| 7 | langchain-ai/langgraph | Agent framework | 28.7k+ | MIT |
 | 8 | run-llama/llama_index | Agent framework (RAG-first) | — | MIT |
 | 9 | microsoft/autogen (maintenance) | Agent framework | — | MIT / CC-BY |
 | 10 | crewAIInc/crewAI | Agent framework (personas) | 48k+ | MIT |
 | 11 | xlang-ai/OpenAgents | Agent platform (end-user) | 4.7k+ | Apache-2.0 |
-| 12 | deepseek-ai/DeepSeek-R1 | Reasoning model weights | 92k | MIT |
+| 12 | deepseek-ai/DeepSeek-R1 | Reasoning model weights | 92k+ | MIT |
 | 13 | huggingface/open-r1 | Reasoning-RL reproduction | 26k+ | Apache-2.0 |
+| 13b | simplescaling/s1 | Budget-forced test-time scaling | — | Apache-2.0 |
+| 13c | MoonshotAI/Kimi-K2-Thinking | Reasoning model (1T MoE, tool-fused) | — | Modified MIT |
+| 13d | facebookresearch/coconut | Latent continuous reasoning | — | CC-BY-NC |
 | 14 | Jiayi-Pan/TinyZero (deprecated) | Reasoning-RL reproduction | 13k | Apache-2.0 |
 | 15 | hkust-nlp/simpleRL-reason | Reasoning-RL reproduction | 3.8k | MIT |
 | 16 | Open-Reasoner-Zero/Open-Reasoner-Zero | Reasoning-RL reproduction | 2.1k | MIT |
@@ -262,3 +295,6 @@ Standard fields per repo: **URL · Stars · License · Primary language · Last 
 - Open-Reasoner-Zero — https://github.com/Open-Reasoner-Zero/Open-Reasoner-Zero (paper: arXiv:2503.24290)
 - PRM800K — https://github.com/openai/prm800k (paper: arXiv:2305.20050, "Let's Verify Step by Step")
 - PRIME — https://github.com/PRIME-RL/PRIME (paper: arXiv:2502.01456)
+- s1 (simplescaling) — https://github.com/simplescaling/s1 (paper: arXiv:2501.19393)
+- Kimi K2 Thinking — https://huggingface.co/moonshotai/Kimi-K2-Thinking · https://github.com/MoonshotAI/Kimi-K2.5
+- Coconut — https://github.com/facebookresearch/coconut (paper: arXiv:2412.06769)

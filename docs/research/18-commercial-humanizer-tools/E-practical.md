@@ -43,7 +43,9 @@ Numbers below are as reported by the users/reviewers in those threads — not in
 
 | Tool | Reported pass / human score | Reported fail / AI score | Source type |
 |---|---|---|---|
-| GPTHuman.ai | 99% human on Winston AI (Substack test); consistently passes Turnitin, GPTZero, ZeroGPT, Copyleaks (multiple Reddit threads) | — | Reddit r/BestAIHumanizer_, Substack |
+| Ryter Pro | 97% GPTZero, 94% Turnitin (AI Natural Write Apr 2026) | — | Independent review; no community Reddit data yet |
+| Walter Writes AI | Pre-Aug 2025: 79.7% Turnitin; post-Aug 2025: ~62% Turnitin | ~38% still flagged Turnitin; ~45% Originality.ai; TikTok hype inflated reputation | r/BypassAiDetect, Leap AI, independent |
+| GPTHuman.ai | 99% human on Winston AI (Substack test); top-4 pick in 30-tool Substack review on quality | 37.4% avg bypass in rigorous testing (Leap AI Apr 2026); fails GPTZero/ZeroGPT in external tests | Reddit r/BestAIHumanizer_, Substack |
 | Humanizer PRO | 94% avg bypass across Turnitin/GPTZero/Originality/Copyleaks/ZeroGPT in vendor‑cited Reddit roll‑up | — | Aggregator + Reddit |
 | Undetectable.ai | 87–91% bypass across independent tests | Often produces awkward phrasing; users re‑edit | r/aitoolhq, Nerdbot |
 | WriteHuman | 82% pass on GPTZero in one 53‑test review; its own internal checker says "100% human" | 100% AI on GPTZero in an independent spot‑test; real‑world bypass est. 40–55% | aixradar, r/BypassAiDetect |
@@ -61,8 +63,9 @@ Numbers below are as reported by the users/reviewers in those threads — not in
 Recurring caveats in the threads themselves:
 
 - "Passing the tool's own detector" ≠ passing GPTZero/Turnitin. Users repeatedly warn not to trust the in‑product checker (WriteHuman is the canonical example).
-- Turnitin updated in August 2025 to explicitly detect "AI bypasser" output; anything benchmarked before that is stale.
+- Turnitin updated in August 2025 to explicitly detect "AI bypasser" output — trained on the specific output signatures of named humanizer tools. Updated again in February 2026 to improve recall while keeping false positives below 1%. Anything benchmarked before August 2025 is stale for Turnitin specifically.
 - GPTZero patched the Cyrillic‑letter/invisible‑space TikTok trick within days.
+- Walter Writes AI was a community top pick before August 2025; its Turnitin bypass rate fell from 79.7% to ~62% after the update. Several users in r/BypassAiDetect shifted recommendations to Ryter Pro and Undetectable.ai for Turnitin use cases after this degradation.
 
 ---
 
@@ -72,19 +75,23 @@ Aggregator tables and the Nerdbot long‑form converge on roughly this landscape
 
 | Tool | Entry paid | Word cap at entry | ~Cost / 1K words | Free tier |
 |---|---|---|---|---|
-| QuillBot Premium | $9.95/mo | Unlimited (paraphrase) | ~$0.01 | 125 words |
+| Ryter Pro | $6/mo billed annually | 5K chars/session (Basic) | ~$0.10–0.12 | Limited |
+| QuillBot Premium | $8.33/mo (annual) | Unlimited (paraphrase) | ~$0.01 | 125 words |
 | BypassGPT | $7.99/mo | 10K | ~$0.80 | 150 w/mo stated |
 | Humbot | $7.99–14.99/mo | "basic vs advanced" split | ~$0.40–0.75 | 200 basic words |
-| Undetectable.ai | $5/mo billed annually (≈$9.99 monthly) to $49.99 | 10K–50K | $0.20–$1.00 | Trial only |
-| WriteHuman | $12/mo (annual) | 15K + 600–3,000 w/request by tier | ~$0.80 | 1 scan |
+| Undetectable.ai | $5/mo billed annually (≈$14.99 monthly now) | 10K–15K | $0.20–$1.00 | Detector only |
+| WriteHuman | $9/mo (annual, Basic — restructured 2026) | 600–3,000 w/request by tier | ~$0.80 | 1 scan |
+| Walter Writes AI | ~$10/mo (Starter) | 10K | ~$1.00 | 300 words, no login |
 | StealthWriter | $14.99–$20/mo | 30K; up to 5K/input | ~$0.50; $0.02/w overage | Limited daily |
-| StealthGPT | $24.99/mo | 30K | ~$0.50 + overages | None |
+| StealthGPT | ~$32/mo weekly billing (restructured 2026) | Varies by plan | ~$0.50–1.00 | 7-day free trial |
 | GPTInf | $4.99 (Lite 5K) → $29.99 unlimited | 5K–∞ | $0.12–$1.00 | ~240 words |
 | Netus AI | $14/mo | 1 credit = 10 words | ~$1.40 | 50 credits |
 | Phrasly | $10.99/mo (annual) → ~$19.99 monthly | 5K/process | Varies; business API $0.14/1K | Yes |
-| HIX Bypass | $14.99/mo Standard | Tiered | Varies | Yes |
+| HIX Bypass | $14.99/mo annual (Pro, 50K words) | Tiered | Varies | Yes |
 | Deceptioner | ~$10/mo entry | Separate rewriter / generator pools; top‑ups | Varies | Yes |
 | "Humanize AI Pro" (vendor‑claimed free) | $0 | Unlimited per vendor | $0.00 | Unlimited (vendor‑run, unverifiable) |
+
+*Note: Undetectable.ai monthly plan increased to $14.99/mo (from $9.99). WriteHuman web tiers dropped from $18/$27/$48 to $9/$12/$36. StealthGPT moved to weekly billing (~$32–40/mo equivalent). GPTHuman.ai paid tier $9.99/mo.*
 
 Hidden‑cost patterns users complain about across threads:
 
@@ -98,7 +105,7 @@ Hidden‑cost patterns users complain about across threads:
 
 ## 4. Patterns and trends
 
-**Arms race is explicit and acknowledged by both sides.** Turnitin publicly treats humanizers as "a growing threat to academic integrity" and ships detectors specifically for AI‑paraphrased text (Aug 2025 update). GPTZero patches bypass tricks within days. Users in r/Professors and r/education describe an endless "spiral."
+**Arms race is explicit and acknowledged by both sides.** Turnitin publicly treats humanizers as "a growing threat to academic integrity" and shipped AI bypasser detection in August 2025, then updated it again in February 2026 to improve recall (false positives held below 1%). GPTZero patches bypass tricks within days. Users in r/Professors and r/education describe an endless "spiral." The August 2025 Turnitin update visibly degraded bypass rates for Walter Writes AI, QuillBot humanizer, and several mid-tier tools in community tests conducted after the update.
 
 **Tool market is ~150 products, ~34M monthly visits in aggregate.** Cursive's Joseph Thibault tracked 43 humanizers at 33.9M combined monthly visits in October 2025; Turnitin lists ~150. This is a meaningful consumer category, not a fringe hack.
 

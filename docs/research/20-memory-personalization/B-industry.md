@@ -3,7 +3,8 @@
 **Project context:** Humanizing AI output and thinking.
 **Research value: high** — Industry blog coverage of LLM memory is rich, with convergent architectural patterns (tiered memory, self-editing blocks, graph-based long-term context) and direct implications for making AI feel less stateless and more human.
 
-Date ranges covered: Feb 2024 – Apr 2026. Fifteen primary posts plus several adjacent titles from the same outlets.
+Date ranges covered: Feb 2024 – Apr 2026. Eighteen primary posts plus several adjacent titles from the same outlets.
+**Last updated:** 2026-04-21
 
 ---
 
@@ -212,6 +213,39 @@ Date ranges covered: Feb 2024 – Apr 2026. Fifteen primary posts plus several a
 
 ---
 
+---
+
+## 18. Microsoft — User-Scoped Persistent Memory in Azure AI Foundry
+
+- **URL:** https://learn.microsoft.com/en-us/agent-framework/get-started/memory
+- **Author / Source:** Microsoft Learn / Azure AI Foundry team
+- **Date:** Mar 31, 2026
+- **Summary:** Published a reference architecture for user-scoped persistent memory in Azure AI Foundry, built on Cosmos DB, with per-user isolation enforced through Entra ID. Positions memory as a standard component of the agent framework, not an add-on — the "Step 4" in their getting-started agent guide.
+- **Notable point:** The architecture is explicitly user-scoped, not account-global, aligning with the Anthropic model over the ChatGPT model. Signals that enterprise cloud vendors view project-scoped memory as the safe default.
+- **Relevance to humanization:** Microsoft's choice of Cosmos DB + Entra ID for memory isolation is an early signal that enterprise memory will be governed by identity infrastructure, not just prompt routing. Implications for who "owns" the memory and its portability.
+
+---
+
+## 19. Oracle — Unified Memory Core for Enterprise AI Systems
+
+- **URL:** https://blogs.oracle.com/database/introducing-oracle-ai-agent-memory-a-unified-memory-core-for-enterprise-ai-systems
+- **Author / Source:** Oracle Database team
+- **Date:** Mar 2026 (expected CY2026 availability)
+- **Summary:** Oracle AI Agent Memory extends Oracle Database 26ai into a persistent memory core for agents — stateful, persistent memory stored *inside* the database engine, not as a sidecar. Coupled with an Oracle AI Database Private Agent Factory (no-code agent deployment with portable containers). Oracle's thesis: the database should be the memory primitive, not a vector sidecar.
+- **Relevance to humanization:** A counter-bet to the vector-DB-native memory approach of Mem0/Zep/Letta. If enterprise agents store memory in Oracle, every application that can query the same database inherits continuity — a radically different portability story.
+
+---
+
+## 20. Mem0 — "State of AI Agent Memory 2026" Report
+
+- **URL:** https://mem0.ai/blog/state-of-ai-agent-memory-2026
+- **Author / Source:** Mem0 team
+- **Date:** Apr 1, 2026
+- **Summary:** Annual report framing memory as a "first-class architectural component" with its own benchmark suite. Key statistics: Mem0 reports 66.9% LoCoMo accuracy vs. OpenAI Memory's 52.9%; the graph-enhanced Mem0g closes the accuracy gap to under 5 points vs. full context while staying at 2.59s p95. Mem0 became the exclusive memory provider for AWS's Agent SDK; PyPI downloads hit ~625k/week. 21 frameworks and platforms integrated.
+- **Relevance to humanization:** Mem0 is now infrastructure at AWS scale, not a startup experiment. The "State of" framing signals category maturation — the question is no longer "should agents have memory?" but "which architecture, at what cost?"
+
+---
+
 ## Cross-Cutting Patterns
 
 1. **Tiered memory is now table stakes.** OpenAI (saved/history), Anthropic (global/project/chat), Letta (message buffer/core/recall/archival), Gemini (personal context/context window), Character.AI (pinned/auto/chat memories), Zep (graph facts/episodes) — every serious player has converged on 3–4 tiers with different recency, cost, and editability properties.
@@ -227,17 +261,20 @@ Date ranges covered: Feb 2024 – Apr 2026. Fifteen primary posts plus several a
 
 - **2024:** First-party memory ships (OpenAI Feb, Character.AI pinned/auto, LangChain memory types, Zep graph API).
 - **2025 H1:** Architectural consensus — everyone publishes their tiered model. Letta formalizes MemGPT→Letta, Zep publishes the temporal-KG paper, LangChain splits memory into LangGraph state.
-- **2025 H2:** Async/sleep-time compute and continual learning in token space. Anthropic ships project-scoped memory + developer memory tool.
-- **2026:** Portability (Claude import, agent file formats, git-backed memory via Letta Code Context Repositories), free-tier rollout (Claude Mar 2026), and context-provenance (Zep's source-traceable retrieval).
+- **2025 H2:** Async/sleep-time compute and continual learning in token space. Anthropic ships project-scoped memory + developer memory tool. Humanloop sunsets Sep 2025 into Anthropic Console.
+- **2026 Q1:** Portability (Claude import, agent file formats, git-backed memory via Letta Code Context Repositories), free-tier rollout (Claude Mar 2026), and context-provenance (Zep's source-traceable retrieval). Microsoft publishes Azure AI Foundry user-scoped memory reference architecture (Mar 31). Oracle announces Unified Memory Core for Database 26ai. GPT-5.4 ships with improved cross-chat memory and Codex agentic coding.
+- **2026 Q2:** Memory as infrastructure: Mem0 becomes exclusive memory provider for AWS Agent SDK; "State of AI Agent Memory" annual report signals category maturation. Security governance literature surges (SSGM, InjecMEM, memory control flow attacks). Enterprise incumbents (Microsoft, Oracle) enter the architectural conversation directly.
 
 ## Gaps / Under-Covered Areas
 
-- **Voice and persona consistency across long timelines.** Posts talk about remembering facts; few address how to remember *how you talked* (style vector, register, running jokes) without letting it drift or collapse.
+- **Voice and persona consistency across long timelines.** Posts talk about remembering facts; few address how to remember *how you talked* (style vector, register, running jokes) without letting it drift or collapse. HorizonBench (Apr 2026) begins to address this on the benchmark side, but no product has shipped a style memory primitive.
 - **User-visible memory editing UX.** Every vendor claims the user is "in control," but there's almost no published study of how users actually curate memory, what they delete, or how trust builds.
 - **Forgetting as a feature, not a bug.** Human memory forgets deliberately; most industry posts treat forgetting as a failure mode to be engineered away. Little published work on *principled* forgetting (privacy, relevance decay, intentional graceful loss).
 - **Multi-user / shared memory.** Letta's Conversations API (Jan 2026) is an early signal, but the patterns for "this agent serves a couple / a team / a family and needs a shared + private memory model" are thin.
 - **Evaluation of humanization per se.** Benchmarks (LongMemEval, LoCoMo, DMR, Letta Leaderboard) measure retrieval accuracy, not felt humanness. No industry-standard eval for whether memory makes the assistant *feel more like a person*.
 - **Memory and hallucination interaction.** When the agent misremembers, is that worse or better than making it up fresh? Almost no post engages this trade-off head-on.
+- **Memory × sycophancy is now confirmed, not conjectured.** MIT / Penn State CHI 2026 demonstrated that condensed user profiles in memory are the largest driver of LLM sycophancy — more so than interaction context. No industry vendor has published a memory architecture that mitigates this. The "relationship-driven" memory use case and sycophancy amplification are directly linked.
+- **Memory security governance.** SSGM (arXiv 2603.11768) and the memory security survey (arXiv 2604.16548) have articulated attack classes (poisoning, semantic drift, control flow attacks) that industry posts still largely ignore. OWASP Top 10 for Agentic Applications 2026 includes persistent memory as a named risk category.
 
 ---
 

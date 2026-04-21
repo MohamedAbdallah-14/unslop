@@ -60,6 +60,22 @@ AI_ISMS = (
     r"\bever[- ](?:evolving|changing)\b",
     r"\bin today'?s (?:digital )?(?:world|age|landscape|era)\b",
     r"\bdynamic landscape\b",
+    # 2026-04 additions — mirror humanize.py's vocabulary extension. Each
+    # entry has a corresponding STOCK_VOCAB rewrite; the validator refuses
+    # to let an LLM rewrite reintroduce them.
+    r"\bmeticulous(?:ly)?\b",
+    r"\bbustling\b",
+    r"\bparadigm\s+shift\b",
+    r"\bgame[- ]?chang(?:er|ers|ing)\b",
+    r"\brevolutioniz(?:e|es|ed|ing)\b",
+    r"\btransformative\b",
+    r"\bunprecedented(?=\s+(?:opportunity|opportunities|challenge|challenges|growth|success|impact|change)\b)",
+    r"\ba\s+myriad\s+of\b",
+    r"\bmyriad\s+(?=\w)",
+    r"\ba\s+plethora\s+of\b",
+    r"\buncharted\s+(?:territory|waters|ground|area|domain)\b",
+    r"\bnuanced\b(?=\s+(?:understanding|view|perspective|approach|analysis|take))",
+    r"\bsynerg(?:y|ies|ize|izes|ized|izing)\b",
     # Hedging stacks
     r"\bit'?s important to note that\b",
     r"\bit'?s worth (?:mentioning|noting|pointing out) that\b",
@@ -163,6 +179,8 @@ class ValidationResult:
     false_ranges_after: int = 0
     synonym_cycling_before: int = 0
     synonym_cycling_after: int = 0
+    contraction_rate_before: float = 0.0
+    contraction_rate_after: float = 0.0
 
     def to_dict(self) -> dict:
         return {
@@ -180,6 +198,8 @@ class ValidationResult:
             "false_ranges_after": self.false_ranges_after,
             "synonym_cycling_before": self.synonym_cycling_before,
             "synonym_cycling_after": self.synonym_cycling_after,
+            "contraction_rate_before": round(self.contraction_rate_before, 3),
+            "contraction_rate_after": round(self.contraction_rate_after, 3),
         }
 
 
@@ -292,6 +312,29 @@ def _count_false_ranges(text: str) -> int:
 
 
 _WORD_RE = re.compile(r"[A-Za-z]+")
+
+# Contraction detection — AI text typically has 0.00 contractions per chunk
+# vs human ~0.17 (Kalemaj et al. arXiv 2604.11687). Low contraction rate is
+# a distributional fingerprint that token-level detectors read.
+_CONTRACTION_RE = re.compile(
+    r"\b(?:don|doesn|didn|won|wouldn|shouldn|couldn|mightn|mustn|isn|aren|"
+    r"wasn|weren|hasn|haven|hadn|can)'t\b|"
+    r"\b(?:it|that|there|what|where|who|he|she|we|you|they|"
+    r"I)'(?:s|re|ve|ll|d|m)\b|"
+    r"\bI'm\b",
+    re.IGNORECASE,
+)
+
+
+def _contraction_rate(text: str) -> float:
+    """Contractions per 1000 words in prose-only text. Human baseline ~17 per
+    1k words; AI-generated text often has 0."""
+    prose = _strip_code_for_prose(text)
+    words = len(_WORD_RE.findall(prose))
+    if words < 20:
+        return 0.0
+    contractions = len(_CONTRACTION_RE.findall(prose))
+    return (contractions / words) * 1000
 
 
 def _count_synonym_cycling(text: str) -> int:
@@ -470,6 +513,15 @@ def validate(original: str, humanized: str) -> ValidationResult:
             "Using 3+ synonyms for one concept in the same paragraph reads as AI."
         )
 
+    # Contraction rate — AI text often has 0 contractions; human baseline ~17/1k words.
+    cr_before = _contraction_rate(original)
+    cr_after = _contraction_rate(humanized)
+    if len(new_lengths) >= 8 and cr_after < 2.0:
+        warnings.append(
+            f"Contraction rate low ({cr_after:.1f}/1k words). "
+            "Human writing uses ~17 contractions per 1k words; zero contractions is a detector signal."
+        )
+
     return ValidationResult(
         ok=len(errors) == 0,
         errors=errors,
@@ -485,6 +537,8 @@ def validate(original: str, humanized: str) -> ValidationResult:
         false_ranges_after=fr_after,
         synonym_cycling_before=sc_before,
         synonym_cycling_after=sc_after,
+        contraction_rate_before=cr_before,
+        contraction_rate_after=cr_after,
     )
 
 
@@ -504,6 +558,10 @@ def format_report(result: ValidationResult) -> str:
     if result.flat_paragraphs_after or result.flat_paragraphs_before:
         parts.append(
             f"  Flat paragraphs: {result.flat_paragraphs_before} → {result.flat_paragraphs_after}"
+        )
+    if result.contraction_rate_after > 0 or result.contraction_rate_before > 0:
+        parts.append(
+            f"  Contractions/1k: {result.contraction_rate_before:.1f} → {result.contraction_rate_after:.1f}"
         )
     for err in result.errors:
         parts.append(f"  ERROR: {err}")

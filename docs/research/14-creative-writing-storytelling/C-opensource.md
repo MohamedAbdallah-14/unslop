@@ -4,6 +4,8 @@
 > **Angle:** Survey of open-source frontends, community-trained writing models, long-form story-generation systems, datasets, and benchmarks that the open-source world has built for AI-assisted creative writing.
 > **Research value: high** — a full stack exists (frontends + bespoke creative-writing models + long-form generation systems + datasets + purpose-built writing benchmarks + "AI slop" detectors), much of it built specifically to push LLM prose away from the bland, assistant-voice default that the humanization project is fighting.
 
+**Last updated: April 2026.**
+
 ## Scope
 
 This angle indexes the open-source work most directly relevant to "making AI prose feel human." That means: (1) the fiction-first frontends that established the genre (KoboldAI, text-generation-webui's creative preset tradition, NovelAI-adjacent tooling); (2) the community-merged and community-trained writing LLMs that trade benchmark scores for voice (Mytho-series, Midnight-Miqu, Goliath, Sao10K's Euryale/Fimbulvetr); (3) long-form story-generation research systems (Dramatron, Re3, DOC, autonovel, StoryDaemon); (4) the canonical creative-writing datasets (r/WritingPrompts, GPT-WritingPrompts, CoAuthor); and (5) the new generation of writing-specific benchmarks and AI-slop detectors (EQ-Bench creative-writing-v3, longform-writing-bench, WritingBench, Judgemark-v2, slop-score).
@@ -52,7 +54,7 @@ The through-line: the open-source stack has already diagnosed the main failure m
 - **URL:** https://github.com/oobabooga/text-generation-webui
 - **Author:** oobabooga
 - **Stars:** ~46,400
-- **Updated:** Active (2026), v4.0 released
+- **Updated:** Active (2026), v4.0 released; SillyTavern 1.15.0 (Dec 28 2025) added Macros 2.0, new backends, and UI enhancements — SillyTavern is now the dominant creative-writing frontend for power users while oobabooga remains the sampler/preset reference
 - **License:** AGPL-3.0
 - **Description:** Dominant local LLM frontend; ships with a large registry of **sampler presets** ranked by a community "Preset Arena" blind vote that is the closest thing the open-source world has to a canonical list of "best settings for creative output."
 - **Techniques / notable presets:**
@@ -130,19 +132,20 @@ The through-line: the open-source stack has already diagnosed the main failure m
 ## 8. Sao10K — Euryale / Fimbulvetr / Stheno series
 
 - **URLs:**
-  - Euryale 70B — https://huggingface.co/Sao10K/L3.1-70B-Euryale-v2.2 (and L3.3 successors)
+  - Euryale 70B v2.3 — https://huggingface.co/Sao10K/L3.3-70B-Euryale-v2.3 *(current frontier, Dec 2024)*
+  - Euryale 70B v2.2 — https://huggingface.co/Sao10K/L3.1-70B-Euryale-v2.2 *(legacy)*
   - Fimbulvetr 11B v2 — https://huggingface.co/Sao10K/Fimbulvetr-11B-v2
   - Stheno 8B v3.3 (32K) — https://huggingface.co/Sao10K/L3-8B-Stheno-v3.3-32K
   - Lunaris 8B — https://huggingface.co/Sao10K/L3-8B-Lunaris-v1
 - **Author:** Sao10K
-- **Updated:** Continuously maintained 2023–2026 across Llama 2 / 3 / 3.1 / 3.3 generations
+- **Updated:** Continuously maintained 2023–2026 across Llama 2 / 3 / 3.1 / 3.3 generations. **L3.3-70B-Euryale-v2.3** is the current flagship (Dec 7 2024 release on Llama 3.3 Instruct base, 131K context window, 16K output limit). Trained without LoRA extraction for more robust creative roleplay. Recommended settings: temperature 1.1, min_p 0.1. Available on OpenRouter.
 - **Description:** The most prolific single author of creative-writing-first open LLMs. Each model is explicitly positioned by size niche: Stheno 8B (fast), Fimbulvetr 11B (verbose narrator), Lunaris 8B (balanced), Euryale 70B (prestige roleplay/storytelling).
 - **Techniques:**
   - Curated SFT + DPO on roleplay / creative-writing datasets, per model card notes
-  - Explicit fine-tunes for each new Llama base rather than merges of other people's fine-tunes
+  - Direct training on each new Llama base (not LoRA extraction) for v2.3+
   - Per-model sampler and prompt-format recommendations in the cards
-- **Takeaways for humanization:** Sao10K's catalog is a natural experiment in "what is the minimum model size at which fiction starts feeling human?" Community consensus clusters at **~8B for acceptable short roleplay, ~11B for consistent narrator voice, ~70B for prose that rivals closed frontier models.** That is useful prior data for any humanization system sizing its target model.
-- **Summary:** The single most important open-source creative-writing model author of this era. Any humanization evaluation should include at least Stheno-8B and Euryale-70B as sized reference points.
+- **Takeaways for humanization:** Sao10K's catalog is a natural experiment in "what is the minimum model size at which fiction starts feeling human?" Community consensus clusters at **~8B for acceptable short roleplay, ~11B for consistent narrator voice, ~70B for prose that rivals closed frontier models.** Euryale v2.3 on Llama 3.3 is currently the open-source reference point for 70B creative writing. On aggregated 2026 writing leaderboards, Qwen3-235B-A22B and DeepSeek-V3 now outperform Euryale-70B on benchmark tasks — the field has not stood still.
+- **Summary:** The single most important open-source creative-writing model author of this era. Any humanization evaluation should include at least Stheno-8B and Euryale-70B v2.3 as sized reference points. Note that Qwen3 models now present significant competition in the open frontier.
 
 ## 9. google-deepmind/dramatron
 
@@ -351,22 +354,43 @@ The through-line: the open-source stack has already diagnosed the main failure m
 
 ## Trends (2024 → 2026)
 
-- **Writing-specific benchmarks became first-class.** EQ-Bench creative-writing-v3, longform-writing-bench, Judgemark-v2, WritingBench, LongGenBench — prior to 2024 there was essentially nothing; now there is a small but serious ecosystem. Expect a leaderboard war and rapid rubric refinement through 2026.
+- **Writing-specific benchmarks are proliferating.** EQ-Bench creative-writing-v3, longform-writing-bench, Judgemark-v2, WritingBench, LongGenBench, and lechmazur/writing (V4, Nov 2025) now constitute a real leaderboard ecosystem. The lechmazur V4 benchmark using Thurstone-style pairwise evaluation is the current state of the art in open creative-writing evaluation.
 - **Slop-vocabulary suppression is moving from prompt to weights.** MythoMist merged against slop vocabulary in 2023 as a curiosity; by 2026 this is a standard objective at both merge and fine-tune time. Humanization pipelines will need to defend against an adversarial arms race between slop detectors and slop-avoiders.
-- **Long-form pipelines are consolidating on: outline + controller + reranker + edit pass.** Re3 → DOC → autonovel → StoryDaemon shows convergence on the same four boxes, differing only in how rigidly the outline constrains the draft.
-- **Instruction-tunable creative models are replacing pure "completion" models.** NovelAI's Kayra Instruct modules, Llama-3-based Euryale v2.2, and most 2025+ merges all support in-line directive syntax; pure pre-training-style base models for fiction are becoming legacy.
-- **Small, cheap judges are beating GPT-4-as-judge for writing rubrics.** WritingBench's 7B critic, Prometheus 2, and CharacterRM (from the persona angle) all show ≥ human–human agreement on narrow prose rubrics at a fraction of the cost.
-- **Community model ecosystem is consolidating around Llama 3 / 3.1 / 3.3.** The Mytho family is legacy (Llama 2 era); Midnight-Miqu is post-Miqu drift-limited; Sao10K's Llama 3.3 Euryale and similar 3.x-based merges are the live frontier.
+- **Long-form pipelines are maturing beyond simple outlines.** Re3 → DOC → DOME → StoryWriter shows convergence on the same four boxes (plan → outline → draft → revise), but 2025 additions introduce KG-based memory (DOME) and event-relationship graphs (StoryWriter) to make outlines adaptive rather than fixed. The StoryWriter LongStory dataset (~6,000 stories, avg 8,000 words) is now an open fine-tuning resource.
+- **Instruction-tunable creative models are replacing pure "completion" models.** NovelAI's Xialong (GLM-4.6 base, RL-trained to avoid repetition) and Sao10K Euryale v2.3 (Llama 3.3, direct training not LoRA) are the 2026 flagships. Pure completion-style base models are now legacy.
+- **SillyTavern 1.15.0 is the dominant creative-writing frontend for power users.** As of Dec 28 2025, SillyTavern leads on features (Macros 2.0, multi-backend support) while oobabooga/text-generation-webui remains the sampler-research reference.
+- **Small, cheap judges are beating GPT-4-as-judge for writing rubrics.** WritingBench's 7B critic, Prometheus 2, and CharacterRM all show ≥ human–human agreement on narrow prose rubrics at a fraction of the cost.
+- **Open-source frontier has fragmented across base model families.** Euryale v2.3 (Llama 3.3), Qwen3-235B-A22B, and DeepSeek-V3 are all viable 2026 creative-writing choices on aggregated benchmarks. Qwen3 models are now cited as top performers in several 2026 open-source writing guides, challenging the Llama-family dominance of 2024.
+- **NovelAI Xialong** is based on Zhipu AI's GLM-4.6, not the Llama family — the first major commercial fiction LLM to leave the Llama lineage entirely. Solves fixed output patterns and removes the need for repeat-penalty presets. Available Opus tier.
+
+## New Tools (2025–2026 additions)
+
+**lechmazur/writing** — LLM Creative Story-Writing Benchmark
+- **URL:** https://github.com/lechmazur/writing
+- **Author:** Lech Mazur
+- **Updated:** V3 released Sep 9 2025; V4 released Nov 25 2025 (new graders, added GPT-5 Pro, Gemini 3 Pro, GPT-5.1, Claude Opus 4.5/Sonnet 4.5, Grok 4.1, Kimi K2, GLM-4.6). Dec 16 2025 added GPT 5.2 and Mistral Large 3.
+- **Description:** Tests how well LLMs incorporate 10 mandatory story elements (character, object, concept, attribute, action, method, setting, timeframe, motivation, tone). V4 uses pairwise head-to-head comparisons (Thurstone-style rating) as the canonical quality signal. Companion repository `lechmazur/writing_styles` documents stylistic fingerprints and within-model diversity across 29+ models (15,347+ stories).
+- **Takeaways for humanization:** The constrained-element design partially mitigates evaluation leakage (models can't have memorized the exact prompts). The style companion study surfaces which models have distinctive voices vs generic outputs — directly useful for humanization target-setting.
+
+**yingpengma/Awesome-Story-Generation** — Curated Paper Index
+- **URL:** https://github.com/yingpengma/Awesome-Story-Generation
+- **Author:** Yingpeng Ma
+- **Updated:** Active (2025–2026)
+- **Description:** Extensive curated list of LLM story generation papers organized across planning/decomposition, multi-agent collaboration, long-context coherence, refinement methods, and evaluation. More actively maintained than Picrew/awesome-llm-story-generation and includes DOME, StoryWriter, HAMLET, and SWAG.
+- **Takeaways for humanization:** The best current community-maintained index of this literature. Supersedes Picrew/awesome-llm-story-generation as the go-to reading list.
+
+---
 
 ## Gaps
 
 - **No open dataset of *revisions* at scale.** CoAuthor is the gold standard but small (1,445 sessions). There is no public equivalent at millions-of-sessions scale, despite that being the most valuable signal for humanization training. This is the single biggest data gap in the angle.
 - **No widely-agreed human-baseline corpus for slop-score-style metrics.** slop-score's word lists are hand-curated; an automated, continuously-updated, large-scale human-vs-AI reference corpus would make slop suppression reproducible. Nobody has built it openly.
 - **Affect / emotional-trajectory evaluation is still subjective.** EQ-Bench rubrics ask for "emotional engagement" but have no principled arc-level metric. There is no public benchmark for "does this story *feel* real" that isn't just "does a Claude judge say it feels real."
-- **Multilingual open creative-writing benchmarks are absent.** Almost all of this stack is English-only; Chinese has CharacterEval on the persona side but no equivalent on the story-craft side, and other languages have nothing.
+- **Multilingual open creative-writing benchmarks are absent.** Almost all of this stack is English-only; Chinese has CharacterEval on the persona side but no equivalent on the story-craft side, and other languages have nothing. The PNAS "Echoes in AI" paper used English-only; cultural writing diversity (CHI 2025) is now a documented gap.
 - **Sampler/preset discovery is manual.** The Preset Arena is blind-voting at human scale; there is no public automated search for good sampler stacks against creative-writing benchmarks. A humanization project could probably produce a better Preset Arena winner in a week of automated search.
-- **No open end-to-end system combines the best pieces.** The "ideal" stack — Euryale-70B weights + slop-score inner-loop reward + DOC-style outline controller + EQ-Bench rubric gate — does not exist as a single repo. Every current project picks two or three of these and leaves the rest on the table.
+- **No open end-to-end system combines the best pieces.** The "ideal" stack — Euryale-70B weights + slop-score inner-loop reward + DOC/DOME outline controller + EQ-Bench rubric gate — does not exist as a single repo. Every current project picks two or three of these and leaves the rest on the table.
 - **Human-AI revision interfaces are thin.** CoAuthor's tab-to-suggest is still the reference UI; nothing open has improved on it materially in four years, despite repeated evidence that **interaction design moves humanization-felt quality more than model choice**.
+- **Open-source frontier is fragmenting across base model families.** Euryale v2.3 (Llama 3.3), Qwen3 series, DeepSeek-V3 are all viable 2026 creative-writing choices. Unlike the Llama 2/3 era, there is no single dominant base — any humanization project targeting "open models" now needs to specify which family.
 
 ## Sources
 
@@ -399,3 +423,11 @@ The through-line: the open-source stack has already diagnosed the main failure m
 - Picrew/awesome-llm-story-generation — https://github.com/Picrew/awesome-llm-story-generation
 - NovelAI Prompt Preset Manager — https://github.com/NeviumX/NovelAI-Prompt-Preset-Manager
 - NovelAI Kayra / Clio context — https://blog.novelai.net/introducing-novelai-lm-13b-402k-kayra-dabe8ff86fc6
+- NovelAI Xialong — https://blog.novelai.net/novelai%E6%9C%80%E6%96%B0%E3%83%86%E3%82%AD%E3%82%B9%E3%83%88%E7%94%9F%E6%88%90%E3%83%A2%E3%83%87%E3%83%AB-xialong-%E3%81%8C%E7%99%BB%E5%A0%B4-8a4ec11895ea (GLM-4.6 based, RL anti-repetition, 2026)
+- Sao10K/L3.3-70B-Euryale-v2.3 — https://huggingface.co/Sao10K/L3.3-70B-Euryale-v2.3 (current flagship, Dec 2024; on OpenRouter)
+- SillyTavern 1.15.0 release notes — https://github.com/SillyTavern/SillyTavern/releases (Dec 28 2025; Macros 2.0, new backends)
+- lechmazur/writing — https://github.com/lechmazur/writing (V4 Nov 25 2025; Thurstone pairwise evaluation)
+- lechmazur/writing_styles — https://github.com/lechmazur/writing_styles (style fingerprint companion, Dec 2025)
+- yingpengma/Awesome-Story-Generation — https://github.com/yingpengma/Awesome-Story-Generation
+- StoryWriter CIKM 2025 — https://arxiv.org/abs/2506.16445
+- DOME NAACL 2025 — https://aclanthology.org/2025.naacl-long.63.pdf

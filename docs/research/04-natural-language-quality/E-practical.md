@@ -84,6 +84,7 @@ Phased web search → deep-fetch of highest-signal primary sources (guides, PR t
 - **Mechanism:** `logits[logits < max(logits) - n * std(logits)] = -inf`. Truncates based on standard-deviation distance from the top logit; stays stable as temperature rises.
 - **Why community picked it up fast:** Unlike min-p, it doesn't degrade when temperature is aggressively cranked. Min-p author publicly says it outperforms min-p as a general sampler.
 - **Ranges:** `n=0.7` conservative, `n=1.3` diverse, `1.5` is rpwithai's recommended starting value.
+- **Deployment caveat (as of early 2026):** Top-nσ defaults to `-1` (disabled) in llama.cpp even after merge. Users must explicitly activate it. Ollama and hosted deployments that wrap llama.cpp will not automatically get this sampler; manual config is required.
 
 ### 12. oobabooga PR #6335 — XTC (Exclude Top Choices) merge
 - **URL:** https://github.com/oobabooga/text-generation-webui/pull/6335
@@ -104,11 +105,11 @@ Phased web search → deep-fetch of highest-signal primary sources (guides, PR t
 - **URLs:** https://huggingface.co/Virt-io/SillyTavern-Presets · https://huggingface.co/sphiratrioth666/SillyTavern-Presets-Sphiratrioth
 - **Take-away:** The actual shipped presets for the largest "humanizing LLM output" community (roleplay/creative writing, ~300+ likes) neutralize *everything* except **Min-P + DRY + Temperature**. This is the de facto production recipe.
 
-### 16. sam-paech/antislop-sampler + Antislop paper (arXiv 2510.15061)
-- **URLs:** https://github.com/sam-paech/antislop-sampler · https://arxiv.org/abs/2510.15061
+### 16. sam-paech/antislop-sampler + Antislop paper (arXiv 2510.15061) — **ICLR 2026 accepted**
+- **URLs:** https://github.com/sam-paech/antislop-sampler · https://arxiv.org/abs/2510.15061 · https://github.com/sam-paech/auto-antislop
 - **Mechanism:** String/regex matching with *backtracking* — when the model emits a banned phrase like "a tapestry of" or "testament to," the sampler rewinds and resamples the prior tokens with that branch masked.
-- **Finding (paper):** Some slop patterns appear **>1000× more frequently in LLM output than in human text**. Sampler achieves ~90% slop reduction on benchmarks while preserving creative-writing quality. Also introduces FTPO fine-tuning for permanent removal.
-- **Why it matters for this project:** The first community tool that directly targets naturalness defects rather than token distribution shape.
+- **Status update (2026):** Paper accepted at **ICLR 2026** (poster #10008156). FTPO now suppresses 8,000+ patterns achieving 90% slop reduction while maintaining or improving GSM8K, MMLU, and creative writing benchmarks. The new `auto-antislop` repo automates the full pipeline (profile → slop list → FTPO training data). Published antislop fine-tuned models available: `sam-paech/gemma-3-27b-it-antislop` and `sam-paech/gemma-3-12b-it-antislop` on HuggingFace.
+- **Why it matters for this project:** The first community tool that directly targets naturalness defects rather than token distribution shape — and now peer-reviewed at a top venue with production-ready models.
 
 ### 17. r/accelerate — "AI slop is a skill problem, not a model problem"
 - **URL:** https://www.reddit.com/r/accelerate/comments/1r20y1c/ai_slop_is_a_skill_problem_not_a_model_problem/
@@ -211,12 +212,13 @@ Layer Antislop on top of the above if the target is natural prose specifically �
 
 ## Gaps & open questions
 
-1. **No standardized "naturalness" benchmark.** Sam Paech's EQ-Bench creative-writing and Antislop eval are the closest; everything else is vibes. This is exactly the gap the Humanizer project can fill.
+1. **No standardized "naturalness" benchmark.** EQ-Bench Creative Writing v3 is the closest external benchmark, and its new Slop and Repetition columns (added 2025) directly quantify what humanization must remove. This is progress, but still no unified "humanness score" combining distribution, psycholinguistic, and detection signals.
 2. **Min-p / Top-nσ on non-creative tasks.** HN commenter: min-p and XTC underperform default top-p on math/reasoning. The dials that humanize prose may degrade reasoning — needs empirical validation per use case.
-3. **Sampling can't overcome training bias.** Antislop paper shows 90% reduction but not 100%. A phrase the model has been RLHF'd to love will resist even backtracking. The long-term humanization path likely requires fine-tuning (FTPO) *in addition to* sampling.
-4. **Commercial APIs remain a dead end for advanced samplers.** Anyone building a humanizer on top of OpenAI/Anthropic/Gemini has access to only the weakest tools. The project should assume open-weights or self-hosted inference for full control.
+3. **Sampling can't overcome training bias.** Antislop paper (ICLR 2026) shows 90% reduction but not 100%. A phrase the model has been RLHF'd to love will resist even backtracking. The long-term humanization path requires FTPO fine-tuning *in addition to* sampling — and Paech's auto-antislop pipeline now makes this accessible.
+4. **Commercial APIs remain a dead end for advanced samplers.** Anyone building a humanizer on top of OpenAI/Anthropic/Gemini has access to only the weakest tools. The project should assume open-weights or self-hosted inference for full control. Note: Anthropic Custom Styles (2025) close the gap at the prompt-layer level, but decoding control is still absent.
 5. **Sampler interactions are under-studied.** e.g. "DRY + XTC + high-temp + dynatemp" has no published ablation — it's community folklore. Someone should actually A/B these.
 6. **Burstiness / human rhythm specifically.** The community optimizes for "creative" and "not repetitive" — not explicitly for the sentence-length-variance signal that AI detectors target. There's a research-value gap here for the Humanizer project.
+7. **Top-nσ activation friction is a real barrier.** Despite being "the best general-purpose sampler" per the min-p author, top-nσ is disabled by default in llama.cpp and not surfaced in Ollama. Any practitioner guide that recommends it must include explicit activation instructions, or it will silently not apply.
 
 ---
 
@@ -241,11 +243,13 @@ Layer Antislop on top of the above if the target is natural prose specifically �
 | 15 | Virt-io SillyTavern presets | https://huggingface.co/Virt-io/SillyTavern-Presets |
 | 16 | sphiratrioth666 SillyTavern presets | https://huggingface.co/sphiratrioth666/SillyTavern-Presets-Sphiratrioth |
 | 17 | sam-paech/antislop-sampler | https://github.com/sam-paech/antislop-sampler |
-| 18 | Antislop paper (arXiv 2510.15061) | https://arxiv.org/abs/2510.15061 |
+| 18 | Antislop paper — ICLR 2026 (Paech et al.) | https://openreview.net/pdf/6916f45661bf884811be66da937b7467b97a9114.pdf |
 | 19 | Min-p paper — ICLR 2025 Oral (Nguyen et al.) | https://openreview.net/forum?id=ga46iBDt7E |
 | 20 | r/accelerate — "AI slop is a skill problem" | https://www.reddit.com/r/accelerate/comments/1r20y1c/ |
 | 21 | DEV.to — How LLMs Actually Generate Text | https://dev.to/thousand_miles_ai/how-llms-actually-generate-text-temperature-top-k-top-p-and-the-dice-rolls-you-never-see-jop |
 | 22 | YouTube — LLM Parameters Explained | https://www.youtube.com/watch?v=CPs_PGELoMY |
+| 23 | auto-antislop repo (Paech, 2025) | https://github.com/sam-paech/auto-antislop |
+| 24 | EQ-Bench Longform Creative Writing Leaderboard | https://eqbench.com/creative_writing_longform.html |
 
 ---
 

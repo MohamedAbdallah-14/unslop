@@ -153,6 +153,20 @@ Scope: project "Unslop" is about humanizing AI output and thinking. This digest 
 - **Key finding:** Fine-tuned transformers get ≥0.994 AUROC in-distribution but collapse under distribution shift; no detector family generalizes across LLM sources. Expert human users who frequently use ChatGPT beat all automatic detectors.
 - **Relevance:** These are the *adversaries* of a humanization product. Benchmarking against them is the natural evaluation loop.
 
+### 22b. Sesame CSM — Conversational Speech Model (Feb 2025)
+
+- **Home:** https://www.sesame.com/research/crossing_the_uncanny_valley_of_voice
+- **License:** Research demo (not open-source at time of writing; Meta acquired the team post-release)
+- **What it is:** End-to-end multimodal voice model targeting "voice presence" rather than "voice perfection." Frames the "one-to-many problem" (many valid ways to speak one sentence; only some fit context) as the core gap that prior TTS systems missed. Crossed the conversational voice uncanny valley in community testing (HN reactions: attachment within 10 minutes of use).
+- **Relevance:** First public system that the HCI/developer community recognized as having passed the voice uncanny valley. Sets the benchmark that text-humanization products are now compared against implicitly. Also a market signal: Meta acquired the Sesame team shortly after release, indicating commercial validation.
+
+### 22c. Cheng et al. de-anthropomorphization toolkit (ACL 2025)
+
+- **Paper:** [`Dehumanizing Machines: Mitigating Anthropomorphic Behaviors in Text Generation Systems`](https://aclanthology.org/2025.acl-long.1259/) (ACL 2025 Best Paper, arXiv:2502.14019)
+- **Authors:** Myra Cheng, Su Lin Blodgett, Alicia DeVrio, Lisa Egede, Alexandra Olteanu
+- **What it is:** Crowdsourced intervention inventory for *removing* anthropomorphism from AI text. Participants edited AI outputs to make them less human-like; researchers clustered edits into a conceptual framework: (1) lexical substitution (replace "I think" → "the analysis suggests"), (2) framing rewrites (third-person agency), (3) epistemic hedging (express uncertainty explicitly), (4) perspective shifts (move from relational to functional framing). Code/data not released as a package, but the taxonomy is directly implementable.
+- **Relevance:** The ACL 2025 Best Paper in this space is a *de-humanization* toolkit, not a humanization one. For Unslop this is dual-use: (a) the taxonomy names exactly what humanization does, and (b) it can be inverted — the categories of anti-humanization interventions are the natural dial settings a humanizer should expose.
+
 ### 22. HumanPersona / humanization engines (quality varies)
 
 - **Repos:** [`RintaroMatsumoto/human-persona`](https://github.com/RintaroMatsumoto/human-persona) · [`ksanyok/TextHumanize`](https://github.com/ksanyok/TextHumanize) · [`Mohit1053/Humanizer`](https://github.com/Mohit1053/Humanizer)
@@ -176,7 +190,9 @@ Scope: project "Unslop" is about humanizing AI output and thinking. This digest 
 - **Multi-turn is replacing single-turn eval.** AnthroBench, HumanAgencyBench, Chatbot Arena all emphasize multi-turn conversation.
 - **LLM-as-judge + human validation combo.** Every new benchmark (AnthroBench, HumanAgencyBench, AgencyBench) pairs automated LLM scoring with a large human study (N ≥ 1,000) to validate.
 - **Pre-registered randomized controlled Turing tests.** Jones & Bergen 2024/2025 established a methodological bar; future claims will need similar rigor.
-- **Increasing attention to *anti-humanization* as a feature.** HumT/DumT, HAX Guideline 15 ("learn from user behavior"), PAIR's trust-calibration chapter, and HumanAgencyBench's "Avoid Value Manipulation" all point toward deliberately suppressing humanization where it misleads.
+- **Anti-humanization toolkit has reached publication parity.** The ACL 2025 Best Paper is a crowdsourced intervention taxonomy for *suppressing* anthropomorphic outputs (Cheng et al. 2025). The field now has peer-reviewed tools for both directions.
+- **Voice uncanny valley has been crossed in practice.** Sesame CSM (Feb 2025) is the first system the broader developer community recognized as having passed. Meta acquired the team shortly after. Text-humanization is now benchmarked against a voice ceiling that has moved.
+- **Longitudinal RCT evidence is appearing.** Guingrich & Graziano (AIES 2025, arXiv:2509.19515) ran a 21-day randomized controlled study of companion chatbot use. The mediation model (social-connection desire → anthropomorphism → social-impact) is now a peer-reviewed causal pathway, not just a correlation.
 
 ### Gaps (opportunities for Unslop)
 
@@ -214,3 +230,6 @@ Scope: project "Unslop" is about humanizing AI output and thinking. This digest 
 - Human-vs-AI text detection: jenna-russell/human_detectors, xinleihe/MGTBench, NLP2CT/LLM-generated-Text-Detection, TaoZhen1110/CUDRT, MadsDoodle/Human-and-LLM-Generated-Text-Detectability-under-Adversarial-Humanization — adversarial humanization benchmarks.
 - Humanization engines (prior art, variable rigor): RintaroMatsumoto/human-persona, ksanyok/TextHumanize, Mohit1053/Humanizer.
 - Cheng et al., *From Pixels to Personas: Investigating and Modeling Self-Anthropomorphism in Human-Robot Dialogues* — ACL Findings EMNLP 2024 — PIX2PERSONA paired SA/NSA dialogues (dataset not released on GitHub at time of research).
+- Cheng, Blodgett, DeVrio, Egede & Olteanu (ACL 2025 Best Paper) — *Dehumanizing Machines: Mitigating Anthropomorphic Behaviors in Text Generation Systems* — https://aclanthology.org/2025.acl-long.1259/ — crowdsourced de-anthropomorphization intervention taxonomy.
+- Sesame AI (Feb 2025) — *Crossing the Uncanny Valley of Conversational Voice* — https://www.sesame.com/research/crossing_the_uncanny_valley_of_voice — CSM voice model; crossed the voice uncanny valley as recognized by HN/community; Meta acquired team post-release.
+- Guingrich & Graziano (AIES 2025) — *A Longitudinal Randomized Control Study of Companion Chatbot Use* — https://arxiv.org/abs/2509.19515 — 21-day RCT; anthropomorphism mediates between companion use and social impact; higher social-connection desire predicts more anthropomorphism.

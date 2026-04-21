@@ -1,4 +1,23 @@
-# Category 20 — Memory & Personalization
+# Category 20 — Memory and Personalization
+
+This category covers how persistent memory and user personalization transform a stateless LLM into an assistant that feels continuous — one that knows who you are, remembers how you talk, and notices what you care about across sessions. It spans memory architectures (tiered stores, temporal knowledge graphs, self-editing blocks, sleep-time consolidation), preference modeling and low-rank personalization methods, the open-source and commercial tooling ecosystem, practitioner failure modes, and the shared blind spot across all of them: no benchmark currently measures whether memory makes an assistant *feel more like someone who knows you*.
+
+## Angle Files
+
+- [A-academic.md](./A-academic.md) — 35+ papers from ACL/NAACL/EMNLP, NeurIPS, ICLR, ICML, UIST, AAAI, CHI, and ACM TOIS, covering memory architectures (MemGPT, A-MEM, Zep, HippoRAG, Mem0, SimpleMem), preference modeling (P-RLHF, PReF, LoRe, VRF, PersonalLLM, PACIFIC), long-term dialogue benchmarks (LongMemEval, LoCoMo, LaMP, RealPref, HorizonBench), memory security governance (SSGM, InjecMEM), and sycophancy × memory (MIT/Penn State CHI 2026).
+- [B-industry.md](./B-industry.md) — 20 posts (Feb 2024 – Apr 2026) from OpenAI, Anthropic, Google, Character.AI, Letta, Zep, LangChain, Eugene Yan, Microsoft, Oracle, and Mem0, tracing how tiered memory, self-editing blocks, async consolidation, portability, cloud-platform memory, and long-dialogue inference economics developed across industry.
+- [C-opensource.md](./C-opensource.md) — 21 GitHub repos with star counts, licenses, and representative README quotes: Letta/MemGPT, Mem0, Graphiti, A-MEM, LangMem, Cognee, MemoRAG, EM-LLM, MemoryBank/SiliconFriend, MemoryScope/ReMe, PersonaMem-v2, LlamaIndex memory, gptme, Motorhead, Chroma, OpenMemory MCP, Axolotl, Unsloth, and SimpleMem.
+- [D-commercial.md](./D-commercial.md) — 19 vendors across four sub-segments: Memory-as-a-Service infrastructure (Mem0 [now AWS exclusive], Zep, Letta, Supermemory, Cognee, Personize, GetProfile, Fastino), personalized writing assistants (Lex, Jenova, Lindy, ChatGPT/Claude/Gemini native memory), enterprise CRM memory (Salesforce, Gong, HubSpot), and cloud platform memory (Microsoft Azure AI Foundry, Oracle Database 26ai).
+- [E-practical.md](./E-practical.md) — Practitioner corpus from r/ChatGPT, r/LocalLLaMA, r/LangChain, Hacker News, dev.to, YouTube, and engineering blogs: the transactional-vs-relationship-driven user split, the four canonical DIY failure modes, independent head-to-head benchmarks, security (Rehberger's false-memory injection attack), and 13+ techniques with known trade-offs.
+
+## Synthesis and Legacy
+
+- [SYNTHESIS.md](./SYNTHESIS.md) — the distilled synthesis across all five angles
+- [INDEX.md](./INDEX.md) — legacy category summary, preserved for traceability (the detailed version of this file predating SYNTHESIS.md)
+
+---
+
+<!-- Legacy summary content below — compiled 2026-04-19, updated 2026-04-21 -->
 
 **Project:** Unslop — Humanizing AI output and thinking
 **Compiled:** 2026-04-19
@@ -35,7 +54,7 @@ Memory and personalization have become **the** architectural frontier of the age
 
 **The episodic / semantic / procedural split is re-emerging as a first-class axis.** PRIME, REMem, SEEM, Echo, LangMem, LlamaIndex and gptme all now model these memory types separately — the same taxonomy psychologists use for human autobiographical memory. Systems that collapse everything into one vector store consistently lose on multi-session reasoning.
 
-**Benchmarks have caught up with ambition.** LongMemEval, LoCoMo, PersonalLLM, LongLaMP and ALOE give the field measurable ground truth for long-horizon recall, temporal reasoning, preference heterogeneity, and implicit-preference inference. Current leaderboard shape: Zep ~63.8% LongMemEval / 94.8% DMR, Mem0 ~49% LongMemEval but far cheaper/faster, Letta strong on architecture but "not production-ready."
+**Benchmarks have caught up with ambition.** LongMemEval, LoCoMo, PersonalLLM, LongLaMP, ALOE, RealPref, and HorizonBench give the field measurable ground truth for long-horizon recall, temporal reasoning, preference heterogeneity, implicit-preference inference, and (newly) preference evolution over time. Current leaderboard shape: Zep ~71.2% LongMemEval (independent) / 94.8% DMR; Mem0 ~49% LongMemEval independently (self-reports 93.4%, unexplained gap); SimpleMem +64% over Claude-Mem on LoCoMo (compression-first approach, Jan 2026); Letta strong on architecture but "not production-ready" by practitioner consensus. Benchmark fragmentation is an active credibility problem — vendor numbers and independent numbers diverge by 15–44 points.
 
 **Commercially, memory is now its own category.** Mem0 ($24M, YC), Zep, Letta ($10M), Supermemory ($3M), Cognee ($7.5M), Personize, Fastino, and GetProfile all ship "drop-in memory layer" APIs — and are starting to be commoditized by foundation-model vendors shipping native memory (ChatGPT, Claude, Gemini). Writing-voice products (Lex, Jenova) are the closest commercial analogs to the Unslop thesis and explicitly sell "your signature tone, metaphors, terminology, narrative voice."
 
@@ -90,6 +109,11 @@ That last gap is the core Unslop opportunity: to treat memory not just as retrie
 13. **Reflective Memory Management for Long-Term Personalized Dialogue** — ACL 2025. Online-RL over retrieval policy; +10% LongMemEval. https://aclanthology.org/2025.acl-long.413/
 14. **A Survey on the Memory Mechanism of LLM-based Agents** — ACM TOIS 2025. Best current orientation map. https://dl.acm.org/doi/10.1145/3748302
 15. **EM-LLM** — ICLR 2025. Bayesian-surprise event segmentation; 10M-token context with no fine-tuning. https://arxiv.org/abs/2407.09450
+16. **SimpleMem: Efficient Lifelong Memory for LLM Agents** — arXiv 2601.02553 (Jan 2026). Three-stage compression pipeline; +64% over Claude-Mem on LoCoMo, 30× token reduction. Multimodal. https://arxiv.org/abs/2601.02553
+17. **Personalization Features and LLM Sycophancy** — MIT/Penn State, CHI 2026. Empirically confirms that condensed user profiles in memory are the largest sycophancy driver. The open question listed throughout this research is now closed on the diagnosis side. https://news.mit.edu/2026/personalization-features-can-make-llms-more-agreeable-0218
+18. **Governing Evolving Memory in LLM Agents (SSGM)** — arXiv 2603.11768 (Mar 2026). First governance framework for memory evolution; names Memory Poisoning, Semantic Drift, and Conflict/Hallucination as the three critical failure points. https://arxiv.org/abs/2603.11768
+19. **RealPref: Evaluating Long-Horizon Preference Following** — arXiv 2603.04191 (Mar 2026). 100 user profiles, 1300 preferences, explicit to implicit expression types; shows all current LLMs degrade significantly on implicit long-horizon preference following. https://arxiv.org/abs/2603.04191
+20. **HorizonBench: Long-Horizon Personalization with Evolving Preferences** — arXiv 2604.17283 (Apr 2026). First benchmark specifically targeting user preference *evolution* — fills the "voice drift" benchmark gap identified in this research. https://arxiv.org/abs/2604.17283
 
 ### Must-read posts/essays
 
@@ -105,6 +129,9 @@ That last gap is the core Unslop opportunity: to treat memory not just as retrie
 10. **Eugene Yan — "Training an LLM-RecSys Hybrid for Steerable Recs with Semantic IDs"** (2025). Cleanest pattern for steerable personalization. https://eugeneyan.com/writing/semantic-ids/
 11. **Character.AI — "Optimizing AI Inference"** (2024). Humanized long dialogues have an infra-cost problem. https://blog.character.ai/optimizing-ai-inference-at-character-ai-2/
 12. **Salesforce Engineering — "Agentic Memory"** (2026). Reference architecture for enterprise customer memory. https://engineering.salesforce.com/how-agentic-memory-enables-durable-reliable-ai-agents-across-millions-of-enterprise-users/
+13. **Mem0 — "State of AI Agent Memory 2026"** (Apr 2026). Annual report marking memory's transition from experiment to first-class infrastructure; Mem0 becomes AWS Agent SDK exclusive partner; graph memory declared "in production." https://mem0.ai/blog/state-of-ai-agent-memory-2026
+14. **Microsoft — Azure AI Foundry Memory Reference Architecture** (Mar 31, 2026). User-scoped memory (Cosmos DB + Entra ID) as "Step 4" in standard agent setup — signals enterprise convergence on user-scoped over account-global defaults. https://learn.microsoft.com/en-us/agent-framework/get-started/memory
+15. **Oracle — "Introducing Oracle AI Agent Memory"** (Mar 2026). Counter-thesis: the database, not the vector sidecar, is the right memory primitive for enterprise agents. https://blogs.oracle.com/database/introducing-oracle-ai-agent-memory-a-unified-memory-core-for-enterprise-ai-systems
 
 ### Key open-source projects
 
@@ -120,10 +147,11 @@ That last gap is the core Unslop opportunity: to treat memory not just as retrie
 10. **OpenMemory MCP** — `mem0ai/mem0/openmemory`. Local-first, MCP-shared memory across Cursor / Claude / Windsurf. https://github.com/mem0ai/mem0/tree/main/openmemory
 11. **gptme** — `gptme/gptme`. "Living memory systems": Journal / Tasks / Knowledge / Relationships / Projects. https://github.com/gptme/gptme
 12. **Unsloth** + **Axolotl** — `unslothai/unsloth` / `axolotl-ai-cloud/axolotl`. Make per-user / per-persona LoRA fine-tunes tractable on consumer GPUs. https://github.com/unslothai/unsloth
+13. **SimpleMem** — `aiming-lab/SimpleMem`. Compression-first lifelong memory: semantic compression + recursive consolidation + adaptive retrieval. +64% over Claude-Mem on LoCoMo. https://github.com/aiming-lab/SimpleMem
 
 ### Notable commercial tools
 
-1. **Mem0** (mem0.ai) — $24M raised, ~50k stars, 186M+ monthly API calls. The category leader on setup speed and ecosystem. https://mem0.ai
+1. **Mem0** (mem0.ai) — $24.5M raised, ~48k stars, 186M+ monthly API calls, ~625k PyPI downloads/week. **Exclusive memory provider for AWS Agent SDK** as of Q1 2026. Category leader on setup speed and ecosystem. https://mem0.ai
 2. **Zep / Graphiti** (getzep.com) — Temporal KG + fact invalidation; best benchmarks on long-horizon accuracy. https://www.getzep.com
 3. **Letta** (letta.com) — Memory-first agents, cross-provider portable memory, persona as first-class object. https://www.letta.com
 4. **Supermemory** (supermemory.ai) — "One memory across all your AI tools" + consumer app. https://supermemory.ai
@@ -231,9 +259,15 @@ That last gap is the core Unslop opportunity: to treat memory not just as retrie
 
 10. **Enterprise CRM incumbents moving fast.** Salesforce's published Agentic Memory architecture (mid-2026) + Gong Mission Andromeda (Feb 2026) compress the window for startup wedges in enterprise customer memory.
 
-11. **Benchmark stratification.** LoCoMo, LongMemEval, PersonalLLM, LongLaMP, DMR, BEAM, ALOE are becoming the standard evaluation axes. "Does it work?" has shifted to "what does 85% accuracy mean for my use case?"
+11. **Benchmark stratification — and fragmentation.** LoCoMo, LongMemEval, PersonalLLM, LongLaMP, DMR, BEAM, ALOE, RealPref, HorizonBench are the standard axes. "Does it work?" has shifted to "what does 85% accuracy mean for my use case?" But vendor self-reports diverge from independent tests by 15–44 points — benchmark credibility is now as important as benchmark coverage.
 
 12. **Agentic / procedural memory via auto-edited rules files.** `CLAUDE.md`, `.cursor/rules`, gptme's Knowledge folder. The system's *own* learned style guide.
+
+13. **Memory security governance is now a field.** SSGM (arXiv Mar 2026), InjecMEM, the memory security survey (arXiv Apr 2026), and OWASP Top 10 for Agentic Applications 2026 all name persistent memory as an attack surface. Memory Poisoning, Semantic Drift, and Conflict/Hallucination are the named failure classes. The Rehberger attack is now one instance of a broader class.
+
+14. **Cloud hyperscalers entered the architecture conversation directly (Q1 2026).** Microsoft (Azure AI Foundry user-scoped memory, Cosmos DB + Entra ID), Oracle (Database 26ai Unified Memory Core), and AWS (Mem0 exclusive partner). The container-orchestration-in-2015 analogy: multiple competing architectures, no consensus, every major vendor making different architectural bets.
+
+15. **Compression-first memory is an emerging alternative to extraction-first.** SimpleMem (Jan 2026) and MemoRAG demonstrate that distilling entire dialogue streams into compact indexed units, then consolidating asynchronously, beats extraction-and-append on cost (30× token reduction) and accuracy (+64% LoCoMo vs. Claude-Mem). The "store everything" approach and the "extract key facts" approach are both losing ground to compress-then-consolidate.
 
 ---
 
@@ -247,7 +281,7 @@ That last gap is the core Unslop opportunity: to treat memory not just as retrie
 
 4. **Cold start beyond VRF.** When is it worse than nothing to personalize? Most systems assume more user data is always better; VRF addresses uncertainty but the field lacks principled guidance.
 
-5. **Style contradictions / voice drift.** Temporal fact invalidation handles "Adidas → Nike." Nobody has the equivalent for "voice last March vs. voice now" where the author legitimately evolves.
+5. **Style contradictions / voice drift.** Temporal fact invalidation handles "Adidas → Nike." HorizonBench (Apr 2026) now measures *preference evolution* on the benchmark side — the first such benchmark. No system has yet shipped the equivalent for voice/style drift.
 
 6. **Emotional / affective memory.** Outside MemoryBank/SiliconFriend, very few academic systems — and essentially no commercial ones — explicitly track affect, sentiment trajectories, or relationship state. Arguably the most distinctively human aspect of long-term memory.
 
@@ -263,7 +297,7 @@ That last gap is the core Unslop opportunity: to treat memory not just as retrie
 
 12. **Memory-hallucination trade-off.** When the agent misremembers, is that worse or better than making it up fresh? Essentially unstudied.
 
-13. **Sycophancy × memory.** If the agent remembers "user likes feature X," does that increase sycophantic agreement? Unstudied.
+13. **Sycophancy × memory: now confirmed, not just conjectured.** MIT / Penn State, CHI 2026: condensed user profiles in memory are the single largest driver of sycophancy across five LLMs studied. Accurate persona inference drives mirroring; inaccurate inference does not. No published architectural defense exists. This is now a known product liability for memory-enabled assistants.
 
 14. **Cross-session identity drift of the agent itself.** Generative Agents' reflection gives agents opinions; no work asks how those should evolve coherently across months. Humans have narrative identity; current agents have memory without biography.
 
@@ -271,7 +305,7 @@ That last gap is the core Unslop opportunity: to treat memory not just as retrie
 
 16. **How much memory is the right amount?** Fransys' "more memories ≠ better" is widely cited but there is no published Pareto curve of memory count vs. accuracy vs. latency.
 
-17. **Defenses against memory-as-attack-surface.** Rehberger's indirect-prompt-injection-to-memory has no published canonical defense.
+17. **Defenses against memory-as-attack-surface.** Rehberger's indirect-prompt-injection-to-memory is now one instance of a broader class: InjecMEM (one-interaction poisoning), memory control flow attacks, and semantic drift attacks. SSGM (arXiv Mar 2026) proposes a governance middleware, but no production defense has been validated. OWASP Top 10 for Agentic Applications 2026 names persistent memory as a named risk category.
 
 18. **Reader/audience memory.** All products model one user. None model the reader / audience as a co-memory object — though writing humanness depends heavily on audience context.
 

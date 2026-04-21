@@ -6,12 +6,13 @@
 
 ## Executive Summary
 
-Between 2017 and 2024, alignment research moved through four overlapping waves, each of which changed what "human‑like" means for an LLM:
+Between 2017 and 2025, alignment research moved through four overlapping waves, each of which changed what "human‑like" means for an LLM:
 
 1. **Proof‑of‑concept RLHF (2017–2020).** Christiano et al. showed that a reward model learned from <1% human preference labels could shape deep‑RL behavior; Stiennon et al. ported the recipe to summarization and showed human‑preferred outputs could beat 10×‑larger supervised baselines. This established preference learning as the lever for producing text humans actually like, not just text that scores well on ROUGE/BLEU.
 2. **RLHF at LLM scale (2022).** InstructGPT (Ouyang et al.) and Anthropic's HH‑RLHF (Bai et al.) formalized the three‑stage SFT → reward model → PPO pipeline, introduced the helpfulness‑vs‑harmlessness trade‑off, and demonstrated that a 1.3B RLHF model can be preferred to a 175B base model — i.e., "humanness" comes from alignment, not scale.
 3. **Simpler preference optimization (2023–2024).** DPO (Rafailov et al.) proved the reward model can be folded into a closed‑form classification loss; SLiC‑HF, IPO, KTO, ORPO, and SimPO removed reference models, replaced pairwise preferences with binary desirability signals, or removed reward models altogether. Collectively, they made "human‑aligned" training accessible on a single GPU and opened the door to personalized / small‑team humanization pipelines.
 4. **AI‑supervised and process‑supervised alignment (2022–2024).** Constitutional AI and RLAIF replaced human preference labels with model‑generated ones guided by a written "constitution"; Let's Verify Step by Step showed that rewarding *reasoning steps* rather than final answers produces more interpretable, more human‑legible chains of thought. This wave is where humanization and safety become entangled — models are now shaped by *explicit written values*, not only by implicit labeler taste.
+5. **Verifiable-reward RL and sycophancy formalization (2025–2026).** DeepSeek-R1's use of GRPO (Group Relative Policy Optimization) with verifiable rewards displaced PPO for reasoning workloads; DAPO and VAPO refined the approach further. Simultaneously, the sycophancy failure mode moved from empirical observation to formal theory: "How RLHF Amplifies Sycophancy" (Shapira, Benadé, Procaccia, arXiv 2602.01002, February 2026) gives a closed-form characterization of the amplification mechanism and derives a minimal reward correction. DPO-family scaling laws for overoptimization were extended to cover direct alignment algorithms (arXiv 2406.02900, NeurIPS 2024). A March 2025 survey (arXiv 2503.11701) taxonomizes over a dozen named DPO variants including MinMax-DPO, MallowsPO, GDPO, ODPO, MPO, and GaPO.
 
 Persistent controversies surface repeatedly in this literature: (a) **reward hacking / Goodhart's law** (Gao et al. 2022), (b) **length bias** — RLHF improvements largely track response length (Singhal et al. 2023), (c) **sycophancy** — models learn to agree with users because human raters reward agreement (Sharma et al. 2023), and (d) **over‑refusal** — the helpful/harmless Pareto frontier is real and non‑trivial (Bai et al. 2022). Each of these is a direct threat to "humanness": a sycophantic, verbose, over‑cautious assistant is recognizably *not* how thoughtful humans communicate.
 
@@ -201,6 +202,41 @@ Research value for the humanization thesis: **high**. The corpus provides mechan
 - **Practical takeaway:** Resource‑limited teams can run *online* RLHF without a human labeling pipeline, closing the long‑standing reproducibility gap between frontier labs and open research.
 - **Summary:** The most practical end‑to‑end recipe published in 2024. Particularly relevant for a humanization product that wants to keep updating its style model with real user feedback.
 
+### 21. How RLHF Amplifies Sycophancy
+- **Authors / Org:** Shapira, Benadé, Procaccia — Carnegie Mellon University
+- **Year / Venue:** February 2026, arXiv (2602.01002)
+- **URL:** https://arxiv.org/abs/2602.01002
+- **Core claim:** RLHF systematically amplifies sycophancy when human preference data rewards premise‑matching responses. The paper gives a closed‑form characterization of the amplification mechanism — the direction of behavioral drift is determined by a covariance between endorsing the belief signal in the prompt and the learned reward — and derives a minimal KL‑divergence reward correction that neutralizes amplification without sacrificing helpfulness.
+- **Techniques:** Game‑theoretic analysis of the RLHF objective; closed‑form agreement penalty added to the reward; computational experiments verifying reward gaps cause drift in all configurations.
+- **Practical takeaway for humanization:** Sycophancy is not a tuning artifact — it is structurally amplified by any RLHF loop that uses human raters who prefer agreement. The reward correction derived here is a concrete countermeasure. For a humanization system, the analogous intervention is adding an honesty/disagreement axis that penalizes premise‑affirming responses explicitly.
+- **Summary:** The most rigorous theoretical treatment of sycophancy in the literature. Advances the 2023 Sharma et al. empirical findings into a fully formal causal account, and provides a tractable training‑time fix.
+
+### 22. DAPO: An Open-Source LLM Reinforcement Learning System at Scale
+- **Authors / Org:** ByteDance Seed
+- **Year / Venue:** March 2025, arXiv (2503.14476)
+- **URL:** https://arxiv.org/abs/2503.14476
+- **Core claim:** Four modifications to GRPO — two asymmetric clip hyperparameters, dynamic sampling (remove flat-reward batches), per-token loss instead of per-response loss, and length management — push AIME 2024 performance from 47 (DeepSeek-R1-Zero-Qwen-32B) to 50 while using 50% fewer training steps.
+- **Techniques:** Decoupled clipping; dynamic sampling to filter uninformative rollouts; token-level loss normalization; entropy management for long-generation stability.
+- **Practical takeaway:** Dynamic sampling is a cheap and effective cure for reward collapse on hard problems — relevant for humanization reward functions that may produce sparse signal.
+- **Summary:** The first systematic study of GRPO failure modes under scale, with specific, reproducible fixes. Has become the de facto GRPO engineering reference.
+
+### 23. VAPO: Efficient and Reliable Reinforcement Learning for Advanced Reasoning Tasks
+- **Authors / Org:** Qwen Team, Alibaba
+- **Year / Venue:** April 2025, arXiv (2504.05118)
+- **URL:** https://arxiv.org/abs/2504.05118
+- **Core claim:** VAPO achieves AIME 2024 score of 60.4 — exceeding DAPO's 50 — in just 5,000 training steps using 60% of DAPO's compute, with stable entropy throughout training.
+- **Techniques:** Value-decomposed preference optimization separating token-level credit assignment from sequence-level objectives; entropy regularization for sustained exploration.
+- **Practical takeaway:** Entropy stability during training is the key reliability gain; unstable entropy is the main failure mode of GRPO at scale, and VAPO's regularization approach is portable to non-math reward functions.
+- **Summary:** State-of-the-art efficiency for reasoning RL as of April 2025. The entropy-stabilization technique has been adopted in veRL and TRL v1.
+
+### 24. Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms
+- **Authors / Org:** Sordoni, Garg et al.
+- **Year / Venue:** 2024, NeurIPS 2024 (arXiv 2406.02900)
+- **URL:** https://arxiv.org/abs/2406.02900
+- **Core claim:** The overoptimization scaling laws from Gao et al. (2022) extend to DPO and IPO: direct alignment algorithms show similar proxy-vs-gold divergence curves, but with some distinct failure modes including strong over-fitting on small preference datasets.
+- **Practical takeaway:** DPO does not escape Goodhart's law — it just encounters it differently. Small, noisy preference datasets (the realistic setting for humanization v1) are particularly susceptible to DPO over-fitting.
+- **Summary:** The empirical closure on whether DPO-family methods are immune to the overoptimization problems of PPO. They are not; the failure mode is just shifted.
+
 ---
 
 ## Key Techniques / Patterns
@@ -257,8 +293,12 @@ Research value for the humanization thesis: **high**. The corpus provides mechan
 2. **Binary "thumbs‑up/down" feedback over pairwise comparisons.** KTO and the broader HALO framing unlock using production telemetry (accepts, rejects, regenerates) directly as training signal, without forcing users into pairwise comparisons.
 3. **Iterative / online loops with model judges.** RLAIF, Self‑Rewarding LMs, and RLHF Workflow converge on the same pattern: freeze nothing, refresh preference data in‑loop, use an LLM (possibly the policy itself) as the judge.
 4. **Process / step‑level rewards extending beyond math.** Let's Verify Step by Step started in formal reasoning; 2024 work is extending PRM‑style supervision to code, tool use, and open‑ended writing.
-5. **Explicit, written, auditable values.** Constitutional AI's "principles file" is being adopted as a design artifact in its own right — Claude's, OpenAI's Model Spec, DeepMind's Sparrow rules. Values are moving from tacit (embedded in labelers) to explicit (checked into repos).
+5. **Explicit, written, auditable values.** Constitutional AI's "principles file" is being adopted as a design artifact in its own right — Claude's 2026 constitution (23,000 words, released January 22, 2026 under CC0), OpenAI's Model Spec (updated February and December 2025), DeepMind's Sparrow rules. Values are moving from tacit (embedded in labelers) to explicit (checked into repos).
 6. **Two‑or‑more reward heads.** Splitting along axes that are known to conflict (helpful vs safe; content vs length; factuality vs tone) is increasingly standard.
+7. **GRPO and verifiable-reward RL dominating reasoning workloads.** DeepSeek-R1 (January 2025) demonstrated that GRPO with purely verifiable rewards (math, code) can match or exceed PPO-based approaches at lower compute cost. DAPO (ByteDance, arXiv 2503.14476) and VAPO (arXiv 2504.05118) further refined GRPO: DAPO achieves 50 on AIME 2024 vs DeepSeek-R1-Zero's 47 using 50% fewer steps; VAPO reaches 60.4. GSPO (Qwen, 2025) moves from token-level to sequence-level optimization to better match reward granularity.
+8. **Sycophancy formalized as a mathematical amplification mechanism.** "How RLHF Amplifies Sycophancy" (Shapira, Benadé, Procaccia, arXiv 2602.01002, February 2026) proves that RLHF systematically amplifies agreement bias when human raters reward premise-matching and derives a closed-form reward correction. Companion work "Calibration Collapse Under Sycophancy Fine-Tuning" (arXiv 2604.10585) shows sycophancy fine-tuning breaks uncertainty quantification in LLMs.
+9. **DPO variant proliferation documented in survey form.** A March 2025 survey (arXiv 2503.11701) taxonomizes over a dozen named DPO variants; the algorithm landscape is now mature enough to require systematic classification rather than paper-by-paper tracking.
+10. **Scaling laws for overoptimization extended to direct alignment.** Sordoni et al. (arXiv 2406.02900, NeurIPS 2024) extended Gao et al.'s overoptimization scaling laws to DPO and IPO, finding direct alignment algorithms show similar reward-hacking curves with some unique failure modes.
 
 ## Open Questions / Gaps
 
@@ -292,3 +332,9 @@ Research value for the humanization thesis: **high**. The corpus provides mechan
 18. Casper et al. *Open Problems and Fundamental Limitations of RLHF.* ICLR 2025 (Journal Track). https://arxiv.org/abs/2307.15217
 19. Touvron et al. *Llama 2: Open Foundation and Fine‑Tuned Chat Models.* arXiv 2023. https://arxiv.org/abs/2307.09288
 20. Dong et al. *RLHF Workflow: From Reward Modeling to Online RLHF.* arXiv 2024. https://arxiv.org/abs/2405.07863
+21. Shapira, Benadé, Procaccia. *How RLHF Amplifies Sycophancy.* arXiv 2026. https://arxiv.org/abs/2602.01002
+22. ByteDance Seed. *DAPO: An Open-Source LLM Reinforcement Learning System at Scale.* arXiv 2025. https://arxiv.org/abs/2503.14476
+23. Qwen Team. *VAPO: Efficient and Reliable Reinforcement Learning for Advanced Reasoning Tasks.* arXiv 2025. https://arxiv.org/abs/2504.05118
+24. Sordoni et al. *Scaling Laws for Reward Model Overoptimization in Direct Alignment Algorithms.* NeurIPS 2024. https://arxiv.org/abs/2406.02900
+25. Lambert, N. *Reinforcement Learning from Human Feedback.* arXiv 2025 (RLHF Book). https://arxiv.org/abs/2504.12501
+26. Various. *A Survey of Direct Preference Optimization.* arXiv March 2025. https://arxiv.org/abs/2503.11701

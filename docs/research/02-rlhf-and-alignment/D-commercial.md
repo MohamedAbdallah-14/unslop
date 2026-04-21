@@ -25,13 +25,13 @@ For the "humanizing AI output" project the most directly relevant commercial sig
 
 #### 1. Scale AI — GenAI Platform / RLHF
 - **URL:** https://scale.ai/ · https://scale.ai/comparison
-- **Vendor:** Scale AI (Alexandr Wang)
+- **Vendor:** Scale AI (CEO: Jason Droege as of June 2025; founder Alexandr Wang joined Meta as Chief AI Officer)
 - **Pricing tier:** Enterprise ~$93K/yr typical, up to $400K+; self-serve Data Engine pay-as-you-go with 1,000 free labeling units
 - **Year:** Founded 2016; GenAI Platform / RLHF offering matured 2022–2025
-- **Core feature:** End-to-end RLHF data, SFT data, red teaming, evaluation; tightly integrated with enterprise sales motion and frontier labs
-- **Claims / techniques:** "Quality RLHF data for natural language generation and large language models"; hybrid expert + crowd model; reward signal generation
-- **2-3 sentence summary:** Scale AI is the reference commercial RLHF vendor, with reported 2024 revenue near $870M and deep integrations with OpenAI, Meta, and US government. Pricing is opaque and enterprise-only in practice, which has driven competitors like Surge and Mercor to win share among labs that want tighter quality loops. Self-serve is available but users report unpredictable costs once free credits expire.
-- **Takeaways:** Still the default for large enterprises; but losing frontier-lab share on quality/speed.
+- **Core feature:** End-to-end RLHF data, SFT data, red teaming, evaluation; tightly integrated with enterprise sales motion and frontier labs. Meta acquired a 49% non-voting stake in June 2025 for ~$14.3B (valuing Scale at ~$29B).
+- **Claims / techniques:** "Quality RLHF data for natural language generation and large language models"; hybrid expert + crowd model; reward signal generation. SEAL (Safety, Evaluation, and Alignment Lab) frameworks now provide Meta with privileged access.
+- **2-3 sentence summary:** The Scale AI / Meta deal (June 2025) was the largest transaction in the RLHF data market to date but triggered immediate customer defection: Google, OpenAI, and xAI severed ties rather than share proprietary training data with a Meta-affiliated vendor. Founder Alexandr Wang stepped down as CEO to become Meta's Chief AI Officer. Scale maintains nominal independence but Meta has priority scheduling access to its workforce.
+- **Takeaways:** The Meta deal is a structural market event: Scale is now effectively unavailable to Meta's main competitors, creating a vacuum that Surge AI and Mercor are positioned to fill. Any RLHF data procurement decision in 2025–2026 must account for this conflict-of-interest risk.
 
 #### 2. Surge AI — RLHF platform + domain experts
 - **URL:** https://www.surgehq.ai/
@@ -40,8 +40,8 @@ For the "humanizing AI output" project the most directly relevant commercial sig
 - **Year:** Founded 2020; platform scaled 2022–2026
 - **Core feature:** ~50,000 vetted domain-expert "Surgers"; proprietary quality-control tech; Hemingway-bench (writing), AdvancedIF (instruction following), EnterpriseBench (agentic)
 - **Claims / techniques:** "Rich human feedback"; red teaming; human-crafted reward rubrics yielding "13% gain" on instruction-following via Meta Superintelligence Labs partnership
-- **2-3 sentence summary:** Surge AI is the expert-labeler-specialized rival to Scale, disclosed at $1.2B 2024 revenue and $1.4B in 2025 with only 121 employees — the best evidence that margin-rich, quality-first RLHF data is a real market. Anthropic, OpenAI, Google, Microsoft, and Meta are cited customers. Their benchmarks (Hemingway-bench for writing quality, AdvancedIF for instruction following) directly signal that quality-of-writing RLHF is a vendor wedge, which matters for a humanization product.
-- **Takeaways:** Most directly aligned with humanization angle via Hemingway-bench; bootstrapped profitability demonstrates pricing power.
+- **2-3 sentence summary:** Surge AI grew from $1.2B (2024 revenue) to seeking a $1B capital raise at a $15–25B valuation in July 2025 — its first external financing after bootstrapping to this scale. The Scale AI / Meta deal sent major customers to Surge as the now-unaffiliated alternative; Google, OpenAI, and xAI are cited as newly uncontested Surge opportunities. Hemingway-bench (writing quality), AdvancedIF (instruction following) remain the most relevant benchmarks for humanization alignment.
+- **Takeaways:** Post Scale/Meta deal, Surge is the leading unaffiliated frontier-lab RLHF vendor. The $15–25B valuation range in mid-2025 reflects the market's pricing of expert preference data as a strategic asset, not a commodity.
 
 #### 3. Labelbox — Alignerr Connect / Expert Network
 - **URL:** https://labelbox.com/ · https://labelbox.com/services/alignerr-connect/ · https://www.alignerr.com/
@@ -284,14 +284,16 @@ For the "humanizing AI output" project the most directly relevant commercial sig
 
 ## Emerging Trends
 
-1. **Preference data as a $1B+/vendor business.** Surge AI ($1.2B 2024 revenue) and Scale AI (~$870M) establish that RLHF data is no longer a line item — it is a market larger than most MLOps categories.
-2. **Bootstrapped, low-headcount scale.** Surge at $1.4B revenue with 121 employees suggests very high gross margins on expert-RLHF data; expect more entrants chasing this.
+1. **Preference data as a $1B+/vendor business — with consolidation.** Surge AI ($1.2B+ revenue) and Scale AI (~$870M 2024 revenue) are now the two poles, but the Meta/Scale deal restructured the competitive landscape: Google, OpenAI, and xAI have reallocated budgets away from Scale toward Surge and Mercor. The annotation market is projected at $17–29B by 2030–2032.
+2. **Scale/Meta deal is the defining market event of 2025.** Meta's $14.3B (49% non-voting stake) at ~$29B valuation closed June 2025. It simultaneously elevated Scale AI's valuation and made it effectively off-limits to Scale's existing top-tier AI lab customers. The strategic lesson: RLHF data is treated as a strategic moat, not a commodity service.
 3. **"Taste" and "creativity" enter the RL reward stack.** Contra Labs (creative RLHF) and Surge's Hemingway-bench both productize the idea that aesthetic/tonal quality is a legitimate reward signal. This is the key trend for humanization.
 4. **Verticalized evaluation benchmarks become a GTM wedge.** AdvancedIF (instruction-following), Hemingway-bench (writing), EnterpriseBench/CoreCraft (agentic), APEX (general) — vendors are building and owning the benchmarks their customers measure against, which also generates demand for their labeling services.
 5. **Self-serve DPO pricing is converging around ~$0.50–$3/1M training tokens.** OpenPipe, Together, and Lamini are close enough in pricing that selection is now driven by ergonomics and model support, not raw cost.
-6. **Reinforcement fine-tuning (RFT/GRPO) is the new premium wedge.** Expected to drift down-market the way DPO did in 2024–2025.
+6. **Reinforcement fine-tuning (GRPO/DAPO) is drifting down-market.** Fireworks, Anyscale, and Predibase already expose GRPO-style RL to enterprise customers. Expected to become commodity-priced the way DPO did in 2024–2025.
 7. **Safety/guardrails is separating from training-time alignment.** Alinia, Alignx-style runtime layers are forming a distinct category, implying that a humanization stack will likely compose a fine-tuning vendor + a runtime guardrail vendor.
 8. **Synthetic + programmatic preference amplification is a cost lever.** Snorkel Flow, Anyscale synthetic-DPO, and vendor "AI-assisted QA" (Toloka) all point to the same compression of expert hours into scaled preference signal.
+9. **Expert data at small volume is the new hotspot.** Mercor's "fewer than 1,000 expert examples nearly doubled Pass@1" thesis gained credibility in 2025. The LIMA-style minimalism trend reinforces this: tiny, high-quality expert datasets outperform large generic ones for style/voice alignment specifically.
+10. **Anti-sycophancy enters commercial specifications.** OpenAI's December 2025 Model Spec explicitly names sycophancy as a behavior to suppress. Expect commercial fine-tuning platforms to add anti-sycophancy objectives as a named checkbox in their DPO/RLHF pipelines by 2026.
 
 ---
 
@@ -304,6 +306,8 @@ For the "humanizing AI output" project the most directly relevant commercial sig
 - **Edit-log → preference-pair tooling is thin outside OpenPipe.** A production humanization product generating edit logs has few off-the-shelf options to turn those into DPO-ready data at scale.
 - **Trust/provenance of "human-sounding" claims.** Consumer humanizers (HumanTone) advertise "beats AI detection," but there is no vendor-neutral way to measure "human-ness" of AI writing — a potential benchmark gap worth filling.
 - **Closed vs. open model trade-off is unresolved.** OpenAI's DPO API ties humanization to GPT-4.1 family; open-model DPO (Together/OpenPipe/Anyscale) is cheaper and more controllable but loses access to frontier base-model quality. No vendor bridges this cleanly.
+- **Post-Scale/Meta landscape is still settling.** Google, OpenAI, and xAI defecting from Scale creates vendor fragmentation. How this resolves — whether Surge takes their share entirely, or new entrants emerge — will determine the commercial RLHF data market structure for 2026–2027. Procurement decisions made in the next 12 months may need to be revisited.
+- **Antitrust scrutiny of Meta/Scale deal.** European regulators opened an inquiry into whether Meta's "privileged access" framework constitutes unfair competitive advantage in foundation model development. Outcome could force unwinding or behavioral remedies — a live variable for anyone relying on Scale infrastructure.
 
 ---
 

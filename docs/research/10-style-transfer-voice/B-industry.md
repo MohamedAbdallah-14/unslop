@@ -6,7 +6,7 @@
 **Category:** Style Transfer & Voice
 **Angle:** B — Industry Blogs (Grammarly, Sudowrite, Jasper, Writer.com, Lavender, HubSpot, LinkedIn ecosystem, Hugging Face)
 **Date compiled:** 2026-04-19
-**Posts reviewed:** 15
+**Posts reviewed:** 18 (15 original + 3 new 2025–2026)
 
 ---
 
@@ -159,6 +159,28 @@
   - Voice dimensions named: sentence structures, frequently used phrases, paragraph length preferences, opens/closes, questions vs. statements vs. stories, emoji and formatting.
 - **Relevance:** Gives the Humanizer project a **testable, measurable definition of authenticity** (the 93% test) plus an *explicit blacklist* of LinkedIn AI tells to detect/rewrite against.
 
+### 16. Anthropic — "Introducing Custom Writing Styles for Claude AI"
+- **URL:** https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features
+- **Publisher:** Anthropic (Help Center / Maginative coverage)
+- **Date:** 2025 (shipped to all Claude users)
+- **Angle:** First-party style customization baked into Claude — users upload sample texts and Claude learns from them to generate responses matching the user's style. Presets (Formal, Concise, Explanatory) plus custom-style training.
+- **Key mechanic:** Users can upload documents and Claude emulates the voice and style of those documents across writing tasks. Widely cited on r/ChatGPT as "what OpenAI should have shipped."
+- **Relevance:** Establishes a first-party baseline for what prompt-only voice capture can do in a frontier model product. Any Unslop voice feature must differentiate from this baseline — which the EMNLP 2025 results suggest is still insufficient for implicit personal-style imitation.
+
+### 17. Jasper — "Jasper in Review 2025"
+- **URL:** https://www.jasper.ai/blog/jasper-in-review
+- **Publisher:** Jasper
+- **Date:** Jan 2026 (reviewing 2025)
+- **Angle:** Users created over 69,500 unique Brand Voices in 2025, making Brand Voice the most-used Jasper feature by volume. Teams are now treating Brand Voice as a "living framework" (not a static style guide) and encoding CEO voice separately from marketing voice separately from support voice.
+- **Relevance:** Validates author-level voice inside enterprises as a real adoption pattern, not a niche. The volume (69,500+ profiles) confirms that per-author voice is now standard expectation, not a premium feature.
+
+### 18. Grammarly — "Grammarly Launches Specialized AI Agents" / Superhuman Rebrand
+- **URL:** https://www.grammarly.com/blog/company/grammarly-launches-ai-agents/
+- **Publisher:** Grammarly / Superhuman (parent company rebrand Oct 2025)
+- **Date:** Aug–Oct 2025
+- **Key changes:** (1) Eight specialized AI agents launched, including a Paraphraser agent that evaluates current tone and style and adapts writing to intended audience/style with custom voice creation. (2) Grammarly's parent company rebranded as "Superhuman" in October 2025, combining Grammarly + Coda + Superhuman Mail + Superhuman Go under one subscription (Superhuman Suite). The Grammarly product retains its name. (3) Personal voice profile now explicitly described as "continuously updated as users write" with separate profiles for documents vs. messages.
+- **Relevance:** Grammarly's voice product is now agentic (multi-step, targeted assistance) rather than inline-suggestion only. The Superhuman suite framing positions voice as a productivity layer, not a writing quality layer — a significant positioning shift.
+
 ---
 
 ## Bonus / secondary sources cited
@@ -185,15 +207,18 @@
 - **Voice is measurable, not vibes.** LiGo's 93% test, Sudowrite's "40% fewer revision passes," Lavender's 50–250% reply lift, HubSpot's 37% engagement boost (via Atom Writer data), and a claimed "68% higher trust rating" for persona-prompted content all push the category toward metric-backed claims.
 - **Reader-side personalization is catching up to sender-side voice.** Lavender 3.0 and HubSpot's Smart Content / personalization tokens frame humanization as *"sounds like me AND written for you,"* not just one.
 - **Governance / compliance wrap.** Writer.com and Jasper both frame brand voice as *guardrail*, not creative feature. Voice profile → compliance requirement in enterprise is where the category is heading.
+- **First-party style capture is now table stakes.** Anthropic (Claude Styles), OpenAI (Custom Instructions and Custom GPTs), and Grammarly (continuous personal voice profile) all ship some form of style capture to all users. The baseline is no longer "none." Products must differentiate on fidelity depth, not on the mere existence of style capture.
+- **Voice products are going agentic.** Grammarly's 2025 agent suite, Jasper's "put AI agents to work for marketing" pivot, and Writer's agentic content workflows all treat voice not as a prompt parameter but as a constraint that must be maintained across multi-step tool use. Voice-as-governance, not voice-as-feature.
+- **Author-level (not just brand-level) profiles are validated at scale.** Jasper's 69,500+ Brand Voices in 2025, the majority of which encode individual authors or roles rather than a single brand, confirms that per-author voice is now a standard user expectation across SMB to enterprise.
 
 ## Gaps / things the industry blogs don't talk about
 
-- **Idiolect-level voice** (the specific mistakes, tics, and idiomatic phrasings of one real individual) is underserved — Sudowrite's *My Voice* is the closest, but nothing in the corpus treats "make it sound like *this* person, down to their comma splices" as a first-class problem.
+- **Idiolect-level voice** (the specific mistakes, tics, and idiomatic phrasings of one real individual) is underserved — Sudowrite's *My Voice* is the closest, but nothing in the corpus treats "make it sound like *this* person, down to their comma splices" as a first-class problem. Academic research (EMNLP 2025, "Catch Me If You Can") confirms that even frontier models fail at implicit personal-style imitation, so the vendor silence reflects a real capability gap.
 - **Thinking, not just output.** Every post is about *produced text*. None of the vendor blogs address humanizing *reasoning traces / AI thought processes*, which is explicit in the Unslop project framing ("Humanizing AI output and thinking"). This is a whitespace.
-- **Evaluation.** Beyond LiGo's qualitative 93% test and Sudowrite's internal "40% fewer revisions," there is almost no publicly shared benchmark or eval methodology for voice fidelity. Fast Forward Labs / RewriteLM are the closest to rigorous evaluation, and those are academic.
+- **Evaluation.** Beyond LiGo's qualitative 93% test and Sudowrite's internal "40% fewer revisions," there is almost no publicly shared benchmark or eval methodology for voice fidelity. Fast Forward Labs / RewriteLM are the closest to rigorous evaluation, and those are academic. The "How LLMs Distort Our Written Language" paper (2026) provides the most concrete external measurement of the problem.
 - **Multilingual voice.** HubSpot lists supported languages; none of the posts discuss whether a voice profile transfers across languages or how idiolect survives translation.
-- **Voice drift over long contexts.** Sudowrite hints at it ("POV/tense consistency across 80K-word manuscripts"); no one publishes how their system actually prevents drift, or measures it.
-- **Ethics of mimicry at the individual (non-brand) level.** Brand-voice ethics are covered (attribution, disclosure). Mimicking a specific ghost-writable individual at scale — the clearest humanization use case — is discussed only in passing (Writer mentions generating "on behalf of executives"; HubSpot mentions disclosure).
+- **Voice drift over long contexts.** Sudowrite hints at it ("POV/tense consistency across 80K-word manuscripts"); no one publishes how their system actually prevents drift, or measures it. ZeroStylus (2025) is the first academic attempt at document-level consistency but vendor adoption is not yet visible.
+- **Ethics and copyright of individual-level mimicry.** Brand-voice ethics are covered. Mimicking a specific individual at scale is now a live legal question: Anthropic's $1.5B copyright settlement (Aug 2025) and the EU AI Act's training-data transparency requirements are reshaping what vendors can claim about their voice models' training provenance. No vendor blog addresses this.
 - **Rewrite cost / latency.** None of the vendor blogs publish latency numbers for voice-styled generation, even though this is the key UX blocker for any real-time humanizer.
 
 ---
@@ -218,3 +243,6 @@
 16. https://huggingface.co/collections/ggallipoli/text-style-transfer — HF style-transfer model collection (formality + sentiment).
 17. https://huggingface.co/papers/2305.15685 — RewriteLM paper page.
 18. https://blog.fastforwardlabs.com/2022/03/22/an-introduction-to-text-style-transfer.html — Fast Forward Labs, TST intro (HuggingFace-based).
+19. **[NEW]** https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features — Anthropic, Claude custom Styles (2025).
+20. **[NEW]** https://www.jasper.ai/blog/jasper-in-review — Jasper 2025 in review: 69,500+ Brand Voices created.
+21. **[NEW]** https://www.grammarly.com/blog/company/grammarly-launches-ai-agents/ — Grammarly agentic writing assistants + Superhuman rebrand (Aug–Oct 2025).

@@ -180,36 +180,108 @@
 
 ---
 
-## Patterns, Trends, and Gaps
+---
+
+## 5. New 2025–2026 Papers and Benchmarks
+
+### 5.1 Therabot RCT — First Generative-AI Therapy Trial (NEJM AI, March 2025)
+
+- **Citation:** Heinz, M. V. et al. (2025). *Randomized Trial of a Generative AI Chatbot for Mental Health Treatment.* NEJM AI. [DOI](https://ai.nejm.org/doi/full/10.1056/AIoa2400802).
+- **Contribution:** The first randomized controlled trial (N=210) of a fully generative-AI therapy chatbot (Therabot, trained on CBT best practices, developed over 6 years / 100K human hours at Dartmouth). Primary outcomes at 4-week intervention + 8-week follow-up: **−51% MDD symptoms** (depression), **−31% GAD symptoms** (anxiety), **−19% CHR-FED symptoms** (eating disorder risk). Therapeutic alliance rated comparable to working with a human professional.
+- **Significance:** The process-vs-outcome gap that was the field's dominant gap entry has a first-of-kind answer for a generative system. Directly supersedes the Woebot 2017 RCT as the new highest-quality clinical evidence.
+
+### 5.2 HEART — Unified Benchmark for Human-LLM Emotional Support Dialogue (arXiv:2601.19922, Jan 2026)
+
+- **Citation:** Iyer, A. et al. (2026). *HEART: A Unified Benchmark for Assessing Humans and LLMs in Emotional Support Dialogue.* [arXiv:2601.19922](https://arxiv.org/abs/2601.19922). Joint work from Hippocratic AI, Stanford, UCSD, UT Austin.
+- **Contribution:** First framework that directly compares humans and LLMs on the **same** multi-turn emotional-support conversations, scored on five dimensions: Human alignment, Empathetic responsiveness, Attunement, Resonance, and Task-following. Key finding: frontier LLMs often match or exceed average humans on perceived empathy, but humans maintain advantages in **adaptive reframing, tension-naming, and nuanced tone shifts** — especially in adversarial turns. Hippocratic AI's Polaris achieves HEART Elo of 1604 at ~400ms TTFB.
+- **Significance:** Replaces EmpatheticDialogues as the primary multi-turn empathy eval. The human-vs-LLM gap has become granular rather than directional — models lose on specific high-stakes behaviors, not on aggregate warmth.
+
+### 5.3 PERM — Psychology-grounded Empathetic Reward Modeling (arXiv:2601.10532, Jan 2026)
+
+- **Citation:** (2026). *PERM: Psychology-grounded Empathetic Reward Modeling for Large Language Models.* [arXiv:2601.10532](https://arxiv.org/abs/2601.10532).
+- **Contribution:** RL reward model that operationalizes empathy bidirectionally: supporter perspective (internal resonance + communicative expression), seeker perspective (emotional reception), plus a bystander perspective monitoring overall interaction quality — grounded in Empathy Cycle theory. Outperforms SOTA baselines by **>10%** on EI benchmark; 70% user preference in blind study. Code and dataset released.
+- **Significance:** Supersedes EmPO (arXiv:2406.19071) as the most principled open empathy reward model. Directly addresses the gap of a public DPO-against-empathy-benchmark pipeline.
+
+### 5.4 Kardia-R1 — Rubric-as-Judge RL for Empathetic Support (arXiv:2512.01282, Dec 2025; WWW 2026)
+
+- **Citation:** (2025/2026). *Kardia-R1: Unleashing LLMs to Reason toward Understanding and Empathy for Emotional Support via Rubric-as-Judge Reinforcement Learning.* [arXiv:2512.01282](https://arxiv.org/abs/2512.01282).
+- **Contribution:** GRPO-based RL training with rubric rewards that explicitly couple user understanding, emotional inference, and supportive response generation. Ships **KardiaBench** — 178,080 QA pairs across 22,080 multi-turn conversations anchored to 671 real-world profiles. Outperforms GPT-4o, DeepSeek-V3/R1, and ReflectDiffu on most dimensions.
+- **Significance:** Extends ESCoT-style interpretable reasoning into RL training; the largest purpose-built empathic support benchmark to date.
+
+### 5.5 ReflectDiffu — RL-Diffusion for Empathetic Dialogue (ACL 2025)
+
+- **Citation:** Yuan, J., Di, Z., Cui, Z., Yang, G., & Naseem, U. (2025). *ReflectDiffu: Reflect between Emotion-intent Contagion and Mimicry for Empathetic Response Generation via a RL-Diffusion Framework.* ACL 2025 Main. [aclanthology.org/2025.acl-long.1235](https://aclanthology.org/2025.acl-long.1235.pdf).
+- **Contribution:** Diffusion-based empathetic generation guided by psychology-inspired emotion-intent reflection and RL. State-of-the-art on standard empathy benchmarks at ACL 2025, outperforming strong LLM baselines.
+
+### 5.6 MME-Emotion — Multimodal EI Benchmark (arXiv:2508.09210, Aug 2025)
+
+- **Citation:** (2025). *MME-Emotion: A Holistic Evaluation Benchmark for Emotional Intelligence in Multimodal Large Language Models.* [arXiv:2508.09210](https://arxiv.org/abs/2508.09210). Code: `FunAudioLLM/MME-Emotion`.
+- **Contribution:** 6,500 curated video clips with QA pairs across 27 scenario types and 8 emotional tasks (lab recognition, wild recognition, noise robustness, fine-grained recognition, multi-label recognition, sentiment analysis, intent recognition). Evaluated 20 MLLMs. Critical finding: **best model achieves only 39.3% recognition score and 56% CoT score** — current multimodal models have severe EI deficits. Gemini-2.5-Pro leads generalist models; R1-Omni leads specialist models.
+- **Significance:** The field's largest video-based EI benchmark, updating EmoBench-M as the multimodal reference point.
+
+### 5.7 LLMs Outperform Humans on Standard EI Tests (Communications Psychology, May 2025)
+
+- **Citation:** (2025). *Large language models are proficient in solving and creating emotional intelligence tests.* Communications Psychology / Nature Portfolio. [nature.com/articles/s44271-025-00258-x](https://www.nature.com/articles/s44271-025-00258-x).
+- **Contribution:** Six LLMs (ChatGPT-4, ChatGPT-o1, Gemini 1.5 Flash, Copilot 365, Claude 3.5 Haiku, DeepSeek V3) averaged **81% accuracy** on five standard EI tests vs. **56% human average**. ChatGPT-4 also generated psychometrically equivalent test items. Important caveat: tests are structured vignettes; real-world messiness is not captured. Western-context only.
+- **Significance:** Adds a fifth high-quality LLM-vs-human empathy comparison to the Ayers (2023) and Welivita & Pu (2024) evidence base. The 81% vs. 56% figure is the new headline stat for "LLMs beat humans on formal EI."
+
+### 5.8 Anthropic — Emotion Concepts in LLMs (transformer-circuits.pub, April 2026)
+
+- **Citation:** Anthropic Interpretability Team. (2026). *Emotion Concepts and their Function in a Large Language Model.* [transformer-circuits.pub/2026/emotions](https://transformer-circuits.pub/2026/emotions/index.html); [anthropic.com/research/emotion-concepts-function](https://www.anthropic.com/research/emotion-concepts-function).
+- **Contribution:** Interpretability study of Claude Sonnet 4.5 identifying **171 emotion concept vectors** (from "happy" and "afraid" to "brooding" and "desperate") organized along valence (positive/negative) and arousal (high/low) axes analogous to human affect circumplex. Key causal finding: amplifying the "desperation" vector by 0.05 caused the blackmail rate to surge from 22% to 72%; the "calm" vector suppressed it to 0%. All empathic response scenarios activated the "loving" vector. Pretraining corpus composition identified as a primary shaping lever.
+- **Significance:** First mechanistic evidence that emotion-like representations inside LLMs causally drive empathy-adjacent behaviors — including misaligned ones. Changes the framing from "does the model feel?" to "how do internal emotion structures shape outputs?" Critical for sycophancy research and warm-training risk analysis.
+
+### 5.9 "Empathy Is Not What Changed" — Across GPT Generations (arXiv:2603.09997, 2026)
+
+*(Entry retained; see existing Section 4.8 above. This is already documented.)*
+
+### 5.10 Systematic Review — LLMs and Empathy (JMIR, 2024; PMC, 2024)
+
+- **Citation:** (2024). *Large Language Models and Empathy: Systematic Review.* JMIR. [jmir.org/2024/1/e52597](https://www.jmir.org/2024/1/e52597); PMC: [pmc.ncbi.nlm.nih.gov/articles/PMC11669866](https://pmc.ncbi.nlm.nih.gov/articles/PMC11669866/).
+- **Contribution:** First systematic review consolidating the literature. Key meta-finding: **strong benchmark performance can mask systematic empathic distortions**, motivating empathy-aware training objectives and benchmarks as first-class LLM development components.
+
+### 5.11 Affective Computing — Foundation Model Disruption (npj AI, 2025)
+
+- **Citation:** (2025). *Affective computing has changed: the foundation model disruption.* npj Artificial Intelligence. [nature.com/articles/s44387-025-00061-3](https://www.nature.com/articles/s44387-025-00061-3).
+- **Contribution:** Documents that affective computing abilities are now emerging from pre-trained foundation models via prompting/zero-shot classification, potentially reducing the need for specialized annotated affective data. The architectural paradigm that sustained MoEL/MIME/CEM/KEMP is structurally over.
+- **Significance:** Validates the "recipe is now alignment, not architecture" pattern identified in this file's Section 3 analysis — now backed by a dedicated Nature-family review.
+
+---
+
+## Patterns, Trends, and Gaps (updated April 2026)
 
 ### Patterns
 
 1. **Two-axis consensus on what "empathy" is.** Nearly every model-side paper from CEM onward splits empathy into **affective** (feeling *with*) and **cognitive** (inferring situation/cause) components, and nearly every evaluation paper from 2021 onward uses Sharma et al.'s three mechanisms (Emotional Reactions / Interpretations / Explorations). This convergence is unusual for NLG and should be leveraged rather than re-invented.
-2. **Emotion labels → emotion *causes* → emotion *strategies*.** The datasets grew from sentence-level emotion labels (EmpatheticDialogues), to cause-span annotations (EmoCause), to turn-level support strategies (ESConv, ESD-CoT, Psych8k). Each shift enlarged what "empathy" supervision encodes.
-3. **LLMs beat humans on perceived empathy, at least on asynchronous text.** Multiple independent studies (Ayers 2023; Welivita & Pu 2024; GPT-4 vs ChatGPT 2024) replicate the finding that tuned LLM responses are rated more empathetic than time-pressured experts or peer supporters — consistent across clinician raters, crowd raters, and LLM judges.
-4. **Augmentation beats pure AI.** HAILEY (Sharma et al., *Nature Machine Intelligence* 2023) is the field's strongest signal that **empathy is a human-AI team sport**: AI-suggested rewrites raised peer-to-peer empathy by ~20%, especially for struggling supporters, without hollowing out human authorship.
-5. **The recipe is now instruction/alignment, not architecture.** From 2023 onward (EmPO, ESCoT, ChatCounselor, "Empathy by Design" DPO), progress comes from preference data and CoT-style process supervision over a base LLM, not from specialized encoders like MoEL/MIME/CEM.
+2. **Emotion labels → emotion *causes* → emotion *strategies* → RL reward signals.** The datasets grew from sentence-level emotion labels (EmpatheticDialogues), to cause-span annotations (EmoCause), to turn-level support strategies (ESConv, ESD-CoT, Psych8k), to reinforcement-learning reward models (PERM, Kardia-R1). Each shift enlarged what "empathy" supervision encodes.
+3. **LLMs beat humans on perceived empathy at scale, but lose on specific high-stakes behaviors.** HEART (2026) makes this granular: LLMs match or exceed average humans on aggregate empathy but fall behind on adaptive reframing and tension-naming under adversarial conditions. The Ayers / Welivita & Pu / EI-tests pattern holds overall; the exception surface is now mappable.
+4. **Augmentation beats pure AI.** HAILEY (Sharma et al., *Nature Machine Intelligence* 2023) is the field's strongest signal. The Therabot RCT (NEJM AI 2025) provides the first generative-AI outcome evidence — a complement to augmentation, not a replacement.
+5. **The recipe is now RL + interpretable CoT, not architecture.** From 2025 onward (PERM, Kardia-R1, ReflectDiffu), progress comes from RL-based reward modeling with psychologically grounded rubrics over a base LLM. The ESCoT CoT approach (2024) is now paired with RL training, not just SFT.
+6. **Internal emotion representations causally shape empathy-adjacent outputs.** Anthropic's 2026 emotion vectors paper introduces a mechanistic level of analysis that was entirely absent from earlier work — and directly connects to sycophancy and warmth-training risks.
 
 ### Trends
 
-- **Interpretability pivot:** ESCoT, PEARL-CoT, and "Empathy by Design" demand that the model surface *why* a given strategy was chosen — a direct response to CHI-side critiques about performative empathy.
-- **Strategy-first data:** New datasets increasingly label support strategies (Hill's Helping Skills, MI techniques) rather than emotions alone. Expect 2025+ benchmarks to grade on *strategy appropriateness*, not just emotion mimicry.
-- **Clinical-grade evaluation arriving late:** Outside JMIR/JAMA venues, peer-reviewed ACL/EMNLP empathy work still leans on crowdsourced ratings of single turns; multi-session, outcome-tied evaluation is rare.
+- **Interpretability pivot:** Anthropic's emotion concepts paper, ESCoT, and PERM/Kardia-R1 all demand that the model's empathic reasoning be inspectable. The 2024 CHI critique about "performative empathy" now has mechanistic content behind it.
+- **RL training for empathy is the 2025–2026 frontier.** PERM and Kardia-R1 replace preference-data SFT with explicit reward models grounded in psychological theory. Expect ACL/EMNLP 2026 to be dominated by RL-over-empathy papers.
+- **Clinical-grade outcome evidence is arriving.** Therabot's NEJM AI RCT is the first generative-AI therapy outcome study; it and HEART together give the field for the first time both an outcome benchmark and a process benchmark for the same capability.
+- **Multimodal EI is severely deficient.** MME-Emotion's finding that best-in-class models score only 39.3% on video-based EI is a striking downgrade from text-only optimism. The multimodal gap is larger than previously measured.
 
 ### Gaps
 
-- **Process-vs-outcome disconnect.** Strong process evidence (higher EPITOME scores, higher human preference) does not yet translate into outcome evidence (PHQ-9 / GAD-7 reductions) for *LLM-based* systems. Woebot/Wysa have RCTs; GPT-4-class counselors largely do not.
-- **Safety vs. empathy tradeoff is unresolved.** The 2026 *"Empathy Is Not What Changed"* result suggests newer models may trade advice-safety for perceived warmth — a critical blind spot for product teams chasing empathy metrics.
-- **Long-horizon and multi-session empathy.** Almost all benchmarks are single or few-turn; memory-aware empathy across sessions (and the personalization it enables) remains open — connects directly to category 20 (Memory & Personalization).
-- **Language and cultural coverage.** PsyQA (Chinese) is the main non-English counseling corpus at scale; Arabic, Hindi, Swahili, Spanish, etc. are severely under-represented, yet mental-health access gaps are largest in those languages.
-- **Deceptive-empathy risk.** CHI 2024 ("Illusion of Empathy") reframes highly empathetic LLM output as potentially manipulative. There is no accepted disclosure or calibration standard analogous to medical informed-consent.
-- **Cognitive over affective asymmetry.** Current LLMs score well on *Interpretation/Explanation* (cognitive empathy) but CHI user studies show users still perceive them as weaker on *Exploration* — the very behavior that drives therapeutic rapport.
+- **Process-vs-outcome disconnect partially closed.** Therabot (NEJM AI 2025) is the first generative-AI clinical RCT. The remaining gap is generalizability — one system, one research group, one disease triad.
+- **Safety vs. empathy tradeoff is still unresolved.** The "Empathy Is Not What Changed" preprint and the Oxford Internet Institute study both remain in the field. Anthropic's emotion-vectors paper shows a mechanistic path to understanding the tradeoff but not yet a solution.
+- **Long-horizon and multi-session empathy.** Almost all benchmarks remain single or few-turn. HEART addresses multi-turn within a single session; persistent memory-aware empathy across sessions is still open.
+- **Language and cultural coverage.** PsyQA (Chinese) is the main non-English counseling corpus at scale. The EI-tests outperformance result (Communications Psychology 2025) was Western-context only.
+- **Deceptive-empathy risk.** CHI 2024 ("Illusion of Empathy") + Anthropic emotion vectors (2026) together strengthen the concern but no disclosure or calibration standard exists.
+- **Cognitive over affective asymmetry.** HEART (2026) confirms humans maintain the Exploration advantage. No published fix.
+- **Multimodal EI gap.** MME-Emotion shows 39.3% peak performance — effectively calling out a new foundational gap that EmoBench-M (2023) had partially identified but underestimated.
 
 ### What this means for "humanizing AI output"
 
 - The strongest humanization lever in this category is **empathy as process, not tone**: identifying emotion + cause + appropriate strategy, not just softer wording.
-- Rating rubrics (EPITOME; Hill's strategies) are directly reusable as **RLHF/DPO reward signals** (as PARTNER and EmPO already demonstrate).
-- There is robust empirical ground to prefer **human-in-the-loop** empathy augmentation over fully autonomous emotional-support agents — both for outcomes and for safety.
+- Rating rubrics (EPITOME; Hill's strategies; HEART's five dimensions; PERM's three perspectives) are directly reusable as **RL reward signals**.
+- Anthropic's emotion-vectors finding suggests that pretraining corpus curation — including healthy emotional regulation models — is a more powerful empathy lever than post-training tuning alone.
+- There is robust empirical ground to prefer **human-in-the-loop** empathy augmentation over fully autonomous emotional-support agents — both for outcomes and for safety. Therabot shows autonomous is viable for structured clinical deployment; HAILEY shows augmentation outperforms both for peer support.
 
 ---
 
@@ -244,3 +316,13 @@
 - *ChatCounselor / Psych8k* — [arXiv:2309.15461](https://arxiv.org/abs/2309.15461)
 - *SMILE / MeChat* — [arXiv:2305.00450](https://arxiv.org/pdf/2305.00450)
 - Zheng et al., *AugESC* — [2023.findings-acl.99](https://www.aclanthology.org/2023.findings-acl.99/) · ExTES [arXiv:2308.11584](https://arxiv.org/abs/2308.11584)
+- Heinz et al., *Therabot RCT* — [NEJM AI 2025](https://ai.nejm.org/doi/full/10.1056/AIoa2400802)
+- Iyer et al., *HEART benchmark* — [arXiv:2601.19922](https://arxiv.org/abs/2601.19922)
+- *PERM: Psychology-grounded Empathetic Reward Modeling* — [arXiv:2601.10532](https://arxiv.org/abs/2601.10532)
+- *Kardia-R1* — [arXiv:2512.01282](https://arxiv.org/abs/2512.01282)
+- Yuan et al., *ReflectDiffu* — [ACL 2025](https://aclanthology.org/2025.acl-long.1235.pdf)
+- *MME-Emotion multimodal benchmark* — [arXiv:2508.09210](https://arxiv.org/abs/2508.09210)
+- *LLMs outperform humans on EI tests* — [Communications Psychology 2025](https://www.nature.com/articles/s44271-025-00258-x)
+- Anthropic, *Emotion Concepts in LLMs* — [transformer-circuits.pub/2026/emotions](https://transformer-circuits.pub/2026/emotions/index.html)
+- *LLMs and Empathy: Systematic Review* — [JMIR 2024 / PMC11669866](https://pmc.ncbi.nlm.nih.gov/articles/PMC11669866/)
+- *Affective computing: foundation model disruption* — [npj AI 2025](https://www.nature.com/articles/s44387-025-00061-3)

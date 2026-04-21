@@ -4,6 +4,8 @@
 **Research scope:** Industry blogs and essays where practitioners and researchers frame LLMs through the lens of *cognitive architectures* — memory, planning, reflection, world models, and brain-inspired computation.
 **Research value: high** — A dense, convergent set of industry posts from both the builder camp (LangChain, Letta/MemGPT, Anthropic, Sakana) and the critic camp (Marcus, Numenta/Hawkins, Laird) has stabilized around a shared vocabulary (memory blocks, context engineering, reflection, world models, sensorimotor grounding) that is directly applicable to a "humanize AI" project.
 
+**Last updated: April 2026. Covers April 2025–April 2026.**
+
 ---
 
 ## Research Posts
@@ -58,6 +60,8 @@
 - **Core claim:** Standard LLMs are stateless; each interaction is isolated. "Stateful agents" — agents with persistent, self-editing memory that actually *changes* during deployment — are the missing link to systems that learn in production rather than only during training.
 - **Relevance to humanizing AI:** Humans feel human partly because they update their models of us over time. Letta's thesis is that without agent-side state, no amount of prompt craft produces that texture.
 - **Notable detail:** Letta's follow-up posts (*Sleep-time Compute*, Apr 2025; *Memory Blocks*, May 2025; *Agent Memory: How to Build Agents that Learn and Remember*, Jul 2025; *Continual Learning in Token Space*, Dec 2025) iterate on the same thesis: learning in *token space* (memory edits) rather than weight space is the practical path to agents that improve over their deployed lifetime.
+
+**2025–2026 product updates:** Letta shipped **Letta Evals** (Oct 2025, open-source evaluation framework for stateful agents), **Conversations API** (Jan 2026, shared memory across parallel sessions), **Letta Code** (Dec 2025, #1 model-agnostic on Terminal-Bench), and the **Letta Code App** (Apr 2026, desktop-based deeply personalized coding agent). Moved from `v0.x` to stable release track. `mem0ai/mem0` has emerged as the competing model-agnostic memory API (~48K GitHub stars by Oct 2025 per secondary sources); Letta positions as a complete agent runtime vs. Mem0's drop-in memory layer.
 
 ### 6. Letta — *MemGPT is now part of Letta*
 - **Author:** Charles Packer and Sarah Wooders
@@ -173,6 +177,33 @@
 - **Relevance to humanizing AI:** One of the most overt neuroscience-borrowed metaphors in the current industry-blog literature. Positions "feels more human" as an architectural property of when/how memory is consolidated, not just what is stored.
 - **Notable detail:** Companion research post *Continual Learning in Token Space* (Dec 2025) doubles down: "learning in token space is the key to building AI agents that truly improve over time… agents that can carry their memories across model generations will outlast any single foundation model."
 
+### 17. Mem0 — *State of AI Agent Memory 2026*
+- **Author:** Mem0 team (Prateek Chhikara et al.)
+- **Source:** mem0.ai/blog
+- **Date:** Early 2026
+- **URL:** https://mem0.ai/blog/state-of-ai-agent-memory-2026
+- **Core claim:** Contextual memory is crossing from novel to table stakes for enterprise agentic deployments in 2026. Graph memory (which preserves relational and temporal connections between facts) has moved from experimental to production; vector memory alone can no longer serve agentic use cases that require contradiction detection or temporal reasoning. The Mem0 ECAI 2025 paper benchmarks ten approaches on LOCOMO: full-context wins on accuracy (72.9%) but is not production-viable; Mem0 graph (68.4%) at 2.59 s p95 latency and ~1.8K tokens is the current production-viable sweet spot.
+- **Relevance to humanizing AI:** Establishes the empirical benchmark: pure retrieval can't replace relational memory. The "feels like it remembers me" quality requires graph edges, not just vectors.
+- **Notable detail:** Mem0's own benchmark shows its system achieves "26% relative improvement in LLM-as-a-Judge metric over OpenAI" — meaning more human-preferred responses, not just more accurate ones. A self-serving result but consistent with CoALA's thesis.
+
+### 18. SOFAI — *Fast, Slow, and Metacognitive Thinking in AI*
+- **Author:** Luca Longo, Matteo Matteucci et al.
+- **Source:** npj Artificial Intelligence (Nature)
+- **Date:** 2025
+- **URL:** https://www.nature.com/articles/s44387-025-00027-5
+- **Core claim:** SOFAI (Slow and Fast AI) is a multi-agent architecture with a fast System-1 solver, a slow System-2 solver, and a **metacognitive module** that selects between them and reflects on past choices. Combining the two modalities via a metacognitive arbitrator yields higher decision quality with *less* resource consumption than either alone, and produces emergent human-like behaviors including skill learning, adaptability, and cognitive control. SOFAI-v2 adds real-time metacognitive governance; SOFAI-LM coordinates a fast LLM with a slower LRM.
+- **Relevance to humanizing AI:** The most explicit current instantiation of a separate metacognitive layer that arbitrates System 1 vs 2 in a production-oriented framework. Provides the architectural template that ACPO (arXiv:2505.16315) formalizes via RL.
+- **Notable detail:** "Metacognitive AI" is now a live research category at npj AI — not just an academic framing.
+
+### 19. Hume AI — *Introducing EVI 3 and EVI 4*
+- **Author:** Hume AI team
+- **Source:** hume.ai/blog
+- **Date:** May 2025 (EVI 3); January 2026 (EVI 4-mini)
+- **URL:** https://www.hume.ai/blog/introducing-evi-3
+- **Core claim:** EVI 3 (May 2025) is a speech-to-speech foundation model that can speak expressively with any voice (including cloned voices with 30 seconds of audio) without fine-tuning, at <300 ms latency; captures rhythm, tone, and personality from audio samples. EVI 4-mini (Jan 2026) adds multilingual support across 11 languages.
+- **Relevance to humanizing AI:** The most prosody-centric cognitive architecture in production now has cross-lingual emotional expressiveness. Hume AI also published a joint blog with Anthropic on emotionally intelligent Claude Voice interactions, marking a convergence between reasoning-first labs and affect-first platforms that was absent in prior years.
+- **Notable detail:** EVI 3 outperforms OpenAI GPT-4o and Gemini Live API on practical latency (1.2 s). Hume has also raised $50M Series B, giving it production-scale runway.
+
 ---
 
 ## Patterns and Trends
@@ -203,6 +234,15 @@ Letta's *Stateful Agents* post (Feb 2025) and *Continual Learning in Token Space
 
 ### 9. Convergent multi-tier memory
 Every serious practitioner post — MemGPT/Letta, LangChain, Anthropic, CoALA-grounded framework posts — ends up with some variant of **small working/kernel context + larger persistent external store + policy layer between them**. The shape is stable across ecosystems even when the terminology differs.
+
+### 10. Graph memory has become the dominant production frontier (2025–2026)
+By early 2026, vector-only memory is the legacy approach. Graph memory — preserving relational, temporal, and causal connections between facts — is in production across Mem0, Zep, and custom stacks. The Mem0 ECAI 2025 benchmark makes this concrete: graph-enhanced retrieval improves both accuracy and human preference. Practitioners now distinguish vector memory (semantic similarity) from graph memory (relational traversal) as distinct tools for distinct needs.
+
+### 11. Metacognition productized as a separate agent layer
+SOFAI (npj AI 2025), "Language Models Coupled with Metacognition" (Aug 2025), and the ICML 2025 position paper on intrinsic metacognitive learning all treat the metacognitive module as a distinct architectural component — not just an implicit property of a long context window. This framing is influencing industry: SOFAI-LM coordinates a fast LLM with a slower LRM via a metacognitive arbitrator, which is now more principled than LangChain's "Reflexion" pattern from 2024.
+
+### 12. Reasoning-first × affect-first convergence starting (2025)
+The previously total vocabulary gap between reasoning labs and affect-first platforms shows early signs of closing. Hume AI's joint post with Anthropic on emotionally intelligent Claude Voice (2025), EVI 3's integration with Claude as an LLM backbone, and Inworld's pivot toward a broader "Agent Runtime" rather than purely NPC use signal that the two camps are beginning to overlap. The gap has not closed — but it is no longer a hard wall.
 
 ---
 

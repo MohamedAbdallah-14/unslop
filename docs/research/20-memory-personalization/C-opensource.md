@@ -4,6 +4,7 @@
 
 **Project:** Unslop (humanizing AI output and thinking)
 **Research date:** 2026-04-19
+**Last updated:** 2026-04-21
 **Scope:** The open-source stack for persistent LLM memory, user personalization, and lightweight fine-tuning that enables an assistant to "remember who I am, how I talk, and what I care about" across sessions — MemGPT/Letta, mem0, Zep/Graphiti, LangMem, LlamaIndex memory blocks, A-MEM, MemoryBank, MemoRAG, EM-LLM, Cognee, MemoryScope/ReMe, Motorhead, gptme, ChromaDB memory recipes, plus personalized fine-tuning tooling (Axolotl, Unsloth, PersonaMem-v2).
 
 ---
@@ -19,7 +20,7 @@ Memory is the single most active sub-ecosystem in open-source agent tooling in 2
 | # | Repo | Stars (approx) | License | Language | Status | Relevance to humanization |
 |---|---|---|---|---|---|---|
 | 1 | [letta-ai/letta](https://github.com/letta-ai/letta) (ex-MemGPT) | ~22.1k | Apache 2.0 | Python | Active (v0.16.7, Mar 2026) | Stateful agents with persistent **memory blocks**; self-editing context — originator of the "OS for LLMs" metaphor |
-| 2 | [mem0ai/mem0](https://github.com/mem0ai/mem0) | ~53.5k | Apache 2.0 | Python / TS | Active (v2.0.0, Apr 2026) | Universal memory layer: User/Session/Agent levels; LoCoMo 91.6, LongMemEval 93.4 |
+| 2 | [mem0ai/mem0](https://github.com/mem0ai/mem0) | ~48k | Apache 2.0 | Python / TS | Active (v2.x, Apr 2026); AWS Agent SDK exclusive provider | Universal memory layer: User/Session/Agent levels; LoCoMo 66.9% (independent), LongMemEval self-reported 93.4 |
 | 3 | [getzep/graphiti](https://github.com/getzep/graphiti) | ~25.1k | Apache 2.0 | Python | Active (v0.28.2, Mar 2026) | Temporal knowledge graph memory; tracks how facts **change over time** with provenance |
 | 4 | [agiresearch/A-mem](https://github.com/agiresearch/A-mem) | ~976 | MIT | Python | Active (NeurIPS 2025) | **Zettelkasten-inspired** agentic memory — notes auto-link and evolve as new memories arrive |
 | 5 | [langchain-ai/langmem](https://github.com/langchain-ai/langmem) | ~1.4k | MIT | Python | Active (v0.0.30) | LangGraph-native semantic / episodic / procedural memory SDK — official replacement for deprecated `ConversationBufferMemory` lineage |
@@ -38,6 +39,7 @@ Memory is the single most active sub-ecosystem in open-source agent tooling in 2
 | 18 | [mem0ai/mem0 /embedchain](https://github.com/mem0ai/mem0/tree/main/embedchain) | (absorbed) | Apache 2.0 | Python | Maintained inside mem0 | Personalization-oriented RAG framework; predecessor of mem0's ingest layer |
 | 19 | [axolotl-ai-cloud/axolotl](https://github.com/axolotl-ai-cloud/axolotl) | ~8k+ | Apache 2.0 | Python | Active (v0.16.1, Apr 2026) | YAML-driven LoRA/QLoRA/DPO/GDPO fine-tuning — produces **style-personalized** base models |
 | 20 | [unslothai/unsloth](https://github.com/unslothai/unsloth) | ~40k+ | Apache 2.0 | Python / Triton | Active | 2×–30× faster LoRA/QLoRA with 70–80% less VRAM — makes per-user / per-persona fine-tunes tractable on consumer GPUs |
+| 21 | [aiming-lab/SimpleMem](https://github.com/aiming-lab/SimpleMem) | — | OSS | Python | Active (Jan 2026); ICLR 2026 submission | Efficient lifelong memory via semantic lossless compression: 3-stage pipeline (compress → consolidate → retrieve); +26.4% mean F1, 30× token reduction, +64% over Claude-Mem on LoCoMo; multimodal |
 
 ---
 
@@ -97,6 +99,9 @@ Memory is the single most active sub-ecosystem in open-source agent tooling in 2
 **Unsloth — `unslothai/unsloth`:**
 > "2× faster training and 70% less VRAM with zero accuracy loss… 10× faster than Flash Attention 2 on single GPUs, up to 30× on multi-GPU." Supports "full fine-tuning, LoRA, QLoRA, GRPO, PPO, vision, TTS, embeddings, multimodal" across 1B–405B models on NVIDIA/AMD/Intel GPUs. Practically: makes per-user style fine-tuning affordable.
 
+**SimpleMem — `aiming-lab/SimpleMem`:**
+> "SimpleMem proposes a three-stage pipeline: Semantic Structured Compression, which applies entropy-aware filtering to distill unstructured interactions into compact, multi-view indexed memory units; Recursive Memory Consolidation, an asynchronous process that integrates related units into higher-level abstract representations; and Adaptive Query-Aware Retrieval, which dynamically adjusts retrieval scope based on query complexity." Results: +26.4% mean F1 improvement, 30× inference-time token reduction, +64% over Claude-Mem on LoCoMo. Supports text and multimodal inputs.
+
 ---
 
 ## Patterns
@@ -113,9 +118,11 @@ Memory is the single most active sub-ecosystem in open-source agent tooling in 2
 ## Trends
 
 - **LangChain's memory modules are a cautionary tale** — three deprecations in 18 months have pushed the frontier into purpose-built projects (Letta, mem0, LangMem, Zep), not chain-coupled helpers. Any new dependency on a framework-bound memory API in 2026 is fragile.
-- **MCP is becoming the integration substrate for memory.** OpenMemory MCP, Graphiti MCP, Letta MCP — once a user's memory is exposed as an MCP server, any compliant client inherits it. Expect this to be the dominant interop pattern by end of 2026.
+- **MCP is becoming the integration substrate for memory.** OpenMemory MCP, Graphiti MCP, Letta MCP — once a user's memory is exposed as an MCP server, any compliant client inherits it. Expect this to be the dominant interop pattern by end of 2026. Mem0's MCP Plugin for AI Editors (launched Mar–Apr 2026) ships 9 MCP memory tools with lifecycle hooks and cloud MCP server support.
 - **Episodic event segmentation is quietly crossing from neuroscience to production.** EM-LLM (Bayesian surprise) and A-MEM's note-linking are direct imports from event-boundary theories in cognitive psychology. For a humanization project that wants the AI's recall to feel like *"oh yeah, that conversation last week"* instead of *"here are 5 similar chunks,"* this is the right thread to pull.
 - **Fast, consumer-grade fine-tuning has become the back half of personalization.** Unsloth on a 4060/4070 + Axolotl YAML configs + a few hundred examples of the target voice is now a credible nightly pipeline — no longer research-only.
+- **Compression-first memory (SimpleMem, MemoRAG) is emerging as an alternative to extraction-first memory.** Rather than extracting salient facts and appending them, compression-first systems distill entire dialogue streams into compact indexed units, then consolidate asynchronously. +64% over Claude-Mem on LoCoMo and 30× token savings make this the highest-efficiency approach published as of Apr 2026.
+- **Enterprise cloud vendors entered the architecture conversation directly.** Microsoft (Azure AI Foundry, Mar 2026), Oracle (Database 26ai, CY2026), and AWS (Mem0 as exclusive partner for Agent SDK) are all making architectural bets about where memory lives. The container-orchestration-in-2015 analogy: multiple competing architectures, no consensus yet.
 
 ## Gaps
 

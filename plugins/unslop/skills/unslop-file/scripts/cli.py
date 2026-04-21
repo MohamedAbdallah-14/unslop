@@ -139,6 +139,92 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--structural",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help=(
+            "Phase 1 structural pass: split overlong sentences at safe "
+            "boundaries and collapse parallel bullet-soup. Default: on for "
+            "balanced/full, off for subtle. Use --no-structural to disable."
+        ),
+    )
+    parser.add_argument(
+        "--soul",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help=(
+            "Phase 5 soul pass: contraction lift (do not → don't, it is → it's "
+            "where safe). Default: on for balanced/full, off for subtle. Use "
+            "--no-soul for highly formal content that shouldn't contract."
+        ),
+    )
+    parser.add_argument(
+        "--voice-sample",
+        type=Path,
+        default=None,
+        help=(
+            "Path to a text sample whose stylometric profile the rewrite should "
+            "match. LLM mode only; ignored in --deterministic. The sample's "
+            "sentence-length μ/σ, contraction rate, punctuation rates, and "
+            "pronoun ratios are measured and injected into the rewrite prompt "
+            "as explicit numeric targets."
+        ),
+    )
+    parser.add_argument(
+        "--voice-memory",
+        action="store_true",
+        help=(
+            "Use the persisted style memory (see --save-voice-profile) as the "
+            "voice sample. Silently ignored if no memory is on file. Explicit "
+            "--voice-sample always wins if both are provided."
+        ),
+    )
+    parser.add_argument(
+        "--save-voice-profile",
+        type=Path,
+        default=None,
+        metavar="PATH",
+        help=(
+            "Measure the stylometric profile of the sample at PATH and persist "
+            "it to the style-memory file ($UNSLOP_STYLE_MEMORY or "
+            "$XDG_CONFIG_HOME/unslop/style-memory.json). One-shot command; "
+            "exits after saving."
+        ),
+    )
+    parser.add_argument(
+        "--clear-voice-profile",
+        action="store_true",
+        help="Delete the persisted style memory. One-shot; exits after.",
+    )
+    parser.add_argument(
+        "--detector-feedback",
+        action="store_true",
+        help=(
+            "Run the output through an AI-text detector and re-humanize with "
+            "escalating intensity until the score falls below target. Opt-in; "
+            "first run downloads ~500MB of HF weights (or run `python3 -m "
+            "unslop.scripts.fetch_detectors` ahead of time)."
+        ),
+    )
+    parser.add_argument(
+        "--detector-target",
+        type=float,
+        default=0.5,
+        help="Stop escalating once the detector score drops below this. Default 0.5.",
+    )
+    parser.add_argument(
+        "--detector-max-iterations",
+        type=int,
+        default=3,
+        help="Cap how many escalation steps to try. Default 3.",
+    )
+    parser.add_argument(
+        "--detector-model",
+        choices=("tmr", "desklib"),
+        default="tmr",
+        help="Which detector to use. TMR (~500MB) is the default.",
+    )
+    parser.add_argument(
         "--quiet",
         "-q",
         action="store_true",
@@ -152,11 +238,41 @@ def _process_stdin(args: argparse.Namespace) -> int:
     from .validate import validate
 
     text = sys.stdin.read()
-
-    if args.deterministic or not _llm_available():
-        humanized, report = humanize_deterministic_with_report(text, intensity=args.mode)
+    feedback = None
+    voice_sample = None
+    voice_profile = None
+    if args.voice_sample is not None:
+        voice_sample = args.voice_sample.read_text(encoding="utf-8")
     else:
-        humanized = humanize_llm(text, intensity=args.mode)
+        voice_profile = _resolve_voice_profile(args)
+
+    if args.detector_feedback:
+        from .detector import DetectorUnavailable, feedback_loop
+
+        try:
+            outcome = feedback_loop(
+                text,
+                target_probability=args.detector_target,
+                max_iterations=args.detector_max_iterations,
+                detector=args.detector_model,
+            )
+        except DetectorUnavailable as exc:
+            sys.stderr.write(f"detector feedback disabled: {exc}\n")
+            return 1
+        humanized = outcome.final_text
+        feedback = outcome
+        report = None
+    elif args.deterministic or not _llm_available():
+        humanized, report = humanize_deterministic_with_report(
+            text, intensity=args.mode, structural=args.structural, soul=args.soul
+        )
+    else:
+        llm_kwargs: dict = {"intensity": args.mode}
+        if voice_sample is not None:
+            llm_kwargs["voice_sample"] = voice_sample
+        if voice_profile is not None:
+            llm_kwargs["voice_profile"] = voice_profile
+        humanized = humanize_llm(text, **llm_kwargs)
         report = None
 
     result = validate(text, humanized)
@@ -173,7 +289,15 @@ def _process_stdin(args: argparse.Namespace) -> int:
         }
         if report is not None:
             payload["report"] = report.to_dict()
+        if feedback is not None:
+            payload["detector_feedback"] = feedback.to_dict()
         sys.stderr.write(json.dumps(payload, indent=2) + "\n")
+    elif feedback is not None and not args.quiet:
+        sys.stderr.write(
+            f"detector: {feedback.original_probability:.1%} → "
+            f"{feedback.final_probability:.1%} "
+            f"({feedback.reason_stopped})\n"
+        )
 
     return 0 if result.ok else 2
 
@@ -192,6 +316,69 @@ def _emit_diff(out, label: str, before: str, after: str) -> None:
         tofile=f"{label} (humanized)",
     )
     out.writelines(diff)
+
+
+def _process_file_detector_feedback(
+    path: Path,
+    args: argparse.Namespace,
+    write: bool,
+    report_accumulator: list[dict],
+) -> int:
+    """File-mode detector feedback loop. Separate path because the backup +
+    validate + write sequence differs from humanize_file_ex — we validate
+    the FINAL humanized text against the original, not an intermediate."""
+    from .detector import DetectorUnavailable, feedback_loop
+    from .validate import format_report, validate
+
+    original = path.read_text(encoding="utf-8")
+    try:
+        outcome = feedback_loop(
+            original,
+            target_probability=args.detector_target,
+            max_iterations=args.detector_max_iterations,
+            detector=args.detector_model,
+        )
+    except DetectorUnavailable as exc:
+        sys.stderr.write(f"[{path.name}] detector feedback disabled: {exc}\n")
+        return 1
+
+    humanized = outcome.final_text
+    result = validate(original, humanized)
+
+    if args.diff:
+        _emit_diff(sys.stdout, str(path), original, humanized)
+    elif args.output is not None and result.ok:
+        args.output.write_text(humanized, encoding="utf-8")
+        if not args.quiet:
+            sys.stdout.write(f"[{path.name}] wrote humanized text to {args.output}\n")
+    elif write and result.ok:
+        backup = path.with_name(path.stem + ".original.md")
+        if not args.no_backup and not backup.exists():
+            backup.write_text(original, encoding="utf-8")
+        path.write_text(humanized, encoding="utf-8")
+
+    if args.json:
+        payload = {
+            "path": str(path),
+            "ok": result.ok,
+            "validation": result.to_dict(),
+            "detector_feedback": outcome.to_dict(),
+        }
+        sys.stdout.write(json.dumps(payload, indent=2) + "\n")
+    elif not args.quiet:
+        sys.stdout.write(format_report(result) + "\n")
+        sys.stdout.write(
+            f"  detector: {outcome.original_probability:.1%} → "
+            f"{outcome.final_probability:.1%} "
+            f"({outcome.reason_stopped})\n"
+        )
+
+    if args.report is not None:
+        report_accumulator.append(
+            {"path": str(path), "detector_feedback": outcome.to_dict()}
+        )
+
+    return 0 if result.ok else 2
 
 
 def _process_file(
@@ -224,12 +411,26 @@ def _process_file(
     if args.output is not None:
         write = False  # handle --output explicitly below
 
+    if args.detector_feedback:
+        return _process_file_detector_feedback(path, args, write, report_accumulator)
+
+    voice_sample_text: str | None = None
+    voice_profile = None
+    if args.voice_sample is not None:
+        voice_sample_text = args.voice_sample.read_text(encoding="utf-8")
+    else:
+        voice_profile = _resolve_voice_profile(args)
+
     outcome = humanize_file_ex(
         path,
         deterministic=args.deterministic,
         intensity=args.mode,
         backup=not args.no_backup,
         write=write,
+        structural=args.structural,
+        soul=args.soul,
+        voice_sample=voice_sample_text,
+        voice_profile=voice_profile,
     )
 
     if args.diff:
@@ -273,9 +474,68 @@ def _process_file(
     return 0
 
 
+def _handle_voice_memory_commands(args: argparse.Namespace) -> int | None:
+    """Run --save-voice-profile / --clear-voice-profile if set. Returns an exit
+    code when a memory command ran, or None when no command applied."""
+    if args.save_voice_profile is not None:
+        from .style_memory import StyleMemoryError, save_profile
+
+        sample_path = args.save_voice_profile
+        if not sample_path.is_file():
+            sys.stderr.write(f"Error: voice sample not found: {sample_path}\n")
+            return 1
+        text = sample_path.read_text(encoding="utf-8")
+        try:
+            target = save_profile(text, source=str(sample_path))
+        except StyleMemoryError as exc:
+            sys.stderr.write(f"Error: {exc}\n")
+            return 1
+        if not args.quiet:
+            sys.stdout.write(f"Saved style memory to {target}\n")
+        return 0
+
+    if args.clear_voice_profile:
+        from .style_memory import StyleMemoryError, clear_profile
+
+        try:
+            removed = clear_profile()
+        except StyleMemoryError as exc:
+            sys.stderr.write(f"Error: {exc}\n")
+            return 1
+        if not args.quiet:
+            msg = "Cleared style memory." if removed else "No style memory on file."
+            sys.stdout.write(msg + "\n")
+        return 0
+
+    return None
+
+
+def _resolve_voice_profile(args: argparse.Namespace):
+    """Return a StyleProfile when --voice-memory is requested and memory
+    exists. Explicit --voice-sample is handled via text in the prompt
+    builder; this path only applies when we only have the persisted
+    numeric profile."""
+    if args.voice_sample is not None:
+        return None
+    if not args.voice_memory:
+        return None
+    from .style_memory import StyleMemoryError, load_profile
+
+    try:
+        return load_profile()
+    except StyleMemoryError as exc:
+        sys.stderr.write(f"warn: style memory unreadable: {exc}\n")
+        return None
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = _build_parser()
     args = parser.parse_args(argv)
+
+    # One-shot memory management runs before any humanize work.
+    memory_rc = _handle_voice_memory_commands(args)
+    if memory_rc is not None:
+        return memory_rc
 
     # --diff implies --dry-run. --stdin forces no-backup.
     if args.diff:

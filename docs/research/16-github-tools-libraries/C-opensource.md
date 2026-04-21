@@ -4,6 +4,8 @@
 
 **Scope.** Repos that explicitly target "humanize AI text" behavior: pattern-stripping skills, paraphrase-based rewriters (PEGASUS/T5/BART), stylometry/perplexity/burstiness manipulators, detector-evasion scripts, and curated lists. Activity reviewed as of 2026-04. Star counts are approximate snapshots and move quickly for the top skill repos.
 
+**Catalog size update:** The catalog has grown from 35 to ~42 named repos as of April 2026, driven by a wave of new Claude Code skill forks and a few notable newcomers (jpeggdev/humanize-writing, lguz/humanize-writing-skill, aaaronmiller/humanize-writing, sam-paech/auto-antislop). StealthHumanizer has significantly upgraded its methodology. The Aboudjem/humanizer-skill now targets 37 patterns (up from 30).
+
 ---
 
 ## 1. Inventory (35 repos, roughly by stars / activity)
@@ -12,7 +14,7 @@
 
 | # | Repo | Stars | Language | What it is | Status |
 |---|---|---:|---|---|---|
-| 1 | [`blader/humanizer`](https://github.com/blader/humanizer) | ~14.5k | Markdown / prompt | Claude Code + OpenCode skill that removes "signs of AI writing" via a 29-pattern list derived from Wikipedia's "Signs of AI writing" guide. Voice calibration + 2-pass audit. | **Active**, very viral in late 2025 / 2026. |
+| 1 | [`blader/humanizer`](https://github.com/blader/humanizer) | ~14.7k | Markdown / prompt | Claude Code + OpenCode skill that removes "signs of AI writing" via a 29-pattern list derived from Wikipedia's "Signs of AI writing" guide. Voice calibration + 2-pass audit. | **Active**, very viral in late 2025 / 2026. 12 open PRs, issues as recent as April 16 2026. |
 | 2 | [`psal/anonymouth`](https://github.com/psal/anonymouth) | ~1.9k | Java | Classic stylometric obfuscation tool (Drexel PSAL). Uses JStylo to flag features the author should change to mask identity. Predates LLMs but is still the canonical stylometry-lowering reference. | **Abandoned** (last real update 2021); historical reference. |
 | 3 | [`PrithivirajDamodaran/Parrot_Paraphraser`](https://github.com/PrithivirajDamodaran/Parrot_Paraphraser) | ~916 | Python | T5-based paraphrase framework with adequacy/fluency/diversity knobs. Not branded as "humanizer" but is the most commonly forked NLP-grade paraphraser behind DIY humanizers. | **Semi-active**, widely depended on. |
 | 4 | [`DadaNanjesha/AI-Text-Humanizer-App`](https://github.com/DadaNanjesha/AI-Text-Humanizer-App) | ~258 | Python | Streamlit app using NLTK + `transformers` to rewrite AI text into "formal / academic" style with detector avoidance as an explicit goal. | **Active**. |
@@ -33,13 +35,17 @@
 | 14 | [`ksanyok/TextHumanize`](https://github.com/ksanyok/TextHumanize) | ~12 | Python/PHP/TS | 38-stage adaptive pipeline, proprietary PHANTOM™ / ASH™ / SentenceValidator™ trademarks, 100% offline, 25 languages, claims 60-90% detection-score reduction, "235,000+ lines, 2,073 tests". |
 | 15 | [`vardhin/Humanizer`](https://github.com/vardhin/Humanizer) | ~8 | Python + SvelteKit | Flask back end + HuggingFace Transformers (T5, BART, Pegasus), two-step pipeline (paraphrase → rewrite). |
 | 16 | [`samrand96/Undetectable-AI`](https://github.com/samrand96/Undetectable-AI) | low | Python | DOCX-oriented CLI using Ollama (default `dolphin-mistral`), optional ChatGPT. Translation + humanize + grammar + evaluation modes. |
-| 17 | [`rudra496/StealthHumanizer`](https://github.com/rudra496/StealthHumanizer) | ~5 | TypeScript | 13 provider connectors, 4 rewrite levels, 13 tone presets, 16 languages, 12-metric internal detector for self-grading. |
+| 17 | [`rudra496/StealthHumanizer`](https://github.com/rudra496/StealthHumanizer) | ~5 | TypeScript | **Significantly upgraded since initial catalog.** Now corpus-trained on 10,000 Q1 academic papers (2018–2025) across 11 domains. 13 provider connectors, 4 rewrite levels (Light/Medium/Aggressive/Ninja), 13 tone presets, 16 languages, 12-metric detection calibration against real human writing metrics. Live demo at stealthhumanizer.vercel.app. |
 | 18 | [`Mohit1053/Humanizer`](https://github.com/Mohit1053/Humanizer) | ~1 | Python | Ollama + Llama3, multi-prompt targeting "<10% AI detection" on GPTZero/ZeroGPT. CSV batch + resume. README explicitly cites "perplexity variation, burstiness, human quirks" from 2025 research. |
 | 19 | [`itsjwill/humanizer-x`](https://github.com/itsjwill/humanizer-x) | ~2 | Claude skill | 4-pass engine: 30 severity-ranked AI patterns + statistical-fingerprint manipulation (perplexity, burstiness, entropy) + SSML disfluencies for voice agents. Positioned as free replacement for paid humanizers. |
-| 20 | [`Aboudjem/humanizer-skill`](https://github.com/Aboudjem/humanizer-skill) | low | Claude skill | 30 AI patterns + 5 voice profiles, explicitly targets burstiness and perplexity. |
+| 20 | [`Aboudjem/humanizer-skill`](https://github.com/Aboudjem/humanizer-skill) | low | Claude skill | **Updated to 37 AI patterns** (up from 30) + 5 voice profiles (casual, professional, technical, warm, blunt), zero dependencies, burstiness/perplexity targeting. |
 | 21 | [`humanizerai/agent-skills`](https://github.com/humanizerai/agent-skills) | low | Claude/Cursor | `/detect-ai` and `/humanize` commands; claims to bypass GPTZero/Turnitin/Originality. API-key + paid subscription (commercial skill wrapped around an external API). |
 | 22 | [`trailofbits/skills-curated`](https://github.com/trailofbits/skills-curated/tree/main/plugins/humanizer) | (meta) | Markdown | Security-org curated plugin; humanizer plugin detects 24 pattern categories across content, language, style, communication artifacts. Notable as a non-hype source picking it up. |
 | 23 | [`imsv1301/unmask-ai`](https://github.com/imsv1301/unmask-ai) | low | HTML + Claude | 3-pass pipeline on Claude Sonnet 4 claiming to bypass GPTZero, Turnitin, Originality.ai, QuillBot. |
+| 24 | [`jpeggdev/humanize-writing`](https://github.com/jpeggdev/humanize-writing) | low | Claude skill | 8-pass editing system: structure tells, significance inflation, AI vocabulary, grammar-level patterns, rhythm and style, hedging and filler, connective tissue, human texture. Also published as npm package `@jpeggdev/humanize-writing`. v2.0.0 merges with `humanizer-blader` functionality. |
+| 25 | [`lguz/humanize-writing-skill`](https://github.com/lguz/humanize-writing-skill) | low | Markdown / prompt | 3-pass editing, 36+ banned words, 10 structural patterns, quality checklist. Works with Claude, ChatGPT, Gemini, Cursor, Windsurf — not Claude Code-only. Last updated March 2026. |
+| 26 | [`aaaronmiller/humanize-writing`](https://github.com/aaaronmiller/humanize-writing) | low | Markdown / prompt | Production-oriented complete skill package for transforming AI-generated writing, created December 2025. |
+| 27 | [`sam-paech/auto-antislop`](https://github.com/sam-paech/auto-antislop) | low | Python | Automated slop-elimination pipeline: runs antislop-sampler to surface slop, builds FTPO training examples from banned-continuation pairs, iterates fine-tuning. Companion to the ICLR 2026 ANTISLOP paper. Requires raw logits + training access; LocalLLaMA/researcher tier only. |
 
 ### Tier C — Research (usually more load-bearing than the skill repos)
 
@@ -86,11 +92,12 @@
 
 ### Patterns (what almost everyone does)
 
-1. **Pattern-stripping lists are the new lingua franca.** `blader/humanizer` (29 patterns), `itsjwill/humanizer-x` (30), `Aboudjem/humanizer-skill` (30), `trailofbits` plugin (24 categories) all converge on the same taxonomy: *significance inflation* ("It's important to note…"), AI vocabulary ("delve", "tapestry", "testament"), copula avoidance, rule-of-three constructions, hedging clichés. This is effectively a shared informal standard descending from Wikipedia's "Signs of AI writing".
+1. **Pattern-stripping lists are the new lingua franca.** `blader/humanizer` (29 patterns), `itsjwill/humanizer-x` (30), `Aboudjem/humanizer-skill` (**now 37**), `trailofbits` plugin (24 categories) all converge on the same taxonomy: *significance inflation* ("It's important to note…"), AI vocabulary ("delve", "tapestry", "testament"), copula avoidance, rule-of-three constructions, hedging clichés. This is effectively a shared informal standard descending from Wikipedia's "Signs of AI writing".
 2. **Perplexity + burstiness is the marketed metric pair.** Nearly every Tier B/C repo invokes the same two GPTZero-era statistics as the thing it manipulates, even when the implementation is just synonym swap + sentence-length shuffling.
-3. **Two implementation modes dominate.**
-   - *Agent-skill* (prompt bundle for Claude Code / Cursor / OpenCode): `blader`, `humanizer-x`, `humanizer-skill`, `unmask-ai`, `humanizerai/agent-skills`, trailofbits plugin. Low effort, high reach — `blader/humanizer`'s ~14.5k stars is an order of magnitude above everything else.
+3. **Three implementation modes now dominate** (skill packs were two in 2024):
+   - *Agent-skill* (prompt bundle for Claude Code / Cursor / OpenCode): `blader`, `humanizer-x`, `humanizer-skill`, `unmask-ai`, `humanizerai/agent-skills`, trailofbits plugin, `jpeggdev/humanize-writing`, `lguz/humanize-writing-skill`, `aaaronmiller/humanize-writing`. Low effort, high reach — `blader/humanizer`'s ~14.7k stars is an order of magnitude above everything else.
    - *Hackathon web app* (Next.js/Streamlit + HuggingFace API or Ollama): `sanjaysah101`, `abdibrokhim`, `vardhin`, `Firdavs-coder`, `DadaNanjesha`, `StealthHumanizer`.
+   - *Multi-tool / universal skill* (`lguz/humanize-writing-skill`): designed to work with Claude, ChatGPT, Gemini, Cursor, Windsurf — not Claude Code-specific. Represents a maturing of the skill-pack format beyond Claude ecosystem lock-in.
 4. **T5 / Pegasus / BART are the boring workhorses.** Every repo that does real NLP rather than regex ends up at the same three checkpoints: `tuner007/pegasus_paraphrase`, `Vamsi/T5_Paraphrase_Paws`, or `humarin/chatgpt_paraphraser_on_T5_base`, usually wrapped behind `Parrot_Paraphraser`.
 5. **"Offline / local / privacy" is a rising sell.** `ksanyok/TextHumanize`, `Firdavs-coder` (Ollama phi3), `Mohit1053/Humanizer` (Ollama Llama3), `samrand96/Undetectable-AI` (Ollama dolphin-mistral). Likely driven by users not wanting academic work going to OpenAI/Anthropic logs.
 
@@ -100,6 +107,9 @@
 - **Statistical-fingerprint framing has replaced synonym-swap framing.** 2023-era repos (GPTZero-Bypasser, Anti-AI-detect, XDYB) were about character-level tricks and synonym tables. 2025-2026 repos explicitly advertise perplexity/burstiness/entropy manipulation, even if the underlying code is the same.
 - **Agent skill packs ate the long tail.** Dedicated web apps have plateaued around 50 stars; a new Claude skill can hit thousands in weeks. Implication: distribution, not model quality, is the moat.
 - **Commercial players publish thin OSS shells around paid APIs.** `humanizerai/agent-skills` is open source but requires a $19.99-$49.99/mo subscription; the intelligence is server-side. Expect more of this.
+- **Turnitin's August 2025 anti-humanizer update changed the ground truth.** Turnitin now trains specifically on humanizer output patterns, introducing a "AI-generated text that was AI-paraphrased" tag. Bypass rates for tools benchmarked before August 2025 are unreliable. Walter Writes, previously a top performer in practitioner tests, now leaves 38% flagged on Turnitin post-update. Every repo's claimed bypass numbers need a "benchmarked against which detector version?" qualifier.
+- **Corpus-grounded approaches gaining traction.** `rudra496/StealthHumanizer` now grounds its calibration targets against 10,000 real Q1 academic papers, representing a shift from prompt-based to data-grounded humanization. This is meaningfully different from pattern-list approaches.
+- **Multi-pass skill formats are multiplying fast.** `jpeggdev/humanize-writing` (8 passes), `lguz/humanize-writing-skill` (3 passes), `aaaronmiller/humanize-writing` — the Claude Code skill ecosystem has moved from single-pass to multi-pass as the norm.
 
 ### Gaps (what's missing)
 
@@ -175,3 +185,11 @@
 - [github.com/XuandongZhao/WatermarkAttacker](https://github.com/XuandongZhao/WatermarkAttacker) — NeurIPS 2024 watermark regeneration attacks.
 - [github.com/Brandon689/best-ai-humanizer](https://github.com/Brandon689/best-ai-humanizer), [`ToolkitlyAI/awesome-ai-tools`](https://github.com/ToolkitlyAI/awesome-ai-tools/blob/master/Category/AI_Humanize.md) — curated lists.
 - [github.com/topics/ai-humanizer](https://github.com/topics/ai-humanizer), [`/topics/humanizer`](https://github.com/topics/humanizer) — GitHub topic indexes.
+- [github.com/jpeggdev/humanize-writing](https://github.com/jpeggdev/humanize-writing) — 8-pass Claude Code skill; npm package `@jpeggdev/humanize-writing`.
+- [github.com/lguz/humanize-writing-skill](https://github.com/lguz/humanize-writing-skill) — 3-pass multi-LLM skill, 36+ banned words.
+- [github.com/aaaronmiller/humanize-writing](https://github.com/aaaronmiller/humanize-writing) — production-oriented skill package (Dec 2025).
+- [github.com/sam-paech/auto-antislop](https://github.com/sam-paech/auto-antislop) — automated FTPO-based slop fine-tuning pipeline.
+- [github.com/sam-paech/antislop-vllm](https://github.com/sam-paech/antislop-vllm) — OpenAI-compatible API wrapper for antislop-sampler.
+- openreview.net — ANTISLOP ICLR 2026 paper (arXiv 2510.15061).
+- turnitin.com/press — Turnitin anti-humanizer feature (August 2025).
+- arxiv.org/abs/2501.03437 — DAMAGE: Detecting Adversarially Modified AI Generated Text (Jan 2026).

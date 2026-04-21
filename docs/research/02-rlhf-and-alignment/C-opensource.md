@@ -257,16 +257,17 @@ From the READMEs and papers surveyed:
 
 ## Emerging Trends
 
-1. **DPO-and-variants as commodity.** Between 2023 (release of DPO) and 2026, every major framework shipped DPO plus 3–5 variants (IPO, cDPO, KTO, ORPO, SimPO, GDPO). The algorithm is no longer a competitive moat; the data and reward function are.
-2. **GRPO, REINFORCE++, and value-free RL.** Driven by DeepSeek-R1's success, 2025 saw a wave of value-function-free on-policy methods (GRPO, REINFORCE++, RLOO, ReMax, DAPO). They're cheaper, more stable, and increasingly default for reasoning.
+1. **DPO-and-variants as commodity.** Between 2023 (release of DPO) and 2026, every major framework shipped DPO plus 3–5 variants (IPO, cDPO, KTO, ORPO, SimPO, GDPO). A March 2025 survey (arXiv 2503.11701) taxonomizes over a dozen named variants including MinMax-DPO, MallowsPO, ODPO, MPO, and GaPO. The algorithm is no longer a competitive moat; the data and reward function are.
+2. **GRPO, REINFORCE++, and value-free RL.** Driven by DeepSeek-R1's success (January 2025), 2025 saw a wave of value-function-free on-policy methods (GRPO, REINFORCE++, RLOO, ReMax, DAPO, VAPO). DAPO (arXiv 2503.14476) adds asymmetric clipping and dynamic sampling; VAPO (arXiv 2504.05118) achieves 60.4 on AIME 2024. TRL v1 shipped asynchronous GRPO and VESPO in April 2026.
 3. **Agentic and multi-turn RLHF.** OpenRLHF 0.8 (async agent RLHF), veRL (multi-turn tool-calling), TRL (OpenEnv integration) all shipped in 2025–2026. The frontier is no longer single-turn preference pairs but whole trajectories under tool use.
 4. **VLM alignment catching up to text.** OpenRLHF 0.10, TRL VLM trainer, veRL VLM RL, and LLaVA-style datasets in LLaMA-Factory all arrived in 2025–2026. Expect multimodal humanization (image captioning tone, etc.) to be a 2026 axis.
 5. **Fine-grained and multi-attribute preference data.** UltraFeedback (4-axis), HelpSteer3 (5-axis + Edit), SteerLM (conditioning attributes), Safe-RLHF (helpfulness + safety). Nobody trains on single-scalar preferences anymore if they can avoid it.
-6. **Label-free scaling via RLAIF.** Constitutional AI + GPT-4-judged datasets are now standard for teams without a labeling budget. AlpacaFarm formalized the simulator approach; everyone else uses ad-hoc variants.
-7. **Ray + vLLM as the RL runtime.** Three of the top five libraries (OpenRLHF, veRL, and TRL via co-located vLLM) converged here.
-8. **Deprecation wave.** trlx (archived), NeMo-Aligner (superseded by NeMo RL in May 2025), DeepSpeed-Chat (stagnant since Aug 2023), OpenAssistant (project completed). The first generation of RLHF tooling is being retired.
+6. **Label-free scaling via RLAIF.** Constitutional AI + GPT-4-judged datasets are now standard for teams without a labeling budget. AlpacaFarm formalized the simulator approach; everyone else uses ad-hoc variants. Anthropic's updated 2026 constitution now explicitly describes Claude generating its own synthetic training data from the constitution.
+7. **Ray + vLLM as the RL runtime.** Three of the top five libraries (OpenRLHF, veRL, and TRL via co-located vLLM) converged here. TRL v1's asynchronous GRPO offloads rollouts to an external vLLM server, eliminating idle GPU time during training.
+8. **Deprecation wave.** trlx (archived January 2024), NeMo-Aligner (superseded by NeMo RL in May 2025), DeepSpeed-Chat (stagnant since Aug 2023), OpenAssistant (project completed April 2024). The first generation of RLHF tooling is being retired.
 9. **LIMA-style minimalism re-emerging.** With frontier base models now extremely capable, "small hand-curated SFT + tiny DPO" is winning mindshare again for style/tone tasks (Sky-T1 used this; WeClone too).
 10. **Config-first UX is the norm.** LLaMA-Factory, Axolotl, alignment-handbook — all YAML-first. Unslop should ship a config layer rather than expose raw trainer code.
+11. **Subliminal learning risk for synthetic data pipelines.** Anthropic's 2025 research found student models acquire teacher behavioral traits from model-generated training data even when the data is unrelated to those traits. This affects any RLAIF or synthetic-data preference pipeline — including Constitutional AI variants used for humanization.
 
 ---
 

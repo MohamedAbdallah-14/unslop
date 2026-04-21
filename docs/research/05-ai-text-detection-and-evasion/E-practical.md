@@ -148,6 +148,20 @@ Field key: **ID** · **Type** · **URL** · **Date** · **Audience** · **Core c
 - Methodology: shared text across 4 detectors, reported per-tool pass rates.
 - Notes: Community-run leaderboards exist and are regularly refreshed; product feature idea — public, dated benchmark matters more than self-reported "99.8%."
 
+### 20. Anangsha Alammyan, Medium — "I Re-Tested 30+ AI Humanizers in 2026. Here Are the 13 That Actually Sound Human"
+- Type: Tutorial / review with measured scores
+- URL: https://medium.com/freelancers-hub/i-tried-7-ai-humanizers-heres-the-best-tool-to-bypass-ai-detectors-628590da5ccf
+- Date: 2026
+- Audience: freelancers, content creators
+- Claim: Ryter Pro achieves 97% bypass on GPTZero and 94% on Turnitin — highest-performing tool across the batch. Multi-tool workflow (Undetectable.ai → manual edit → re-check) still the most reliable approach.
+- Notes: Largest practical humanizer comparison published in 2026 period. The "30+ tools" framing signals that the market has further fragmented since the 15-tool landscape of 2025.
+
+### 21. glbgpt.com — "Hybrid Model Guide (Updated 2026)"
+- URL: https://www.glbgpt.com/hub/how-to-make-chatgpt-undetectable/
+- Method: Route different sections through GPT-5.2 (outline) → Claude 4.5 (natural flow) → Grok 4.1 (real-time facts) to break single-model stylometric fingerprints.
+- Scores: Not independently measured; practitioner-reported elimination of model-specific perplexity signatures.
+- Notes: The 2026 update names current frontier models (GPT-5.2, Claude 4.5, Grok 4.1) where the 2025 version named older models. Confirms that multi-model routing is a persistent practitioner technique that follows the model frontier rather than being a fixed recipe.
+
 ---
 
 ## Prior Art
@@ -163,11 +177,12 @@ Field key: **ID** · **Type** · **URL** · **Date** · **Audience** · **Core c
 - **Academic proctored in-class essays / process-based grading** (HN #2): the non-technical answer institutions are converging on; shrinks the post-hoc detection market over time.
 
 ## Market & Competitor Signals
-- **Tested top tier (Reddit + independent)**: Undetectable.AI ~82%, Humbot ~71%, BypassGPT ~67% at $13-20/mo for 10-20K words.
-- **Free/entry**: QuillBot alone ~34% — the dominant Reddit free recommendation, but no longer competitive alone.
+- **Tested top tier (Reddit + independent, 2026)**: Ryter Pro ~97% GPTZero / 94% Turnitin (Alammyan, 2026); Undetectable.AI 87–88% across all major detectors (Cybernews, 2026); Humbot ~71%; BypassGPT ~67% (aitooldiscovery, 2026). Undetectable.ai's user base is now 22M — mainstream, not niche.
+- **Free/entry**: QuillBot alone ~34% — the dominant Reddit free recommendation, but no longer competitive alone. Humanize AI Pro's "free forever" model pressures the $10–20 band from below.
 - **Pricing ceiling**: $14.99-$19.99/mo is the established price point. Vendors compete on (a) detector coverage, (b) readability-mode presets (High School / University / Doctorate / Journalist / Marketing), (c) built-in detector pre-check.
 - **Instability as a feature gap**: the most-cited user complaint is score variance across reruns of the same detector — a re-run-stable humanizer would be differentiated.
-- **SEO sub-market**: 45% of r/Affiliate_Market posts flagged as AI; Originality.AI claims flagged content loses ~67% organic visibility in 90 days — a separate non-academic buyer segment.
+- **SEO sub-market**: 45% of r/Affiliate_Market posts flagged as AI; Originality.AI claims flagged content loses ~67% organic visibility in 90 days — a separate non-academic buyer segment. Ahrefs 600K-page study contradicts the "Google punishes AI" narrative (correlation 0.011), but agency QA gates using Originality remain the real blocker.
+- **GPTZero Chicago Booth 2026** has displaced Scribbr as the community's reference benchmark. Community threads in 2026 cite "does it pass GPTZero Chicago Booth level" rather than the older Scribbr ranking table.
 
 ## Cross-Domain Analogies
 - **Grammarly/Hemingway inversion**: Grammarly standardizes toward "correct" (low-perplexity) prose; a humanizer is the mirror — deliberately injects controlled *in*correctness. Same editing surface, opposite optimization target.
@@ -197,5 +212,8 @@ Field key: **ID** · **Type** · **URL** · **Date** · **Audience** · **Core c
 - r/ChatGPTPromptGenius, r/PromptEngineering, r/BypassAiDetect, r/BestAIHumanizer_ threads.
 - Cristina Cabal teacher blog ("Tyranny of Triplets").
 - Originality.AI Reddit SEO/marketing AI-content study.
-- glbgpt "Hybrid Model" multi-model routing guide.
+- glbgpt "Hybrid Model" multi-model routing guide (2026 update).
 - Threads @yourchatgptguide viral post.
+- Anangsha Alammyan, Medium, "I Re-Tested 30+ AI Humanizers in 2026" — https://medium.com/freelancers-hub/i-tried-7-ai-humanizers-heres-the-best-tool-to-bypass-ai-detectors-628590da5ccf
+- Cybernews, "Undetectable AI review April 2026" — https://cybernews.com/ai-tools/undetectable-ai-review/
+- GPTZero, "GPTZero Tops Accuracy on Chicago Booth Benchmark in 2026" — https://gptzero.me/news/chicago-booth-2026/

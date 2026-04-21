@@ -52,22 +52,40 @@ Numbers tagged **[V]** = vendor/marketing claim, **[A]** = affiliate or self-int
 ### Tier A — Pure-play bypass humanizers (usually outperform suite add-ons)
 
 **Undetectable.ai**
-- Bypass rate: 99%+ **[V]** · ~86–88% avg across multiple affiliate tests **[A]** · only tool in AIXRadar's head-to-head to score any human on GPTZero (6% human / 94% AI) **[I]**. Humaniser's detector matrix pegs residual AI at 8% GPTZero / 9% Turnitin / 9% Originality.
-- Pricing: $5/mo annual (10K words) → $19/mo (20K) → $31/mo (35K); Business custom for 380K+; API via Business plan.
-- Pros: Multi-detector dashboard (GPTZero, Turnitin, Originality, Copyleaks, ZeroGPT), Chrome extension, Essay Writer, SEO writer, Job Applier; tunable strength/readability/purpose; best-documented API; the most consistent independent winner.
-- Cons: Results vary across re-runs; English-focused; no free humanization (free AI checker only); 30-day retention by default; "restrictive refund" (credit only if <75% human within 30 days).
+- Bypass rate: 99%+ **[V]** · 73–88% avg across 2026 tests **[A/I]** · consumer-grade detectors (GPTZero, ZeroGPT) see 96–97% bypass; Turnitin ~89%; Originality.ai drops to ~68%. No longer the clear performance leader in 2026 — Ryter Pro benchmarks higher on Turnitin.
+- Pricing *(updated April 2026)*: Monthly $14.99/mo (15K words). Annual: ~$5/mo for 10K words with 50% off promo (300K words/year marketed). API bundled with annual plans. Additional features added 2025: AI Essay Writer, AI SEO Writer, Human Typer, Word Counter, Job Application Bot.
+- Pros: Multi-detector dashboard (GPTZero, Turnitin, Originality, Copyleaks, ZeroGPT), Chrome extension, Essay Writer, SEO writer, Job Applier; tunable strength/readability/purpose; best-documented API.
+- Cons: Results vary across re-runs; English-focused; no free humanization (free AI checker only); 30-day retention by default; "restrictive refund." Monthly plan price increased from $9.99 to $14.99.
+
+**Walter Writes AI** *(added April 2026)*
+- Bypass rate: Pre-Aug 2025 Turnitin: 79.7% **[I]**; post Turnitin August 2025 update: ~62% Turnitin, ~55% Originality.ai **[I]**. Strong on GPTZero and ZeroGPT. Community-rated highly for output quality and readability.
+- Pricing: Free 300-word trial (no login). Starter ~$10/mo (10K words); Pro ~$19/mo (55K words).
+- Pros: Quality-first output, community top recommendation in r/BypassAiDetect and r/ChatGPTPro, free trial with no friction.
+- Cons: Turnitin bypass degraded significantly after August 2025 update; Originality.ai catches ~45% of output. TikTok paid-influencer wave (Oct 2025–Feb 2026) inflated hype beyond what independent tests support.
+
+**Ryter Pro** *(added April 2026)*
+- Bypass rate: 97% GPTZero, 94% Turnitin **[I]** — highest Turnitin bypass of any tool in AI Natural Write's April 2026 evaluation; no other tool within 5 percentage points of that Turnitin score.
+- Pricing: Basic $6/mo billed annually (100 credits/mo); Professional $12/mo billed annually (500 credits/mo, full API, priority support, Pro Algorithm, New Model).
+- Pros: Best Turnitin bypass rate in 2026 independent testing; fastest processor (>5K words/minute); genuine multilingual capability; API on Professional.
+- Cons: Newer entrant with less community validation than Undetectable or WriteHuman; credit-based model complexity; limited publicly documented technique details.
+
+**GPTHuman.ai** *(added April 2026)*
+- Bypass rate: 37.4% avg **[I]** (Leap AI, Apr 2026) — low raw bypass; competitive on Winston AI specifically.
+- Pricing: Free (300 words/output limit). Paid: $9.99/mo unlimited (2K words/output cap).
+- Pros: Clean UX; tone controls (Standard/High School/College/PhD); mode selector; bundled humanizer + detector + paraphraser; PDF/Word import; Stealth Score on output.
+- Cons: 37.4% average bypass is below free competitors at the same price point; 2K word cap on paid tier limits heavy users.
 
 **StealthGPT**
-- Bypass rate: "100% undetectable" **[V]** · 74% avg drop **[A]** · scored 0% human on GPTZero (100% AI) in AIXRadar head-to-head **[I]**; Phrasly research reported consistent failure on Turnitin and Originality.
-- Pricing: Essential $24.99 → Pro $34.99 → Business $49.99 → Enterprise $249.99; +$4.99 Samurai Engine add-on; API $0.0002/word; staircase loyalty 5%/3mo.
-- Pros: 100+ language support (Pro+), tiered engines (Standard / Infinity / Samurai / Business), bundled tools (Stealth Writer, Study Simulator, SEO, PDF chat).
-- Cons: Grammar/spelling errors flagged by reviewers and Trustpilot; no free trial or tier; Infinity engine word-capped per plan; self-published Turnitin claims unverified; weakest price-per-value in Tier A.
+- Bypass rate: "100% undetectable" **[V]** · 60–82% range **[I]** · scored 0% human on GPTZero (100% AI) in AIXRadar head-to-head **[I]**; consistently fails Originality.ai and Turnitin in rigorous 2026 tests.
+- Pricing *(updated April 2026)*: Restructured to weekly billing — base $32/mo or $40/mo (billed weekly); +$4.99/mo Samurai add-on. Removed the Essential/Pro/Exclusive monthly tiering. Now offers a **7-day free trial** (previously no free tier). XYZ AI Inc (parent) announced new funding raise at higher valuation in late 2025.
+- Pros: 100+ language support, proprietary Ghost and Samurai engines, bundled tools (essay generator with auto-citations, Study Simulator, SEO, Google Docs/Gmail integrations on higher tiers).
+- Cons: Grammar/spelling errors flagged; weekly billing model unusual and harder to budget; fails Originality.ai and Turnitin in independent tests; weakest price-per-value ratio among Tier A pure-plays.
 
 **HIX Bypass**
-- Bypass rate: "99%+" **[V]** · 69% avg drop — lowest of the commonly-ranked top five **[A]**; cleared only 3/5 detectors in UndetectedGPT testing **[I]**; 15% residual GPTZero / 21% Originality **[A]**.
-- Pricing: Standard $14.99 → Pro $29.99 → Unlimited $59.99 (suite pricing often quoted from $29/mo).
+- Bypass rate: "99%+" **[V]** · ~75% avg in 2026 **[I]**; one in four detectors still catches output; Turnitin inconsistent (20–76% AI flagged across runs). Trustpilot: 2.6/5 (~169 reviews) with unauthorized-charge complaints.
+- Pricing *(updated April 2026)*: Pro $29.99/mo (monthly) or $14.99/mo (annual, 50K words/mo). Unlimited $59.99/mo (monthly) or $39.99/mo (annual).
 - Pros: Four modes (Fast / Balanced / Aggressive / Latest), 50+ languages, integrates with broader HIX.AI 120+-tool ecosystem.
-- Cons: Premium price for lowest independent performance among top tier; suite-wide analytics on by default; privacy opt-out hidden in dashboard; recommended mainly if already inside HIX.AI.
+- Cons: Overall bypass ~75% with weak Turnitin reliability; Trustpilot complaints about unauthorized post-cancellation charges and random gibberish in output; recommended mainly if already inside HIX.AI ecosystem.
 
 **Humaniser.com**
 - Bypass rate: 93% avg drop, 9.4/10 composite **[V]** — note: vendor-published benchmark.
@@ -138,11 +156,17 @@ Numbers tagged **[V]** = vendor/marketing claim, **[A]** = affiliate or self-int
 
 ### Tier B — Suite add-ons (consistently underperform in bypass tests)
 
-**Grammarly AI Humanizer**
-- Bypass rate: Grammarly **explicitly states "this tool is not intended to bypass AI detectors"**; text still 70%+ AI across ZeroGPT / GPTZero / QuillBot / Grammarly's own detector after processing.
-- Pricing: Bundled in Grammarly Premium.
-- Pros: Style/readability polish; works inline; trusted brand.
-- Cons: Synonym-swap heavy, not structural rewrite; fails detectors.
+**Grammarly AI Humanizer** *(dedicated tool launched September 2025)*
+- Bypass rate: Grammarly **explicitly states "this tool is not intended to bypass AI detectors"**; text still 70%+ AI across ZeroGPT / GPTZero / QuillBot / Grammarly's own detector after processing. Dedicated humanizer agent launched September 2025 for ChatGPT/Claude/Gemini output.
+- Pricing: Bundled in Grammarly Premium ($12/mo+).
+- Pros: Style/readability polish; works inline; trusted brand; custom voice profile trained on user writing sample; six languages.
+- Cons: Synonym-swap heavy, not structural rewrite; fails detectors; Notre Dame has classified Grammarly itself as generative AI under its academic policy.
+
+**QuillBot Humanizer** *(dedicated mode added late 2025)*
+- Bypass rate: ~47.4% average across major detectors **[I]** (added late 2025 to existing paraphrase platform). Essentially a coin flip. Turnitin's August 2025 "AI bypasser" detection explicitly now flags QuillBot-style synonym-swap output.
+- Pricing: Bundled in QuillBot Premium ($8.33/mo annual).
+- Pros: Familiar interface; bundled paraphraser / grammar / plagiarism / citation.
+- Cons: 47% bypass rate makes it one of the weakest dedicated humanizer modes; Turnitin specifically targets it; operates as synonym swap, not structural rewrite.
 
 **Writesonic AI Humanizer**
 - Bypass rate: Failed 3 of 5 AI-detection tests.
@@ -170,7 +194,7 @@ Numbers tagged **[V]** = vendor/marketing claim, **[A]** = affiliate or self-int
 
 **2. Pure-play bypass tools outperform suite add-ons by a wide margin.** Undetectable / Deceptioner / StealthWriter / BypassGPT / WriteHuman cluster in the 70–88% independent bypass band. Suite add-ons — Grammarly, Writesonic, Surfer SEO, Ahrefs — cluster near 0% independent bypass because they're architected as paraphrasers. Grammarly is the only vendor that openly admits this.
 
-**3. Pricing has converged on a narrow band.** Near-universal pattern: free tier (3 runs / 150–550 words) → paid entry $8–$15/mo (billed annually) → mid-tier $18–$35/mo → high tier $50–$99/mo → custom/enterprise. Annual discounts of 45–60%. StealthGPT ($24.99 entry) and HIX Bypass Unlimited ($59.99) are conspicuous outliers priced against tooling-bundle value rather than humanization raw cost.
+**3. Pricing has converged on a narrow band, with some restructuring.** Near-universal pattern: free tier (3 runs / 150–550 words) → paid entry $6–$15/mo (billed annually) → mid-tier $18–$36/mo → high tier $50–$99/mo → custom/enterprise. Annual discounts of 45–60%. Undetectable.ai raised its monthly price from $9.99 to $14.99/mo. StealthGPT moved to weekly billing at ~$32–40/mo equivalent, departing from the simple monthly model. WriteHuman lowered web-tier prices ($9/$12/$36 vs prior $18/$27/$48). Ryter Pro entered at $6/mo annual.
 
 **4. Engine-tiering is the 2026 product-differentiation move.** StealthGPT (Standard / Infinity / Samurai / Business), HIX Bypass (Fast / Balanced / Aggressive / Latest), Humbot (Quick / Enhanced / Advanced), Undetectable (Humanize / Rephrase + strength sliders), Deceptioner (stealth 0–1 + detector target) all expose knobs that trade readability for evasion. The explicit knob is a soft admission that the readability–stealth frontier is real.
 
@@ -185,6 +209,10 @@ Numbers tagged **[V]** = vendor/marketing claim, **[A]** = affiliate or self-int
 **9. Short-form is a silent weakness.** Sub-200-word inputs (emails, captions) consistently fail academic-grade detection regardless of tool (TextHumanizer 2026 test) — a weakness rarely surfaced in marketing but potentially relevant for email/chat use cases.
 
 **10. Academic positioning persists despite ToS prohibitions.** Tools market heavily to students (StealthGPT "Scholar" / "Debate" modes, Humbot "study simulator") while their own terms ban academic misconduct (StealthWriter, Deceptioner, Phrasly). A clear compliance time-bomb.
+
+**11. Turnitin's bypasser detection is operational and improving.** Turnitin shipped "AI bypasser" detection in August 2025, then updated the model in February 2026 to improve recall while holding false positives below 1%. The update is trained on the outputs of specific humanizer tools and measurably degraded multiple tools' Turnitin bypass rates. English-only. This is the single most consequential arms-race move in the category since mid-2025.
+
+**12. New market leaders on Turnitin performance.** Ryter Pro (2025 entrant) and Walter Writes AI have displaced StealthGPT and HIX Bypass as community-recommended tools for Turnitin-specific use cases in 2026. This reshuffle is rapid — tools that led 12 months ago on Turnitin now rank behind newer entrants.
 
 ---
 
