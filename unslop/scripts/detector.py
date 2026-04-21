@@ -224,6 +224,7 @@ class IterationRecord:
     structural: bool
     ai_probability: float
     ai_isms_after: int
+    soul: bool = False
 
 
 @dataclass
@@ -251,6 +252,7 @@ class FeedbackResult:
                     "iteration": r.iteration,
                     "intensity": r.intensity,
                     "structural": r.structural,
+                    "soul": r.soul,
                     "ai_probability": round(r.ai_probability, 4),
                     "ai_isms_after": r.ai_isms_after,
                 }
@@ -259,14 +261,15 @@ class FeedbackResult:
         }
 
 
-# Escalation ladder: each tuple is (intensity, structural-on).
-# Step 1: balanced no-structural — the gentlest rewrite.
-# Step 2: full no-structural — adds filler + negative-parallelism + superficial-ing.
-# Step 3: full with structural — last resort; touches sentence shape.
-DEFAULT_LADDER: list[tuple[str, bool]] = [
-    ("balanced", False),
-    ("full", False),
-    ("full", True),
+# Escalation ladder: each tuple is (intensity, structural-on, soul-on).
+# Step 1: balanced, no structural, no soul — gentlest rewrite.
+# Step 2: full, no structural, no soul — adds filler + negative-parallelism + superficial-ing.
+# Step 3: full, structural, soul — strongest deterministic mode.
+#         Touches sentence shape AND token distribution via contractions.
+DEFAULT_LADDER: list[tuple[str, bool, bool]] = [
+    ("balanced", False, False),
+    ("full", False, False),
+    ("full", True, True),
 ]
 
 
@@ -276,7 +279,7 @@ def feedback_loop(
     target_probability: float = 0.5,
     max_iterations: int = 3,
     detector: DetectorName = DEFAULT_DETECTOR,
-    ladder: list[tuple[str, bool]] | None = None,
+    ladder: list[tuple] | None = None,
     score_fn: Callable[[str], float] | None = None,
     humanize_fn: Callable | None = None,
 ) -> FeedbackResult:
@@ -312,14 +315,24 @@ def feedback_loop(
     current_text = text
     steps = ladder[:max_iterations]
 
-    for i, (intensity, structural) in enumerate(steps, start=1):
-        current_text, _report = humanize_fn(text, intensity=intensity, structural=structural)
+    for i, step in enumerate(steps, start=1):
+        # Step tuples can be (intensity, structural) or (intensity, structural, soul).
+        # Accept both for backward compatibility with tests that use the old 2-tuple form.
+        if len(step) == 2:
+            intensity, structural = step
+            soul = False
+        else:
+            intensity, structural, soul = step
+        current_text, _report = humanize_fn(
+            text, intensity=intensity, structural=structural, soul=soul
+        )
         prob = score_fn(current_text)
         iterations.append(
             IterationRecord(
                 iteration=i,
                 intensity=intensity,
                 structural=structural,
+                soul=soul,
                 ai_probability=prob,
                 ai_isms_after=_count_ai_isms(current_text),
             )

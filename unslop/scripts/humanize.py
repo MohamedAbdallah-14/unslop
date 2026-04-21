@@ -26,6 +26,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
+from .soul import SoulReport, humanize_soul
 from .structural import StructuralReport, humanize_structural
 from .validate import ValidationResult, validate
 
@@ -64,6 +65,7 @@ class HumanizeReport:
     em_dashes_before: int = 0
     em_dashes_after: int = 0
     structural: StructuralReport = field(default_factory=StructuralReport)
+    soul: SoulReport = field(default_factory=SoulReport)
 
     @property
     def counts_by_rule(self) -> dict[str, int]:
@@ -89,6 +91,7 @@ class HumanizeReport:
             "em_dashes_before": self.em_dashes_before,
             "em_dashes_after": self.em_dashes_after,
             "structural": self.structural.to_dict(),
+            "soul": self.soul.to_dict(),
         }
 
 
@@ -655,6 +658,7 @@ def humanize_deterministic(
     *,
     intensity: Intensity = "balanced",
     structural: bool = False,
+    soul: bool = False,
 ) -> str:
     """Pure regex pass. Preserves code/URLs via placeholders; strips canonical AI-isms.
 
@@ -669,9 +673,13 @@ def humanize_deterministic(
     `structural=True` also runs the Phase 1 structural rewriter (sentence-length
     rebalancer + bullet-soup merger). Off by default while the pass bakes;
     flip on after baseline benchmarks prove it doesn't regress preservation.
+
+    `soul=True` runs the Phase 5 soul-injection pass (contraction lift). Off by
+    default; contractions are a token-distribution lever that matters for
+    detector resistance but can feel informal for highly formal content.
     """
     result, _report = humanize_deterministic_with_report(
-        text, intensity=intensity, structural=structural
+        text, intensity=intensity, structural=structural, soul=soul
     )
     return result
 
@@ -681,6 +689,7 @@ def humanize_deterministic_with_report(
     *,
     intensity: Intensity = "balanced",
     structural: bool = False,
+    soul: bool = False,
 ) -> tuple[str, HumanizeReport]:
     """Like `humanize_deterministic` but returns an audit trail of every
     replacement made. Used by the CLI's `--report` and `--json` output."""
@@ -787,6 +796,12 @@ def humanize_deterministic_with_report(
     # where it's no longer an offender. Gated off by default — see flag doc.
     if structural:
         protected = humanize_structural(protected, report=report.structural)
+
+    # Phase 5 soul-injection pass — contraction lift. Token-distribution lever
+    # for detector resistance. Runs after lexical + structural so the
+    # contractions apply to the final prose shape. Opt-in.
+    if soul:
+        protected = humanize_soul(protected, report=report.soul)
 
     if run_em_dash_cap:
         protected = _cap_em_dashes_per_paragraph(protected, max_dashes=2)
@@ -1035,6 +1050,7 @@ def humanize_file_ex(
     backup: bool = True,
     write: bool = True,
     structural: bool = False,
+    soul: bool = False,
 ) -> HumanizeOutcome:
     """Rich entry point. Returns the full outcome (humanized text, report,
     validation) regardless of whether we actually wrote to disk. The CLI uses
@@ -1042,7 +1058,9 @@ def humanize_file_ex(
 
     `structural=True` enables the Phase 1 structural pass (sentence splitting
     and bullet-soup merging). Opt-in until we default it on for `balanced`
-    after benchmark validation."""
+    after benchmark validation.
+
+    `soul=True` enables the Phase 5 soul pass (contraction lift)."""
     original_text = path.read_text(encoding="utf-8")
     backup_path = path.with_name(path.stem + ".original.md")
 
@@ -1059,7 +1077,7 @@ def humanize_file_ex(
 
     if deterministic:
         humanized, report = humanize_deterministic_with_report(
-            original_text, intensity=intensity, structural=structural
+            original_text, intensity=intensity, structural=structural, soul=soul
         )
         result = validate(original_text, humanized)
         if not result.ok:

@@ -37,12 +37,17 @@ def count_ai_isms(text: str) -> int:
     return sum(len(p.findall(text)) for p in AI_ISM_PATTERNS)
 
 
-def run(fixtures_dir: Path, intensity: str = "balanced", structural: bool = False) -> dict:
+def run(
+    fixtures_dir: Path,
+    intensity: str = "balanced",
+    structural: bool = False,
+    soul: bool = False,
+) -> dict:
     results = []
     for md in sorted(fixtures_dir.glob("*.md")):
         original = md.read_text()
         humanized, hreport = humanize_deterministic_with_report(
-            original, intensity=intensity, structural=structural  # type: ignore[arg-type]
+            original, intensity=intensity, structural=structural, soul=soul  # type: ignore[arg-type]
         )
         report = validate(original, humanized)
         orig_sentence_lengths = _sentence_lengths(original)
@@ -138,6 +143,11 @@ def main() -> int:
         action="store_true",
         help="Enable the Phase 1 structural pass (sentence splitter + bullet merger).",
     )
+    p.add_argument(
+        "--soul",
+        action="store_true",
+        help="Enable the Phase 5 soul pass (contraction lift).",
+    )
     args = p.parse_args()
 
     fixtures = Path(args.fixtures)
@@ -148,7 +158,7 @@ def main() -> int:
     if args.all_intensities:
         # Monotonicity check: each intensity must strip >= previous.
         reports = {
-            lvl: run(fixtures, intensity=lvl, structural=args.structural)
+            lvl: run(fixtures, intensity=lvl, structural=args.structural, soul=args.soul)
             for lvl in VALID_INTENSITIES
         }
         print("Unslop benchmark — all intensities\n")
@@ -172,7 +182,7 @@ def main() -> int:
                 prev_delta = reports[lvl]["total_delta"]
         return 0
 
-    report = run(fixtures, intensity=args.intensity, structural=args.structural)
+    report = run(fixtures, intensity=args.intensity, structural=args.structural, soul=args.soul)
     print_report(report)
 
     out_dir = Path(args.out)

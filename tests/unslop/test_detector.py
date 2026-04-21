@@ -183,10 +183,10 @@ class TestFeedbackLoopSerialization:
 class TestDefaultLadder:
     def test_default_ladder_has_three_escalating_steps(self):
         assert len(DEFAULT_LADDER) == 3
-        # Last step is full + structural.
-        assert DEFAULT_LADDER[-1] == ("full", True)
+        # Last step is full + structural + soul (strongest deterministic mode).
+        assert DEFAULT_LADDER[-1] == ("full", True, True)
         # First step is gentle.
-        assert DEFAULT_LADDER[0] == ("balanced", False)
+        assert DEFAULT_LADDER[0] == ("balanced", False, False)
 
 
 class TestIterationRecord:

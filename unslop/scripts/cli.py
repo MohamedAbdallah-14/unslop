@@ -148,6 +148,15 @@ def _build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--soul",
+        action="store_true",
+        help=(
+            "Enable the Phase 5 soul pass: contraction lift (do not → don't, "
+            "it is → it's where safe). Token-distribution lever for detector "
+            "resistance. Contractions feel informal for highly formal content."
+        ),
+    )
+    parser.add_argument(
         "--detector-feedback",
         action="store_true",
         help=(
@@ -209,7 +218,7 @@ def _process_stdin(args: argparse.Namespace) -> int:
         report = None
     elif args.deterministic or not _llm_available():
         humanized, report = humanize_deterministic_with_report(
-            text, intensity=args.mode, structural=args.structural
+            text, intensity=args.mode, structural=args.structural, soul=args.soul
         )
     else:
         humanized = humanize_llm(text, intensity=args.mode)
@@ -361,6 +370,7 @@ def _process_file(
         backup=not args.no_backup,
         write=write,
         structural=args.structural,
+        soul=args.soul,
     )
 
     if args.diff:
