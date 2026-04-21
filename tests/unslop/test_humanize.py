@@ -186,12 +186,13 @@ class TestDeterministicSycophancy:
     def test_strips_certainly(self) -> None:
         out = humanize_deterministic("Certainly! I will help.")
         assert "Certainly" not in out
-        assert "I will help" in out
+        # Soul pass (default-on at balanced) contracts "I will" → "I'll".
+        assert "I'll help" in out or "I will help" in out
 
     def test_strips_certainly_with_comma(self) -> None:
         out = humanize_deterministic("Certainly, I will help.")
         assert "Certainly" not in out
-        assert "I will help" in out
+        assert "I'll help" in out or "I will help" in out
 
     def test_strips_certainly_after_sentence(self) -> None:
         out = humanize_deterministic("We need it. Certainly, that is true.")

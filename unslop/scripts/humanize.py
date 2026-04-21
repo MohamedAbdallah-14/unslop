@@ -653,30 +653,46 @@ def _tracking_sub(
     return pattern.sub(track, text)
 
 
+def _resolve_toggles(
+    intensity: Intensity, structural: bool | None, soul: bool | None
+) -> tuple[bool, bool]:
+    """Intensity-driven defaults for Phase 1 (structural) and Phase 5 (soul).
+
+    After the Phase 6 humanness benchmark showed 100% win rate with
+    structural + soul on at `balanced`, both features became part of the
+    `balanced` and `full` defaults. `subtle` remains lexical-only.
+
+    Explicit True/False overrides the intensity default. `None` falls back
+    to the intensity-driven value.
+    """
+    intensity_wants_them = intensity in ("balanced", "full")
+    resolved_structural = intensity_wants_them if structural is None else structural
+    resolved_soul = intensity_wants_them if soul is None else soul
+    return resolved_structural, resolved_soul
+
+
 def humanize_deterministic(
     text: str,
     *,
     intensity: Intensity = "balanced",
-    structural: bool = False,
-    soul: bool = False,
+    structural: bool | None = None,
+    soul: bool | None = None,
 ) -> str:
     """Pure regex pass. Preserves code/URLs via placeholders; strips canonical AI-isms.
 
     `intensity` gates which rule families run:
-      - subtle:   stock vocab only.
+      - subtle:   stock vocab only. Lexical-only; no structural or soul pass.
       - balanced: sycophancy, hedging openers, transition tics, stock vocab,
                   performative balance, authority tropes, signposting,
-                  em-dash cap.
-      - full:     everything balanced does, plus filler phrases and
-                  negative-parallelism knockouts.
+                  em-dash cap, significance-inflation, notability-namedropping,
+                  copula-avoidance, plus Phase 1 structural and Phase 5 soul.
+      - full:     everything balanced does, plus filler phrases,
+                  negative-parallelism, superficial-ing.
 
-    `structural=True` also runs the Phase 1 structural rewriter (sentence-length
-    rebalancer + bullet-soup merger). Off by default while the pass bakes;
-    flip on after baseline benchmarks prove it doesn't regress preservation.
-
-    `soul=True` runs the Phase 5 soul-injection pass (contraction lift). Off by
-    default; contractions are a token-distribution lever that matters for
-    detector resistance but can feel informal for highly formal content.
+    `structural` and `soul` default to None and are resolved by intensity
+    (on for balanced/full, off for subtle). Pass True/False to override.
+    Phase 6 benchmark: balanced with both defaults wins 100% blind LLM-judge
+    preference vs the original AI text.
     """
     result, _report = humanize_deterministic_with_report(
         text, intensity=intensity, structural=structural, soul=soul
@@ -688,8 +704,8 @@ def humanize_deterministic_with_report(
     text: str,
     *,
     intensity: Intensity = "balanced",
-    structural: bool = False,
-    soul: bool = False,
+    structural: bool | None = None,
+    soul: bool | None = None,
 ) -> tuple[str, HumanizeReport]:
     """Like `humanize_deterministic` but returns an audit trail of every
     replacement made. Used by the CLI's `--report` and `--json` output."""
@@ -697,6 +713,8 @@ def humanize_deterministic_with_report(
         raise ValueError(
             f"unknown intensity {intensity!r}; expected one of {VALID_INTENSITIES}"
         )
+
+    structural, soul = _resolve_toggles(intensity, structural, soul)
 
     report = HumanizeReport(intensity=intensity)
     log = report.replacements
@@ -1049,8 +1067,8 @@ def humanize_file_ex(
     intensity: Intensity = "balanced",
     backup: bool = True,
     write: bool = True,
-    structural: bool = False,
-    soul: bool = False,
+    structural: bool | None = None,
+    soul: bool | None = None,
 ) -> HumanizeOutcome:
     """Rich entry point. Returns the full outcome (humanized text, report,
     validation) regardless of whether we actually wrote to disk. The CLI uses

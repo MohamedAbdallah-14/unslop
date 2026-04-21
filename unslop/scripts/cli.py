@@ -140,20 +140,22 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--structural",
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
+        default=None,
         help=(
-            "Enable the Phase 1 structural pass: split overlong sentences at "
-            "safe boundaries and collapse parallel bullet-soup. Raises sentence-"
-            "length variance (σ), the #1 AI-detector signal. Opt-in for now."
+            "Phase 1 structural pass: split overlong sentences at safe "
+            "boundaries and collapse parallel bullet-soup. Default: on for "
+            "balanced/full, off for subtle. Use --no-structural to disable."
         ),
     )
     parser.add_argument(
         "--soul",
-        action="store_true",
+        action=argparse.BooleanOptionalAction,
+        default=None,
         help=(
-            "Enable the Phase 5 soul pass: contraction lift (do not → don't, "
-            "it is → it's where safe). Token-distribution lever for detector "
-            "resistance. Contractions feel informal for highly formal content."
+            "Phase 5 soul pass: contraction lift (do not → don't, it is → it's "
+            "where safe). Default: on for balanced/full, off for subtle. Use "
+            "--no-soul for highly formal content that shouldn't contract."
         ),
     )
     parser.add_argument(

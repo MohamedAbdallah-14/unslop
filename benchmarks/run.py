@@ -40,8 +40,8 @@ def count_ai_isms(text: str) -> int:
 def run(
     fixtures_dir: Path,
     intensity: str = "balanced",
-    structural: bool = False,
-    soul: bool = False,
+    structural: bool | None = None,
+    soul: bool | None = None,
 ) -> dict:
     results = []
     for md in sorted(fixtures_dir.glob("*.md")):
@@ -140,13 +140,15 @@ def main() -> int:
     )
     p.add_argument(
         "--structural",
-        action="store_true",
-        help="Enable the Phase 1 structural pass (sentence splitter + bullet merger).",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Phase 1 structural pass. Default: on for balanced/full, off for subtle.",
     )
     p.add_argument(
         "--soul",
-        action="store_true",
-        help="Enable the Phase 5 soul pass (contraction lift).",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="Phase 5 soul pass. Default: on for balanced/full, off for subtle.",
     )
     args = p.parse_args()
 

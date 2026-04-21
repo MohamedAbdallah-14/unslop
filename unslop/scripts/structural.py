@@ -287,6 +287,13 @@ def merge_bullet_soup(
             if not m or m.group(1) != indent or m.group(2) != marker:
                 break
             body = m.group(3).strip()
+            # If a bullet body starts with a protected-region placeholder
+            # (inline code, URL, quoted prose, etc.), stop the run. Placeholders
+            # are opaque tokens; treating their internal kind-name ("INLINE",
+            # "URL", ...) as a shared first word would merge 4 bullets that
+            # start with different code snippets into one.
+            if body.startswith("\x00"):
+                break
             words = _WORD_RE.findall(body)
             if not words:
                 break
@@ -294,10 +301,14 @@ def merge_bullet_soup(
             j += 1
 
         if len(run) < min_run:
-            for k in range(i, j):
+            # Emit every line we examined, plus at minimum the current line so
+            # we always make progress. When the scan broke immediately (j==i)
+            # because the first bullet had a placeholder or didn't match, we
+            # still need to emit lines[i] and advance.
+            end = max(j, i + 1)
+            for k in range(i, end):
                 out.append(lines[k])
-            # If we stopped because j==i (no valid bullets), advance by 1.
-            i = j if j > i else i + 1
+            i = end
             continue
 
         first_word_lower = run[0][0].lower()

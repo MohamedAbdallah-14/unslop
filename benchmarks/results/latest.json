@@ -1,7 +1,7 @@
 {
-  "timestamp": "20260421T104431Z",
+  "timestamp": "20260421T113942Z",
   "intensity": "balanced",
-  "fixture_count": 6,
+  "fixture_count": 7,
   "total_ai_isms_before": 165,
   "total_ai_isms_after": 18,
   "total_delta": 147,
@@ -17,8 +17,8 @@
       "ai_isms_after": 3,
       "delta": 43,
       "burstiness_before": 8.14,
-      "burstiness_after": 7.2,
-      "burstiness_delta": -0.93,
+      "burstiness_after": 7.22,
+      "burstiness_delta": -0.91,
       "flat_paragraphs_before": 4,
       "flat_paragraphs_after": 3,
       "sentences_split": 1,
@@ -30,7 +30,7 @@
     {
       "file": "ai-slop-new-categories.md",
       "words_before": 374,
-      "words_after": 309,
+      "words_after": 310,
       "sentence_count_before": 29,
       "sentence_count_after": 27,
       "ai_isms_before": 43,
@@ -87,6 +87,28 @@
       "structural_errors": [],
       "warnings": [
         "Flat paragraphs increased: 0 \u2192 1. A paragraph with 3+ sentences at uniform length is a detector tell."
+      ]
+    },
+    {
+      "file": "direct-address-doc.md",
+      "words_before": 251,
+      "words_after": 251,
+      "sentence_count_before": 26,
+      "sentence_count_after": 26,
+      "ai_isms_before": 0,
+      "ai_isms_after": 0,
+      "delta": 0,
+      "burstiness_before": 5.35,
+      "burstiness_after": 4.52,
+      "burstiness_delta": -0.82,
+      "flat_paragraphs_before": 3,
+      "flat_paragraphs_after": 4,
+      "sentences_split": 0,
+      "bullet_groups_merged": 1,
+      "structural_ok": true,
+      "structural_errors": [],
+      "warnings": [
+        "Flat paragraphs increased: 3 \u2192 4. A paragraph with 3+ sentences at uniform length is a detector tell."
       ]
     },
     {
