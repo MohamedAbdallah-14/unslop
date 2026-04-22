@@ -2,28 +2,34 @@
 
 <a href="#"><img src="./assets/hero.svg" alt="unslop — make AI output sound like a human wrote it" width="100%"/></a>
 
-<br/>
+<p><i>Strips AI-isms. Restores voice. Preserves code.<br/><b>One plugin, six assistants, zero config.</b></i></p>
 
-<!-- Row 1: status -->
+</div>
+
+```bash
+# Claude Code — paste both lines into any session, restart, type /unslop
+/plugin marketplace add MohamedAbdallah-14/unslop
+/plugin install unslop
+```
+
+<div align="center">
+
+<sub>Using Cursor, Windsurf, Cline, Gemini CLI, Codex, or the CLI? <a href="#-60-second-start">See all install options →</a></sub>
+
+<br/><br/>
+
+<!-- Jump links -->
 <p>
-  <a href="https://github.com/MohamedAbdallah-14/unslop/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/MohamedAbdallah-14/unslop/ci.yml?branch=main&style=for-the-badge&label=tests&logo=githubactions&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="https://codecov.io/gh/MohamedAbdallah-14/unslop"><img alt="Coverage" src="https://img.shields.io/codecov/c/github/MohamedAbdallah-14/unslop?style=for-the-badge&logo=codecov&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="https://pypi.org/project/unslop/"><img alt="PyPI" src="https://img.shields.io/pypi/v/unslop?style=for-the-badge&logo=pypi&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="https://pypi.org/project/unslop/"><img alt="Python" src="https://img.shields.io/pypi/pyversions/unslop?style=for-the-badge&logo=python&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-7C9885?style=for-the-badge&labelColor=0B1410"/></a>
+  <a href="#-60-second-start"><b>Quick start</b></a> &nbsp;·&nbsp;
+  <a href="#-see-the-difference">Demo</a> &nbsp;·&nbsp;
+  <a href="#-what-you-get">Features</a> &nbsp;·&nbsp;
+  <a href="#-how-it-stacks-up">Comparison</a> &nbsp;·&nbsp;
+  <a href="#-faq">FAQ</a> &nbsp;·&nbsp;
+  <a href="#-docs">Docs</a> &nbsp;·&nbsp;
+  <a href="./GETTING_STARTED.md">Non-technical guide</a>
 </p>
 
-<!-- Row 2: community + activity -->
-<p>
-  <a href="https://github.com/MohamedAbdallah-14/unslop/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/MohamedAbdallah-14/unslop?style=for-the-badge&logo=github&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="https://github.com/MohamedAbdallah-14/unslop/network/members"><img alt="Forks" src="https://img.shields.io/github/forks/MohamedAbdallah-14/unslop?style=for-the-badge&logo=github&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="https://github.com/MohamedAbdallah-14/unslop/issues"><img alt="Issues" src="https://img.shields.io/github/issues/MohamedAbdallah-14/unslop?style=for-the-badge&logo=github&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="https://github.com/MohamedAbdallah-14/unslop/pulls"><img alt="Pull requests" src="https://img.shields.io/github/issues-pr/MohamedAbdallah-14/unslop?style=for-the-badge&logo=github&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="https://github.com/MohamedAbdallah-14/unslop/commits/main"><img alt="Last commit" src="https://img.shields.io/github/last-commit/MohamedAbdallah-14/unslop?style=for-the-badge&logo=git&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-  <a href="https://pypi.org/project/unslop/"><img alt="Downloads" src="https://img.shields.io/pypi/dm/unslop?style=for-the-badge&logo=pypi&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
-</p>
-
-<!-- Row 3: supported assistants -->
+<!-- Supported assistants -->
 <p>
   <img alt="Claude Code" src="https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=anthropic&logoColor=white"/>
   <img alt="Cursor" src="https://img.shields.io/badge/Cursor-000000?style=for-the-badge&logo=cursor&logoColor=white"/>
@@ -34,16 +40,11 @@
   <img alt="GitHub Copilot" src="https://img.shields.io/badge/Copilot-24292F?style=for-the-badge&logo=githubcopilot&logoColor=white"/>
 </p>
 
-<p><i>Strips AI-isms, restores voice, preserves code.<br/><b>One plugin, six assistants, zero config.</b></i></p>
-
+<!-- Compact credibility row: 3 signals, not 19 -->
 <p>
-  <a href="#-60-second-start"><b>Quick start</b></a> &nbsp;·&nbsp;
-  <a href="#-see-the-difference">Demo</a> &nbsp;·&nbsp;
-  <a href="#-what-you-get">Features</a> &nbsp;·&nbsp;
-  <a href="#-how-it-stacks-up">Comparison</a> &nbsp;·&nbsp;
-  <a href="#-faq">FAQ</a> &nbsp;·&nbsp;
-  <a href="#-docs">Docs</a> &nbsp;·&nbsp;
-  <a href="./GETTING_STARTED.md">Non-technical guide</a>
+  <a href="https://github.com/MohamedAbdallah-14/unslop/actions/workflows/ci.yml"><img alt="Tests passing" src="https://img.shields.io/github/actions/workflow/status/MohamedAbdallah-14/unslop/ci.yml?branch=main&style=flat-square&label=tests&logo=githubactions&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
+  <a href="https://pypi.org/project/unslop/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/unslop?style=flat-square&logo=pypi&logoColor=white&labelColor=0B1410&color=7C9885"/></a>
+  <a href="./LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-7C9885?style=flat-square&labelColor=0B1410"/></a>
 </p>
 
 </div>
