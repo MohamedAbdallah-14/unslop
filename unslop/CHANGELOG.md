@@ -1,3 +1,21 @@
+## 0.5.5 — 2026-04-22
+
+Docs-only release. No behavior change in the Python package. Benchmark
+and humanness numbers from 0.5.4 carry over; all 474 tests still pass.
+
+### Changed
+
+- Repo README rebuilt around a two-line Claude Code install, with other
+  platforms collapsed. Badge rows now follow the Badges4-README
+  convention. New sections: comparison table, FAQ, Mermaid architecture
+  diagram, roadmap.
+
+### Added
+
+- `assets/hero.svg`, `assets/demo.svg`, `assets/statusline.svg`,
+  `assets/social-preview.svg` — four XML-valid SVG assets that ship with
+  the repo (not the wheel).
+
 ## 0.5.4 — 2026-04-21
 
 Quality + feature pass. Closes two research gaps previously marked partial:

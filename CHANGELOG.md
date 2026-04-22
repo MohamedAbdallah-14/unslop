@@ -11,6 +11,46 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.5.5] — 2026-04-22
+
+Docs-only release. No behavior change in the Python package or any of the
+platform adapters. All 474 tests still pass; the benchmark and humanness
+results from 0.5.4 carry over unchanged.
+
+### Changed
+
+- **README.md** rebuilt around a two-line Claude Code install. Other
+  platforms (Cursor, Windsurf, Cline, Gemini CLI, Codex, manual hooks,
+  standalone CLI) moved behind a single `<details>` block so the landing
+  view stays short. Follows the structure patterns from
+  `matiassingers/awesome-readme`.
+- **Badge rows** reworked to the `alexandresanlim/Badges4-README.md-Profile`
+  convention — `for-the-badge` style, consistent `labelColor=0B1410` and
+  `color=7C9885`, brand logos on every platform badge.
+- **New sections**: comparison table against Anthropic Custom Styles and
+  commercial humanizer SaaS, an eight-entry FAQ covering the common
+  questions (detector behavior, safety for code/legal/medical, API-key
+  requirements, telemetry, origin of the name), a Mermaid architecture
+  diagram, and a roadmap through v1.0.
+- **GitHub alerts** (`> [!TIP]`, `> [!NOTE]`, `> [!WARNING]`) used at the
+  three points where a reader most needs them: the non-technical on-ramp,
+  the humanness-vs-detector disclaimer, and the warmth-reliability warning.
+
+### Added
+
+- **`assets/hero.svg`** — 1280×440 hero banner. Logo tile, gradient
+  wordmark, three achievement pills, terminal card with before/after
+  cover-letter snippet, install-command strip. XML-valid; renders as a
+  static image on GitHub.
+- **`assets/demo.svg`** — 1200×680 product demo. Simulated CLI run with
+  pass-stamp output, counts of what got stripped, plus side-by-side
+  `BEFORE` / `AFTER` panels with inline strikethrough on slop words.
+- **`assets/statusline.svg`** — 1080×220 Claude Code statusline mockup
+  showing the `[unslop:BALANCED]` badge in context.
+- **`assets/social-preview.svg`** — 1280×640 GitHub social card at the
+  OpenGraph recommended size. Upload via repo Settings → Social preview
+  to replace the default star-count card.
+
 ## [0.5.4] — 2026-04-21
 
 Quality + feature pass. Adds two closed-loop capabilities the research trace
