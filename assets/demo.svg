@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" role="img" aria-label="unslop CLI demo - before and after transformation">
+  <defs>
+    <linearGradient id="dbg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0E1713"/>
+      <stop offset="100%" stop-color="#0A1310"/>
+    </linearGradient>
+    <filter id="dshadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="680" fill="url(#dbg)"/>
+
+  <!-- Title -->
+  <text x="600" y="48" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, Roboto, sans-serif" font-size="22" font-weight="700" fill="#F7FBF8" text-anchor="middle">How unslop works in 15 seconds</text>
+  <text x="600" y="74" font-family="ui-sans-serif, -apple-system, sans-serif" font-size="13" fill="#8FA396" text-anchor="middle">One command. Deterministic regex pass. Every change logged. Code and URLs preserved byte-identical.</text>
+
+  <!-- Terminal card -->
+  <g transform="translate(60, 108)">
+    <rect x="0" y="6" width="1080" height="200" rx="14" fill="#000" opacity="0.35" filter="url(#dshadow)"/>
+    <rect width="1080" height="200" rx="12" fill="#0B1410" stroke="#2A3A30" stroke-width="1"/>
+    <rect width="1080" height="32" rx="12" fill="#111D17"/>
+    <rect y="20" width="1080" height="12" fill="#111D17"/>
+    <circle cx="20" cy="16" r="5" fill="#E38B8B" opacity="0.65"/>
+    <circle cx="38" cy="16" r="5" fill="#E6C675" opacity="0.65"/>
+    <circle cx="56" cy="16" r="5" fill="#9BD4A9" opacity="0.8"/>
+    <text x="540" y="20" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#6C8374" text-anchor="middle">bash  -  ~/resume</text>
+
+    <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">
+      <text x="20" y="62"  fill="#6C8374">$</text>
+      <text x="36" y="62"  fill="#D6E7DB">unslop --deterministic cover-letter.md</text>
+
+      <text x="20" y="88"  fill="#9BD4A9">[&#10003;]</text>
+      <text x="50" y="88"  fill="#D6E7DB">stripped</text>
+      <text x="116" y="88" fill="#E6C675">3</text>
+      <text x="126" y="88" fill="#D6E7DB">sycophancy openers     </text>
+      <text x="300" y="88" fill="#6C8374">Great question! &#183; Certainly! &#183; I'd be happy to&#8230;</text>
+
+      <text x="20" y="110" fill="#9BD4A9">[&#10003;]</text>
+      <text x="50" y="110" fill="#D6E7DB">rewrote</text>
+      <text x="110" y="110" fill="#E6C675">4</text>
+      <text x="120" y="110" fill="#D6E7DB">hedging stacks         </text>
+      <text x="300" y="110" fill="#6C8374">It's important to note &#183; Generally speaking&#8230;</text>
+
+      <text x="20" y="132" fill="#9BD4A9">[&#10003;]</text>
+      <text x="50" y="132" fill="#D6E7DB">cut</text>
+      <text x="82"  y="132" fill="#E6C675">7</text>
+      <text x="92"  y="132" fill="#D6E7DB">stock-vocab words      </text>
+      <text x="300" y="132" fill="#6C8374">delve &#183; navigate &#183; landscape &#183; robust &#183; holistic&#8230;</text>
+
+      <text x="20" y="154" fill="#9BD4A9">[&#10003;]</text>
+      <text x="50" y="154" fill="#D6E7DB">varied</text>
+      <text x="98"  y="154" fill="#E6C675">12</text>
+      <text x="114" y="154" fill="#D6E7DB">sentence lengths       </text>
+      <text x="300" y="154" fill="#6C8374">burstiness CV 0.21 &#8594; 0.54</text>
+
+      <text x="20" y="176" fill="#9BD4A9">[&#10003;]</text>
+      <text x="50" y="176" fill="#D6E7DB">preserved code blocks, URLs, headings</text>
+      <text x="340" y="176" fill="#6C8374">byte-identical (validator passed)</text>
+
+      <text x="860" y="176" fill="#A8C5B0" font-weight="700">AI-ism reduction: 91%</text>
+    </g>
+  </g>
+
+  <!-- Two panels: BEFORE / AFTER -->
+  <g transform="translate(60, 340)">
+    <!-- BEFORE -->
+    <g>
+      <rect width="520" height="300" rx="12" fill="#0B1410" stroke="#3D1F1F" stroke-width="1"/>
+      <rect width="520" height="28" rx="12" fill="#1A0F0F"/>
+      <rect y="16" width="520" height="12" fill="#1A0F0F"/>
+      <g transform="translate(16, 8)">
+        <rect width="62" height="16" rx="8" fill="#3D1F1F"/>
+        <text x="31" y="11" font-family="ui-sans-serif, sans-serif" font-size="9" font-weight="700" fill="#E38B8B" text-anchor="middle">BEFORE</text>
+      </g>
+      <text x="92" y="19" font-family="ui-monospace, sans-serif" font-size="11" fill="#6C8374">cover-letter.md (raw AI output)</text>
+
+      <g font-family="ui-sans-serif, -apple-system, sans-serif" font-size="12.5" fill="#8FA396">
+        <text x="20" y="56">
+          <tspan x="20" dy="0">I am writing to </tspan>
+          <tspan fill="#E38B8B" text-decoration="line-through">express my profound enthusiasm</tspan>
+          <tspan x="20" dy="18">for the Marketing Coordinator position. With</tspan>
+          <tspan x="20" dy="18">over five years of experience </tspan>
+          <tspan fill="#E38B8B" text-decoration="line-through">navigating the</tspan>
+          <tspan x="20" dy="18"><tspan fill="#E38B8B" text-decoration="line-through">dynamic landscape</tspan> of digital marketing,</tspan>
+          <tspan x="20" dy="18">I am confident that my </tspan>
+          <tspan fill="#E38B8B" text-decoration="line-through">comprehensive skill</tspan>
+          <tspan x="20" dy="18"><tspan fill="#E38B8B" text-decoration="line-through">set and passion for innovation</tspan> make</tspan>
+          <tspan x="20" dy="18">me a </tspan>
+          <tspan fill="#E38B8B" text-decoration="line-through">robust</tspan>
+          <tspan> candidate. </tspan>
+          <tspan fill="#E38B8B" text-decoration="line-through">I would welcome</tspan>
+          <tspan x="20" dy="18"><tspan fill="#E38B8B" text-decoration="line-through">the opportunity to delve into</tspan> how</tspan>
+          <tspan x="20" dy="18">my background aligns with your goals.</tspan>
+        </text>
+      </g>
+
+      <g transform="translate(20, 250)" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#6C8374">
+        <text x="0" y="0">&#8226; 8 sycophancy / slop phrases</text>
+        <text x="0" y="16">&#8226; flat paragraph, 7 sentences, CV 0.18</text>
+        <text x="0" y="32">&#8226; reads like every other cover letter</text>
+      </g>
+    </g>
+
+    <!-- Arrow -->
+    <g transform="translate(560, 130)">
+      <circle cx="0" cy="20" r="24" fill="#1A2A21" stroke="#3A5443" stroke-width="1"/>
+      <path d="M-8 20 L8 20 M2 14 L8 20 L2 26" stroke="#9BD4A9" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="0" y="58" font-family="ui-monospace, sans-serif" font-size="10" fill="#A8C5B0" text-anchor="middle">/unslop</text>
+    </g>
+
+    <!-- AFTER -->
+    <g transform="translate(600, 0)">
+      <rect width="520" height="300" rx="12" fill="#0B1410" stroke="#1F3D2A" stroke-width="1"/>
+      <rect width="520" height="28" rx="12" fill="#0F1A14"/>
+      <rect y="16" width="520" height="12" fill="#0F1A14"/>
+      <g transform="translate(16, 8)">
+        <rect width="54" height="16" rx="8" fill="#1F3D2A"/>
+        <text x="27" y="11" font-family="ui-sans-serif, sans-serif" font-size="9" font-weight="700" fill="#9BD4A9" text-anchor="middle">AFTER</text>
+      </g>
+      <text x="80" y="19" font-family="ui-monospace, sans-serif" font-size="11" fill="#6C8374">cover-letter.md (humanized)</text>
+
+      <g font-family="ui-sans-serif, -apple-system, sans-serif" font-size="12.5" fill="#E5F0E8">
+        <text x="20" y="56">
+          <tspan x="20" dy="0">Five years in digital marketing, most of it</tspan>
+          <tspan x="20" dy="18">in small teams where nobody else writes the</tspan>
+          <tspan x="20" dy="18">landing pages, so I end up doing it.</tspan>
+          <tspan x="20" dy="26">I saw your Marketing Coordinator posting</tspan>
+          <tspan x="20" dy="18">yesterday. The part about running campaigns</tspan>
+          <tspan x="20" dy="18">end-to-end instead of handing them off to</tspan>
+          <tspan x="20" dy="18">an agency is what pulled me in &#8212; that's</tspan>
+          <tspan x="20" dy="18">the work I actually like.</tspan>
+        </text>
+      </g>
+
+      <g transform="translate(20, 250)" font-family="ui-sans-serif, sans-serif" font-size="10.5" fill="#9BD4A9">
+        <text x="0" y="0">&#8226; 0 AI-isms</text>
+        <text x="0" y="16">&#8226; burstiness CV 0.54, varied sentence shapes</text>
+        <text x="0" y="32">&#8226; sounds like a real person at 9pm</text>
+      </g>
+    </g>
+  </g>
+</svg>

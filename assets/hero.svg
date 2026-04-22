@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 440" role="img" aria-label="unslop - make AI output sound like a human wrote it">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0E1713"/>
+      <stop offset="50%" stop-color="#132019"/>
+      <stop offset="100%" stop-color="#0A1310"/>
+    </linearGradient>
+    <linearGradient id="wordmark" x1="0" y1="0" x2="1" y2="0.6">
+      <stop offset="0%" stop-color="#F7FBF8"/>
+      <stop offset="100%" stop-color="#A8C5B0"/>
+    </linearGradient>
+    <linearGradient id="logoBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9DBDA5"/>
+      <stop offset="100%" stop-color="#5E7867"/>
+    </linearGradient>
+    <linearGradient id="redStrike" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E38B8B" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#E38B8B"/>
+      <stop offset="100%" stop-color="#E38B8B" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="30"/>
+    </filter>
+    <filter id="inner" x="-2%" y="-2%" width="104%" height="104%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <circle cx="1.2" cy="1.2" r="1.2" fill="#2A3A30" opacity="0.35"/>
+    </pattern>
+  </defs>
+
+  <!-- Base -->
+  <rect width="1280" height="440" fill="url(#bg)"/>
+  <rect width="1280" height="440" fill="url(#grid)"/>
+
+  <!-- Ambient blobs -->
+  <circle cx="1150" cy="70"  r="220" fill="#7C9885" opacity="0.14" filter="url(#soft)"/>
+  <circle cx="100"  cy="400" r="200" fill="#A8C5B0" opacity="0.08" filter="url(#soft)"/>
+  <circle cx="640"  cy="220" r="260" fill="#3A5443" opacity="0.10" filter="url(#soft)"/>
+
+  <!-- Left column: logo + wordmark + tagline + pills -->
+  <g transform="translate(80, 112)">
+    <!-- Logo tile -->
+    <g>
+      <rect width="108" height="108" rx="26" fill="url(#logoBg)"/>
+      <rect width="108" height="108" rx="26" fill="none" stroke="#B8D4BF" stroke-opacity="0.25" stroke-width="1"/>
+      <path d="M24 30h17v24h26V30h17v58H67V68H41v20H24V30z" fill="#F7FBF8"/>
+    </g>
+
+    <!-- Wordmark -->
+    <text x="140" y="72" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Roboto, sans-serif" font-size="92" font-weight="800" fill="url(#wordmark)" letter-spacing="-2.5">
+      unslop
+    </text>
+
+    <!-- Tagline -->
+    <text x="140" y="110" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, Roboto, sans-serif" font-size="22" font-weight="500" fill="#B8D4BF">
+      Make AI output sound like a human wrote it.
+    </text>
+
+    <!-- Sub-tagline -->
+    <text x="140" y="140" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, Roboto, sans-serif" font-size="14" font-weight="400" fill="#6C8374">
+      One plugin. Six assistants. Zero config.
+    </text>
+
+    <!-- Pills -->
+    <g transform="translate(140, 166)" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Inter, Roboto, sans-serif" font-size="12.5" font-weight="600">
+      <g>
+        <rect width="172" height="32" rx="16" fill="#1A2A21" stroke="#3A5443" stroke-width="1"/>
+        <circle cx="18" cy="16" r="3.5" fill="#9BD4A9"/>
+        <text x="36" y="20.5" fill="#D6E7DB">100% blind-judge wins</text>
+      </g>
+      <g transform="translate(184, 0)">
+        <rect width="140" height="32" rx="16" fill="#1A2A21" stroke="#3A5443" stroke-width="1"/>
+        <circle cx="18" cy="16" r="3.5" fill="#9BD4A9"/>
+        <text x="36" y="20.5" fill="#D6E7DB">89% AI-ism cut</text>
+      </g>
+      <g transform="translate(336, 0)">
+        <rect width="194" height="32" rx="16" fill="#1A2A21" stroke="#3A5443" stroke-width="1"/>
+        <circle cx="18" cy="16" r="3.5" fill="#9BD4A9"/>
+        <text x="36" y="20.5" fill="#D6E7DB">preserves code &amp; URLs</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Right column: terminal card -->
+  <g transform="translate(760, 82)">
+    <!-- Card shadow -->
+    <rect x="0" y="6" width="440" height="276" rx="16" fill="#000" opacity="0.35" filter="url(#soft)"/>
+    <!-- Card -->
+    <rect width="440" height="276" rx="14" fill="#0B1410" stroke="#2A3A30" stroke-width="1"/>
+    <!-- Window chrome -->
+    <rect width="440" height="38" rx="14" fill="#111D17"/>
+    <rect y="24" width="440" height="14" fill="#111D17"/>
+    <circle cx="22" cy="19" r="5" fill="#E38B8B" opacity="0.65"/>
+    <circle cx="40" cy="19" r="5" fill="#E6C675" opacity="0.65"/>
+    <circle cx="58" cy="19" r="5" fill="#9BD4A9" opacity="0.8"/>
+    <text x="220" y="23" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="11" fill="#6C8374" text-anchor="middle">~/cover-letter.md</text>
+
+    <!-- BEFORE row -->
+    <g transform="translate(18, 58)">
+      <rect width="60" height="20" rx="10" fill="#3D1F1F"/>
+      <text x="30" y="14" font-family="ui-sans-serif, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#E38B8B" text-anchor="middle">BEFORE</text>
+    </g>
+    <text transform="translate(18, 100)" font-family="ui-sans-serif, -apple-system, sans-serif" font-size="12.5" fill="#8FA396">
+      <tspan x="0" dy="0">I am writing to express my profound</tspan>
+      <tspan x="0" dy="17">enthusiasm for </tspan>
+    </text>
+    <!-- Strikethrough slop words -->
+    <g transform="translate(18, 100)" font-family="ui-sans-serif, -apple-system, sans-serif" font-size="12.5">
+      <text x="87" y="17" fill="#E38B8B" text-decoration="line-through">navigating</text>
+      <text x="152" y="17" fill="#8FA396"> the </text>
+      <text x="177" y="17" fill="#E38B8B" text-decoration="line-through">dynamic</text>
+      <text x="0"   y="34" fill="#E38B8B" text-decoration="line-through">landscape</text>
+      <text x="58"  y="34" fill="#8FA396"> of digital marketing&#8230;</text>
+    </g>
+
+    <!-- Divider -->
+    <line x1="18" y1="164" x2="422" y2="164" stroke="#2A3A30" stroke-dasharray="2 4"/>
+
+    <!-- AFTER row -->
+    <g transform="translate(18, 180)">
+      <rect width="60" height="20" rx="10" fill="#1F3D2A"/>
+      <text x="30" y="14" font-family="ui-sans-serif, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#9BD4A9" text-anchor="middle">AFTER</text>
+      <!-- Command indicator -->
+      <text x="78" y="14" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10" fill="#6C8374">$ /unslop balanced</text>
+    </g>
+    <text transform="translate(18, 222)" font-family="ui-sans-serif, -apple-system, sans-serif" font-size="12.5" fill="#E5F0E8">
+      <tspan x="0" dy="0">Five years in digital marketing, most</tspan>
+      <tspan x="0" dy="17">of it in small teams. I saw your posting</tspan>
+      <tspan x="0" dy="17">yesterday &#8212; the end-to-end part pulled me in.</tspan>
+    </text>
+  </g>
+
+  <!-- Bottom bar: install command mockup -->
+  <g transform="translate(80, 372)">
+    <rect width="1120" height="44" rx="10" fill="#0B1410" stroke="#2A3A30" stroke-width="1"/>
+    <text x="18" y="29" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#6C8374">$</text>
+    <text x="38" y="29" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13" fill="#D6E7DB">
+      <tspan fill="#A8C5B0">/plugin</tspan> marketplace add MohamedAbdallah-14/unslop
+      <tspan fill="#6C8374"> &amp;&amp; </tspan>
+      <tspan fill="#A8C5B0">/plugin</tspan> install unslop
+    </text>
+    <g transform="translate(1040, 12)">
+      <rect width="60" height="20" rx="10" fill="#1F3D2A"/>
+      <text x="30" y="14" font-family="ui-sans-serif, -apple-system, sans-serif" font-size="10" font-weight="700" fill="#9BD4A9" text-anchor="middle">2 LINES</text>
+    </g>
+  </g>
+</svg>
