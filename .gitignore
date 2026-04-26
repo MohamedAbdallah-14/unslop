@@ -67,6 +67,9 @@ desktop.ini
 .cursor/settings.json
 ideations/
 
+# --- Local scratch / launch-kit drafts (not for distribution) ---
+ignore/
+
 # --- Graphify caches / renders (knowledge-graph tool, machine-local) ---
 graphify-out/
 
@@ -81,4 +84,5 @@ benchmarks/results/2*.json
 # and are intentionally tracked — whitelisted below.
 *.original.md
 *.original.txt
+*.reasoning.md
 !tests/unslop/fixtures/*.original.md

@@ -184,7 +184,7 @@ The deterministic suite must pass on every change. LLM tests are opt-in via `UNS
 
 1. Create `skills/<name>/SKILL.md` with frontmatter + body.
 2. Create `commands/<name>.toml` if it gets a slash command.
-3. Add the skill to `.claude-plugin/plugin.json` under `skills` and (if applicable) `commands`.
+3. Add the skill to the host manifest only when that host requires explicit skill or command entries. Claude Code hooks currently discover the repo's `skills/` and `commands/` files without listing them in `.claude-plugin/plugin.json`.
 4. Add sync mappings in `scripts/sync-mirrors.sh`, then add trigger paths in `.github/workflows/sync.yml`.
 5. Document the skill in `skills/unslop-help/SKILL.md` (the reference card).
 6. Add a row to the README sub-skills table.

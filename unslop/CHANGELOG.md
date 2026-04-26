@@ -1,3 +1,31 @@
+## 0.5.6 — 2026-04-26
+
+Patch release for deterministic safety, CLI output correctness, and release
+readiness.
+
+### Fixed
+
+- Invalid `--stdin --diff` output no longer prints corrupted humanized text
+  when validation fails.
+- `--stdin --json --quiet` now still emits the requested JSON report.
+- Inline code inside protected quoted prose restores correctly.
+- Unsafe clause-final contractions stay full-form English.
+- Parenthetical em-dash pairs before copulas no longer collapse into comma
+  splices.
+
+### Added
+
+- LLM mode now refuses secret-like content and points users to
+  `--deterministic` for local-only rewrites.
+- Regression tests cover stdin output, nested placeholders, unsafe
+  contractions, secret-like content, and em-dash parentheticals.
+
+### Changed
+
+- `*.reasoning.md` sidecars are gitignored.
+- Public plugin/package version signals are aligned at `0.5.6`.
+- PyPI metadata now uses the modern SPDX license field.
+
 ## 0.5.5 — 2026-04-22
 
 Docs-only release. No behavior change in the Python package. Benchmark

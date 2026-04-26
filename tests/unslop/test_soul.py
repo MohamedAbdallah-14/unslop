@@ -87,6 +87,23 @@ class TestCopulaContractions:
         out = contract_copula("You are probably right.")
         assert out == "You're probably right."
 
+    def test_they_are_clause_final_preserved(self):
+        out = contract_copula("Here they are.")
+        assert out == "Here they are."
+
+    def test_they_are_predicative_complement_preserved(self):
+        out = contract_copula("I see them for what they are.")
+        assert out == "I see them for what they are."
+
+    def test_i_am_before_coordination_preserved(self):
+        out = contract_copula(
+            "Use .claude/profile.md for who I am and .claude/voice.md for how I write."
+        )
+        assert (
+            out
+            == "Use .claude/profile.md for who I am and .claude/voice.md for how I write."
+        )
+
     def test_i_am_contracts(self):
         out = contract_copula("I am watching the logs.")
         assert out == "I'm watching the logs."

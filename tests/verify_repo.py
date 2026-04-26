@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -279,6 +280,50 @@ def verify_commands_wired() -> None:
     print("Plugin + marketplace wired")
 
 
+def verify_version_alignment() -> None:
+    section("Version alignment")
+    sys.path.insert(0, str(ROOT / "unslop"))
+    from scripts import __version__
+
+    expected = __version__
+    version_sources = {
+        "unslop/scripts/__init__.py": expected,
+        ".claude-plugin/marketplace.json": read_json(ROOT / ".claude-plugin/marketplace.json")[
+            "plugins"
+        ][0]["version"],
+        "gemini-extension.json": read_json(ROOT / "gemini-extension.json")["version"],
+        "plugins/unslop/.codex-plugin/plugin.json": read_json(
+            ROOT / "plugins/unslop/.codex-plugin/plugin.json"
+        )["version"],
+        ".agents/plugins/marketplace.json": read_json(ROOT / ".agents/plugins/marketplace.json")[
+            "plugins"
+        ][0]["version"],
+    }
+
+    for label, version in version_sources.items():
+        ensure(version == expected, f"{label} version {version!r} != {expected!r}")
+
+    cli_version = run(
+        [sys.executable, "-m", "scripts.cli", "--version"],
+        cwd=ROOT / "unslop",
+    ).stdout.strip()
+    ensure(cli_version == f"unslop {expected}", f"CLI version mismatch: {cli_version!r}")
+
+    root_changelog = (ROOT / "CHANGELOG.md").read_text()
+    package_changelog = (ROOT / "unslop/CHANGELOG.md").read_text()
+    ensure(
+        re.search(rf"^## \[{re.escape(expected)}\] ", root_changelog, re.MULTILINE)
+        is not None,
+        "root CHANGELOG latest version heading missing",
+    )
+    ensure(
+        re.search(rf"^## {re.escape(expected)} ", package_changelog, re.MULTILINE) is not None,
+        "package CHANGELOG latest version heading missing",
+    )
+
+    print(f"All public version signals match {expected}")
+
+
 def main() -> int:
     checks = [
         verify_synced_mirrors,
@@ -287,6 +332,7 @@ def main() -> int:
         verify_humanize_modules_importable,
         verify_fixture_pairs,
         verify_commands_wired,
+        verify_version_alignment,
     ]
     try:
         for check in checks:

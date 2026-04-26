@@ -11,6 +11,41 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.5.6] — 2026-04-26
+
+Patch release for deterministic safety, CLI output correctness, and release
+readiness.
+
+### Fixed
+
+- Prevented invalid `--stdin --diff` output from printing corrupted humanized
+  text when validation fails.
+- Restored `--stdin --json --quiet` machine output so quiet mode only suppresses
+  chatter, not requested JSON.
+- Fixed nested placeholder restoration for inline code inside protected quoted
+  prose.
+- Made pronoun-copula contractions more conservative so clause-final phrases
+  like "Here they are" and coordinated phrases like "who I am and..." stay
+  grammatical.
+- Preserved closing em-dashes in parenthetical pairs before copulas, avoiding
+  comma-splice output such as `, is the point`.
+
+### Added
+
+- Added a content guard that refuses secret-like text in LLM mode and points
+  users to `--deterministic` for local-only rewrites.
+- Added regression coverage for stdin diff suppression, stdin JSON output,
+  nested placeholders, unsafe contractions, secret-like content, and em-dash
+  parenthetical pairs.
+
+### Changed
+
+- Gitignored `*.reasoning.md` sidecars.
+- Aligned public plugin/package version signals at `0.5.6`.
+- Updated PyPI metadata to the modern SPDX license field.
+- Tightened README and getting-started copy around install paths, detector
+  limits, statusline state, and the `unslop-file` skill name.
+
 ## [0.5.5] — 2026-04-22
 
 Docs-only release. No behavior change in the Python package or any of the

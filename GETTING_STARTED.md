@@ -17,21 +17,14 @@ When you ask ChatGPT or Claude to write something for you, the reply tends to ha
 
 Pick Claude Code. It's the smoothest on-ramp, and you don't need to touch any settings.
 
-Open a terminal and run these three commands:
+Open Claude Code and paste these two lines into any session:
 
-```bash
-git clone https://github.com/MohamedAbdallah-14/unslop.git
-cd unslop
-bash hooks/install.sh
+```
+/plugin marketplace add MohamedAbdallah-14/unslop
+/plugin install unslop
 ```
 
-On Windows, use PowerShell instead:
-
-```powershell
-pwsh hooks/install.ps1
-```
-
-Now open any Claude Code chat. Type:
+Restart Claude Code. Type:
 
 ```
 /unslop
@@ -40,6 +33,15 @@ Now open any Claude Code chat. Type:
 That's it. You'll see a small badge at the bottom of the screen that reads `[unslop:BALANCED]`. From this point on, everything Claude writes back to you in this session comes out in a human voice. Paste in a cover letter, ask for edits, and watch the reply. If you ever want the old Claude back, type `stop unslop` and the badge goes away.
 
 If you use Cursor or Windsurf instead, the plugin loads automatically when you open the project folder. No install step. Just type `/unslop` in the chat panel.
+
+If you need a manual Claude Code install for a fork, an air-gapped machine, or inspection before install:
+
+```bash
+git clone https://github.com/MohamedAbdallah-14/unslop.git
+cd unslop
+bash hooks/install.sh        # macOS / Linux
+pwsh hooks/install.ps1       # Windows
+```
 
 ## What it actually does to your writing
 
@@ -92,7 +94,7 @@ No. It changes how the reply sounds, not what the reply says. If you ask for a c
 
 **Will it hide my text from AI detectors?**
 
-Mostly, but not always, and nobody honest will tell you otherwise. The research the project is built on is clear: AI detectors are noisy. They falsely flag real human writing too, especially from non-native English speakers (one study found over half of TOEFL essays flagged as AI-generated). `anti-detector` mode does the things that are known to work — varying sentence length, adding specific details, roughening predictable structure — and that drops most detector scores. But a single pass through any tool is never a guarantee. For the strongest result, run the output through a second AI from a different company (Claude → ChatGPT, or ChatGPT → Gemini) and then read it yourself before sending.
+No tool can promise that. AI detectors are noisy, and they falsely flag real human writing too, especially from non-native English speakers. `anti-detector` mode focuses on the parts that improve readability and sometimes help scores: varied sentence length, specific details, contractions, and less predictable structure. But our own deterministic tests barely move strong detector scores. Treat detector output as a weak signal, keep drafts, and read the result yourself before sending.
 
 **Do I need to know what a regex is, or how to code?**
 

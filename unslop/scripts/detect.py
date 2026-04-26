@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 NATURAL_LANGUAGE_EXTENSIONS = {".md", ".markdown", ".txt", ".rst"}
@@ -55,6 +56,22 @@ SENSITIVE_PATH_FRAGMENTS = (
     ".npmrc", ".pypirc", ".netrc",
 )
 
+SENSITIVE_CONTENT_PATTERNS = tuple(
+    re.compile(pattern)
+    for pattern in (
+        r"-----BEGIN [A-Z ]*PRIVATE KEY-----",
+        r"\bAKIA[0-9A-Z]{16}\b",
+        r"\bASIA[0-9A-Z]{16}\b",
+        r"\bsk-ant-[A-Za-z0-9_-]{20,}\b",
+        r"\bsk-(?:proj|svcacct)-[A-Za-z0-9_-]{20,}\b",
+        r"\bsk-[A-Za-z0-9]{32,}\b",
+        r"\b(?:ghp|gho|ghu|ghs|ghr)_[A-Za-z0-9_]{30,}\b",
+        r"\bgithub_pat_[A-Za-z0-9_]{30,}\b",
+        r"\bhf_[A-Za-z0-9]{30,}\b",
+        r"\bxox[baprs]-[A-Za-z0-9-]{20,}\b",
+    )
+)
+
 
 def _looks_like_plain_prose(sample_text: str) -> bool:
     """Heuristic guard for extensionless files.
@@ -81,6 +98,16 @@ def _looks_like_plain_prose(sample_text: str) -> bool:
 def is_sensitive_path(path: Path) -> bool:
     p = str(path).lower()
     return any(fragment in p for fragment in SENSITIVE_PATH_FRAGMENTS)
+
+
+def has_sensitive_content(text: str) -> bool:
+    """Return True when prose contains token/private-key shapes.
+
+    Path checks catch obvious secret files. This content check protects allowed
+    Markdown/text files from being sent to LLM mode with embedded credentials.
+    Deterministic mode can still run locally because it makes no network call.
+    """
+    return any(pattern.search(text) for pattern in SENSITIVE_CONTENT_PATTERNS)
 
 
 def is_already_humanized_backup(path: Path) -> bool:

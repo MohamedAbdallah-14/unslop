@@ -319,16 +319,37 @@ def _process_stdin(args: argparse.Namespace) -> int:
             llm_kwargs["voice_sample"] = voice_sample
         if voice_profile is not None:
             llm_kwargs["voice_profile"] = voice_profile
-        humanized = humanize_llm(text, **llm_kwargs)
+        try:
+            humanized = humanize_llm(text, **llm_kwargs)
+        except RuntimeError as exc:
+            if args.json:
+                payload = {
+                    "path": "<stdin>",
+                    "ok": False,
+                    "error_code": "sensitive_content_refused"
+                    if str(exc).startswith("Refusing to send secret-like content")
+                    else "llm_unavailable",
+                    "error": str(exc),
+                    "hint": "Use --deterministic for a local-only pass",
+                }
+                sys.stderr.write(json.dumps(payload, indent=2) + "\n")
+            else:
+                sys.stderr.write(str(exc) + "\n")
+            return 1
         report = None
 
     result = validate(text, humanized)
     if args.diff:
-        _emit_diff(sys.stdout, "stdin", text, humanized)
+        if result.ok:
+            _emit_diff(sys.stdout, "stdin", text, humanized)
+        else:
+            from .validate import format_report
+
+            sys.stderr.write(format_report(result) + "\n")
     else:
         sys.stdout.write(humanized)
 
-    if args.json and not args.quiet:
+    if args.json:
         payload = {
             "path": "<stdin>",
             "ok": result.ok,
@@ -482,7 +503,13 @@ def _process_file(
     )
 
     if args.diff:
-        _emit_diff(sys.stdout, str(path), outcome.original, outcome.humanized)
+        if outcome.ok:
+            _emit_diff(sys.stdout, str(path), outcome.original, outcome.humanized)
+        else:
+            if outcome.validation is not None and hasattr(outcome.validation, "to_dict"):
+                sys.stderr.write(format_report(outcome.validation) + "\n")
+            if outcome.error:
+                sys.stderr.write(f"[{path.name}] {outcome.error}\n")
     elif args.output is not None and outcome.ok:
         args.output.write_text(outcome.humanized, encoding="utf-8")
         if not args.quiet:
@@ -494,6 +521,8 @@ def _process_file(
         "attempts": outcome.attempts,
         "error": outcome.error,
     }
+    if outcome.error and outcome.error.startswith("Refusing to send secret-like content"):
+        file_payload["error_code"] = "sensitive_content_refused"
     if outcome.validation is not None and hasattr(outcome.validation, "to_dict"):
         file_payload["validation"] = outcome.validation.to_dict()
     if outcome.report is not None:
@@ -518,6 +547,8 @@ def _process_file(
         report_accumulator.append({"path": str(path), "report": outcome.report.to_dict()})
 
     if not outcome.ok:
+        if outcome.error and outcome.error.startswith("Refusing to send secret-like content"):
+            return 1
         return 2
     return 0
 
@@ -621,6 +652,8 @@ def main(argv: list[str] | None = None) -> int:
         return _handle_surprisal_command(args)
 
     # --diff implies --dry-run. --stdin forces no-backup.
+    if args.diff and args.json:
+        parser.error("--diff and --json cannot be combined; use one output format")
     if args.diff:
         args.dry_run = True
     if args.stdin:

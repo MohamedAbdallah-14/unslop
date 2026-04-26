@@ -9,9 +9,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import pytest
+
 from unslop.scripts.detect import (
     MAX_BYTES,
     detect_file_type,
+    has_sensitive_content,
     is_already_humanized_backup,
     is_sensitive_path,
     should_compress,
@@ -43,6 +46,38 @@ class TestSensitivePaths:
 
     def test_ordinary_path_allowed(self):
         assert not is_sensitive_path(Path("/home/me/docs/readme.md"))
+
+
+class TestSensitiveContent:
+    @pytest.mark.parametrize(
+        ("prefix", "suffix"),
+        [
+            ("sk-ant-api03-", "abcdefghijklmnopqrstuvwxyz1234567890"),
+            ("sk-proj-", "abcdefghijklmnopqrstuvwxyz1234567890"),
+            ("sk-svcacct-", "abcdefghijklmnopqrstuvwxyz1234567890"),
+            ("sk-", "abcdefghijklmnopqrstuvwxyz1234567890ABCDEF"),
+            ("AKIA", "IOSFODNN7EXAMPLE"),
+            ("github_pat_", "abcdefghijklmnopqrstuvwxyz1234567890ABCDEFG"),
+            ("ghp_", "abcdefghijklmnopqrstuvwxyz1234567890"),
+            ("hf_", "abcdefghijklmnopqrstuvwxyz1234567890"),
+            ("xoxb-", "123456789012-123456789012-abcdefghijklmnopqrstuvwxyz"),
+        ],
+    )
+    def test_api_key_like_content_blocked(self, prefix: str, suffix: str):
+        text = f"Here is the token: {prefix}{suffix}"
+        assert has_sensitive_content(text)
+
+    def test_private_key_blocked(self):
+        text = (
+            "-----BEGIN OPENSSH "
+            "PRIVATE KEY-----\nsecret\n-----END OPENSSH "
+            "PRIVATE KEY-----"
+        )
+        assert has_sensitive_content(text)
+
+    def test_ordinary_prose_allowed(self):
+        text = "This is a paragraph about Claude Code hooks and markdown files."
+        assert not has_sensitive_content(text)
 
 
 class TestDetectFileType:

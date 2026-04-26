@@ -31,6 +31,14 @@ def _run(argv: list[str], stdin: str | None = None, monkeypatch=None) -> tuple[i
     return code, out.getvalue(), err.getvalue()
 
 
+def _fake_anthropic_token() -> str:
+    return "sk-ant-api03-" + "abcdefghijklmnopqrstuvwxyz1234567890"
+
+
+def _fake_openai_project_token() -> str:
+    return "sk-proj-" + "abcdefghijklmnopqrstuvwxyz1234567890"
+
+
 class TestVersionAndHelp:
     def test_version_flag_exits_zero(self, monkeypatch, capsys):
         monkeypatch.setattr(sys, "argv", ["unslop", "--version"])
@@ -82,6 +90,79 @@ class TestStdinDeterministic:
     def test_unknown_intensity_rejected(self, capsys):
         with pytest.raises(SystemExit):
             cli.main(["--stdin", "--deterministic", "--mode", "aggressive"])
+
+
+class TestSecretGuard:
+    def test_stdin_llm_mode_refuses_secret_like_content(self, monkeypatch):
+        monkeypatch.setattr(cli, "_llm_available", lambda: True)
+        code, out, err = _run(
+            ["--stdin"],
+            stdin=f"Token: {_fake_anthropic_token()}",
+            monkeypatch=monkeypatch,
+        )
+        assert code == 1
+        assert out == ""
+        assert "--deterministic" in err
+
+    def test_stdin_llm_mode_refusal_can_emit_json(self, monkeypatch):
+        monkeypatch.setattr(cli, "_llm_available", lambda: True)
+        code, out, err = _run(
+            ["--stdin", "--json"],
+            stdin=f"Token: {_fake_openai_project_token()}",
+            monkeypatch=monkeypatch,
+        )
+        assert code == 1
+        assert out == ""
+        payload = json.loads(err)
+        assert payload["ok"] is False
+        assert payload["error_code"] == "sensitive_content_refused"
+        assert "--deterministic" in payload["hint"]
+
+    def test_file_llm_mode_refuses_secret_like_content(self, tmp_path, monkeypatch):
+        src = tmp_path / "notes.md"
+        src.write_text(
+            f"Token: {_fake_anthropic_token()}\n",
+            encoding="utf-8",
+        )
+        code, _out, err = _run([str(src)], monkeypatch=monkeypatch)
+        assert code == 1
+        assert "--deterministic" in err
+
+    def test_deterministic_allows_secret_like_content_without_network(self, monkeypatch):
+        code, out, _err = _run(
+            ["--stdin", "--deterministic"],
+            stdin=f"Token: {_fake_anthropic_token()}",
+            monkeypatch=monkeypatch,
+        )
+        assert code == 0
+        assert "sk-ant-api03" in out
+
+    def test_detector_feedback_stdin_not_blocked_by_llm_availability(self, monkeypatch):
+        class FakeOutcome:
+            final_text = f"Token: {_fake_anthropic_token()}"
+            original_probability = 0.9
+            final_probability = 0.9
+            reason_stopped = "test"
+
+            def to_dict(self):
+                return {"reason_stopped": self.reason_stopped}
+
+        monkeypatch.setattr(cli, "_llm_available", lambda: True)
+        monkeypatch.setattr(
+            "unslop.scripts.detector.feedback_loop",
+            lambda *args, **kwargs: FakeOutcome(),
+        )
+        code, out, _err = _run(
+            ["--stdin", "--detector-feedback"],
+            stdin=f"Token: {_fake_anthropic_token()}",
+            monkeypatch=monkeypatch,
+        )
+        assert code == 0
+        assert "sk-ant-api03" in out
+
+    def test_diff_json_combination_rejected(self):
+        with pytest.raises(SystemExit):
+            cli.main(["--stdin", "--deterministic", "--diff", "--json"])
 
 
 class TestStripReasoningStdin:

@@ -414,6 +414,26 @@ class TestDeterministicEmDashCap:
         assert " , " not in out, f"Ugly spacing ' , ' found in: {out!r}"
         assert "third, fourth, end" in out or "third,fourth,end" in out
 
+    def test_preserves_closing_dash_of_parenthetical_pair(self) -> None:
+        text = (
+            "The first aside — one short interruption — is fine. "
+            "The second aside — auth, fallback chains, output normalization — is the point."
+        )
+        out = humanize_deterministic(text)
+        assert out.count("—") <= 2
+        assert "The second aside — auth, fallback chains, output normalization, is the point" not in out
+        assert (
+            "The second aside — auth, fallback chains, output normalization — is the point" in out
+            or "The second aside (auth, fallback chains, output normalization) is the point" in out
+        )
+
+    def test_multiple_parenthetical_pairs_still_obey_dash_cap(self) -> None:
+        text = "First — one — is ok. Second — two — is ok. Third — three — is extra."
+        out = humanize_deterministic(text)
+        assert out.count("—") <= 2
+        assert ", is" not in out
+        assert "Second (two) is ok" in out
+
     def test_em_dash_count_resets_per_paragraph(self) -> None:
         text = "One — two — three — four.\n\nAnother — paragraph — here — too."
         out = humanize_deterministic(text)
@@ -486,6 +506,16 @@ class TestPreservation:
         text = "Great question! Use `delve()` here."
         out = humanize_deterministic(text)
         assert "`delve()`" in out
+
+    def test_inline_code_inside_quoted_prose_preserved(self) -> None:
+        text = (
+            'The server emits a "paste this prompt, then run '
+            '`asset_ingest_external` with the file" plan.'
+        )
+        out = humanize_deterministic(text)
+        assert "`asset_ingest_external`" in out
+        assert "INLINE#" not in out
+        assert "\x00" not in out
 
     def test_indented_code_block_preserved_byte_for_byte(self) -> None:
         text = (
@@ -1277,6 +1307,29 @@ class TestHumanizeFileEx:
         assert backup.read_text() == "someone else's backup\n"
 
 
+class TestLLMSafety:
+    def test_humanize_llm_refuses_secret_like_content(self) -> None:
+        from scripts.humanize import humanize_llm
+
+        with pytest.raises(RuntimeError, match="--deterministic"):
+            humanize_llm("Token: " + "sk-proj-" + "abcdefghijklmnopqrstuvwxyz1234567890")
+
+    def test_humanize_file_ex_llm_refuses_secret_like_content(self, tmp_path: Path) -> None:
+        from scripts.humanize import humanize_file_ex
+
+        src = tmp_path / "notes.md"
+        src.write_text(
+            "Token: " + "sk-svcacct-" + "abcdefghijklmnopqrstuvwxyz1234567890\n",
+            encoding="utf-8",
+        )
+
+        outcome = humanize_file_ex(src, deterministic=False, write=False)
+
+        assert outcome.ok is False
+        assert outcome.error is not None
+        assert "--deterministic" in outcome.error
+
+
 # ---------- CLI ----------
 
 
@@ -1355,6 +1408,51 @@ class TestCLI:
         assert "Great question" not in out
         assert "delve" not in out.lower()
 
+    def test_stdin_diff_suppresses_invalid_humanized_output(
+        self, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        import io
+
+        from scripts.cli import main
+        from scripts.humanize import HumanizeReport
+
+        monkeypatch.setattr("sys.stdin", io.StringIO("Run `unslop` with the file.\n"))
+
+        def broken_humanize(*args, **kwargs):
+            return "Run INLINE#27 with the file.\n", HumanizeReport(intensity="balanced")
+
+        monkeypatch.setattr(
+            "scripts.humanize.humanize_deterministic_with_report",
+            broken_humanize,
+        )
+
+        code = main(["--stdin", "--deterministic", "--diff", "--quiet"])
+
+        captured = capsys.readouterr()
+        assert code == 2
+        assert "INLINE#27" not in captured.out
+        assert "INLINE#27" not in captured.err
+        assert "Inline code missing" in captured.err
+
+    def test_stdin_json_not_suppressed_by_quiet(
+        self, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        import io
+        import json as json_mod
+
+        from scripts.cli import main
+
+        monkeypatch.setattr("sys.stdin", io.StringIO("Great question! Delve into this.\n"))
+
+        code = main(["--stdin", "--deterministic", "--json", "--quiet"])
+
+        captured = capsys.readouterr()
+        assert code == 0
+        payload = json_mod.loads(captured.err)
+        assert payload["path"] == "<stdin>"
+        assert payload["ok"] is True
+        assert "report" in payload
+
     def test_dry_run_does_not_write_file(self, tmp_path: Path) -> None:
         from scripts.cli import main
 
@@ -1379,6 +1477,41 @@ class TestCLI:
         assert "+++" in out
         # File itself untouched.
         assert "Great question" in src.read_text()
+
+    def test_diff_suppresses_invalid_humanized_output(
+        self, tmp_path: Path, capsys, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
+        from scripts.cli import main
+        from scripts.humanize import HumanizeOutcome
+        from scripts.validate import ValidationResult
+
+        src = tmp_path / "doc.md"
+        src.write_text("Run `unslop` with the file.\n")
+
+        def broken_humanize_file_ex(*args, **kwargs):
+            return HumanizeOutcome(
+                ok=False,
+                original="Run `unslop` with the file.\n",
+                humanized="Run INLINE#27 with the file.\n",
+                validation=ValidationResult(
+                    ok=False,
+                    errors=["Inline code missing: ['`unslop`']"],
+                    warnings=[],
+                    ai_isms_before=0,
+                    ai_isms_after=0,
+                ),
+                error="Deterministic pass produced a structural change.",
+            )
+
+        monkeypatch.setattr("scripts.humanize.humanize_file_ex", broken_humanize_file_ex)
+
+        code = main(["--deterministic", "--diff", "--quiet", str(src)])
+
+        captured = capsys.readouterr()
+        assert code == 2
+        assert "INLINE#27" not in captured.out
+        assert "INLINE#27" not in captured.err
+        assert "Inline code missing" in captured.err
 
     def test_json_output(self, tmp_path: Path, capsys) -> None:
         import json as json_mod

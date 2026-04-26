@@ -83,8 +83,15 @@ _NEGATION_CONTRACTIONS: list[tuple[re.Pattern[str], str]] = [
 # (possessive-owner cliché) or when sentence-start pattern is capitalized
 # proper noun (common in technical writing).
 #
-# Pattern: "it is" not followed by " own" and NOT at the very start of a
-# capitalized-noun sentence context.
+# Pronoun + copula contractions are only safe when another phrase clearly
+# follows the copula. Clause-final forms like "Here they are" and identity
+# complements like "who I am and ..." must stay full-form English.
+_PRONOUN_COPULA_FOLLOWERS = (
+    r"(?:not|already|still|just|only|really|probably|also|now|then|"
+    r"very|quite|pretty|so|too|ready|right|wrong|sure|able|unable|"
+    r"glad|happy|confident|aware|clear|unclear|sorry|strict|\w+(?:ing|ed))"
+)
+
 _COPULA_CONTRACTIONS: list[tuple[re.Pattern[str], str]] = [
     # "it is the X" / "it is a X" / "it is not" etc. — safe
     (re.compile(r"\b([Ii])t is(?=\s+(?:a|an|the|not|already|still|just|only|really|"
@@ -97,14 +104,14 @@ _COPULA_CONTRACTIONS: list[tuple[re.Pattern[str], str]] = [
     # "there is a X" — possessive-fronting impossible here (there has no semantic referent)
     (re.compile(r"\b([Tt])here is(?=\s+(?:a|an|no|one|only|always|sometimes|often|"
                 r"little|much|nothing|something|anything|everything)\b)"), r"\1here's"),
-    # "we are" → "we're" — "we" is unambiguously a pronoun, always safe
-    (re.compile(r"\b([Ww])e are\b"), r"\1e're"),
+    # "we are" → "we're" only when a safe follower remains.
+    (re.compile(rf"\b([Ww])e are(?=\s+{_PRONOUN_COPULA_FOLLOWERS}\b)"), r"\1e're"),
     # "you are" → "you're"
-    (re.compile(r"\b([Yy])ou are\b"), r"\1ou're"),
+    (re.compile(rf"\b([Yy])ou are(?=\s+{_PRONOUN_COPULA_FOLLOWERS}\b)"), r"\1ou're"),
     # "they are" → "they're"
-    (re.compile(r"\b([Tt])hey are\b"), r"\1hey're"),
+    (re.compile(rf"\b([Tt])hey are(?=\s+{_PRONOUN_COPULA_FOLLOWERS}\b)"), r"\1hey're"),
     # "I am" → "I'm"
-    (re.compile(r"\bI am\b"), "I'm"),
+    (re.compile(rf"\bI am(?=\s+{_PRONOUN_COPULA_FOLLOWERS}\b)"), "I'm"),
     # "I have" → "I've" only when followed by past participle
     (re.compile(r"\bI have(?=\s+(?:seen|done|had|been|found|made|known|thought|"
                 r"tried|worked|written|shipped|built|pushed|pulled|read|used|"

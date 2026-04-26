@@ -37,7 +37,6 @@
   <img alt="Cline" src="https://img.shields.io/badge/Cline-1F2937?style=for-the-badge&logo=visualstudiocode&logoColor=white"/>
   <img alt="Gemini CLI" src="https://img.shields.io/badge/Gemini_CLI-4285F4?style=for-the-badge&logo=google&logoColor=white"/>
   <img alt="OpenAI Codex" src="https://img.shields.io/badge/OpenAI_Codex-412991?style=for-the-badge&logo=openai&logoColor=white"/>
-  <img alt="GitHub Copilot" src="https://img.shields.io/badge/Copilot-24292F?style=for-the-badge&logo=githubcopilot&logoColor=white"/>
 </p>
 
 <!-- Compact credibility row: 3 signals, not 19 -->
@@ -290,7 +289,7 @@ Pairs with Anthropic Custom Styles and OpenAI style-steering. Custom Styles sets
   <img src="./assets/statusline.svg" alt="Claude Code statusline" width="85%"/>
 </p>
 
-The badge is the only UI. Everything else is silent — the hook fires on `SessionStart`, injects the activation rule into Claude's context, and tracks the mode in `~/.claude/.unslop-mode`. No network calls. No telemetry.
+The badge is the only UI. Everything else is silent — the hook fires on `SessionStart`, injects the activation rule into Claude's context, and tracks the mode in `$CLAUDE_CONFIG_DIR/.unslop-active` (fallback: `~/.claude/.unslop-active`). No network calls. No telemetry.
 
 ---
 
@@ -321,7 +320,7 @@ Mode persists for the whole session.
 | `unslop`              | `/unslop`                    | Active humanization for live responses                         |
 | `unslop-commit`       | `/unslop-commit`, `/commit`  | Conventional Commits in human voice                            |
 | `unslop-review`       | `/unslop-review`, `/review`  | Direct, kind PR review comments                                |
-| `humanize` (`unslop`) | `/unslop-file <file>`        | Rewrite a markdown file (preserves code, URLs, headings)       |
+| `unslop-file`         | `/unslop-file <file>`        | Rewrite a markdown file (preserves code, URLs, headings)       |
 | `unslop-reasoning`    | `/unslop-reasoning`          | Strip AI slop from chain-of-thought (over-hedging, loops)      |
 | `unslop-help`         | `/unslop-help`               | Reference card                                                 |
 
@@ -343,7 +342,7 @@ Agent output often carries private reasoning wrappers (`<thinking>`, `<think>`, 
 unslop --deterministic --strip-reasoning agent-output.md
 ```
 
-On a file, stripped content is written to `agent-output.reasoning.md` next to the target. On stdin, the sidecar is discarded. Opt-in; default off.
+On a file, stripped content is written to `agent-output.reasoning.md` next to the target. On stdin, the sidecar is discarded. The sidecar is gitignored by default because reasoning traces can contain process notes you did not mean to ship. Opt-in; default off.
 
 ### Surprisal-variance reading
 

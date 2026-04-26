@@ -184,7 +184,10 @@ def _protect(text: str) -> tuple[str, dict[str, str]]:
 
 
 def _restore(text: str, table: dict[str, str]) -> str:
-    for ph, original in table.items():
+    # Restore in reverse protection order so outer placeholders that contain
+    # earlier inner placeholders (quoted prose containing inline code) unwrap
+    # before the inner placeholders are restored.
+    for ph, original in reversed(table.items()):
         text = text.replace(ph, original)
     return text
 
@@ -613,12 +616,48 @@ _LIST_MARKER = re.compile(r"^[ \t]*(?:[-*+]|\d+\.)[ \t]")
 
 
 def _cap_in_block(block: str, max_dashes: int) -> str:
+    protected_pair_starts: dict[int, int] = {}
+    protected_pair_ends: dict[int, bool] = {}
+    for match in re.finditer(
+        r"—[^—.!?\n]{1,160}—(?=\s+(?:is|are|was|were|has|have|had|will|would|can|could|should)\b)",
+        block,
+    ):
+        protected_pair_starts[match.start()] = match.end() - 1
+
     count = 0
     buf: list[str] = []
     chars = list(block)
     i = 0
     while i < len(chars):
         if chars[i] == "—":
+            if i in protected_pair_starts:
+                keep_pair = count + 2 <= max_dashes
+                protected_pair_ends[protected_pair_starts[i]] = keep_pair
+                if keep_pair:
+                    count += 1
+                    buf.append("—")
+                else:
+                    if buf and buf[-1] == " ":
+                        buf.pop()
+                    buf.append(" (")
+                    if i + 1 < len(chars) and chars[i + 1] == " ":
+                        i += 1
+                i += 1
+                continue
+            if i in protected_pair_ends:
+                keep_pair = protected_pair_ends[i]
+                if keep_pair:
+                    count += 1
+                    buf.append("—")
+                else:
+                    if buf and buf[-1] == " ":
+                        buf.pop()
+                    buf.append(")")
+                    if i + 1 < len(chars) and chars[i + 1] == " ":
+                        buf.append(" ")
+                        i += 1
+                i += 1
+                continue
             count += 1
             if count <= max_dashes:
                 buf.append("—")
@@ -1154,6 +1193,14 @@ def humanize_llm(
     voice_sample: str | None = None,
     voice_profile=None,
 ) -> str:
+    from .detect import has_sensitive_content
+
+    if has_sensitive_content(text):
+        raise RuntimeError(
+            "Refusing to send secret-like content to LLM mode. "
+            "Use --deterministic for a local-only pass."
+        )
+
     prompt = _build_humanize_prompt(
         text,
         intensity=intensity,
