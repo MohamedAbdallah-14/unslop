@@ -42,7 +42,7 @@ jobs:
         run: python3 benchmarks/detector_bench.py --tmr-only
 
       - name: Upload detector benchmark artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: detector-bench-${{ github.run_id }}
           path: benchmarks/results/*-detectors.json
@@ -73,7 +73,7 @@ jobs:
           python3 evals/perceived_humanness.py --runs 1
 
       - name: Upload humanness artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: humanness-${{ github.run_id }}
           path: benchmarks/results/*-humanness.json
