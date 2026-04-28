@@ -50,6 +50,34 @@
 
 ---
 
+## 👀 See the difference
+
+<p align="center">
+  <img src="./assets/demo.svg" alt="unslop CLI output: before and after a cover letter pass" width="100%"/>
+</p>
+
+Same facts. Different voice. A hiring manager reads the second version without wincing.
+
+<table>
+<tr><th width="50%">😬 Before (stock AI output)</th><th width="50%">✅ After <code>/unslop</code></th></tr>
+<tr>
+<td valign="top">
+
+I am writing to express my profound enthusiasm for the Marketing Coordinator position at Acme Corp. With over five years of experience **navigating the dynamic landscape** of digital marketing, I am confident that my **comprehensive skill set and passion for innovation** make me a **robust** candidate. I am particularly drawn to Acme's **cutting-edge** approach, and I would welcome the opportunity to **delve into** how my background aligns with your team's goals.
+
+</td>
+<td valign="top">
+
+Five years in digital marketing, most of it in small teams where nobody else writes the landing pages, so I end up doing it. I saw your Marketing Coordinator posting yesterday. The part about running campaigns end-to-end instead of handing them off to an agency is what pulled me in — that's the work I actually like.
+
+</td>
+</tr>
+</table>
+
+> **21 out of 21** blind LLM-judge runs preferred the unslop rewrite over the original. See [Measured results](#-measured-results).
+
+---
+
 ## 🧭 Who this is for
 
 <table>
@@ -80,41 +108,13 @@ Byte-identical preservation of code, URLs, headings. Backed by 38 peer-reviewed 
 
 ---
 
-## 👀 See the difference
-
-<p align="center">
-  <img src="./assets/demo.svg" alt="unslop CLI output: before and after a cover letter pass" width="100%"/>
-</p>
-
-Same facts. Different voice. A hiring manager reads the second version without wincing.
-
-<table>
-<tr><th width="50%">😬 Before (stock AI output)</th><th width="50%">✅ After <code>/unslop</code></th></tr>
-<tr>
-<td valign="top">
-
-I am writing to express my profound enthusiasm for the Marketing Coordinator position at Acme Corp. With over five years of experience **navigating the dynamic landscape** of digital marketing, I am confident that my **comprehensive skill set and passion for innovation** make me a **robust** candidate. I am particularly drawn to Acme's **cutting-edge** approach, and I would welcome the opportunity to **delve into** how my background aligns with your team's goals.
-
-</td>
-<td valign="top">
-
-Five years in digital marketing, most of it in small teams where nobody else writes the landing pages, so I end up doing it. I saw your Marketing Coordinator posting yesterday. The part about running campaigns end-to-end instead of handing them off to an agency is what pulled me in — that's the work I actually like.
-
-</td>
-</tr>
-</table>
-
-> **21 out of 21** blind LLM-judge runs preferred the unslop rewrite over the original. See [Measured results](#-measured-results).
-
----
-
 ## Table of contents
 
 <details>
 <summary>Click to expand</summary>
 
-- [🧭 Who this is for](#-who-this-is-for)
 - [👀 See the difference](#-see-the-difference)
+- [🧭 Who this is for](#-who-this-is-for)
 - [🚀 60-second start](#-60-second-start)
 - [🧪 Measured results](#-measured-results)
 - [✨ What you get](#-what-you-get)
@@ -281,7 +281,7 @@ Opt-in CLI flag scores your text against the TMR detector (99.28 % AUROC on RAID
 
 ### 🗣️ Persistent voice-match
 
-Save a numeric stylometric profile from a sample of your own writing — sentence length CV, contraction rate, pronoun ratios. Reuse across sessions. No free-text prose is stored (sycophancy-memory vector physically unavailable).
+Save a numeric profile from a sample of your own writing — sentence-length variance, contraction rate, pronoun ratios. Reuse across sessions. No text samples are stored, so the tool can't learn to flatter you over time.
 
 </td>
 <td width="33%" valign="top">
