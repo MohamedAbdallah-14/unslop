@@ -1,24 +1,24 @@
 {
-  "timestamp": "20260426T133403Z",
+  "timestamp": "20260428T181647Z",
   "intensity": "balanced",
   "fixture_count": 9,
-  "total_ai_isms_before": 226,
+  "total_ai_isms_before": 229,
   "total_ai_isms_after": 18,
-  "total_delta": 208,
-  "percent_reduced": 92.0,
+  "total_delta": 211,
+  "percent_reduced": 92.1,
   "fixtures": [
     {
       "file": "academic-abstract.md",
       "words_before": 328,
-      "words_after": 286,
+      "words_after": 285,
       "sentence_count_before": 19,
       "sentence_count_after": 19,
-      "ai_isms_before": 29,
+      "ai_isms_before": 31,
       "ai_isms_after": 0,
-      "delta": 29,
+      "delta": 31,
       "burstiness_before": 11.5,
-      "burstiness_after": 9.55,
-      "burstiness_delta": -1.95,
+      "burstiness_after": 9.54,
+      "burstiness_delta": -1.96,
       "flat_paragraphs_before": 1,
       "flat_paragraphs_after": 1,
       "sentences_split": 0,
@@ -26,7 +26,8 @@
       "structural_ok": true,
       "structural_errors": [],
       "warnings": [
-        "False-range clich\u00e9s present (1). Formulaic 'from X to Y' patterns read as AI; hand-edit or run --mode full."
+        "False-range clich\u00e9s present (1). Formulaic 'from X to Y' patterns read as AI; hand-edit or run --mode full.",
+        "Title-case heading(s) present (1). Sentence-case headings usually read less generated."
       ]
     },
     {
@@ -47,7 +48,9 @@
       "bullet_groups_merged": 0,
       "structural_ok": true,
       "structural_errors": [],
-      "warnings": []
+      "warnings": [
+        "Title-case heading(s) present (2). Sentence-case headings usually read less generated."
+      ]
     },
     {
       "file": "ai-slop-new-categories.md",
@@ -67,7 +70,9 @@
       "bullet_groups_merged": 0,
       "structural_ok": true,
       "structural_errors": [],
-      "warnings": []
+      "warnings": [
+        "Title-case heading(s) present (1). Sentence-case headings usually read less generated."
+      ]
     },
     {
       "file": "ai-slop-release-notes.md",
@@ -87,7 +92,9 @@
       "bullet_groups_merged": 0,
       "structural_ok": true,
       "structural_errors": [],
-      "warnings": []
+      "warnings": [
+        "Title-case heading(s) present (1). Sentence-case headings usually read less generated."
+      ]
     },
     {
       "file": "ai-slop-tutorial.md",
@@ -109,7 +116,8 @@
       "structural_errors": [],
       "warnings": [
         "Flat paragraphs increased: 0 \u2192 1. A paragraph with 3+ sentences at uniform length is a detector tell.",
-        "Contraction rate low (0.0/1k words). Human writing uses ~17 contractions per 1k words; zero contractions is a detector signal."
+        "Contraction rate low (0.0/1k words). Human writing uses ~17 contractions per 1k words; zero contractions is a detector signal.",
+        "Title-case heading(s) present (3). Sentence-case headings usually read less generated."
       ]
     },
     {
@@ -130,7 +138,9 @@
       "bullet_groups_merged": 1,
       "structural_ok": true,
       "structural_errors": [],
-      "warnings": []
+      "warnings": [
+        "Title-case heading(s) present (1). Sentence-case headings usually read less generated."
+      ]
     },
     {
       "file": "flat-paragraph-bait.md",
@@ -150,17 +160,19 @@
       "bullet_groups_merged": 0,
       "structural_ok": true,
       "structural_errors": [],
-      "warnings": []
+      "warnings": [
+        "Title-case heading(s) present (1). Sentence-case headings usually read less generated."
+      ]
     },
     {
       "file": "qa-format.md",
       "words_before": 306,
-      "words_after": 249,
+      "words_after": 248,
       "sentence_count_before": 23,
       "sentence_count_after": 21,
-      "ai_isms_before": 32,
+      "ai_isms_before": 33,
       "ai_isms_after": 0,
-      "delta": 32,
+      "delta": 33,
       "burstiness_before": 8.03,
       "burstiness_after": 6.43,
       "burstiness_delta": -1.6,
@@ -171,7 +183,8 @@
       "structural_ok": true,
       "structural_errors": [],
       "warnings": [
-        "False-range clich\u00e9s present (1). Formulaic 'from X to Y' patterns read as AI; hand-edit or run --mode full."
+        "False-range clich\u00e9s present (1). Formulaic 'from X to Y' patterns read as AI; hand-edit or run --mode full.",
+        "Title-case heading(s) present (1). Sentence-case headings usually read less generated."
       ]
     },
     {
@@ -194,7 +207,8 @@
       "structural_errors": [],
       "warnings": [
         "False-range clich\u00e9s present (2). Formulaic 'from X to Y' patterns read as AI; hand-edit or run --mode full.",
-        "Contraction rate low (0.0/1k words). Human writing uses ~17 contractions per 1k words; zero contractions is a detector signal."
+        "Contraction rate low (0.0/1k words). Human writing uses ~17 contractions per 1k words; zero contractions is a detector signal.",
+        "Title-case heading(s) present (1). Sentence-case headings usually read less generated."
       ]
     }
   ]

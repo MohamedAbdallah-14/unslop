@@ -218,6 +218,67 @@ class TestDeterministicHedging:
         assert "worth mentioning" not in out.lower()
         assert "Performance matters" in out
 
+
+class TestVocabClusterSync:
+    def test_align_with_swap(self) -> None:
+        out = humanize_deterministic("This should align with our values.")
+        assert "align with" not in out.lower()
+        assert "match" in out.lower()
+
+    def test_fostering_swap(self) -> None:
+        out = humanize_deterministic("The plan is fostering collaboration.")
+        assert "fostering" not in out.lower()
+        assert "building collaboration" in out.lower()
+
+    def test_showcasing_swap(self) -> None:
+        out = humanize_deterministic("The page is showcasing the feature.")
+        assert "showcasing" not in out.lower()
+        assert "showing the feature" in out.lower()
+
+    def test_hyphenated_pair_swaps(self) -> None:
+        out = humanize_deterministic(
+            "This fast-paced, groundbreaking, well-rounded plan works."
+        )
+        assert "fast-paced" not in out.lower()
+        assert "groundbreaking" not in out.lower()
+        assert "well-rounded" not in out.lower()
+
+
+class TestCurlyQuotes:
+    def test_curly_quote_normalize(self) -> None:
+        out = humanize_deterministic("The UI says “Save” and ‘Cancel’.")
+        assert "“" not in out and "”" not in out
+        assert "‘" not in out and "’" not in out
+        assert '"Save"' in out
+        assert "'Cancel'" in out
+
+    def test_curly_quote_in_code_preserved(self) -> None:
+        text = '```js\nconst label = “Save”;\n```\n\nThe prose says “Cancel”.'
+        out = humanize_deterministic(text)
+        assert 'const label = “Save”;' in out
+        assert '"Cancel"' in out
+
+
+class TestKnowledgeCutoff:
+    def test_knowledge_cutoff_removed(self) -> None:
+        out = humanize_deterministic("As of my last update, the API supports retries.")
+        assert "last update" not in out.lower()
+        assert "The API supports retries" in out
+
+    def test_training_data_disclaimer_removed(self) -> None:
+        out = humanize_deterministic(
+            "My training data only goes up to 2024, the docs may have changed."
+        )
+        assert "training data" not in out.lower()
+        assert "The docs may have changed" in out
+
+
+class TestVagueAttribution:
+    def test_observers_say_removed(self) -> None:
+        out = humanize_deterministic("Observers say the patch is risky.")
+        assert "observers say" not in out.lower()
+        assert "The patch is risky" in out
+
     def test_strips_stacked_hedging(self) -> None:
         out = humanize_deterministic(
             "It's worth mentioning that, generally speaking, you should run tests."
@@ -730,6 +791,33 @@ class TestValidate:
         result = validate(original, humanized)
         assert not result.ok
         assert any("AI-ism count increased" in e for e in result.errors)
+
+    def test_title_case_heading_warning(self) -> None:
+        flagged = validate("## How To Build A Thing", "## How To Build A Thing")
+        clean = validate("## How to build a thing", "## How to build a thing")
+        assert flagged.title_case_headings == 1
+        assert clean.title_case_headings == 0
+
+    def test_inline_header_lists_warning(self) -> None:
+        text = "- **One:** body\n- **Two:** body\n- **Three:** body\n"
+        result = validate(text, text)
+        assert result.inline_header_lists == 1
+        assert any("Inline-header" in w for w in result.warnings)
+
+    def test_vague_attribution_observers_say_flagged(self) -> None:
+        text = "Observers say the patch is risky."
+        result = validate("", text)
+        assert result.ai_isms_after >= 1
+
+    def test_generic_positive_conclusion_warning(self) -> None:
+        text = "The work shipped. It remains a fascinating field."
+        result = validate(text, text)
+        assert result.generic_positive_conclusions == 1
+
+    def test_curly_quote_warning(self) -> None:
+        text = "The UI says “Save”."
+        result = validate(text, text)
+        assert result.curly_quotes_after == 2
 
 
 # ---------- end-to-end ----------
@@ -1605,6 +1693,8 @@ from scripts.detect import _looks_like_plain_prose, detect_file_type
 from scripts.humanize import (
     HumanizeReport,
     Replacement,
+    _build_audit_prompt,
+    _build_audit_rewrite_prompt,
     _build_humanize_prompt,
     _build_fix_prompt,
     _call_anthropic_sdk,
@@ -1741,6 +1831,18 @@ class TestPromptBuilders:
         assert "heading drift" in prompt
         assert "orig" in prompt and "broken" in prompt
 
+    def test_build_audit_prompt(self) -> None:
+        prompt = _build_audit_prompt("humanized text", "original text")
+        assert "Text to audit" in prompt
+        assert "humanized text" in prompt
+        assert "original text" in prompt
+
+    def test_build_audit_rewrite_prompt(self) -> None:
+        prompt = _build_audit_rewrite_prompt("too smooth", "current text")
+        assert "too smooth" in prompt
+        assert "current text" in prompt
+        assert "Output the rewritten text only" in prompt
+
 
 # ---------- humanize.py: _strip_outer_fence ----------
 
@@ -1858,6 +1960,56 @@ class TestHumanizeLLMOrchestration:
             lambda *_: "```markdown\nfenced reply\n```",
         )
         assert humanize_llm("input") == "fenced reply"
+
+    def test_audit_default_off_for_balanced(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        calls: list[str] = []
+
+        def fake_call(prompt: str) -> str:
+            calls.append(prompt)
+            return " ".join(["word"] * 120)
+
+        monkeypatch.setattr("scripts.humanize._call_llm", fake_call)
+        humanize_llm("input", intensity="balanced")
+        assert len(calls) == 1
+
+    def test_audit_default_on_for_full(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        calls: list[str] = []
+
+        def fake_call(prompt: str) -> str:
+            calls.append(prompt)
+            if len(calls) == 1:
+                return " ".join(["word"] * 120)
+            if len(calls) == 2:
+                return "too uniform"
+            return " ".join(["fixed"] * 120)
+
+        monkeypatch.setattr("scripts.humanize._call_llm", fake_call)
+        humanize_llm("input", intensity="full")
+        assert len(calls) == 3
+
+    def test_no_audit_flag_overrides(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        calls: list[str] = []
+        monkeypatch.setattr(
+            "scripts.humanize._call_llm",
+            lambda prompt: calls.append(prompt) or " ".join(["word"] * 120),
+        )
+        humanize_llm("input", intensity="full", audit=False)
+        assert len(calls) == 1
+
+    def test_audit_fallback_on_validate_fail(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        calls: list[str] = []
+
+        def fake_call(prompt: str) -> str:
+            calls.append(prompt)
+            if len(calls) == 1:
+                return "# Heading\n\n" + " ".join(["word"] * 120)
+            if len(calls) == 2:
+                return "heading dropped"
+            return " ".join(["fixed"] * 120)
+
+        monkeypatch.setattr("scripts.humanize._call_llm", fake_call)
+        out = humanize_llm("# Heading\n\ninput " * 80, intensity="full")
+        assert out.startswith("# Heading")
 
 
 class TestLLMFix:

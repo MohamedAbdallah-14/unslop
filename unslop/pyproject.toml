@@ -29,6 +29,7 @@ dependencies = []
 
 [project.optional-dependencies]
 llm = ["anthropic>=0.34"]
+surprisal = ["torch", "transformers", "scipy"]
 dev = ["pytest>=9", "pytest-cov>=7", "ruff>=0.15", "mypy>=1.20"]
 
 [project.urls]

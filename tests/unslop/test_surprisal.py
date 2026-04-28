@@ -38,6 +38,26 @@ class TestReadingShape:
         assert d["surprisal_stdev"] == 1.2
         assert d["surprisal_cv"] == 0.48
 
+    def test_diveye_vector_length_10(self):
+        r = SurprisalReading(
+            mean_log_prob=-2.5,
+            surprisal_stdev=1.2,
+            surprisal_cv=0.48,
+            token_count=100,
+            model="distilgpt2",
+            surprisal_variance=1.44,
+            surprisal_skewness=0.1,
+            surprisal_kurtosis=-0.2,
+            delta_surprisal_mean=0.0,
+            delta_surprisal_stdev=0.5,
+            delta2_surprisal_variance=0.2,
+            delta2_surprisal_entropy=1.1,
+            delta2_surprisal_autocorr=0.3,
+        )
+        vector = r.to_diveye_vector()
+        assert len(vector) == 10
+        assert vector[:5] == [2.5, 1.2, 1.44, 0.1, -0.2]
+
     def test_empty_reading_zeros(self):
         # compute_surprisal_variance on empty input returns a zero reading
         # *without* loading the model, so it's safe even with no deps.
@@ -111,6 +131,8 @@ class TestMockedLM:
         # Nonzero readings on nonempty text.
         assert r.token_count > 0
         assert r.surprisal_stdev >= 0.0
+        assert len(r.to_diveye_vector()) == 10
+        assert all(value == value for value in r.to_diveye_vector())
         assert r.model == "fake"
 
     def test_short_input_returns_zero_without_crashing(self, monkeypatch):
@@ -138,6 +160,13 @@ class TestMockedLM:
         r = compute_surprisal_variance("hi", model="fake")
         assert r.token_count == 1
         assert r.surprisal_stdev == 0.0
+
+    def test_autocorr_handles_constant_seq(self):
+        assert surprisal._lag1_autocorr([1.0, 1.0, 1.0]) == 0.0
+
+    def test_entropy_uses_20_bins_shape(self):
+        entropy = surprisal._entropy_20_bins([float(i) for i in range(20)])
+        assert entropy > 0.0
 
 
 @pytest.mark.skipif(

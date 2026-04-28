@@ -172,6 +172,12 @@ class TestLatinateRatio:
         assert p.latinate_ratio == 0.0
 
 
+class TestFunctionWordRate:
+    def test_function_words_high_on_glue_text(self):
+        p = analyze("The cat is on the mat and it is in the room.")
+        assert p.function_word_rate > 0.5
+
+
 class TestStartsWithAndBut:
     def test_detected(self):
         text = "The plan is simple. And we ship tomorrow. But not without tests."
@@ -282,6 +288,7 @@ class TestProfileShape:
             "colon_rate",
             "parenthetical_rate",
             "type_token_ratio",
+            "function_word_rate",
             "avg_commas_per_sentence",
             "latinate_ratio",
             "first_person_rate",

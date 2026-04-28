@@ -224,6 +224,8 @@ Every fixture wins 3/3 runs. Reproduce with `python3 evals/perceived_humanness.p
 
 Code blocks, inline code, URLs, headings, YAML frontmatter, tables, blockquotes — byte-identical on the way out. Deterministic mode fails the run if anything drifts. LLM mode gets the same preservation list as an explicit instruction.
 
+Also catches the newer visible tells: curly quotes, knowledge-cutoff disclaimers, vague attributions, title-case headings, and repeated `- **Label:**` bullet stacks.
+
 </td>
 <td width="33%" valign="top">
 
@@ -268,7 +270,7 @@ Strip `<thinking>` / `<analysis>` / `<reasoning>` / `<scratchpad>` wrappers and 
 
 ### 🎚️ Mode gating
 
-`--no-structural` and `--no-soul` let you turn off the newer aggressive passes for highly formal content (legal, compliance). Per-file opt-outs via HTML comments.
+`--no-structural`, `--no-soul`, and `--no-audit` let you turn off the newer aggressive passes for highly formal content (legal, compliance). Per-file opt-outs via HTML comments.
 
 </td>
 <td width="33%" valign="top">
@@ -377,6 +379,12 @@ unslop --detector-feedback file.md          # humanize, score, escalate, report
 
 Escalation ladder: `balanced` → `full` → `full + structural + soul`. Reports the score at each step. It does not claim to lower scores — it just tells you where you are.
 
+Use `--detector-loop-aggressive` for the longer five-step ladder:
+
+```bash
+unslop --detector-feedback --detector-loop-aggressive file.md
+```
+
 ---
 
 ## ⚖️ How it stacks up
@@ -400,6 +408,14 @@ Not every tool in this space solves the same problem. Here's the honest map.
 </div>
 
 **Honest position:** unslop is a *polish layer*, not a *detector-defeat tool*. It pairs with Anthropic Custom Styles — Custom Styles sets the ceiling at generation time, unslop catches residue after generation. The ICLR 2026 Antislop paper formalizes this split as "auto-antislop". Commercial SaaS "humanizers" are a different product category and mostly don't beat a second pass through a different model family plus five minutes of manual editing (Chicago Booth 2026 audit: median detector-accuracy drop ~6 points, not the claimed 40+).
+
+---
+
+## ⚠️ Limitations
+
+- Rewriting can degrade statistical watermarks such as SynthID or green-list schemes. That is a side effect, not a feature. If provenance matters, watermark after unslop.
+- Detector evasion is not durable when the verifier has source-generation logs or retrieval access. Use anti-detector mode for false-positive defense, not academic misconduct.
+- AI detectors still over-flag non-native English. Liang et al. (arXiv 2306.04723) found GPTZero, OriginalityAI, and Crossplag flagged >50 % of TOEFL essays as AI-generated; keep drafts and process notes when stakes are high.
 
 ---
 
