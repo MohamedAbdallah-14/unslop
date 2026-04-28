@@ -202,3 +202,29 @@ class TestRealDistilGPT2:
         r_flat = compute_surprisal_variance(flat)
         r_varied = compute_surprisal_variance(varied)
         assert r_varied.surprisal_stdev > r_flat.surprisal_stdev
+
+
+class TestDocstring:
+    """Regression: arXiv 2304.04736 was added to the Chakraborty et al. reference.
+
+    Guards against the citation being silently dropped or reverted to the
+    bare 'ICML 2024' form that previously had no identifier."""
+
+    def test_chakraborty_arxiv_id_present(self):
+        assert surprisal.__doc__ is not None
+        assert "2304.04736" in surprisal.__doc__, (
+            "Chakraborty et al. arXiv 2304.04736 reference missing from module docstring"
+        )
+
+    def test_chakraborty_icml_year_present(self):
+        assert surprisal.__doc__ is not None
+        assert "ICML 2024" in surprisal.__doc__
+
+    def test_diveye_reference_present(self):
+        assert surprisal.__doc__ is not None
+        assert "DivEye" in surprisal.__doc__
+
+    def test_nicks_iclr_reference_present(self):
+        # Nicks et al. ICLR 2024 is the other detector-arms-race citation.
+        assert surprisal.__doc__ is not None
+        assert "Nicks et al. ICLR 2024" in surprisal.__doc__

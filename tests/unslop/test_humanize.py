@@ -2751,3 +2751,86 @@ class TestModuleEntryPoint:
             timeout=30,
         )
         assert result.returncode == 0, result.stderr
+
+
+# ---------- class-naming regression (PR fix: shadowed TestHumanizeFileEx) ----------
+
+
+class TestHumanizeFileExClassNaming:
+    """Regression: a duplicate class named TestHumanizeFileEx silently killed
+    four tests via Python class-name shadowing.  The second class was renamed
+    to TestHumanizeFileExEdgeCases.  These meta-tests guard against the
+    shadowing being reintroduced."""
+
+    def test_edge_cases_class_is_distinct_from_main_class(self):
+        import tests.unslop.test_humanize as th_mod  # noqa: PLC0415
+
+        main_cls = th_mod.TestHumanizeFileEx
+        edge_cls = th_mod.TestHumanizeFileExEdgeCases
+        assert main_cls is not edge_cls, (
+            "TestHumanizeFileEx and TestHumanizeFileExEdgeCases must be separate "
+            "classes; duplicate names cause pytest to silently skip the first one."
+        )
+
+    def test_main_class_has_four_tests(self):
+        import inspect
+        import tests.unslop.test_humanize as th_mod  # noqa: PLC0415
+
+        methods = [
+            name
+            for name, _ in inspect.getmembers(th_mod.TestHumanizeFileEx, predicate=inspect.isfunction)
+            if name.startswith("test_")
+        ]
+        assert len(methods) == 4, (
+            f"TestHumanizeFileEx should have exactly 4 test methods; found {methods}"
+        )
+
+    def test_main_class_expected_test_names(self):
+        import tests.unslop.test_humanize as th_mod  # noqa: PLC0415
+
+        expected = {
+            "test_outcome_carries_report_and_validation",
+            "test_dry_run_does_not_write",
+            "test_no_backup_flag",
+            "test_refuses_to_overwrite_existing_backup",
+        }
+        import inspect
+
+        actual = {
+            name
+            for name, _ in inspect.getmembers(th_mod.TestHumanizeFileEx, predicate=inspect.isfunction)
+            if name.startswith("test_")
+        }
+        assert actual == expected
+
+    def test_edge_cases_class_has_four_tests(self):
+        import inspect
+        import tests.unslop.test_humanize as th_mod  # noqa: PLC0415
+
+        methods = [
+            name
+            for name, _ in inspect.getmembers(th_mod.TestHumanizeFileExEdgeCases, predicate=inspect.isfunction)
+            if name.startswith("test_")
+        ]
+        assert len(methods) == 4, (
+            f"TestHumanizeFileExEdgeCases should have exactly 4 test methods; found {methods}"
+        )
+
+    def test_no_duplicate_class_names_in_module(self):
+        """Scan the test_humanize module for any two test classes sharing a name.
+
+        This would catch a fresh shadowing regression before it silently kills
+        another batch of tests."""
+        import inspect
+        import tests.unslop.test_humanize as th_mod  # noqa: PLC0415
+
+        class_names = [
+            name
+            for name, obj in inspect.getmembers(th_mod, predicate=inspect.isclass)
+            if name.startswith("Test")
+        ]
+        # Each name should appear exactly once.
+        from collections import Counter
+
+        dupes = [name for name, count in Counter(class_names).items() if count > 1]
+        assert not dupes, f"Duplicate test class names detected: {dupes}"
