@@ -14,10 +14,12 @@ import pytest
 
 from unslop.scripts.detector import (
     DEFAULT_LADDER,
+    LADDER_AGGRESSIVE,
     DetectorUnavailable,
     FeedbackResult,
     IterationRecord,
     feedback_loop,
+    feedback_loop_aggressive,
     score_ai_probability,
 )
 
@@ -147,6 +149,43 @@ class TestFeedbackLoopLadder:
         )
         intensities = [r.intensity for r in result.iterations]
         assert intensities == ["subtle", "full"]
+
+    def test_aggressive_ladder_5_steps(self):
+        assert len(LADDER_AGGRESSIVE) == 5
+        assert LADDER_AGGRESSIVE[0] == ("subtle", False, False)
+        assert LADDER_AGGRESSIVE[-1] == ("full", True, True)
+
+    def test_aggressive_wrapper_uses_longer_ladder(self):
+        scorer = _make_mock_scorer([0.95, 0.9, 0.85, 0.8, 0.75, 0.7])
+        result = feedback_loop_aggressive(
+            "The team shipped. " * 20,
+            target_probability=0.1,
+            score_fn=scorer,
+        )
+        assert len(result.iterations) == 5
+        assert result.iterations[0].intensity == "subtle"
+
+    def test_per_detector_threshold(self):
+        scorer = _make_mock_scorer([0.9, 0.45, 0.35, 0.29])
+        result = feedback_loop(
+            "The team shipped. " * 20,
+            target_probability={"tmr": 0.3},
+            max_iterations=3,
+            detector="tmr",
+            score_fn=scorer,
+        )
+        assert len(result.iterations) == 3
+        assert result.final_probability == pytest.approx(0.29)
+
+    def test_surprisal_logged_per_iteration(self):
+        scorer = _make_mock_scorer([0.9, 0.2])
+        result = feedback_loop(
+            "The team shipped. " * 20,
+            target_probability=0.5,
+            score_fn=scorer,
+            surprisal_fn=lambda _text: 1.25,
+        )
+        assert result.iterations[0].surprisal_stdev == pytest.approx(1.25)
 
 
 class TestFeedbackLoopSerialization:

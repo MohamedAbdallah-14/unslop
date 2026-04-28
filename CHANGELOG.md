@@ -11,6 +11,32 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.6.0] — 2026-04-28
+
+Feature release for the core humanization pipeline.
+
+### Added
+
+- Pattern coverage for curly quotes, knowledge-cutoff disclaimers, vague
+  attributions, generic-positive conclusions, title-case headings, and
+  repeated inline-header bullet lists.
+- `anti-detector` intensity, `--no-audit`, `--detector-loop-aggressive`,
+  and `--report-stylometric-gaps`.
+- `unslop.scripts.lexical_targets` for deterministic stylometric target
+  nudges without inventing first-person claims.
+- Canonical 10-field DivEye vector output from `SurprisalReading`.
+- Stylometric baseline and external comparison benchmark harnesses.
+
+### Changed
+
+- Expanded the stock-vocabulary table with the 2024–2026 Wikipedia /
+  blader gap list.
+- Detector feedback now has a five-step aggressive ladder and can record
+  surprisal stdev per iteration.
+- Citation and boundary notes now use the verified Ibrahim, SycEval, LVU,
+  Krishna, Liang, and watermarking references.
+- Public plugin/package version signals are aligned at `0.6.0`.
+
 ## [0.5.6] — 2026-04-26
 
 Patch release for deterministic safety, CLI output correctness, and release

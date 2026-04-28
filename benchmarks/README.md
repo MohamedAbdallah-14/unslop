@@ -56,6 +56,19 @@ Current baseline (4 fixtures, 148 total AI-isms):
 | balanced   | 18    | 130   | 87.8%       |
 | full       | 13    | 135   | 91.2%       |
 
+## Stylometric baseline
+
+```bash
+python3 benchmarks/stylometric_baseline.py \
+  --human benchmarks/fixtures/human_corpus \
+  --llm benchmarks/fixtures/llm_corpus \
+  --out benchmarks/results/stylometric_baseline.json
+```
+
+The harness measures every numeric `StyleProfile` field and writes p25, median,
+and p75 bands for both corpora. Use a published human corpus subset for release
+baselines; the script does not ship invented target numbers.
+
 ## Detector eval (opt-in, heavy)
 
 Rule-counting is necessary but not sufficient. It counts whether known AI phrases left the document; it doesn't measure whether a modern transformer-based AI detector still flags the humanized output. `benchmarks/detector_bench.py` closes that gap by scoring each fixture (original + every intensity) through two SOTA open detectors:
@@ -81,3 +94,19 @@ python3 benchmarks/detector_bench.py --strict     # fails if balanced doesn't be
 Deterministic rule-stripping alone moves the TMR probability by 0.1–0.2 percentage points. That aligns with Cat 05 research (adversarial paraphrasing, DIPPER): stylometric fingerprints survive vocabulary substitution. The LLM pass + `anti-detector` intensity in `SKILL.md` is the path that moves this number; rules alone are not an evasion tool and by design we are not shipping a plagiarism-laundering product.
 
 What the rule pass *does* do, verifiably, is remove the lexical tells a human reader sees (the `run.py --all-intensities` table above). That is the claim the project makes and can back up with evidence.
+
+## Reference comparisons
+
+Two comparison harnesses are available when the external repos and model weights
+are present:
+
+```bash
+git clone https://github.com/IBM/diveye /tmp/ibm-diveye
+python3 benchmarks/diveye_comparison/run.py
+
+git clone https://github.com/chengez/Adversarial-Paraphrasing /tmp/chengez-adv
+python3 benchmarks/adversarial_paraphrasing_comparison/run.py
+```
+
+They write JSON plus markdown summaries under `benchmarks/results/`. Do not
+commit cloned repos or model weights.
