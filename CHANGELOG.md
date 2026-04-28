@@ -11,6 +11,40 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.6.2] — 2026-04-29
+
+Docs and presentation release. No code changes; tests still 555 passed,
+3 skipped.
+
+### Added
+
+- `docs/RESEARCH_AND_TECH.md` — public reference compendium covering 38
+  verified citations across 20 research categories, full tech-stack
+  inventory, and design differentiators with file:line evidence.
+- README **Engineering & research** section above Architecture: links to
+  `RESEARCH_AND_TECH.md`, embedded research-depth constellation visual,
+  inspirations table (blader/humanizer, Antislop ICLR 2026, Adversarial
+  Paraphrasing NeurIPS 2025, DivEye TMLR 2026, Liang et al. 2023), and a
+  "What we deliberately don't do" list.
+- README **Who this is for** 3-persona strip (Engineers / Writers /
+  Researchers).
+- README author byline near the footer.
+- Five new PNG visual assets: `assets/hero-refresh.png`,
+  `assets/research-depth.png`, `assets/social-preview.png`,
+  `assets/demo.png`, `assets/statusline.png`.
+
+### Changed
+
+- README hero image swapped to `hero-refresh.png`; subtitle simplified.
+- README jump-link bar reordered (Demo first, Research added) and TOC
+  updated to match.
+- README feature grid trimmed from 9 cells to 6; surprisal-variance,
+  reasoning-trace sanitizer, and mode gating moved into a collapsed
+  **Power-user features** details block.
+- README voice-match feature card rewritten in plain English; dropped
+  "stylometric" / "sycophancy-memory vector" jargon.
+- README demo and statusline assets switched from SVG to PNG.
+
 ### Fixed
 
 - README: AI-ism reduction stat corrected from `89.1 %` to `92.1 %`
@@ -44,6 +78,8 @@ inside its wheel; both files are kept in sync. Edit this one.
   `20260426T*.json`, `llm-mode-baseline.json`) and the
   `evals/snapshots/20260419T220738Z/` snapshot. Current Apr 28 runs and
   the `baselines/` / `humanness/` subtrees remain.
+- Orphan SVG assets `hero.svg`, `demo.svg`, `statusline.svg`, and
+  `social-preview.svg`. PNG replacements take over.
 
 ## [0.6.1] — 2026-04-28
 

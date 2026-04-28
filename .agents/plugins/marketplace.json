@@ -6,7 +6,7 @@
       "name": "unslop-repo",
       "displayName": "Unslop (this repo)",
       "description": "Unslop plugin sourced from this repository.",
-      "version": "0.6.1",
+      "version": "0.6.2",
       "source": "./plugins/unslop"
     }
   ]
