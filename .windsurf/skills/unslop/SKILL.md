@@ -60,7 +60,7 @@ Five framing rules that override the cosmetic ones when they conflict:
 
 | Level | What changes |
 |-------|--------------|
-| **subtle** | Trim AI tells (sycophancy, stock vocab). Keep length and structure roughly same. Safe default for polish. |
+| **subtle** | Trim AI stock vocab (delve, tapestry, testament, etc.). Keep length and structure roughly same. (Sycophancy and hedging stacks need at least balanced.) |
 | **balanced** | Default. Cut slop, vary rhythm, restore voice, allow opinions and short fragments. Reasonable rewrite. |
 | **full** | Strong rewrite. Restructure paragraphs. Drop performative balance. Sound like a human with a stake. |
 | **voice-match** | Follow an external voice/style sample. See voice-match procedure below. |

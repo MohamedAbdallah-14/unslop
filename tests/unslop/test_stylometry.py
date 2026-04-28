@@ -9,7 +9,6 @@ from __future__ import annotations
 import pytest
 
 from unslop.scripts.stylometry import (
-    StyleDelta,
     StyleProfile,
     analyze,
     format_delta,

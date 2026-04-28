@@ -111,7 +111,7 @@ class TestSplitLongSentencesConjunction:
             "but it failed."
         )
         report = StructuralReport()
-        out = split_long_sentences(text, report=report)
+        split_long_sentences(text, report=report)
         assert report.sentences_split == 0
 
     def test_however_splits(self):
@@ -305,7 +305,7 @@ class TestShapeGate:
         )
         text = f"{long_a} {long_b} {long_c}"
         report = StructuralReport()
-        out = split_long_sentences(text, report=report)
+        split_long_sentences(text, report=report)
         assert report.sentences_split >= 1
 
 
@@ -320,6 +320,6 @@ class TestCombinedPipeline:
             "- Uses Jest"
         )
         report = StructuralReport()
-        out = humanize_structural(text, report=report)
+        humanize_structural(text, report=report)
         assert report.sentences_split == 1
         assert report.bullet_groups_merged == 1

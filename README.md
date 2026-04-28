@@ -194,7 +194,7 @@ Blind LLM-as-judge preference test. Claude Sonnet 4.5 compares each unslop rewri
 | :------------------------------------- | :------: | :----------------------: |
 | Blind humanness preference             |    —     | **100 % (21/21)**        |
 | Humanized wins / ties / original wins  |    —     | **21 / 0 / 0**           |
-| AI-ism reduction (rule-counted)        |   0 %    | **89.1 %**               |
+| AI-ism reduction (rule-counted)        |   0 %    | **92.1 %** (9-fixture suite, 2026-04-28) |
 | Flat-paragraph count across suite      |    14    | 13                       |
 | Preservation of code / URLs / headings |    —     | **byte-identical**       |
 
@@ -213,7 +213,7 @@ Every fixture wins 3/3 runs. Reproduce with `python3 evals/perceived_humanness.p
 <tr>
 <td width="33%" valign="top">
 
-### 🎯 Six modes, one command
+### 🎯 Five modes, one command
 
 `subtle` keeps your shape, just scrubs the fingerprints. `balanced` is the default — cuts slop, varies rhythm. `full` rewrites with opinion. `voice-match` mimics a sample. `anti-detector` does the burstiness and specificity moves that actually work on GPTZero.
 
@@ -320,8 +320,8 @@ Mode persists for the whole session.
 | Skill                 | Trigger                      | What it does                                                   |
 | --------------------- | ---------------------------- | -------------------------------------------------------------- |
 | `unslop`              | `/unslop`                    | Active humanization for live responses                         |
-| `unslop-commit`       | `/unslop-commit`, `/commit`  | Conventional Commits in human voice                            |
-| `unslop-review`       | `/unslop-review`, `/review`  | Direct, kind PR review comments                                |
+| `unslop-commit`       | `/unslop-commit`             | Conventional Commits in human voice                            |
+| `unslop-review`       | `/unslop-review`             | Direct, kind PR review comments                                |
 | `unslop-file`         | `/unslop-file <file>`        | Rewrite a markdown file (preserves code, URLs, headings)       |
 | `unslop-reasoning`    | `/unslop-reasoning`          | Strip AI slop from chain-of-thought (over-hedging, loops)      |
 | `unslop-help`         | `/unslop-help`               | Reference card                                                 |
