@@ -511,6 +511,7 @@ Each layer matches its host: Python for the file rewriter (CLI, HuggingFace inte
 
 - **[GETTING_STARTED.md](./GETTING_STARTED.md)** — plain-English on-ramp for non-developers (cover letters, essays, LinkedIn posts).
 - **[unslop/README.md](./unslop/README.md)** — the Python package and standalone CLI.
+- **[docs/RESEARCH_AND_TECH.md](./docs/RESEARCH_AND_TECH.md)** — public reference: the research that informs shipping code, the tech stack, and the design choices that make unslop different.
 - **[docs/research/](./docs/research/)** — 20 research categories, 120+ angle files, full [implementation trace](./docs/research/IMPLEMENTATION_TRACE.md) mapping each finding to the line of code it motivates.
 - **[CHANGELOG.md](./CHANGELOG.md)** — all releases.
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** — PR workflow, test gates, SSOT layout.
