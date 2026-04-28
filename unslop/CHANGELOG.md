@@ -1,5 +1,10 @@
 ## Unreleased
 
+## 0.6.2 — 2026-04-29
+
+Docs and presentation release. No code changes; tests still 555 passed,
+3 skipped.
+
 ### Fixed
 
 - README and `skills/unslop/SKILL.md` corrections: AI-ism reduction stat
