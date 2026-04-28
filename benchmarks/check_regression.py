@@ -3,7 +3,8 @@
 
 Runs after benchmarks/run.py. Reads benchmarks/results/latest.json, compares
 against benchmarks/results/baselines/<baseline>.json (default: most recent
-post-phase*.json), and exits non-zero if any tolerance is breached.
+post-*.json by embedded benchmark timestamp), and exits non-zero if any
+tolerance is breached.
 
 Tolerances (generous enough to absorb small edits, tight enough to catch real
 regressions):
@@ -50,14 +51,17 @@ def _load_json(path: Path) -> dict:
 
 
 def _pick_default_baseline() -> Path:
-    """Most recent post-*.json baseline by mtime.
+    """Most recent post-*.json baseline by embedded benchmark timestamp.
 
     Matches post-phase*, post-soul-fix*, post-0.5.0*, and any similar
     maintainer-named baseline. Excludes pre-*.json (which are regression
-    anchors from before a feature shipped, not after-feature baselines)."""
-    candidates = sorted(
-        BASELINES.glob("post-*.json"), key=lambda p: p.stat().st_mtime
-    )
+    anchors from before a feature shipped, not after-feature baselines).
+
+    Do not use filesystem mtime here. Fresh checkouts can give every baseline
+    the same checkout-time mtime, which makes CI choose an arbitrary older
+    baseline.
+    """
+    candidates = sorted(BASELINES.glob("post-*.json"))
     if not candidates:
         print(
             f"No post-*.json baselines in {BASELINES}. "
@@ -66,7 +70,15 @@ def _pick_default_baseline() -> Path:
             file=sys.stderr,
         )
         raise SystemExit(1)
-    return candidates[-1]
+
+    def sort_key(path: Path) -> tuple[str, str]:
+        try:
+            timestamp = str(_load_json(path).get("timestamp", ""))
+        except json.JSONDecodeError:
+            timestamp = ""
+        return (timestamp, path.name)
+
+    return max(candidates, key=sort_key)
 
 
 def compare(baseline: dict, latest: dict, *, ai_ism_tolerance: float, flat_tolerance: int) -> list[str]:
@@ -119,7 +131,7 @@ def main() -> int:
         "--baseline",
         default=None,
         help="Baseline JSON filename under benchmarks/results/baselines/. "
-        "Default: newest post-phase*.json.",
+        "Default: newest post-*.json by embedded benchmark timestamp.",
     )
     p.add_argument(
         "--latest",
