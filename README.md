@@ -53,7 +53,7 @@
 ## 👀 See the difference
 
 <p align="center">
-  <img src="./assets/demo.svg" alt="unslop CLI output: before and after a cover letter pass" width="100%"/>
+  <img src="./assets/demo.png" alt="unslop CLI output: before and after a cover letter pass" width="100%"/>
 </p>
 
 Same facts. Different voice. A hiring manager reads the second version without wincing.
@@ -157,7 +157,7 @@ Restart Claude. Type `/unslop`. Done.
 You'll see a `[unslop:BALANCED]` badge appear in the statusline. Everything Claude writes from here on comes out in a human voice. Type `stop unslop` to turn it off, `/unslop full` to turn it up, `/unslop-help` to see everything.
 
 <p align="center">
-  <img src="./assets/statusline.svg" alt="Claude Code statusline showing the [unslop:BALANCED] badge" width="80%"/>
+  <img src="./assets/statusline.png" alt="Claude Code statusline showing the [unslop:BALANCED] badge" width="80%"/>
 </p>
 
 <details>
@@ -332,7 +332,7 @@ Strip `<thinking>` / `<analysis>` / `<reasoning>` / `<scratchpad>` wrappers and 
 ## 📸 In the wild
 
 <p align="center">
-  <img src="./assets/statusline.svg" alt="Claude Code statusline" width="85%"/>
+  <img src="./assets/statusline.png" alt="Claude Code statusline" width="85%"/>
 </p>
 
 The badge is the only UI. Everything else is silent — the hook fires on `SessionStart`, injects the activation rule into Claude's context, and tracks the mode in `$CLAUDE_CONFIG_DIR/.unslop-active` (fallback: `~/.claude/.unslop-active`). No network calls. No telemetry.
