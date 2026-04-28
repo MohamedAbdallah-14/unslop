@@ -145,6 +145,24 @@ AI_ISMS = (
     r",\s+(?:highlighting|underscoring|emphasizing|illustrating|reflecting|showcasing)\s+(?:the|its|their|his|her|a|an)\s+(?:importance|significance|role|impact|value|need|necessity|relevance|nature)\b",
     # Copula avoidance (", being a/an/the X,")
     r",\s+being\s+(?:a|an|the)\s+[a-z]",
+    # 2026-04-28 Tier 1 gap-fill: full copula avoidance set, canonical
+    # negative parallelism, additional promotional register. Each pattern
+    # mirrors a humanize.py rule so the residual check refuses to let an
+    # LLM rewrite reintroduce them.
+    #
+    # Promotional copula avoidance — mirrors humanize.py COPULA_AVOIDANCE.
+    r"\bserves?\s+as\s+(?:a|an|the)\s+(?:reliable|powerful|leading|prominent|key|major|prime|cornerstone|hub|center|centre|foundation|backbone|gateway|model|standard|benchmark|symbol|reminder|catalyst|beacon)\b",
+    r"\bserved\s+as\s+(?:a|an|the)\s+(?:reliable|powerful|leading|prominent|key|major|prime|cornerstone|hub|center|centre|foundation|backbone|gateway|model|standard|benchmark|symbol|reminder|catalyst|beacon)\b",
+    r"\bboast(?:s|ed|ing)?\s+(?:a|an)\s+[a-z]",
+    r"\bfeatures\s+(?:a|an)\s+(?:stunning|beautiful|breathtaking|impressive|elegant|sleek|innovative|intuitive|seamless|cutting-edge|state-of-the-art|world-class|industry-leading|best-in-class|revolutionary|groundbreaking)\b",
+    # Negative parallelism (canonical) — "Not just/only X, but Y" and
+    # "It's not X — it's Y". Mirrors humanize.py NEGATIVE_PARALLELISM.
+    r"(?:^|(?<=[.!?]\s))Not (?:just|only) [^,.!?\n]{1,80},\s*but(?:\s+also)?\b",
+    r"(?:^|(?<=[.!?]\s))It'?s not [^—.!?\n]{1,80}\s+[—–]\s+it'?s ",
+    # Promotional register (Wikipedia #4) — mirrors STOCK_VOCAB additions.
+    r"\bnestled\s+(?:in|between|amongst|among|within|by)\b",
+    r"\b(?:rich|deep)\s+heritage\b",
+    r"\bsteeped\s+in\s+(?:rich\s+)?(?:tradition|history|heritage)\b",
 )
 
 # FALSE_RANGES — "from X to Y" clichés where the range is formulaic rather than
@@ -200,6 +218,7 @@ class ValidationResult:
     title_case_headings: int = 0
     inline_header_lists: int = 0
     generic_positive_conclusions: int = 0
+    outline_conclusions: int = 0
 
     def to_dict(self) -> dict:
         return {
@@ -224,6 +243,7 @@ class ValidationResult:
             "title_case_headings": self.title_case_headings,
             "inline_header_lists": self.inline_header_lists,
             "generic_positive_conclusions": self.generic_positive_conclusions,
+            "outline_conclusions": self.outline_conclusions,
         }
 
 
@@ -413,6 +433,27 @@ _GENERIC_POSITIVE_SUMMARY = re.compile(
     re.IGNORECASE,
 )
 
+# Outline-like-conclusion (Wikipedia "Signs of AI writing" #6, blader/unslop
+# #6). Encyclopedic AI-essay closer that pairs a "Despite X" concession with
+# a "Y faces (significant) challenges" forecast. The structure is the tell;
+# the words inside it can be plausible. Validator-only — auto-rewriting risks
+# destroying real concession + forecast prose. Surface as a warning so the
+# user can hand-edit or run LLM mode.
+_OUTLINE_CONCLUSION = re.compile(
+    # Anchor at start of a line (MULTILINE) or after a sentence terminator.
+    # MULTILINE matters because paragraph breaks are `\n\n`, and the lookbehind
+    # would otherwise see only the trailing `\n` and fail.
+    r"(?:^|(?<=[.!?]\s))Despite\s+[^,.!?\n]{3,120},\s+"
+    # Optional subject clause: zero-or-more non-sentence-terminator chars
+    # followed by required whitespace. Bounded by `[^.!?\n]` so the regex
+    # can never overrun into the next sentence.
+    r"(?:[A-Za-z][^.!?\n]{0,80}?\s+)?"
+    r"(?:faces?|will\s+face|continues?\s+to\s+face|must\s+(?:overcome|address|navigate|confront))\s+"
+    r"(?:significant|major|numerous|various|several|many|ongoing|continuing|persistent|considerable)?\s*"
+    r"(?:challenges|hurdles|obstacles|difficulties|headwinds|barriers)\b",
+    re.IGNORECASE | re.MULTILINE,
+)
+
 
 def _count_curly_quotes(text: str) -> int:
     return len(_CURLY_QUOTE.findall(_strip_code_for_prose(text)))
@@ -457,6 +498,12 @@ def _count_generic_positive_conclusions(text: str) -> int:
             count += 1
         count += len(_GENERIC_POSITIVE_SUMMARY.findall(paragraph))
     return count
+
+
+def _count_outline_conclusions(text: str) -> int:
+    """Count "Despite X, Y faces (significant) challenges" closers in prose."""
+    prose = _strip_code_for_prose(text)
+    return len(_OUTLINE_CONCLUSION.findall(prose))
 
 
 def validate(original: str, humanized: str) -> ValidationResult:
@@ -650,6 +697,14 @@ def validate(original: str, humanized: str) -> ValidationResult:
             f"Generic positive conclusion(s) present ({generic_positive_conclusions}). Replace with a concrete closing claim."
         )
 
+    outline_conclusions = _count_outline_conclusions(humanized)
+    if outline_conclusions:
+        warnings.append(
+            f"Outline-like conclusion(s) present ({outline_conclusions}). "
+            "'Despite X, Y faces challenges' is the canonical encyclopedic AI closer; "
+            "rewrite with a concrete next step or hand-edit."
+        )
+
     return ValidationResult(
         ok=len(errors) == 0,
         errors=errors,
@@ -672,6 +727,7 @@ def validate(original: str, humanized: str) -> ValidationResult:
         title_case_headings=title_case_headings,
         inline_header_lists=inline_header_lists,
         generic_positive_conclusions=generic_positive_conclusions,
+        outline_conclusions=outline_conclusions,
     )
 
 

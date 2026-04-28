@@ -422,6 +422,24 @@ STOCK_VOCAB = [
     (re.compile(r"\bsynergiz(?:es|ed|ing)\b", re.IGNORECASE),
      lambda m: {"synergizes": "works well with", "synergized": "worked well with", "synergizing": "working well with"}.get(m.group(0).lower(), "works well with")),
     (re.compile(r"\bsynergize\b", re.IGNORECASE), "work well with"),
+    # 2026-04-28 promotional-register additions (Wikipedia "Signs of AI writing"
+    # + blader/unslop #4 promotional language). These are the postcard-and-
+    # press-release adjectives that flag a paragraph as marketing-AI even when
+    # the rest of the prose is clean.
+    #
+    # `nestled` (in/between/amongst/among/within/by) — travel-guide cliché.
+    # The word adds nothing factual; the preposition does the work.
+    (re.compile(r"\bnestled\s+(in|between|amongst|among|within|by)\b", re.IGNORECASE), r"\1"),
+    # "rich heritage" / "deep heritage" — promotional puffery. "history" is
+    # the literal word.
+    (re.compile(r"\b(?:a\s+)?(?:rich|deep)\s+heritage\b", re.IGNORECASE), "history"),
+    # "steeped in (rich) tradition/history/heritage" — same family. Collapse
+    # to "rooted in tradition" which makes the same claim without the
+    # brochure stylization.
+    (
+        re.compile(r"\bsteeped\s+in\s+(?:rich\s+)?(?:tradition|history|heritage)\b", re.IGNORECASE),
+        "rooted in tradition",
+    ),
 ]
 
 # Authority tropes (blader/unslop #27). Persuasive framing that signals
@@ -503,6 +521,27 @@ NEGATIVE_PARALLELISM = [
     # "No guesswork, no bloat, no surprises." — three-clause tricolon of negations
     re.compile(
         r"(^|(?<=[.!?]\s))No [A-Za-z][A-Za-z -]{1,20}(?:, no [A-Za-z][A-Za-z -]{1,20}){2,}[.!]",
+        re.MULTILINE,
+    ),
+    # "Not just X, but (also) Y" / "Not only X, but (also) Y" — canonical
+    # negative parallelism (Wikipedia "Signs of AI writing" + blader/unslop
+    # #9). The framing is rhetorical filler; Y carries the actual claim. We
+    # strip the "Not just/only X, but (also) " lead-in and let Y stand alone.
+    # Bound by the next clause boundary so multi-sentence overrun is impossible.
+    re.compile(
+        r"(^|(?<=[.!?]\s))Not (?:just|only) [^,.!?\n]{1,80},\s*but (?:also )?",
+        re.MULTILINE | re.IGNORECASE,
+    ),
+    # "It's not X — it's Y" — em-dash contrast form. Strip "It's not X — "
+    # so "it's Y" carries the sentence.
+    re.compile(
+        r"(^|(?<=[.!?]\s))It'?s not [^—.!?\n]{1,80}\s+[—–]\s+(?=[Ii]t'?s )",
+        re.MULTILINE,
+    ),
+    # "It's not X. It's Y." — period-break contrast form. Strip the negation
+    # half; the affirmation half remains as its own sentence.
+    re.compile(
+        r"(^|(?<=[.!?]\s))It'?s not [^.!?\n]{1,80}[.!]\s+(?=[Ii]t'?s )",
         re.MULTILINE,
     ),
 ]
@@ -660,6 +699,54 @@ COPULA_AVOIDANCE = [
             r",\s+being\s+(?=(?:a|an|the)\s+[a-z])", re.IGNORECASE
         ),
         ", ",
+    ),
+    # 2026-04-28: full copula-avoidance set (Wikipedia "Signs of AI writing":
+    # "Avoidance of copulas"). Each pattern fires only when the verb is
+    # followed by a clearly promotional/positional noun phrase, so legit
+    # uses like "the function serves as a callback" or "features include
+    # caching" survive untouched.
+    #
+    # "X serves as a/an Y" → "X is a/an Y" — only when Y is in the
+    # promotional/positional noun set. Verb tense preserved across forms.
+    (
+        re.compile(
+            r"\bserves\s+as\s+(?=(?:a|an|the)\s+(?:reliable|powerful|leading|prominent|key|major|prime|cornerstone|hub|center|centre|foundation|backbone|gateway|model|standard|benchmark|symbol|reminder|catalyst|beacon|cornerstone)\b)",
+            re.IGNORECASE,
+        ),
+        "is ",
+    ),
+    (
+        re.compile(
+            r"\bserved\s+as\s+(?=(?:a|an|the)\s+(?:reliable|powerful|leading|prominent|key|major|prime|cornerstone|hub|center|centre|foundation|backbone|gateway|model|standard|benchmark|symbol|reminder|catalyst|beacon)\b)",
+            re.IGNORECASE,
+        ),
+        "was ",
+    ),
+    (
+        re.compile(
+            r"\bserve\s+as\s+(?=(?:a|an|the)\s+(?:reliable|powerful|leading|prominent|key|major|prime|cornerstone|hub|center|centre|foundation|backbone|gateway|model|standard|benchmark|symbol|reminder|catalyst|beacon)\b)",
+            re.IGNORECASE,
+        ),
+        "are ",
+    ),
+    # "boasts a/an X" — promotional copula. Drop to "has". Verb tense
+    # preserved across forms. Guards: only `(?:a|an)` continuation, so
+    # "He boasts about Python" / "boasts of his work" / "boasts that ..."
+    # are not touched (the AI tell is specifically `boasts a/an <noun>`).
+    (re.compile(r"\bboasts\s+(?=(?:a|an)\s+[a-z])", re.IGNORECASE), "has "),
+    (re.compile(r"\bboasted\s+(?=(?:a|an)\s+[a-z])", re.IGNORECASE), "had "),
+    (re.compile(r"\bboasting\s+(?=(?:a|an)\s+[a-z])", re.IGNORECASE), "with "),
+    (re.compile(r"\bboast\s+(?=(?:a|an)\s+[a-z])", re.IGNORECASE), "have "),
+    # "features a/an Y" — promotional copula avoidance. Strict guard: only
+    # when followed by an unambiguously promotional adjective. Avoids
+    # collapsing "features include", "features of X", "feature-list", or
+    # technical product-feature prose.
+    (
+        re.compile(
+            r"\bfeatures\s+(?=(?:a|an)\s+(?:stunning|beautiful|breathtaking|impressive|elegant|sleek|innovative|intuitive|seamless|cutting-edge|state-of-the-art|world-class|industry-leading|best-in-class|revolutionary|groundbreaking)\b)",
+            re.IGNORECASE,
+        ),
+        "has ",
     ),
 ]
 

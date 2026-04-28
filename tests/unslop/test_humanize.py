@@ -1185,6 +1185,182 @@ class TestCopulaAvoidance:
         out = humanize_deterministic(text, intensity="balanced")
         assert "being a pragmatist" in out.lower()
 
+    def test_serves_as_promotional_swapped(self) -> None:
+        text = "The library serves as a powerful foundation for builds."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "serves as" not in out.lower()
+        assert "powerful foundation" in out.lower()
+        # Swap inserts "is" — verb-tense preserved across the rule family.
+        assert " is a powerful foundation" in out.lower()
+
+    def test_serves_as_neutral_preserved(self) -> None:
+        # Non-promotional context — the function-callback idiom must survive.
+        text = "The function serves as a callback for the parent."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "serves as a callback" in out.lower()
+
+    def test_served_as_past_tense(self) -> None:
+        text = "She served as a leading voice for the cause."
+        out = humanize_deterministic(text, intensity="balanced")
+        # Promotional noun "leading" triggers the rule; "leading" itself is
+        # not in the strip list (only adjectives modifying it are), so the
+        # rewrite leaves "was a leading voice".
+        assert "served as" not in out.lower()
+        assert "was a leading" in out.lower()
+
+    def test_boasts_dropped_with_article(self) -> None:
+        text = "The platform boasts a redesigned dashboard."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "boasts" not in out.lower()
+        assert "has a redesigned dashboard" in out.lower()
+
+    def test_boasts_about_preserved(self) -> None:
+        # "boasts about X" / "boasts of X" / "boasts that ..." stay intact —
+        # the rule guards on "boasts (?=a|an)".
+        text = "He boasts about his Python performance numbers."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "boasts about" in out.lower()
+
+    def test_boasted_past_tense(self) -> None:
+        text = "The release boasted an unprecedented feature set."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "boasted an" not in out.lower()
+        assert "had an" in out.lower()
+
+    def test_features_promotional_swapped(self) -> None:
+        text = "The room features a stunning view of the river."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "features a stunning" not in out.lower()
+        assert "has a stunning" in out.lower()
+
+    def test_features_neutral_preserved(self) -> None:
+        # "features include ..." is a legitimate enumeration — the rule
+        # only fires on `features a/an PROMO_ADJ`.
+        text = "The library features include caching, retries, and pagination."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "features include" in out.lower()
+
+
+class TestPromotionalRegister:
+    def test_nestled_in_swap(self) -> None:
+        text = "Nestled in the mountains, the village remains quiet."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "nestled" not in out.lower()
+        assert "in the mountains" in out.lower()
+
+    def test_nestled_between_swap(self) -> None:
+        text = "The cabin sits nestled between two pines."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "nestled" not in out.lower()
+        assert "between two pines" in out.lower()
+
+    def test_rich_heritage_swap(self) -> None:
+        text = "The region has a rich heritage of craftsmanship."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "rich heritage" not in out.lower()
+        assert "history" in out.lower()
+
+    def test_deep_heritage_swap(self) -> None:
+        text = "Their deep heritage shows in every stitch."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "deep heritage" not in out.lower()
+
+    def test_steeped_in_tradition_swap(self) -> None:
+        text = "The festival is steeped in rich tradition."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "steeped in" not in out.lower()
+        assert "rooted in tradition" in out.lower()
+
+    def test_steeped_in_history_swap(self) -> None:
+        text = "The town is steeped in history."
+        out = humanize_deterministic(text, intensity="balanced")
+        assert "steeped in" not in out.lower()
+
+
+class TestOutlineConclusionValidator:
+    def test_despite_growth_challenges_flagged(self) -> None:
+        from unslop.scripts.validate import validate
+
+        text = (
+            "The framework has shipped to thousands of users.\n\n"
+            "Despite this growth, the project faces significant challenges in the years ahead."
+        )
+        result = validate(text, text)
+        assert result.outline_conclusions >= 1
+        assert any("Outline-like" in w for w in result.warnings)
+
+    def test_despite_will_face_hurdles(self) -> None:
+        from unslop.scripts.validate import validate
+
+        text = "Despite recent wins, the team will face numerous hurdles in the next quarter."
+        result = validate(text, text)
+        assert result.outline_conclusions >= 1
+
+    def test_despite_must_overcome_obstacles(self) -> None:
+        from unslop.scripts.validate import validate
+
+        text = "Despite favorable winds, the company must overcome significant obstacles ahead."
+        result = validate(text, text)
+        assert result.outline_conclusions >= 1
+
+    def test_clean_paragraph_not_flagged(self) -> None:
+        from unslop.scripts.validate import validate
+
+        text = "The framework has shipped to thousands of users."
+        result = validate(text, text)
+        assert result.outline_conclusions == 0
+
+    def test_despite_without_challenges_clause_not_flagged(self) -> None:
+        from unslop.scripts.validate import validate
+
+        # "Despite X, Y" without the "faces ... challenges" tail is a
+        # legitimate concession structure — must not trip the detector.
+        text = "Despite the rain, the picnic continued as planned."
+        result = validate(text, text)
+        assert result.outline_conclusions == 0
+
+
+class TestNegativeParallelismCanonical:
+    def test_not_just_but_stripped_at_full(self) -> None:
+        text = "Not just a tool, but a platform for collaboration."
+        out = humanize_deterministic(text, intensity="full")
+        assert "not just" not in out.lower()
+        assert "platform" in out.lower()
+
+    def test_not_only_but_also_stripped_at_full(self) -> None:
+        text = "Not only fast, but also remarkably accurate."
+        out = humanize_deterministic(text, intensity="full")
+        assert "not only" not in out.lower()
+        assert "remarkably accurate" in out.lower()
+
+    def test_its_not_dash_form_stripped_at_full(self) -> None:
+        text = "It's not a mirror — it's a portal to another world."
+        out = humanize_deterministic(text, intensity="full")
+        assert "not a mirror" not in out.lower()
+        assert "portal" in out.lower()
+
+    def test_its_not_period_form_stripped_at_full(self) -> None:
+        text = "It's not a tool. It's a platform for serious work."
+        out = humanize_deterministic(text, intensity="full")
+        assert "not a tool" not in out.lower()
+        assert "platform" in out.lower()
+
+    def test_not_just_preserved_at_balanced(self) -> None:
+        text = "Not just a tool, but a platform."
+        out = humanize_deterministic(text, intensity="balanced")
+        # Negative-parallelism rule is gated on `full`. At balanced, the
+        # canonical contrast survives.
+        assert "not just" in out.lower()
+
+    def test_negative_parallelism_canonical_validator_flag(self) -> None:
+        from unslop.scripts.validate import validate
+
+        # AI_ISMS catches the canonical form even at balanced intensity so
+        # the validator can refuse to let an LLM rewrite reintroduce it.
+        text = "Not just a tool, but a platform for collaboration."
+        result = validate(text, text)
+        assert result.ai_isms_after >= 1
+
 
 class TestFalseRangesValidator:
     def test_beginners_to_experts_flagged(self) -> None:

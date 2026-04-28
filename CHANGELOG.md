@@ -11,6 +11,34 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.6.1] — 2026-04-28
+
+Tier 1 gap-fill release. Closes the four pattern families that the 0.6.0 sweep
+left behind: full promotional copula avoidance, canonical negative parallelism,
+extended promotional register, and outline-like conclusion detection.
+
+### Added
+
+- `humanize.py` `STOCK_VOCAB`: `nestled`, `(rich|deep) heritage`, and
+  `steeped in (tradition|history|heritage)`.
+- `humanize.py` `COPULA_AVOIDANCE`: promotional `serves/served/serve as`,
+  `boasts/boasted/boasting/boast`, and `features` followed by promotional
+  adjectives. Each pattern guards on the surrounding noun phrase so legit
+  uses (`function serves as a callback`, `features include …`) survive.
+- `humanize.py` `NEGATIVE_PARALLELISM`: canonical `Not just/only X, but Y`
+  and `It's not X — it's Y` / `It's not X. It's Y.` forms (full intensity).
+- `validate.py` `_count_outline_conclusions` + `outline_conclusions`
+  field: detects "Despite X, Y faces (significant) challenges" closers
+  and surfaces a warning.
+- 25 new tests across `TestCopulaAvoidance`, `TestPromotionalRegister`,
+  `TestOutlineConclusionValidator`, and `TestNegativeParallelismCanonical`.
+
+### Changed
+
+- `validate.py` `AI_ISMS` mirrors every new humanize.py rule so the
+  residual check refuses LLM rewrites that reintroduce them.
+- All public version manifests aligned at `0.6.1`.
+
 ## [0.6.0] — 2026-04-28
 
 Feature release for the core humanization pipeline.
