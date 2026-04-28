@@ -1,8 +1,8 @@
 <div align="center">
 
-<a href="#"><img src="./assets/hero.svg" alt="unslop — make AI output sound like a human wrote it" width="100%"/></a>
+<a href="#"><img src="./assets/hero-refresh.png" alt="unslop — Prettier for AI prose" width="100%"/></a>
 
-<p><i>Strips AI-isms. Restores voice. Preserves code.<br/><b>One plugin, six assistants, zero config.</b></i></p>
+<p><i>Make AI output sound like a human wrote it.<br/><b>Six assistants. One plugin. Zero config.</b></i></p>
 
 </div>
 
@@ -20,12 +20,12 @@
 
 <!-- Jump links -->
 <p>
-  <a href="#-60-second-start"><b>Quick start</b></a> &nbsp;·&nbsp;
-  <a href="#-see-the-difference">Demo</a> &nbsp;·&nbsp;
+  <a href="#-see-the-difference"><b>Demo</b></a> &nbsp;·&nbsp;
+  <a href="#-60-second-start">Quick start</a> &nbsp;·&nbsp;
   <a href="#-what-you-get">Features</a> &nbsp;·&nbsp;
+  <a href="#-engineering--research">Research</a> &nbsp;·&nbsp;
   <a href="#-how-it-stacks-up">Comparison</a> &nbsp;·&nbsp;
   <a href="#-faq">FAQ</a> &nbsp;·&nbsp;
-  <a href="#-docs">Docs</a> &nbsp;·&nbsp;
   <a href="./GETTING_STARTED.md">Non-technical guide</a>
 </p>
 
@@ -50,15 +50,75 @@
 
 ---
 
+## 👀 See the difference
+
+<p align="center">
+  <img src="./assets/demo.svg" alt="unslop CLI output: before and after a cover letter pass" width="100%"/>
+</p>
+
+Same facts. Different voice. A hiring manager reads the second version without wincing.
+
+<table>
+<tr><th width="50%">😬 Before (stock AI output)</th><th width="50%">✅ After <code>/unslop</code></th></tr>
+<tr>
+<td valign="top">
+
+I am writing to express my profound enthusiasm for the Marketing Coordinator position at Acme Corp. With over five years of experience **navigating the dynamic landscape** of digital marketing, I am confident that my **comprehensive skill set and passion for innovation** make me a **robust** candidate. I am particularly drawn to Acme's **cutting-edge** approach, and I would welcome the opportunity to **delve into** how my background aligns with your team's goals.
+
+</td>
+<td valign="top">
+
+Five years in digital marketing, most of it in small teams where nobody else writes the landing pages, so I end up doing it. I saw your Marketing Coordinator posting yesterday. The part about running campaigns end-to-end instead of handing them off to an agency is what pulled me in — that's the work I actually like.
+
+</td>
+</tr>
+</table>
+
+> **21 out of 21** blind LLM-judge runs preferred the unslop rewrite over the original. See [Measured results](#-measured-results).
+
+---
+
+## 🧭 Who this is for
+
+<table>
+<tr>
+<td width="33%" valign="top" align="center">
+
+### Engineers
+
+Cleaner agent output before it ships. Strip reasoning traces, kill sycophancy openers, write commits that don't read like a marketing intern.
+
+</td>
+<td width="33%" valign="top" align="center">
+
+### Writers
+
+Polish a cover letter, a college essay, a LinkedIn post. The rewriter never touches your numbers, names, or quoted phrases.
+
+</td>
+<td width="33%" valign="top" align="center">
+
+### Researchers
+
+Byte-identical preservation of code, URLs, headings. Backed by 38 peer-reviewed papers across 20 categories.
+
+</td>
+</tr>
+</table>
+
+---
+
 ## Table of contents
 
 <details>
 <summary>Click to expand</summary>
 
-- [🚀 60-second start](#-60-second-start)
 - [👀 See the difference](#-see-the-difference)
+- [🧭 Who this is for](#-who-this-is-for)
+- [🚀 60-second start](#-60-second-start)
 - [🧪 Measured results](#-measured-results)
 - [✨ What you get](#-what-you-get)
+- [🔬 Engineering & research](#-engineering--research)
 - [📸 In the wild](#-in-the-wild)
 - [🎛️ Using it](#️-using-it)
 - [⚖️ How it stacks up](#-how-it-stacks-up)
@@ -158,32 +218,6 @@ Two modes: `--deterministic` (regex, no API) or default LLM mode (calls Claude).
 
 ---
 
-## 👀 See the difference
-
-<p align="center">
-  <img src="./assets/demo.svg" alt="unslop CLI output: before and after a cover letter pass" width="100%"/>
-</p>
-
-Same facts. Different voice. A hiring manager reads the second version without wincing.
-
-<table>
-<tr><th width="50%">😬 Before (stock AI output)</th><th width="50%">✅ After <code>/unslop</code></th></tr>
-<tr>
-<td valign="top">
-
-I am writing to express my profound enthusiasm for the Marketing Coordinator position at Acme Corp. With over five years of experience **navigating the dynamic landscape** of digital marketing, I am confident that my **comprehensive skill set and passion for innovation** make me a **robust** candidate. I am particularly drawn to Acme's **cutting-edge** approach, and I would welcome the opportunity to **delve into** how my background aligns with your team's goals.
-
-</td>
-<td valign="top">
-
-Five years in digital marketing, most of it in small teams where nobody else writes the landing pages, so I end up doing it. I saw your Marketing Coordinator posting yesterday. The part about running campaigns end-to-end instead of handing them off to an agency is what pulled me in — that's the work I actually like.
-
-</td>
-</tr>
-</table>
-
----
-
 ## 🧪 Measured results
 
 Blind LLM-as-judge preference test. Claude Sonnet 4.5 compares each unslop rewrite against the original **without knowing which is which**. Seven fixtures, randomized A/B sides, 3 independent runs per fixture = 21 judgments.
@@ -245,20 +279,35 @@ Opt-in CLI flag scores your text against the TMR detector (99.28 % AUROC on RAID
 </td>
 <td width="33%" valign="top">
 
+### 🗣️ Persistent voice-match
+
+Save a numeric profile from a sample of your own writing — sentence-length variance, contraction rate, pronoun ratios. Reuse across sessions. No text samples are stored, so the tool can't learn to flatter you over time.
+
+</td>
+<td width="33%" valign="top">
+
+### 🤝 Complementary, not competitive
+
+Pairs with Anthropic Custom Styles and OpenAI style-steering. Custom Styles sets the ceiling, unslop catches residue after generation. The ICLR 2026 Antislop paper formalizes this exact split.
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><b>Power-user features</b> — surprisal reading, reasoning-trace sanitizer, mode gating</summary>
+
+<br/>
+
+<table>
+<tr>
+<td width="33%" valign="top">
+
 ### 🧠 Surprisal-variance reading
 
 One-shot `--surprisal-variance` gives you the real DivEye signal — per-token log-probabilities from a local `distilgpt2` model. Flat AI prose lands near 0.6–0.9; literary human prose often exceeds 1.5.
 
 </td>
-<td width="33%" valign="top">
-
-### 🗣️ Persistent voice-match
-
-Save a numeric stylometric profile from a sample of your own writing — sentence length CV, contraction rate, pronoun ratios. Reuse across sessions. No free-text prose is stored (sycophancy-memory vector physically unavailable).
-
-</td>
-</tr>
-<tr>
 <td width="33%" valign="top">
 
 ### 🧹 Reasoning-trace sanitizer
@@ -273,15 +322,10 @@ Strip `<thinking>` / `<analysis>` / `<reasoning>` / `<scratchpad>` wrappers and 
 `--no-structural`, `--no-soul`, and `--no-audit` let you turn off the newer aggressive passes for highly formal content (legal, compliance). Per-file opt-outs via HTML comments.
 
 </td>
-<td width="33%" valign="top">
-
-### 🤝 Complementary, not competitive
-
-Pairs with Anthropic Custom Styles and OpenAI style-steering. Custom Styles sets the ceiling, unslop catches residue after generation. The ICLR 2026 Antislop paper formalizes this exact split.
-
-</td>
 </tr>
 </table>
+
+</details>
 
 ---
 
@@ -648,6 +692,41 @@ Our own testing: deterministic rewriting moves TMR scores by < 0.5 pp. Real dete
 
 ---
 
+## 🔬 Engineering & research
+
+Every rule that ships in this repo ties back to a paper or a working open-source project. Not vibes. The full list lives in [`docs/RESEARCH_AND_TECH.md`](./docs/RESEARCH_AND_TECH.md) — 38 verified citations across 20 research categories, each one linked to the file and line of code it motivates.
+
+<p align="center">
+  <img src="./assets/research-depth.png" alt="Research-depth constellation: 20 categories, 38 citations, 555 tests informing unslop's design" width="100%"/>
+</p>
+
+### Inspirations
+
+Five projects and papers carry the most weight in shaping what unslop does and doesn't do.
+
+| Source | What it taught us |
+| --- | --- |
+| [`blader/humanizer`](https://github.com/blader/humanizer) | The original "scrub the AI residue" pattern. The deterministic regex layer in `humanize.py` started by porting its rule families and grew from there. |
+| [Antislop · Paech, ICLR 2026](https://arxiv.org/abs/2510.15061) | Formalized the "auto-antislop" split between generation-time style control and post-generation residue cleanup. unslop sits on the second half of that split. |
+| [Adversarial Paraphrasing · Cheng et al., NeurIPS 2025](https://arxiv.org/abs/2506.07001) | Predicted exactly the result we measured: surface rewriting moves modern AI-text detector scores by less than 1 pp. The reason `detector.py` recommends a cross-model pass when the local ladder exhausts. |
+| [DivEye · Basani, Chen et al., TMLR 2026](https://arxiv.org/abs/2509.18880) | Surprisal-variance as a humanness proxy. `surprisal.py` runs a local distilgpt2 to compute the canonical 10-feature signal — flat AI prose lands near 0.6–0.9, literary human prose often exceeds 1.5. |
+| [Liang et al., Patterns 2023](https://arxiv.org/abs/2304.02819) | Over 50% of TOEFL essays were flagged as AI by GPTZero. The ESL false-positive problem is the reason `/unslop anti-detector` exists — defensive use, not academic misconduct. |
+
+### What we deliberately don't do
+
+- **Claim detector defeat.** TMR detector AUROC 99.28; deterministic rewriting moves scores 0.0–0.2 pp on our fixtures. The README says so. The marketing doesn't.
+- **Store free-text style preferences.** The voice-match cache is numeric only — sentence-length CV, contraction rate, pronoun ratios. The CHI 2026 sycophancy-memory paper (MIT/Penn State) links free-text preference storage to amplified sycophancy over time. We made that vector physically unavailable.
+- **Add "warmth" to text.** Ibrahim, Hafner & Rocher 2025 ([arXiv 2507.21919](https://arxiv.org/abs/2507.21919)) found warmer-sounding LLM output carries an 8–13% higher error rate. unslop subtracts AI residue rather than layering empathy on top.
+- **Send anything anywhere.** No telemetry. No analytics. No cloud roundtrip. The plugin's hooks run locally; the CLI calls only the API key you configure.
+
+### Where to read more
+
+- [`docs/RESEARCH_AND_TECH.md`](./docs/RESEARCH_AND_TECH.md) — public reference: every paper, every tech-stack decision, every differentiator with file:line evidence.
+- [`docs/research/`](./docs/research/) — 20 numbered category folders (academic, industry, commercial, practical) covering 120+ angle files.
+- [`docs/research/IMPLEMENTATION_TRACE.md`](./docs/research/IMPLEMENTATION_TRACE.md) — every research finding mapped to the line of code it motivates.
+
+---
+
 ## 🏗️ Architecture
 
 ```mermaid
@@ -827,6 +906,10 @@ If unslop saved you from shipping a "comprehensive solution that leverages cutti
 <br/>
 
 <div align="center">
+
+<sub>Built by <a href="https://github.com/MohamedAbdallah-14">Mohamed Abdallah</a> — senior Flutter engineer, OSS contributor on Flutter Favorite packages.</sub>
+
+<br/>
 
 <sub>Built with careful human edits and a healthy suspicion of "delve".</sub>
 
