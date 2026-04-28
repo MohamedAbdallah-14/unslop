@@ -43,7 +43,7 @@ readings, not calibrated thresholds -- calibration is per-model.
 
 Not a silver bullet. DivEye itself is one detector among many, and
 detector arms races move fast (Nicks et al. ICLR 2024, Chakraborty et al.
-ICML 2024). Use the reading as a voice-match target, not a gate."""
+arXiv 2304.04736 ICML 2024). Use the reading as a voice-match target, not a gate."""
 
 from __future__ import annotations
 

@@ -357,9 +357,9 @@ def _count_false_ranges(text: str) -> int:
 
 _WORD_RE = re.compile(r"[A-Za-z]+")
 
-# Contraction detection — AI text typically has 0.00 contractions per chunk
-# vs human ~0.17 (Kalemaj et al. arXiv 2604.11687). Low contraction rate is
-# a distributional fingerprint that token-level detectors read.
+# Contraction detection — AI text typically has near-zero contractions per word
+# vs human ~0.17 (empirical; source citation pending re-verification). Low
+# contraction rate is a distributional fingerprint that token-level detectors read.
 _CONTRACTION_RE = re.compile(
     r"\b(?:don|doesn|didn|won|wouldn|shouldn|couldn|mightn|mustn|isn|aren|"
     r"wasn|weren|hasn|haven|hadn|can)'t\b|"

@@ -11,6 +11,40 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+### Fixed
+
+- README: AI-ism reduction stat corrected from `89.1 %` to `92.1 %`
+  (9-fixture suite, 2026-04-28 latest run).
+- README: "Six modes, one command" → "Five modes, one command" (subtle,
+  balanced, full, voice-match, anti-detector).
+- README: skills table no longer claims `/commit` or `/review` triggers
+  the commit/review sub-skills — only `/unslop-commit` and `/unslop-review`
+  match the hook regex.
+- `skills/unslop/SKILL.md`: subtle-mode description aligned with
+  deterministic code path. Sycophancy and hedging stacks need at least
+  balanced; subtle is stock-vocab-only.
+- `unslop/scripts/validate.py` + `soul.py`: removed broken arXiv
+  `2604.11687` / "Kalemaj et al." citation. The ID resolves to an
+  unrelated paper. Threshold kept; comment marked empirical pending
+  re-verification.
+- `unslop/scripts/surprisal.py`: added missing arXiv ID for the
+  Chakraborty et al. ICML 2024 reference.
+- `tests/unslop/test_humanize.py`: renamed shadowed `TestHumanizeFileEx`
+  edge-case class to `TestHumanizeFileExEdgeCases`. The four main-path
+  tests in the first class were silently dead due to Python class
+  shadowing; they run again.
+- 14 ruff F401/F811/F841 hits across `tests/` and `evals/measure.py`
+  cleaned up.
+
+### Removed
+
+- `requirements-optional.txt`: dropped `scipy` (zero imports across the
+  repo).
+- 30+ stale benchmark result dumps (`benchmarks/results/20260421T*.json`,
+  `20260426T*.json`, `llm-mode-baseline.json`) and the
+  `evals/snapshots/20260419T220738Z/` snapshot. Current Apr 28 runs and
+  the `baselines/` / `humanness/` subtrees remain.
+
 ## [0.6.1] — 2026-04-28
 
 Tier 1 gap-fill release. Closes the four pattern families that the 0.6.0 sweep

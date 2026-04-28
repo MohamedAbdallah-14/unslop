@@ -1678,7 +1678,6 @@ class TestCLI:
         import io
 
         from scripts.cli import main
-        from scripts.humanize import HumanizeReport
 
         monkeypatch.setattr("sys.stdin", io.StringIO("Run `unslop` with the file.\n"))
 
@@ -1838,7 +1837,6 @@ class TestCLI:
         assert "Great question" in src.read_text()
 
     def test_mode_full_at_cli(self, tmp_path: Path) -> None:
-        import json as json_mod
 
         from scripts.cli import main
 
@@ -1864,8 +1862,8 @@ import subprocess as _subprocess
 from unittest.mock import MagicMock, patch
 
 from scripts import benchmark, validate as validate_mod
-from scripts.cli import _build_parser, _emit_diff, _llm_available, main as cli_main
-from scripts.detect import _looks_like_plain_prose, detect_file_type
+from scripts.cli import _emit_diff, _llm_available, main as cli_main
+from scripts.detect import _looks_like_plain_prose
 from scripts.humanize import (
     HumanizeReport,
     Replacement,
@@ -2206,7 +2204,7 @@ class TestLLMFix:
 # ---------- humanize.py: humanize_file_ex paths ----------
 
 
-class TestHumanizeFileEx:
+class TestHumanizeFileExEdgeCases:
     def test_deterministic_structural_failure_returns_outcome(
         self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     ) -> None:

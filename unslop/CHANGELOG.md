@@ -1,3 +1,27 @@
+## Unreleased
+
+### Fixed
+
+- README and `skills/unslop/SKILL.md` corrections: AI-ism reduction stat
+  (89.1 → 92.1), mode count ("Six" → "Five"), skills-table triggers
+  (drop `/commit` and `/review`; only the `/unslop-*` forms match), and
+  subtle-mode description alignment with deterministic code.
+- `validate.py` + `soul.py`: removed broken `arXiv 2604.11687` /
+  "Kalemaj et al." citation; the ID resolves to an unrelated paper.
+  Empirical contraction-rate threshold kept.
+- `surprisal.py`: added missing arXiv ID for the Chakraborty et al.
+  ICML 2024 reference.
+- `tests/unslop/test_humanize.py`: renamed shadowed `TestHumanizeFileEx`
+  edge-case class. Four previously-dead main-path tests run again.
+- 14 ruff F401/F811/F841 hits cleaned up across `tests/` and
+  `evals/measure.py`.
+
+### Removed
+
+- `scipy` from `requirements-optional.txt` (zero imports).
+- 30+ stale benchmark result dumps and the
+  `evals/snapshots/20260419T220738Z/` snapshot.
+
 ## 0.6.1 — 2026-04-28
 
 Tier 1 gap-fill release. Closes the four pattern families that the 0.6.0 sweep

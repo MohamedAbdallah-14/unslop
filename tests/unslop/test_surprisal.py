@@ -10,7 +10,6 @@ UNSLOP_RUN_REAL_SURPRISAL=1 env var so CI without HF cache doesn't fail."""
 from __future__ import annotations
 
 import os
-from unittest.mock import patch
 
 import pytest
 
