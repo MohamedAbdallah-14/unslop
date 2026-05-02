@@ -899,6 +899,17 @@ If unslop saved you from shipping a "comprehensive solution that leverages cutti
 
 ---
 
+## 📚 Read more
+
+The story behind the tool, in long-form:
+
+- **[Claude rewrote my resume and I couldn't send it, so I built unslop](https://blog.mohamedabdallah.com/unslop-resume-story)** — origin of the project.
+- **[The AI writing tic I couldn't stop seeing after building a humanizer](https://blog.mohamedabdallah.com/ai-writing-tic)** — what `unslop`'s pattern-detection trained the eye for.
+
+Cross-posted on [Medium](https://medium.com/@mohamedmabdallah14) and [dev.to](https://dev.to/mohamedabdallah14).
+
+---
+
 ## 📄 License
 
 [MIT](./LICENSE). Use it, fork it, ship it.
