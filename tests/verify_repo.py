@@ -431,6 +431,24 @@ def verify_version_alignment() -> None:
         re.search(rf"^## {re.escape(expected)} ", package_changelog, re.MULTILINE) is not None,
         "package CHANGELOG latest version heading missing",
     )
+    ensure(
+        re.search(
+            rf"^\[{re.escape(expected)}\]: .+/releases/tag/unslop-v{re.escape(expected)}$",
+            root_changelog,
+            re.MULTILINE,
+        )
+        is not None,
+        "root CHANGELOG latest version link missing",
+    )
+    ensure(
+        re.search(
+            rf"^\[Unreleased\]: .+/compare/unslop-v{re.escape(expected)}\.\.\.HEAD$",
+            root_changelog,
+            re.MULTILINE,
+        )
+        is not None,
+        "root CHANGELOG Unreleased comparison is stale",
+    )
 
     print(f"All public version signals match {expected}")
 

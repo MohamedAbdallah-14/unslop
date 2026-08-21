@@ -18,8 +18,8 @@ The GitHub login must be the intended maintainer account. The worktree must be c
 Update the version in every public source:
 
 - `unslop/scripts/__init__.py`
+- `.claude-plugin/plugin.json`
 - `.claude-plugin/marketplace.json`
-- `.agents/plugins/marketplace.json`
 - `.codex/hooks.json`
 - `.cursor-plugin/plugin.json`
 - `gemini-extension.json`

@@ -763,5 +763,6 @@ Exit codes: `0` success, `1` usage / file-not-found / sensitive path,
 
 See git history. No formal changelog before 0.4.0.
 
-[Unreleased]: https://github.com/MohamedAbdallah-14/unslop/compare/unslop-v0.4.0...HEAD
+[Unreleased]: https://github.com/MohamedAbdallah-14/unslop/compare/unslop-v0.7.0...HEAD
+[0.7.0]: https://github.com/MohamedAbdallah-14/unslop/releases/tag/unslop-v0.7.0
 [0.4.0]: https://github.com/MohamedAbdallah-14/unslop/releases/tag/unslop-v0.4.0
