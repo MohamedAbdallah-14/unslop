@@ -11,6 +11,25 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+### Added
+
+- Packaged the development stylometric baseline, opt-in surprisal telemetry,
+  SHIELD detector metrics, and a CI-safe feedback-loop benchmark.
+
+### Changed
+
+- Detector feedback now uses a four-step default ladder and a six-step
+  aggressive ladder while preserving explicit iteration limits. Baseline-driven
+  target nudges now run only in anti-detector mode, keeping the final step
+  distinct from full intensity.
+- Tightened anti-detector guidance and corrected public detector-research
+  claims and citations.
+- Pinned Ruff 0.16.4 for development and made CI load the repository's lint
+  configuration explicitly.
+- Reject non-positive detector iteration limits, tolerate malformed baseline
+  payloads, isolate cached-baseline tests, and fail feedback benchmarks when an
+  expected fixture is missing.
+
 ## [0.6.2] — 2026-04-29
 
 Docs and presentation release. No code changes; tests still 555 passed,

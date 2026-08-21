@@ -126,9 +126,9 @@ Each section covers one research directory. Three subsections per entry:
 ## 05 — AI Text Detection & Evasion
 
 ### Outdated / False
-- **GPTZero accuracy**: "claimed 99.3%/0.24% FP" was stale but directionally correct — GPTZero v4.1b (2026) now measures 99.3% recall / **0.1% FPR** (tighter). The Scribbr 2024 ranking (GPTZero at 52%) was out-of-date by two major model versions and no longer representative. Chicago Booth 2026 is now the reference benchmark.
+- **GPTZero accuracy**: "claimed 99.3%/0.24% FP" mixed two evaluations. GPTZero reports **98.78% recall and 0.00% FPR** for v4.1b on its own 2026 benchmark. Its reanalysis of the Jabarian & Imas Booth corpus reports **99.3% recall at 0.1% FPR**; the underlying independent working paper is BFI WP 2025-116.
 - **Originality.ai model names**: "Lite, Turbo, Academic" had no version numbers. Now: Lite 1.0.1 (Jun 2025), Lite 1.0.2 / Turbo 3.0.2 / Academic 0.0.5 (Sep 2025) with explicit humanizer-corpus retraining.
-- **Turnitin**: "98%, <1% FP" accurate for raw AI text but omitted the **60–85% performance drop against edited/paraphrased content** (University of Chicago Booth, late 2025). Japanese detection (Apr 2025) missing. 2026 roadmap targeting humanizer tools specifically not covered.
+- **Turnitin**: "98%, <1% FP" accurate for raw AI text but omitted independent tier-test bypass rates on humanizer-processed text (54–85% band depending on tool — Blommerde, MPG ONE; Booth did not evaluate Turnitin). Japanese detection (Apr 2025) missing. 2026 roadmap targeting humanizer tools specifically not covered.
 - **Undetectable.ai user count**: "15M+ users as of Feb 2025" — updated to **22M+** as of 2026. Bypass rate corrected from "96% GPTZero" to "87–88% average across all major detectors" (independent 2026 testing).
 - **Watermark attack landscape**: Jovanović ($50, ICML 2024) was stated state of the art. **SIRA** (ICML 2025) supersedes it: ~100% success on seven watermarking schemes at **$0.88/million tokens**, no algorithm access needed. Qualitatively different threat model.
 - **SynthID vulnerability**: only Jovanović's attack mentioned. ETH SRI Lab's black-box probing (2025) showing SynthID is easier to scrub than other SOTA schemes was absent.
@@ -140,7 +140,7 @@ Each section covers one research directory. Three subsections per entry:
 - **WaterPark** (EMNLP 2025): new watermark-specific benchmark.
 - **ETH SRI Lab SynthID probe** (2025): black-box vulnerability analysis.
 - EU AI Act Article 50 as a binding external forcing function on the arms race.
-- Chicago Booth 2026 as the reference benchmark replacing Scribbr 2024.
+- Jabarian & Imas (Booth 2025) as independent clean-text benchmark replacing Scribbr 2024.
 - Ryter Pro added as 2026 Turnitin bypass leader (97%).
 - Awesome-LLM-Watermark curated list, SIRA attack code repo.
 
@@ -284,7 +284,7 @@ Each section covers one research directory. Three subsections per entry:
 ### Outdated / False
 - **GeDi and CTRL repos**: presented as active — **both archived by Salesforce in mid-2025**.
 - **`shandley/claude-style-guide`**: referenced "Claude Opus 4.5" — a model name that does not exist publicly.
-- **EMNLP 2025 fidelity gap**: not covered. "Catch Me If You Can?" (arXiv 2509.14543) tested six frontier models on personal-style imitation — all fail. Few-shot prompting is 23.5× better than zero-shot but still insufficient. **Fine-tuning wins decisively for personal-style imitation** — the fine-tune-vs-prompt debate is now resolved.
+- **EMNLP 2025 fidelity gap**: not covered. "Catch Me If You Can?" (arXiv 2509.14543) found domain-sensitive prompt-only imitation: structured news and email were easier than informal blogs and forums. Jemama et al. (2509.24930) reports up to 23.5× higher style-matching accuracy with few-shot prompting than zero-shot prompting in an academic-essay setting. These studies do not compare prompting with fine-tuning, so they do not settle that design choice.
 - **Grammarly**: described without the August 2025 agentic launch or October 2025 **Superhuman rebrand** with 8 AI agents.
 - **Jasper**: no 2025 usage data — 69,500+ Brand Voices created in 2025; per-author voice is now a standard expectation.
 - **Anthropic Claude Styles**: first-party style capture shipped in 2025 (Normal/Concise/Explanatory/Formal presets + user-defined). Now the baseline; not listed anywhere.
@@ -636,7 +636,7 @@ Each section covers one research directory. Three subsections per entry:
 | 02 RLHF & Alignment | 4 | 3 | 2 | Scale/Meta acquisition, GRPO era, Claude Constitution |
 | 03 Persona & Character | 7 | 6 | 3 | Pi exit, companion-AI market size, PSM paper |
 | 04 NL Quality | 4 | 4 | 1 | Antislop ICLR upgrade, EU AI Act Article 50 |
-| 05 AI Text Detection | 4 | 4 | 1 | SIRA attack, Turnitin 60–85% drop on humanized text |
+| 05 AI Text Detection | 4 | 4 | 1 | SIRA attack; Turnitin bypass tier tests (not Booth-attributed) |
 | 06 Chain-of-Thought | 6 | 5 | 2 | GPT-5, o4-mini, CoT deprecated on reasoning models |
 | 07 Emotional Intelligence | 11 | 4 | 2 | Therabot RCT, Woebot shutdown, emotion-vectors |
 | 08 Dialogue Systems | 7 | 6 | 3 | Full-duplex era (SyncLLM, PersonaPlex), SycEval |

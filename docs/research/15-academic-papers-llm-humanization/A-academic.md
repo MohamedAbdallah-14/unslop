@@ -54,7 +54,7 @@ Scope: papers that explicitly *humanize* AI-generated text (make it less detecta
 - **[Repro: medium]** — methodology clear; depends on detector API quotas.
 - **Project relevance:** shows humanization can be trained against *black-box* commercial detectors, not only open ones.
 
-### 1.10 Kalemaj et al., *Please Make It Sound Like Human: Encoder-Decoder vs. Decoder-Only Transformers for AI-to-Human Text Style Transfer* (arXiv:2604.11687, Apr 2026)
+### 1.10 Paneru, *Please Make It Sound Like Human: Encoder-Decoder vs. Decoder-Only Transformers for AI-to-Human Text Style Transfer* (arXiv:2604.11687, Apr 2026)
 - **Contribution:** Builds a 25,140-pair AI↔human parallel corpus and identifies 11 measurable stylistic markers (including contraction rate: AI averages 0.00 contractions/chunk vs. human 0.17). BART-large beats Mistral-7B-Instruct with QLoRA (BERTScore F1 0.924, ROUGE-L 0.566, chrF++ 55.92) with 17× fewer parameters.
 - **[Repro: high]** — parallel corpus + fine-tuning recipe; modest compute footprint.
 - **Project relevance:** evidence that humanization does not require frontier-scale models; a 400M encoder-decoder is competitive.

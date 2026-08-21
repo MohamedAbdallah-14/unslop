@@ -92,6 +92,17 @@ def _markdown_table(fields: dict[str, Any]) -> str:
     return "\n".join(lines) + "\n"
 
 
+def _stable_corpus_label(path: Path) -> str:
+    """Return a stable, non-sensitive corpus identifier.
+
+    Inside the repo: repo-relative path. Outside: basename only.
+    """
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return path.name
+
+
 def build_baseline(human_dir: Path, llm_dir: Path) -> dict[str, Any]:
     human_paths = _iter_texts(human_dir)
     llm_paths = _iter_texts(llm_dir)
@@ -100,11 +111,15 @@ def build_baseline(human_dir: Path, llm_dir: Path) -> dict[str, Any]:
     fields = _summarize(human_rows, llm_rows)
     return {
         "metadata": {
-            "human_corpus": str(human_dir),
-            "llm_corpus": str(llm_dir),
+            "human_corpus": _stable_corpus_label(human_dir),
+            "llm_corpus": _stable_corpus_label(llm_dir),
             "n_human": len(human_rows),
             "n_llm": len(llm_rows),
-            "note": "Use a published corpus subset when producing release baselines.",
+            "note": (
+                f"Small development seed corpus ({len(human_rows)} human, "
+                f"{len(llm_rows)} LLM). "
+                "Not a published or genre-calibrated release corpus."
+            ),
         },
         "fields": fields,
     }

@@ -165,6 +165,8 @@ Lives in `unslop/scripts/`. The package is split:
 - `soul.py` — Phase 5 soul / contraction pass
 - `detector.py` — optional AI-text detector feedback loop
 - `fetch_detectors.py` — one-shot HF weight fetcher for `detector.py`
+- `shield_metrics.py` — SHIELD/RAID evaluation metrics (TPR@FPR, w-AUROC, SFD, URSS). Pure stdlib
+- `lexical_targets.py` — stylometric gap nudges for anti-detector mode. Loads baseline from `benchmarks/results/stylometric_baseline.json` (repo) or `scripts/data/stylometric_baseline.json` (wheel)
 
 **Add a new AI-ism**: edit `STOCK_VOCAB`, `HEDGING_OPENERS`, `SYCOPHANCY`, `PERFORMATIVE`, or `TRANSITION_TICS` in `humanize.py` AND add a corresponding pattern to `AI_ISMS` in `validate.py` so the validator catches additions. Add a test in `tests/unslop/test_humanize.py`.
 
@@ -188,6 +190,13 @@ The deterministic suite must pass on every change. LLM tests are opt-in via `UNS
 4. Add sync mappings in `scripts/sync-mirrors.sh`, then add trigger paths in `.github/workflows/sync.yml`.
 5. Document the skill in `skills/unslop-help/SKILL.md` (the reference card).
 6. Add a row to the README sub-skills table.
+
+## Citation hygiene
+
+When editing SSOT docs, verify benchmark attributions against `drafts/2026-08-detector-research/`:
+- Liang ESL paper is **arXiv:2304.02819** (not 2306.04723 — that's Tulchinskii PHD).
+- Jabarian & Imas (Booth 2025) tested **StealthGPT only** — not Turnitin, not twelve humanizers.
+- **23.5×** few-shot style gain is **Jemama** (2509.24930), not Catch Me (2509.14543).
 
 ## Voice
 

@@ -191,7 +191,7 @@ Every fixture wins 3/3 runs. Reproduce with `python3 evals/perceived_humanness.p
 
 ### Five modes
 
-`subtle` keeps the shape, scrubs the fingerprints. `balanced` is the default. `full` rewrites with opinion. `voice-match` mimics a sample. `anti-detector` does the burstiness and specificity moves that move GPTZero scores.
+`subtle` keeps the shape, scrubs the fingerprints. `balanced` is the default. `full` rewrites with opinion. `voice-match` mimics a sample. `anti-detector` applies burstiness, contractions, and specificity moves aimed at ESL false-positive defense — not a GPTZero bypass guarantee.
 
 </td>
 <td width="33%" valign="top">
@@ -367,9 +367,11 @@ python3 -m unslop.scripts.fetch_detectors   # one-time: ~500MB of weights
 unslop --detector-feedback file.md          # humanize, score, escalate, report
 ```
 
-Escalation ladder: `balanced` → `full` → `full + structural + soul`. Reports the score at each step. It does not claim to lower scores — it just tells you where you are.
+Escalation ladder: `balanced` → `full` → `full + structural + soul` → `anti-detector`. Reports the score at each step. It does not claim to lower scores — it just tells you where you are.
 
-Use `--detector-loop-aggressive` for the longer five-step ladder:
+Use `--detector-loop-aggressive` for the longer six-step ladder:
+
+An explicit `--detector-max-iterations` value still caps either ladder.
 
 ```bash
 unslop --detector-feedback --detector-loop-aggressive file.md
@@ -389,7 +391,7 @@ Not every tool in this space solves the same problem. Here's the honest map.
 | **Runs offline (deterministic)**      | ✅ regex mode             | ❌ cloud only            | ❌ cloud only                     | ❌ needs API                 |
 | **Preserves code / URLs byte-exact**  | ✅ validated              | 🟡 best-effort           | ❌ often breaks code              | ❌ drifts                    |
 | **Blind human-reads-more-human test** | ✅ 100 % (21/21)          | 🟡 not publicly measured | 🟡 vendor-claimed, unverified     | 🟡 varies by prompt          |
-| **Honest about detector limits**      | ✅ documents < 0.5 pp     | ✅ doesn't claim defeat  | ❌ "99.8 % undetectable" claims   | —                            |
+| **Honest about detector limits**      | ✅ documents ~0.0–0.2 pp  | ✅ doesn't claim defeat  | ❌ "99.8 % undetectable" claims   | —                            |
 | **No paste-in-browser round-trip**    | ✅ inline in your editor  | ✅ inline                | ❌ copy-paste workflow            | ✅ inline                    |
 | **Open source, MIT**                  | ✅                        | ❌ proprietary           | ❌ proprietary                    | —                            |
 | **Free**                              | ✅                        | ✅ on Claude.ai          | ❌ $10–30/mo                      | ✅                           |
@@ -397,7 +399,7 @@ Not every tool in this space solves the same problem. Here's the honest map.
 
 </div>
 
-unslop is a polish layer, not a detector-defeat tool. Commercial SaaS humanizers are a different category and mostly don't beat a second pass through a different model family plus five minutes of manual editing (Chicago Booth 2026 audit: median detector-accuracy drop ~6 points, not the claimed 40+).
+unslop is a polish layer, not a detector-defeat tool. Commercial SaaS humanizers are a different category and mostly don't beat a second pass through a different model family plus five minutes of manual editing. Jabarian & Imas (Booth 2025) tested one humanizer (StealthGPT) against four detectors — not a twelve-tool panel.
 
 ---
 
@@ -405,7 +407,7 @@ unslop is a polish layer, not a detector-defeat tool. Commercial SaaS humanizers
 
 - Rewriting can degrade statistical watermarks like SynthID or green-list schemes. Side effect, not a feature. If provenance matters, watermark after unslop.
 - Detector evasion isn't durable when the verifier has source-generation logs or retrieval access. Use anti-detector mode for false-positive defense, not academic misconduct.
-- AI detectors over-flag non-native English. Liang et al. (arXiv 2306.04723) found GPTZero, OriginalityAI, and Crossplag flagged >50 % of TOEFL essays as AI-generated. Keep drafts and process notes when stakes are high.
+- AI detectors over-flag non-native English. Liang et al. ([arXiv:2304.02819](https://arxiv.org/abs/2304.02819)) found GPTZero, OriginalityAI, and Crossplag flagged >50 % of TOEFL essays as AI-generated. Keep drafts and process notes when stakes are high.
 
 ---
 
@@ -607,7 +609,7 @@ What actually lowers detector scores, ordered by strength:
 5. Break predictable structure. If every bullet has the same shape (verb + metric + with + tool), vary half of them.
 6. One or two rough edges. A slightly awkward phrasing, a parenthetical trail, a non-linear logical jump — all read human.
 
-Commercial humanizer SaaS (Undetectable.ai, StealthGPT, WriteHuman, HIX Bypass, Ryter Pro, Walter Writes AI, GPTHuman.ai — the ~150 products Category 18 audits) mostly don't beat a second pass through a different model plus five minutes of manual editing. Independent audits (DAMAGE COLING 2025; Epaphras & Mtenzi 2026; Turnitin's August 2025 anti-humanizer update) show wide gaps between their "99.8 % undetectable" claims and reality, and the gap shifts monthly. Chicago Booth's 2026 audit of twelve humanizer services found the median accuracy drop in downstream detectors was ~6 points, not the claimed 40+.
+Commercial humanizer SaaS (Undetectable.ai, StealthGPT, WriteHuman, HIX Bypass, Ryter Pro, Walter Writes AI, GPTHuman.ai — the ~150 products Category 18 audits) mostly don't beat a second pass through a different model plus five minutes of manual editing. Independent audits (DAMAGE COLING 2025 — 19 tools; HumanizerBench — twelve-tool panel; Epaphras & Mtenzi 2026; Turnitin's August 2025 anti-humanizer update) show wide gaps between "99.8 % undetectable" marketing and reality. Jabarian & Imas (Booth 2025) tested StealthGPT only — GPTZero FNR hit 44–77% on humanized text in that study while Pangram stayed near 0–5%.
 
 The right comparison isn't another SaaS. It's Anthropic Custom Styles (shipped November 2025 in Claude.ai) and OpenAI's style-steering prompt patterns — first-party style control from the model vendor, targeted at the same job. unslop is complementary: Custom Styles at generation time, the deterministic + LLM rewriting in this package after generation. The ICLR 2026 Antislop paper formalizes this split as "auto-antislop".
 
@@ -640,7 +642,7 @@ RMTBench and HorizonBench (arXiv 2604.17283, April 2026) measure >30 % persona-c
 
 An LLM-mode procedure. Covers items 2, 4, 5 from the detector list in one pass: burstiness targeting, contraction lift, structural variance. Item 1 (different-model paraphrase) the skill cannot execute alone — you have to request it. Use this mode when the reader might pipe the text into GPTZero or Turnitin. Skip for code, legal, or anything where precision beats voice.
 
-My own testing: deterministic rewriting moves TMR scores by < 0.5 pp. Real detector resistance needs the different-model pass that only you can orchestrate. unslop's value in anti-detector mode is doing the local burstiness / contraction / specificity work correctly so the cross-model pass has less to fix.
+My own testing: deterministic rewriting moves TMR scores by ~0.0–0.2 pp. Real detector resistance needs the different-model pass that only you can orchestrate. unslop's value in anti-detector mode is doing the local burstiness / contraction / specificity work correctly so the cross-model pass has less to fix.
 
 </details>
 

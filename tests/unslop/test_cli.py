@@ -337,6 +337,156 @@ class TestReportFlag:
         assert "report" in payload[0]
 
 
+class TestDetectorMaxIterationsSentinel:
+    """Regression: explicit --detector-max-iterations 4 must not silently become 6."""
+
+    def test_explicit_4_stays_4_in_aggressive(self):
+        parser = cli._build_parser()
+        args = parser.parse_args(
+            ["--stdin", "--detector-feedback", "--detector-loop-aggressive",
+             "--detector-max-iterations", "4"]
+        )
+        assert cli._detector_feedback_max_iterations(args) == 4
+
+    def test_default_aggressive_maps_to_6(self):
+        parser = cli._build_parser()
+        args = parser.parse_args(
+            ["--stdin", "--detector-feedback", "--detector-loop-aggressive"]
+        )
+        assert cli._detector_feedback_max_iterations(args) == 6
+
+    def test_default_non_aggressive_maps_to_4(self):
+        parser = cli._build_parser()
+        args = parser.parse_args(
+            ["--stdin", "--detector-feedback"]
+        )
+        assert cli._detector_feedback_max_iterations(args) == 4
+
+    @pytest.mark.parametrize("value", ["0", "-1"])
+    def test_non_positive_iteration_limit_is_rejected(self, value):
+        parser = cli._build_parser()
+        with pytest.raises(SystemExit):
+            parser.parse_args(
+                ["--stdin", "--detector-feedback", "--detector-max-iterations", value]
+            )
+
+
+class TestDetectorSurprisalFlag:
+    """--detector-surprisal opt-in; no model load by default."""
+
+    def test_flag_present_in_parser(self):
+        parser = cli._build_parser()
+        args = parser.parse_args(["--stdin", "--detector-feedback", "--detector-surprisal"])
+        assert args.detector_surprisal is True
+
+    def test_flag_default_is_false(self):
+        parser = cli._build_parser()
+        args = parser.parse_args(["--stdin", "--detector-feedback"])
+        assert args.detector_surprisal is False
+
+    def test_model_forwarded(self):
+        parser = cli._build_parser()
+        args = parser.parse_args([
+            "--stdin", "--detector-feedback", "--detector-surprisal",
+            "--surprisal-model", "gpt2",
+        ])
+        assert args.surprisal_model == "gpt2"
+
+    def test_no_surprisal_fn_when_flag_absent(self, monkeypatch):
+        calls = []
+
+        def spy_loop(*args, **kwargs):
+            calls.append(kwargs.get("surprisal_fn"))
+            class FakeOutcome:
+                final_text = "done"
+                original_probability = 0.9
+                final_probability = 0.3
+                reason_stopped = "test"
+                def to_dict(self):
+                    return {"reason_stopped": "test", "iterations": []}
+            return FakeOutcome()
+
+        monkeypatch.setattr("unslop.scripts.detector.feedback_loop", spy_loop)
+        _run(
+            ["--stdin", "--detector-feedback"],
+            stdin="The team shipped.",
+            monkeypatch=monkeypatch,
+        )
+        assert calls[0] is None
+
+    def test_surprisal_fn_passed_when_flag_set(self, monkeypatch):
+        calls = []
+
+        def spy_loop(*args, **kwargs):
+            calls.append(kwargs.get("surprisal_fn"))
+            class FakeOutcome:
+                final_text = "done"
+                original_probability = 0.9
+                final_probability = 0.3
+                reason_stopped = "test"
+                def to_dict(self):
+                    return {"reason_stopped": "test", "iterations": []}
+            return FakeOutcome()
+
+        monkeypatch.setattr("unslop.scripts.detector.feedback_loop", spy_loop)
+        monkeypatch.setattr(
+            "unslop.scripts.cli._build_surprisal_fn",
+            lambda model: (lambda text: 1.0),
+        )
+        _run(
+            ["--stdin", "--detector-feedback", "--detector-surprisal"],
+            stdin="The team shipped.",
+            monkeypatch=monkeypatch,
+        )
+        assert calls[0] is not None
+
+    def test_help_mentions_detector_surprisal(self, capsys):
+        with pytest.raises(SystemExit):
+            cli.main(["--help"])
+        captured = capsys.readouterr()
+        assert "--detector-surprisal" in captured.out
+
+
+class TestSurprisalDiagnostic:
+    """When --detector-surprisal deps are missing, emit one clear stderr message."""
+
+    def test_emits_one_diagnostic_when_import_fails(self, monkeypatch, capsys):
+        import sys as _sys
+        import unslop.scripts.cli as cli_mod
+        monkeypatch.setattr(cli_mod, "_SURPRISAL_WARNING_EMITTED", False)
+
+        key = "unslop.scripts.surprisal"
+        saved = _sys.modules.pop(key, None)
+        monkeypatch.setitem(_sys.modules, key, None)
+
+        result = cli_mod._build_surprisal_fn("distilgpt2")
+        assert result is None
+        captured = capsys.readouterr()
+        assert "--detector-surprisal requested but dependencies unavailable" in captured.err
+        assert "pip install unslop[surprisal]" in captured.err
+
+        if saved is not None:
+            _sys.modules[key] = saved
+
+    def test_no_repeated_warning_across_calls(self, monkeypatch, capsys):
+        import sys as _sys
+        import unslop.scripts.cli as cli_mod
+        monkeypatch.setattr(cli_mod, "_SURPRISAL_WARNING_EMITTED", False)
+
+        key = "unslop.scripts.surprisal"
+        saved = _sys.modules.pop(key, None)
+        monkeypatch.setitem(_sys.modules, key, None)
+
+        cli_mod._build_surprisal_fn("distilgpt2")
+        monkeypatch.setattr(cli_mod, "_SURPRISAL_WARNING_EMITTED", True)
+        cli_mod._build_surprisal_fn("distilgpt2")
+        captured = capsys.readouterr()
+        assert captured.err.count("--detector-surprisal requested") == 1
+
+        if saved is not None:
+            _sys.modules[key] = saved
+
+
 class TestNoInputError:
     def test_no_files_and_no_stdin_errors(self):
         with pytest.raises(SystemExit):
