@@ -126,7 +126,7 @@ Each section covers one research directory. Three subsections per entry:
 ## 05 — AI Text Detection & Evasion
 
 ### Outdated / False
-- **GPTZero accuracy**: "claimed 99.3%/0.24% FP" was stale but directionally correct — GPTZero v4.1b (2026) now measures 99.3% recall / **0.1% FPR** (tighter). The Scribbr 2024 ranking (GPTZero at 52%) was out-of-date by two major model versions and no longer representative. Jabarian & Imas (Booth 2025, BFI WP 2025-116) is the independent clean-text benchmark.
+- **GPTZero accuracy**: "claimed 99.3%/0.24% FP" mixed two evaluations. GPTZero reports **98.78% recall and 0.00% FPR** for v4.1b on its own 2026 benchmark. Its reanalysis of the Jabarian & Imas Booth corpus reports **99.3% recall at 0.1% FPR**; the underlying independent working paper is BFI WP 2025-116.
 - **Originality.ai model names**: "Lite, Turbo, Academic" had no version numbers. Now: Lite 1.0.1 (Jun 2025), Lite 1.0.2 / Turbo 3.0.2 / Academic 0.0.5 (Sep 2025) with explicit humanizer-corpus retraining.
 - **Turnitin**: "98%, <1% FP" accurate for raw AI text but omitted independent tier-test bypass rates on humanizer-processed text (54–85% band depending on tool — Blommerde, MPG ONE; Booth did not evaluate Turnitin). Japanese detection (Apr 2025) missing. 2026 roadmap targeting humanizer tools specifically not covered.
 - **Undetectable.ai user count**: "15M+ users as of Feb 2025" — updated to **22M+** as of 2026. Bypass rate corrected from "96% GPTZero" to "87–88% average across all major detectors" (independent 2026 testing).
@@ -284,7 +284,7 @@ Each section covers one research directory. Three subsections per entry:
 ### Outdated / False
 - **GeDi and CTRL repos**: presented as active — **both archived by Salesforce in mid-2025**.
 - **`shandley/claude-style-guide`**: referenced "Claude Opus 4.5" — a model name that does not exist publicly.
-- **EMNLP 2025 fidelity gap**: not covered. "Catch Me If You Can?" (arXiv 2509.14543) tested six frontier models on personal-style imitation — all fail (~2–3× few-shot gain over zero-shot, still insufficient). Jemama et al. (2509.24930) reports up to 23.5× style-matching accuracy with few-shot prompting over zero-shot. **Fine-tuning wins decisively for personal-style imitation** — the fine-tune-vs-prompt debate is now resolved.
+- **EMNLP 2025 fidelity gap**: not covered. "Catch Me If You Can?" (arXiv 2509.14543) found domain-sensitive prompt-only imitation: structured news and email were easier than informal blogs and forums. Jemama et al. (2509.24930) reports up to 23.5× higher style-matching accuracy with few-shot prompting than zero-shot prompting in an academic-essay setting. These studies do not compare prompting with fine-tuning, so they do not settle that design choice.
 - **Grammarly**: described without the August 2025 agentic launch or October 2025 **Superhuman rebrand** with 8 AI agents.
 - **Jasper**: no 2025 usage data — 69,500+ Brand Voices created in 2025; per-author voice is now a standard expectation.
 - **Anthropic Claude Styles**: first-party style capture shipped in 2025 (Normal/Concise/Explanatory/Formal presets + user-defined). Now the baseline; not listed anywhere.

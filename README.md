@@ -371,6 +371,8 @@ Escalation ladder: `balanced` → `full` → `full + structural + soul` → `ant
 
 Use `--detector-loop-aggressive` for the longer six-step ladder:
 
+An explicit `--detector-max-iterations` value still caps either ladder.
+
 ```bash
 unslop --detector-feedback --detector-loop-aggressive file.md
 ```

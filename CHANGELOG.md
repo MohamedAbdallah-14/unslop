@@ -26,6 +26,9 @@ inside its wheel; both files are kept in sync. Edit this one.
   claims and citations.
 - Pinned Ruff 0.16.4 for development and made CI load the repository's lint
   configuration explicitly.
+- Reject non-positive detector iteration limits, tolerate malformed baseline
+  payloads, isolate cached-baseline tests, and fail feedback benchmarks when an
+  expected fixture is missing.
 
 ## [0.6.2] — 2026-04-29
 

@@ -209,8 +209,8 @@
 ### 9.1 Wang et al. — *Catch Me If You Can? Not Yet: LLMs Still Struggle to Imitate the Implicit Writing Styles of Everyday Authors* — **EMNLP 2025 Findings**
 - **Problem:** Does in-context prompting faithfully replicate a specific individual's writing style from a few samples?
 - **Contribution:** Comprehensive evaluation across GPT-4o, GPT-4o-mini, Gemini-2.0-Flash, Gemma-3-27B, DeepSeek-V3, and Llama-4-Maverick using four complementary metrics: authorship attribution, authorship verification, style matching, and AI detection.
-- **Key finding:** All tested models — including frontier ones — fail to reliably imitate *implicit* writing styles of ordinary authors via in-context learning. Catch Me reports ~2–3× few-shot gain over zero-shot on Blog authorship verification; Jemama et al. (2509.24930) reports up to 23.5× style-matching accuracy with few-shot prompting over zero-shot — neither reaches reliable everyday-author cloning via prompting alone.
-- **Unslop relevance:** Empirical proof that prompt-only approaches remain insufficient for individual voice cloning as of late 2025. Directly motivates embedding- or fine-tune-based approaches over pure prompting.
+- **Key finding:** Imitation quality is domain-sensitive: the tested models perform better on structured news and email than on informal blogs and forums. Catch Me reports few-shot gains on Blog authorship verification, while Jemama et al. (2509.24930) reports up to 23.5× higher style-matching accuracy with few-shot prompting than zero-shot prompting in a separate academic-essay setting.
+- **Unslop relevance:** Prompt-only voice matching needs domain-matched evaluation. The paper supports extracting measurable style signals and testing against representative author samples; it does not compare prompting with fine-tuning.
 - **Link:** `https://arxiv.org/abs/2509.14543` | GitHub: `https://github.com/jaaack-wang/llms-implicit-writing-styles-imitation`
 
 ### 9.2 Jemama et al. — *How Well Do LLMs Imitate Human Writing Style?* — **arXiv 2509.24930, 2025**

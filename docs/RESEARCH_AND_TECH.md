@@ -48,7 +48,7 @@ Two deterministic proxies (`sentence_length_cv`, `word_length_stdev`) fall back 
 
 `SKILL.md` states the failure modes explicitly:
 
-- Voice-match is prompt-based, not stylometric-attribution-resistant. Catch Me If You Can? ([arXiv:2509.14543](https://arxiv.org/abs/2509.14543), EMNLP 2025) showed all six tested frontier models fail personal-style imitation (Blog AV ~17–21% vs 91.4% human; few-shot ~2–3× over zero-shot). Jemama et al. ([arXiv:2509.24930](https://arxiv.org/abs/2509.24930)) reports up to 23.5× style-matching accuracy with few-shot prompting over zero-shot; fine-tuning wins decisively for production voice cloning.
+- Voice-match is prompt-based and domain-sensitive. Catch Me If You Can? ([arXiv:2509.14543](https://arxiv.org/abs/2509.14543), EMNLP 2025) found stronger imitation on structured news and email than on informal blogs and forums. Jemama et al. ([arXiv:2509.24930](https://arxiv.org/abs/2509.24930)) reports up to 23.5× higher style-matching accuracy with few-shot prompting than zero-shot prompting in its academic-essay setting. Neither result establishes a universal production recipe; evaluate author-specific fidelity on representative samples.
 - Detector evasion isn't durable when the verifier has source-DB access. Krishna et al. (DIPPER, [arXiv:2303.13408](https://arxiv.org/abs/2303.13408), NeurIPS 2023): retrieval-defense recovers 80–97% of paraphrased outputs.
 - All commercial humanizer bypass numbers from before August 2025 are stale. Turnitin shipped explicit "AI bypasser" detection then, retrained February 2026, FP held below 1%.
 
