@@ -193,7 +193,7 @@ The deterministic suite must pass on every change. LLM tests are opt-in via `UNS
 
 ## Citation hygiene
 
-When editing SSOT docs, verify benchmark attributions against `drafts/2026-08-detector-research/`:
+When editing SSOT docs, verify benchmark attributions against `docs/research/2026-08-detector-research/`:
 - Liang ESL paper is **arXiv:2304.02819** (not 2306.04723 — that's Tulchinskii PHD).
 - Jabarian & Imas (Booth 2025) tested **StealthGPT only** — not Turnitin, not twelve humanizers.
 - **23.5×** few-shot style gain is **Jemama** (2509.24930), not Catch Me (2509.14543).

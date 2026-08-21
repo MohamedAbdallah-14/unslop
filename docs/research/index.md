@@ -52,3 +52,12 @@ Categories 12, 19, and 20 are the load-bearing ones. Category 11 (Theory of Mind
 
 **Ethics and policy researcher:**
 Categories 05, 09, 13, and 18 cover the detection arms race, regulatory inflection, anthropomorphism risks, and commercial tool accountability. Category 17 grounds the ethical debates in real deployment outcomes.
+
+---
+
+## August 2026 Detector Research Program
+
+- [`2026-08-detector-research/`](./2026-08-detector-research/HANDOVER-2026-08.md) — 100-agent research program covering academic detection, evasion pipelines, stylometry & voice restoration, commercial landscape, and implementation plans.
+  - Master Priorities: [`PLAN-100-MASTER-PRIORITIES.md`](./2026-08-detector-research/PLAN-100-MASTER-PRIORITIES.md)
+  - Agent Manifest: [`AGENT-MANIFEST-100.md`](./2026-08-detector-research/AGENT-MANIFEST-100.md)
+  - Deep Research Exec Summary: [`DEEP-RESEARCH-EXEC-SUMMARY.md`](./2026-08-detector-research/DEEP-RESEARCH-EXEC-SUMMARY.md)

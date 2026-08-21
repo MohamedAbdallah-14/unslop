@@ -447,7 +447,7 @@ Each section covers one research directory. Three subsections per entry:
 - **Rallapalli et al.** (arXiv 2604.14111, Apr 2026): decoding temperature is itself a stylistic signal independent of model identity — a cheap humanization lever not mentioned.
 - **"Humanizing Machines"** (arXiv 2508.17573, EMNLP 2025): four-cue anthropomorphism taxonomy (perceptive, linguistic, behavioral, cognitive) — the only design-framework paper in the field. Absent.
 - **Why AI-Generated Text Detection Fails** (arXiv 2603.23146, Mar 2026): XAI analysis showing in-domain AUROC numbers are systematically misleading under distribution shift.
-- **Kalemaj et al. detail** (arXiv 2604.11687): contraction-rate finding (AI: 0.00 vs. human: 0.17 per chunk) and 17× parameter efficiency of BART-large over Mistral were not captured.
+- **Paneru (arXiv 2604.11687)** (previously misattributed to "Kalemaj et al."): contraction-rate finding (AI: 0.00 vs. human: 0.17 per chunk) and 17× parameter efficiency of BART-large over Mistral were not captured.
 - **Institutional detection retreat**: universities disabling AI detectors, OpenAI classifier shutdown — not documented in E-practical.
 
 ### Added / Updated

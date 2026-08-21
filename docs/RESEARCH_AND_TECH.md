@@ -290,7 +290,7 @@ This document is the result of a five-agent audit run on 2026-04-28. Three audit
 - **arXiv 2510.01268 (AdaDetectGPT)** — verified, Zhou, Zhu, Su et al.
 - **DOI 10.37284/ijar.9.1.4683 (Epaphras & Mtenzi)** — verified at Aga Khan University eCommons.
 
-One previously-cited arXiv ID (2604.11687, attributed to "Kalemaj et al." for the contraction-rate threshold) was found broken — the ID resolves to an unrelated paper by Utsav Paneru. That citation was removed from `validate.py` and `soul.py`; the empirical threshold was kept with a `pending re-verification` note.
+One previously-cited arXiv ID (2604.11687) was attributed to "Kalemaj et al." The paper is actually Utsav Paneru's *Please Make it Sound like Human*. Its Table 1 reports 0.00 contractions per AI-generated chunk and 0.17 per human-reference chunk on a 1,390-chunk test subset. The values are corpus-specific evidence, not a universal threshold; cite Paneru and keep the implementation conservatively gated.
 
 If you spot a citation that doesn't resolve, a PR is welcome.
 
