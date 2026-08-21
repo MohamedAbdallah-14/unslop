@@ -15,7 +15,7 @@
     "voice",
     "editing"
   ],
-  "logo": "plugins/unslop/.codex-plugin/assets/unslop.svg",
+  "logo": "plugins/unslop/assets/unslop.svg",
   "skills": "skills/",
   "rules": ".cursor/rules/"
 }

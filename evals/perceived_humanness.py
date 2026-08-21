@@ -37,7 +37,7 @@ LLM-as-judge has quantified, reproducible biases (arXiv 2411.15594
     open-ended tasks. A single-model judge (any single model, Claude
     included) is therefore an upper bound on the true human-rated win
     rate. Mitigation here: `--judges` accepts a comma-separated list
-    ("claude-sonnet-4-5,gpt-5") and reports a per-judge table plus a
+    ("claude-sonnet-5,gpt-5.6") and reports a per-judge table plus a
     jury-average row. When any judge matches the generator family used
     to create the humanized text, this value should be read as "likely
     inflated on that row".
@@ -52,7 +52,7 @@ Usage:
   python3 evals/perceived_humanness.py --intensity full --structural --soul
   python3 evals/perceived_humanness.py --fixtures benchmarks/fixtures
   python3 evals/perceived_humanness.py --runs 3         # independent judgments per fixture
-  python3 evals/perceived_humanness.py --judges "claude-sonnet-4-5,gpt-5"
+  python3 evals/perceived_humanness.py --judges "claude-sonnet-5,gpt-5.6"
 
 Output: benchmarks/results/<stamp>-humanness.json + stdout markdown table.
 
@@ -84,8 +84,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "unslop"))
 
-from scripts.humanize import humanize_deterministic  # noqa: E402
-
+from scripts.humanize import (  # noqa: E402
+    DEFAULT_ANTHROPIC_MODEL,
+    humanize_deterministic,
+)
 
 JUDGE_SYSTEM_PROMPT = """\
 You are a careful editor comparing two short passages.
@@ -558,10 +560,10 @@ def main() -> int:
     )
     p.add_argument(
         "--judges",
-        default=os.environ.get("UNSLOP_JUDGE_MODELS", "claude-sonnet-4-5"),
+        default=os.environ.get("UNSLOP_JUDGE_MODELS", DEFAULT_ANTHROPIC_MODEL),
         help=(
-            "Comma-separated list of judge model IDs. Default claude-sonnet-4-5. "
-            "Example: 'claude-sonnet-4-5,gpt-5' for a two-model jury."
+            f"Comma-separated list of judge model IDs. Default {DEFAULT_ANTHROPIC_MODEL}. "
+            "Example: 'claude-sonnet-5,gpt-5.6' for a two-model jury."
         ),
     )
     p.add_argument(

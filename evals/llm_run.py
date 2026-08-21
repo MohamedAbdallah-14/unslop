@@ -8,7 +8,7 @@ Conditions:
 
 Usage:
   python3 evals/llm_run.py [--prompts evals/prompts] [--out evals/snapshots]
-                           [--model claude-sonnet-4-5] [--max-prompts N]
+                           [--model claude-sonnet-5] [--max-prompts N]
 
 Each run writes to snapshots/<UTC timestamp>/ a JSON document per prompt plus
 a `meta.json` describing the run (model, cwd, git sha). Safe to commit for
@@ -28,7 +28,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "unslop"))
 
-from scripts.humanize import humanize_deterministic, humanize_llm  # noqa: E402
+from scripts.humanize import (  # noqa: E402
+    DEFAULT_ANTHROPIC_MODEL,
+    humanize_deterministic,
+    humanize_llm,
+)
 
 
 def _git_sha() -> str:
@@ -113,7 +117,7 @@ def main() -> int:
     p.add_argument("--out", default=str(ROOT / "evals/snapshots"))
     p.add_argument(
         "--model",
-        default=os.environ.get("UNSLOP_MODEL", "claude-sonnet-4-5"),
+        default=os.environ.get("UNSLOP_MODEL", DEFAULT_ANTHROPIC_MODEL),
     )
     p.add_argument("--max-prompts", type=int, default=0, help="0 = all")
     args = p.parse_args()

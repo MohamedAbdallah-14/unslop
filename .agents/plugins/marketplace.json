@@ -1,13 +1,20 @@
 {
   "name": "unslop-agents-marketplace",
-  "description": "Local agents marketplace for the unslop plugin (anti-AI-slop tooling).",
+  "interface": {
+    "displayName": "Unslop"
+  },
   "plugins": [
     {
       "name": "unslop",
-      "displayName": "Unslop",
-      "description": "Unslop plugin sourced from this repository.",
-      "version": "0.7.0",
-      "source": "./plugins/unslop"
+      "source": {
+        "source": "local",
+        "path": "./plugins/unslop"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
     }
   ]
 }

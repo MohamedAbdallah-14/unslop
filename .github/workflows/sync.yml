@@ -8,6 +8,7 @@ on:
       - skills/unslop-commit/SKILL.md
       - skills/unslop-review/SKILL.md
       - skills/unslop-help/SKILL.md
+      - skills/unslop-reasoning/SKILL.md
       - rules/unslop-activate.md
       - unslop/SKILL.md
       - unslop/scripts/**

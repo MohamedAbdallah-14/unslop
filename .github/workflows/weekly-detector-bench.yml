@@ -28,9 +28,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install deps
-        run: |
-          pip install -e unslop[dev]
-          pip install torch transformers huggingface_hub safetensors
+        run: pip install -e 'unslop[dev,detector]'
 
       - name: Cache HuggingFace models
         uses: actions/cache@v6
@@ -60,7 +58,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install deps
-        run: pip install -e unslop[dev] && pip install anthropic
+        run: pip install -e 'unslop[dev,llm]'
 
       - name: Run perceived-humanness benchmark
         env:
