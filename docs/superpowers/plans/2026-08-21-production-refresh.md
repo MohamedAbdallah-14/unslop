@@ -246,15 +246,15 @@ git commit -m "chore(release): align 0.7.0 versions"
 
 Leave a new empty `[Unreleased]` section, then date `[0.7.0] — 2026-08-21`. Cover detector feedback Phase 1, the research archive, current CI/runtime support, Cursor packaging, citation corrections, and dependency updates. Edit only root `CHANGELOG.md`; `unslop/CHANGELOG.md` is generated.
 
-- [ ] **Step 2: Audit install and product claims**
+- [x] **Step 2: Audit install and product claims**
 
 Verify every Claude, Cursor, Windsurf, Gemini, Codex, pip, and Docker command against actual files or current first-party docs. Remove stale model labels and future-tense EU AI Act wording. Do not change benchmark numbers without a matching committed result.
 
-- [ ] **Step 3: Add a release runbook**
+- [x] **Step 3: Add a release runbook**
 
 Document: clean main, version check, tests, mirror sync dry run, build, `twine check`, tag, GitHub workflow, PyPI verification, GitHub release, Cursor submission/refresh, and dependent marketplace checks. Mark Cursor submission as manual because Cursor reviews plugins through its publisher form.
 
-- [ ] **Step 4: Commit release documentation**
+- [x] **Step 4: Commit release documentation**
 
 ```bash
 git add CHANGELOG.md README.md GETTING_STARTED.md CONTRIBUTING.md docs/RELEASING.md

@@ -17,11 +17,12 @@ Read [`CLAUDE.md`](./CLAUDE.md). It names the SSOT files and explains which dire
 | PR review rules | `skills/unslop-review/SKILL.md` |
 | Slash command behavior | `commands/<name>.toml` |
 | Hook behavior | `hooks/<name>.{js,sh,ps1}` |
-| Plugin manifests | `.claude-plugin/`, `gemini-extension.json`, `plugins/unslop/.codex-plugin/plugin.json` |
+| Plugin manifests | `.claude-plugin/`, `.cursor-plugin/`, `.agents/`, `.codex/`, `gemini-extension.json`, `plugins/unslop/.codex-plugin/plugin.json` |
+| Release notes | Root `CHANGELOG.md` only; `unslop/CHANGELOG.md` is generated |
 
 ## Add an AI-ism
 
-1. Add a regex to the right list in `unslop/scripts/humanize.py` (`STOCK_VOCAB`, `HEDGING_OPENERS`, or `SYCOPHANCY`).
+1. Add a regex to the right list in `unslop/scripts/humanize.py` (`STOCK_VOCAB`, `HEDGING_OPENERS`, `SYCOPHANCY`, `PERFORMATIVE`, or `TRANSITION_TICS`).
 2. Add the same regex to `AI_ISMS` in `unslop/scripts/validate.py` so the validator catches it.
 3. Add a test in `tests/unslop/test_humanize.py`.
 4. Add the phrase to the "Drop" lists in `skills/unslop/SKILL.md` and `rules/unslop-activate.md`.
@@ -29,10 +30,14 @@ Read [`CLAUDE.md`](./CLAUDE.md). It names the SSOT files and explains which dire
 ## Tests
 
 ```bash
-python3 -m pytest tests/unslop/
+python3 -m pytest tests/unslop/                 # Python package contract
+python3 -m pytest tests/                        # Package + hook integration
+python3 tests/verify_repo.py                    # Mirrors, manifests, syntax, versions
+python3 benchmarks/run.py --strict              # Offline quality gate
+python3 benchmarks/run.py --all-intensities --strict
 ```
 
-Must pass before any merge. Add coverage for any new behavior.
+Python 3.10–3.14 and Node 24 are required in CI. Run the affected local gates before opening a PR and add coverage for new behavior. The full release checklist lives in [`docs/RELEASING.md`](./docs/RELEASING.md).
 
 ## Commit messages
 

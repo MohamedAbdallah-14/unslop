@@ -135,14 +135,23 @@ Open the cloned folder in your IDE. The bundled rule files at `.windsurf/rules/u
 
 ```bash
 git clone https://github.com/MohamedAbdallah-14/unslop.git && cd unslop
-gemini extension install ./
+gemini extensions install ./
 ```
 
 Reads `gemini-extension.json` and loads `GEMINI.md` + the unslop skill into context.
 
 ### OpenAI Codex
 
-Clone the repo — the `plugins/unslop/.codex-plugin/plugin.json` bundle is auto-discovered by the Codex IDE extension.
+Clone the repo and open it in Codex. Codex reads the root `AGENTS.md` before it starts work, so the repository's writing and review rules apply immediately.
+
+To install the reusable bundle from this repository's marketplace:
+
+```bash
+codex plugin marketplace add MohamedAbdallah-14/unslop --ref main
+codex plugin add unslop@unslop-agents-marketplace
+```
+
+The bundle lives at `plugins/unslop/` and follows the Codex `.codex-plugin/plugin.json` format. Public-directory availability is a separate review; the repository marketplace works without claiming that listing is live.
 
 ### Claude Code without the plugin system (manual hooks)
 
@@ -166,11 +175,11 @@ Idempotent. Re-run anytime to upgrade. The bash installer re-verifies `settings.
 ### Standalone CLI (no IDE needed)
 
 ```bash
-pip install unslop
+pipx install unslop
 unslop --deterministic path/to/file.md
 ```
 
-Two modes: `--deterministic` (regex, no API) or default LLM mode (calls Claude). See [`unslop/README.md`](./unslop/README.md) for the full CLI surface.
+For API-backed LLM mode, install the optional SDK with `pipx install 'unslop[llm]'`. See [`unslop/README.md`](./unslop/README.md) for the full CLI surface.
 
 </details>
 
@@ -360,7 +369,7 @@ cat sample.md | unslop --surprisal-variance
 #   "surprisal_cv": 0.61, "token_count": 412, "model": "distilgpt2" }
 ```
 
-First call downloads `distilgpt2` (~330 MB) via HuggingFace; subsequent calls are ~1 s on CPU. Override with `--surprisal-model gpt2-medium` for a stronger but slower reading. Source: Ganapathi et al., DivEye (arXiv 2509.18880, TMLR 2026). Requires `pip install torch transformers`. Set `UNSLOP_SKIP_SURPRISAL=1` to disable.
+First call downloads `distilgpt2` (~330 MB) via HuggingFace; subsequent calls are ~1 s on CPU. Override with `--surprisal-model gpt2-medium` for a stronger but slower reading. Source: Ganapathi et al., DivEye (arXiv 2509.18880, TMLR 2026). Install with `pipx install 'unslop[surprisal]'`. Set `UNSLOP_SKIP_SURPRISAL=1` to disable.
 
 ### Configure default mode
 
@@ -379,8 +388,8 @@ Resolution: env var > config file > `balanced`. Set to `"off"` to disable sessio
 ### Live detector feedback loop
 
 ```bash
-python3 -m unslop.scripts.fetch_detectors   # one-time: ~500MB of weights
-unslop --detector-feedback file.md          # humanize, score, escalate, report
+pipx install 'unslop[detector]'
+unslop --detector-feedback file.md          # first run downloads model weights
 ```
 
 Escalation ladder: `balanced` → `full` → `full + structural + soul` → `anti-detector`. Reports the score at each step. It does not claim to lower scores — it just tells you where you are.
@@ -520,9 +529,10 @@ Each layer matches its host: Python for the file rewriter (CLI, HuggingFace inte
 - **[GETTING_STARTED.md](./GETTING_STARTED.md)** — plain-English on-ramp for non-developers (cover letters, essays, LinkedIn posts).
 - **[unslop/README.md](./unslop/README.md)** — the Python package and standalone CLI.
 - **[docs/RESEARCH_AND_TECH.md](./docs/RESEARCH_AND_TECH.md)** — public reference: the research that informs shipping code, the tech stack, and the design choices that make unslop different.
-- **[docs/research/](./docs/research/)** — 20 research categories, 120+ angle files, full [implementation trace](./docs/research/IMPLEMENTATION_TRACE.md) mapping each finding to the line of code it motivates.
+- **[docs/research/](./docs/research/)** — public research index and August archive: 80 topic memos, 16 syntheses, four phase plans, plus the full [implementation trace](./docs/research/IMPLEMENTATION_TRACE.md).
 - **[CHANGELOG.md](./CHANGELOG.md)** — all releases.
 - **[CONTRIBUTING.md](./CONTRIBUTING.md)** — PR workflow, test gates, SSOT layout.
+- **[docs/RELEASING.md](./docs/RELEASING.md)** — maintainer release, PyPI, tag, and marketplace checklist.
 - **[SECURITY.md](./SECURITY.md)** — vulnerability reporting.
 - **[CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md)** — community guidelines.
 
@@ -669,7 +679,7 @@ My own testing: deterministic rewriting moves TMR scores by ~0.0–0.2 pp. Real 
 Every rule that ships in this repo ties back to a paper or a working open-source project. Not vibes. The full list lives in [`docs/RESEARCH_AND_TECH.md`](./docs/RESEARCH_AND_TECH.md) — 38 verified citations across 20 research categories, each one linked to the file and line of code it motivates.
 
 <p align="center">
-  <img src="./assets/new/not-vibes-tests.png" alt="Not vibes. Tests. Human voice, measured carefully. Engineering dashboard showing the published numbers: 21/21 blind humanness preference (3-run, Sonnet 4.5 judge, 7 fixtures), 92.1% AI-ism reduction (balanced deterministic, 9-fixture suite), byte-identical preservation, 333 tests in tests/unslop/, 0.0–0.2 pp TMR detector score movement, no telemetry, numeric-only voice profile, detector feedback not detector promises. Terminal block shows pytest, verify_repo, and benchmarks/run.py --strict all green." width="100%"/>
+  <img src="./assets/new/not-vibes-tests.png" alt="Not vibes. Tests. Human voice, measured carefully. Engineering dashboard showing the published numbers: 21/21 blind humanness preference (3-run, Sonnet 4.5 judge, 7 fixtures), 92.1% AI-ism reduction (balanced deterministic, 9-fixture suite), byte-identical preservation, 639 tests collected in tests/unslop/, 0.0–0.2 pp TMR detector score movement, no telemetry, numeric-only voice profile, detector feedback not detector promises. Terminal block shows pytest, verify_repo, and benchmarks/run.py --strict all green." width="100%"/>
 </p>
 
 ### Inspirations
@@ -694,7 +704,7 @@ Five projects and papers carry the most weight in shaping what unslop does and d
 ### Where to read more
 
 - [`docs/RESEARCH_AND_TECH.md`](./docs/RESEARCH_AND_TECH.md) — public reference: every paper, every tech-stack decision, every differentiator with file:line evidence.
-- [`docs/research/`](./docs/research/) — 20 numbered category folders (academic, industry, commercial, practical) covering 120+ angle files.
+- [`docs/research/`](./docs/research/) — the public research index plus the August 2026 archive: 80 topic memos, 16 syntheses, four phase plans, and the maintainer handover.
 - [`docs/research/IMPLEMENTATION_TRACE.md`](./docs/research/IMPLEMENTATION_TRACE.md) — every research finding mapped to the line of code it motivates.
 
 ---
@@ -734,7 +744,7 @@ flowchart LR
     R3[Windsurf rules auto-load]
     R4[Cline rules auto-load]
     R5[Gemini extension install]
-    R6[Codex plugin discovery]
+    R6[Codex AGENTS.md<br/>plugin bundle]
   end
 
   subgraph Python ["unslop Python package"]
@@ -774,12 +784,13 @@ flowchart LR
 
 ```
 .
-├── skills/                   # SSOT for the five agent-facing skills
+├── skills/                   # SSOT for six agent-facing skills
 │   ├── unslop/               — main mode
 │   ├── unslop-commit/        — commit messages
 │   ├── unslop-review/        — PR comments
 │   ├── unslop-help/          — reference card
-│   └── humanize/             — mirror of unslop file rewriter
+│   ├── unslop-reasoning/     — reasoning-trace cleanup
+│   └── unslop-file/          — generated mirror of the file rewriter
 ├── unslop/                   # SSOT for the file-rewriter (Python + skill)
 │   └── scripts/              — humanize, validate, structural (Ph1),
 │                               soul (Ph5), detector (Ph3), stylometry (Ph4)
@@ -787,6 +798,7 @@ flowchart LR
 ├── commands/                 # Claude Code slash commands (TOML)
 ├── hooks/                    # SessionStart + UserPromptSubmit + statusline + installers
 ├── .claude-plugin/           # Claude Code marketplace + plugin manifest
+├── .cursor-plugin/           # Cursor Plugin manifest
 ├── .cursor/                  # Cursor rules + skills (mirror)
 ├── .windsurf/                # Windsurf rules + skills (mirror)
 ├── .clinerules/              # Cline rules (mirror)
@@ -798,7 +810,7 @@ flowchart LR
 └── .github/workflows/        # CI + sync SSOT to mirrored locations
 ```
 
-**Source of truth:** `skills/unslop/SKILL.md`, `rules/unslop-activate.md`, `unslop/SKILL.md`. The `sync.yml` workflow propagates these to every mirrored location on push to main.
+**Source of truth:** `skills/unslop/SKILL.md`, the other authored `skills/*/SKILL.md` files, `rules/unslop-activate.md`, `unslop/SKILL.md`, `unslop/scripts/`, and root `CHANGELOG.md`. The `sync.yml` workflow propagates their generated counterparts on push to main.
 
 </details>
 
@@ -815,13 +827,13 @@ python3 benchmarks/run.py --strict        # Offline benchmark on AI-slop corpus,
 <details>
 <summary><b>Full coverage breakdown</b></summary>
 
-- **`tests/unslop/`** — 333 tests covering file-type detection; every deterministic rule family; structural rewriter (Phase 1); soul contractions (Phase 5); detector feedback loop (Phase 3); stylometry (Phase 4); humanness harness (Phase 6); preservation (code, URLs, headings, YAML, tables, blockquotes); end-to-end round trip. LLM tests are opt-in (`UNSLOP_RUN_LLM_TESTS=1`).
+- **`tests/unslop/`** — 639 tests collected for file-type detection; every deterministic rule family; structural rewriter (Phase 1); soul contractions (Phase 5); detector feedback loop (Phase 3); stylometry (Phase 4); humanness harness (Phase 6); preservation (code, URLs, headings, YAML, tables, blockquotes); and end-to-end round trips. Paid API and real-model tests remain opt-in.
 - **`tests/test_hooks.py`** — hook installer (fresh, idempotent, preserves custom statusline), `unslop-activate.js` banner, `unslop-mode-tracker.js` slash commands + natural language + stop phrases, statusline badge output, symlink refusal, `CLAUDE_CONFIG_DIR` honoring.
 - **`tests/verify_repo.py`** — every SSOT mirror is byte-identical after sync, JSON manifests parse, all JS / Bash / PowerShell scripts are syntax-clean, fixture pairs round-trip, plugin + marketplace manifests are wired.
 - **`benchmarks/run.py`** — runs `humanize_deterministic` over a corpus of AI-slop markdown and reports AI-ism reduction, per-paragraph flat count, sentences split, bullet groups merged, per-file structural integrity. `--strict` fails the build on any regression.
 - **`benchmarks/check_regression.py`** — compares latest benchmark output against a pinned `post-phase*.json` baseline. Fails if AI-ism reduction drops > 2 pp, flat-paragraph total rises > 2, or preservation breaks. Runs in CI on every PR.
 - **`benchmarks/detector_bench.py`** — opt-in AI-detector benchmark (TMR, Desklib). Downloads HF weights on first run. Scheduled weekly via `.github/workflows/weekly-detector-bench.yml`.
-- **`evals/perceived_humanness.py`** — blind LLM-as-judge preference harness. Claude Sonnet 4.5 (default) compares unslop-rewritten vs original without side metadata.
+- **`evals/perceived_humanness.py`** — blind LLM-as-judge preference harness. New runs default to Claude Sonnet 5; the published 21/21 result remains the archived Sonnet 4.5 run named above.
 - **`evals/`** — additional LLM-driven A/B harness (`llm_run.py` + `measure.py`) for snapshotting baseline vs deterministic vs LLM unslop on a fixed prompt set.
 
 </details>
@@ -837,10 +849,11 @@ Living list. PRs welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md).
 - [x] v0.3 — Claude Code plugin via marketplace (2-command install)
 - [x] v0.4 — Phase 1 structural (burstiness), Phase 3 detector loop, Phase 5 soul contractions
 - [x] v0.5 — Stylometric voice-match profile, reasoning-trace sanitizer, DivEye surprisal-variance
-- [ ] v0.6 — VS Code extension (native, not via Cline)
-- [ ] v0.6 — Browser bookmarklet for web UIs (ChatGPT, Gemini web, Claude.ai)
-- [ ] v0.7 — Multi-language support (Spanish, French, German slop patterns)
-- [ ] v0.7 — Automatic different-model paraphrase pass for real detector resistance
+- [x] v0.6 — Expanded pattern coverage, anti-detector controls, DivEye readings, reasoning cleanup, and stricter preservation tests
+- [x] v0.7 — August detector audit, SHIELD metrics, Python 3.14, Node 24, current automation, and a Cursor Plugin package
+- [ ] v0.8 — Multi-language pattern packs with language-specific preservation fixtures
+- [ ] v0.8 — Native VS Code distribution beyond Cline
+- [ ] Later — Browser integrations and explicitly user-orchestrated cross-model evaluation
 - [ ] v1.0 — Stable plugin API, frozen SSOT schema
 
 ---

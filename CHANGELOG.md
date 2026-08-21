@@ -37,8 +37,14 @@ inside its wheel; both files are kept in sync. Edit this one.
   and updated official GitHub Actions to their current stable majors.
 - Updated build and development requirements to current Python 3.10-compatible
   releases, including Anthropic SDK 1.x and exact pytest, Ruff, and mypy pins.
+- Moved new Anthropic-backed rewrites and judge runs to Claude Sonnet 5 while
+  keeping `UNSLOP_MODEL` and `UNSLOP_JUDGE_MODELS` overrides.
+- Split optional local-model dependencies into `surprisal` and `detector`
+  extras, and made the weekly workflows install those declared groups.
 - Aligned Python, Claude, Cursor, Codex, Gemini, and Agents distribution
   metadata at 0.7.0.
+- Refreshed install, contribution, research, and release guides; updated the
+  public test graphic and counts to the 639-test core suite.
 
 ### Fixed
 
@@ -47,6 +53,16 @@ inside its wheel; both files are kept in sync. Edit this one.
   expected fixture is missing.
 - Corrected the Liang/Tulchinskii, Booth/Turnitin, Catch Me/Jemama, and
   Kalemaj/Paneru research attributions against the primary papers.
+- Added a verifier for every mirror-owning sync trigger and restored the
+  missing `unslop-reasoning` workflow path.
+- Removed an ignored Claude marketplace field, versioned the Claude plugin
+  manifest, and moved Gemini's context paths to its supported manifest field.
+- Migrated the Codex plugin and Agents marketplace to the current `interface`,
+  source, policy, and asset-path schema; removed its unsupported legacy agent YAML.
+
+### Removed
+
+- Removed the unused `scipy` dependency from the surprisal extra.
 
 ## [0.6.2] — 2026-04-29
 

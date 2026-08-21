@@ -45,6 +45,17 @@ ln -s "$(pwd)" ~/.cursor/plugins/local/unslop
 
 Restart Cursor or run **Developer: Reload Window**, then manage the plugin under **Customize**. After the public listing is approved, install `unslop` directly from Customize at project or user scope.
 
+For OpenAI Codex, clone and open the repository. Codex reads the included `AGENTS.md` project instructions automatically. To install the reusable bundle globally, add `MohamedAbdallah-14/unslop` with `codex plugin marketplace add`, then run `codex plugin add unslop@unslop-agents-marketplace`.
+
+For the standalone command-line tool:
+
+```bash
+pipx install unslop
+unslop --deterministic draft.md
+```
+
+That path is local-only. API-backed rewriting uses the optional install: `pipx install 'unslop[llm]'`.
+
 If you need a manual Claude Code install for a fork, an air-gapped machine, or inspection before install:
 
 ```bash
@@ -109,7 +120,7 @@ No tool can promise that. AI detectors are noisy, and they falsely flag real hum
 
 **Do I need to know what a regex is, or how to code?**
 
-No. If you can type `/unslop` into a chat, you have everything you need. The installation is three copy-pasted commands, once, and then you're done forever.
+No. If you can type `/unslop` into a chat, you have everything you need. The Claude Code installation is two copy-pasted plugin commands, one restart, then `/unslop`.
 
 ## If you get stuck
 
