@@ -107,13 +107,29 @@ You'll see a `[unslop:BALANCED]` badge appear in the statusline. Everything Clau
 
 <br/>
 
-### Cursor, Windsurf, or Cline
+### Cursor
 
 ```bash
 git clone https://github.com/MohamedAbdallah-14/unslop.git
 ```
 
-Open the folder in your IDE. The bundled rule files at `.cursor/rules/unslop.mdc`, `.windsurf/rules/unslop.md`, and `.clinerules/unslop.md` load automatically. Type `/unslop` in the chat panel.
+Open the folder in Cursor. The project rule at `.cursor/rules/unslop.mdc` loads automatically.
+
+The repository also contains a Cursor Plugin manifest. Until the Marketplace listing is approved, test the installable plugin from a clone:
+
+```bash
+cd unslop
+mkdir -p ~/.cursor/plugins/local
+ln -s "$(pwd)" ~/.cursor/plugins/local/unslop
+```
+
+Restart Cursor or run **Developer: Reload Window**. The rules and skills appear under **Customize**. Remove the symlink when local testing is finished.
+
+After Cursor approves the public listing, open **Customize**, search for `unslop`, select **Install**, and choose project or user scope. The listing is not live yet.
+
+### Windsurf or Cline
+
+Open the cloned folder in your IDE. The bundled rule files at `.windsurf/rules/unslop.md` and `.clinerules/unslop.md` load automatically.
 
 ### Gemini CLI
 

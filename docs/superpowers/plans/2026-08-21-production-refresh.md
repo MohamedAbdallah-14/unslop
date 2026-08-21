@@ -147,11 +147,11 @@ git commit -m "ci: update runtimes and actions"
 - Consumes: root `skills/`, `.cursor/rules/`, and existing SVG assets.
 - Produces: a single-repository Cursor Plugin ready for local loading and marketplace review.
 
-- [ ] **Step 1: Add a failing verifier test**
+- [x] **Step 1: Add a failing verifier test**
 
 Require `.cursor-plugin/plugin.json`, parse it, check version alignment, and confirm its `skills`, `rules`, and `logo` paths exist. Do not include `commands/*.toml`: Cursor's plugin reference accepts Markdown/text command files, not this repo's Claude TOML commands.
 
-- [ ] **Step 2: Run the verifier and confirm the missing-manifest failure**
+- [x] **Step 2: Run the verifier and confirm the missing-manifest failure**
 
 ```bash
 /opt/homebrew/bin/python3 tests/verify_repo.py
@@ -159,11 +159,11 @@ Require `.cursor-plugin/plugin.json`, parse it, check version alignment, and con
 
 Expected: failure naming `.cursor-plugin/plugin.json`.
 
-- [ ] **Step 3: Create the manifest**
+- [x] **Step 3: Create the manifest**
 
 Use required `name: unslop`, version `0.7.0`, author, homepage, repository, MIT license, keywords, a committed SVG logo, `skills: ./skills/`, and `rules: ./.cursor/rules/`. Use only fields supported by Cursor's official plugin reference.
 
-- [ ] **Step 4: Re-run verification**
+- [x] **Step 4: Re-run verification**
 
 ```bash
 /opt/homebrew/bin/python3 tests/verify_repo.py
@@ -172,11 +172,11 @@ node -e "JSON.parse(require('fs').readFileSync('.cursor-plugin/plugin.json'))"
 
 Expected: both commands exit 0.
 
-- [ ] **Step 5: Document current Cursor installation paths**
+- [x] **Step 5: Document current Cursor installation paths**
 
 State that cloned repositories still auto-load project rules. For installed plugins, direct users to Cursor Customize after marketplace approval. Document local development loading via `~/.cursor/plugins/local/unslop` without claiming the listing is live.
 
-- [ ] **Step 6: Commit the Cursor package**
+- [x] **Step 6: Commit the Cursor package**
 
 ```bash
 git add .cursor-plugin tests/verify_repo.py README.md GETTING_STARTED.md

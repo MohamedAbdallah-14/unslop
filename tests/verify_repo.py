@@ -138,6 +138,7 @@ def verify_manifests_and_syntax() -> None:
     manifests = [
         ROOT / ".claude-plugin/plugin.json",
         ROOT / ".claude-plugin/marketplace.json",
+        ROOT / ".cursor-plugin/plugin.json",
         ROOT / "gemini-extension.json",
         ROOT / "plugins/unslop/.codex-plugin/plugin.json",
     ]
@@ -280,6 +281,35 @@ def verify_commands_wired() -> None:
     print("Plugin + marketplace wired")
 
 
+def verify_cursor_plugin() -> None:
+    section("Cursor plugin")
+    manifest_path = ROOT / ".cursor-plugin/plugin.json"
+    manifest = read_json(manifest_path)
+
+    ensure(manifest.get("name") == "unslop", "Cursor plugin name mismatch")
+    ensure(isinstance(manifest.get("version"), str), "Cursor plugin version missing")
+    ensure("commands" not in manifest, "Cursor plugin must not expose TOML commands")
+
+    for field in ("skills", "rules", "logo"):
+        value = manifest.get(field)
+        ensure(isinstance(value, str) and value, f"Cursor plugin {field} path missing")
+        relative = Path(value)
+        ensure(not relative.is_absolute(), f"Cursor plugin {field} path must be relative")
+        ensure(".." not in relative.parts, f"Cursor plugin {field} path must not contain '..'")
+        ensure((ROOT / relative).exists(), f"Cursor plugin {field} path missing: {value}")
+
+    skills_dir = ROOT / manifest["skills"]
+    ensure(
+        any(skills_dir.glob("*/SKILL.md")),
+        "Cursor plugin skills path contains no skills",
+    )
+    rules_dir = ROOT / manifest["rules"]
+    ensure(any(rules_dir.glob("*.mdc")), "Cursor plugin rules path contains no .mdc files")
+    ensure(Path(manifest["logo"]).suffix == ".svg", "Cursor plugin logo must be SVG")
+
+    print("Cursor plugin manifest and component paths wired")
+
+
 def verify_version_alignment() -> None:
     section("Version alignment")
     sys.path.insert(0, str(ROOT / "unslop"))
@@ -332,6 +362,7 @@ def main() -> int:
         verify_humanize_modules_importable,
         verify_fixture_pairs,
         verify_commands_wired,
+        verify_cursor_plugin,
         verify_version_alignment,
     ]
     try:
