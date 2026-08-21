@@ -2751,3 +2751,30 @@ class TestModuleEntryPoint:
             timeout=30,
         )
         assert result.returncode == 0, result.stderr
+
+
+# ---------- CoPA-style negative guidance in anti-detector prompt ----------
+
+
+class TestAntiDetectorCoPA:
+    """Anti-detector prompt must include CoPA negative guidance patterns."""
+
+    def test_contains_hedging_negative(self):
+        from scripts.humanize import _INTENSITY_PROMPT_GUIDANCE
+        prompt = _INTENSITY_PROMPT_GUIDANCE["anti-detector"]
+        assert "hedging" in prompt.lower()
+
+    def test_contains_parallel_structure_negative(self):
+        from scripts.humanize import _INTENSITY_PROMPT_GUIDANCE
+        prompt = _INTENSITY_PROMPT_GUIDANCE["anti-detector"]
+        assert "parallel structure" in prompt.lower()
+
+    def test_contains_stock_transitions_negative(self):
+        from scripts.humanize import _INTENSITY_PROMPT_GUIDANCE
+        prompt = _INTENSITY_PROMPT_GUIDANCE["anti-detector"]
+        assert "furthermore" in prompt.lower() or "moreover" in prompt.lower()
+
+    def test_contains_remove_directive(self):
+        from scripts.humanize import _INTENSITY_PROMPT_GUIDANCE
+        prompt = _INTENSITY_PROMPT_GUIDANCE["anti-detector"]
+        assert "remove" in prompt.lower()

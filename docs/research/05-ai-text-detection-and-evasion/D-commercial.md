@@ -11,9 +11,9 @@ Scope: 9 detectors + 9 humanizers = **18 products** profiled. Pricing and claims
 ### 1. GPTZero
 - **Positioning / Origin**: Built Dec 2022 by Princeton undergrad Edward Tian as a senior thesis; the one major detector whose "built for educators" framing is original, not retrofit. ~$20M ARR mid-2025, 380K+ teacher users. [3][15]
 - **Pricing**: Free tier 10K words/mo; paid from ~$10/mo (annual) up through classroom/institution tiers. [1][3]
-- **Claimed performance**: Version 4.1b: 99.39% overall accuracy, 98.78% recall, 0.00% FPR on own 2026 benchmark (1,000 human + 1,000 AI texts). Chicago Booth 2026 (third-party): 99.3% recall at 0.1% FPR — now the most-cited external benchmark replacing Scribbr's 2024 ranking. Independent real-world testing (MPG ONE, 2026): 88–95% on raw AI text, drops to 60–80% on paraphrased/edited content. [1][21]
+- **Claimed performance**: Version 4.1b: 99.39% overall accuracy, 98.78% recall, 0.00% FPR on own 2026 benchmark (1,000 human + 1,000 AI texts). Jabarian & Imas (Booth 2025, BFI WP 2025-116): 99.3% recall at 0.1% FPR on clean text — now the most-cited external benchmark replacing Scribbr's 2024 ranking. Independent real-world testing (MPG ONE, 2026): 88–95% on raw AI text, drops to 60–80% on paraphrased/edited content. [1][21]
 - **Underlying technique**: Perplexity + burstiness as baseline, now layered with fine-tuned classifiers, writing-process replay, and a humanizer-awareness layer that maintains a greylist of known bypass methods and patches within days. [1][15][17][23]
-- **Marketing frame**: "#1 AI detector for teachers" and "most accurate commercial AI detector" per Chicago Booth 2026. Humanizer-aware detection is now an explicit product line (Jan 2026 post). Shifted post-2025 toward "responsible classroom AI use" rather than pure catch-the-cheater. [15]
+- **Marketing frame**: "#1 AI detector for teachers" and "most accurate commercial AI detector" per Jabarian & Imas (Booth 2025). Humanizer-aware detection is now an explicit product line (Jan 2026 post). Shifted post-2025 toward "responsible classroom AI use" rather than pure catch-the-cheater. [15]
 
 ### 2. Originality.ai
 - **Positioning**: Built for SEO agencies / publishers; no free tier, sells on enterprise credibility. [2]
@@ -32,7 +32,7 @@ Scope: 9 detectors + 9 humanizers = **18 products** profiled. Pricing and claims
 ### 4. Turnitin
 - **Positioning**: Institutional standard bundled into university LMS contracts; not sold per-seat to consumers. [1]
 - **Pricing**: Institutional only; effectively "included" from the student's view. [1]
-- **Claimed performance**: "98% accuracy, <1% FP on submissions >300 words." Independent 2025–2026 testing: 92–100% on raw AI text; drops to 60–85% on manually edited or paraphrased content; 70–80% on AI text with minor human edits (University of Chicago Booth data, late 2025). Stanford HAI study: non-native English misclassified 2–5× more often than native English, up to 32% of non-native essays flagged. [1][6]
+- **Claimed performance**: "98% accuracy, <1% FP on submissions >300 words." Independent 2025–2026 testing: 92–100% on raw AI text; independent tier tests report 54–85% bypass rates on humanizer-processed text depending on tool and model update (Blommerde, MPG ONE — not Jabarian & Imas / Booth, which did not evaluate Turnitin). Stanford HAI study: non-native English misclassified 2–5× more often than native English, up to 32% of non-native essays flagged. [1][6]
 - **Underlying technique**: Proprietary classifier fine-tuned on academic corpora; April 2025 update added Japanese-language detection. 2026 model targets "AI humanizer tool" outputs specifically. October 2025 update softened verdicts and hid 1–19% scores by default due to false-positive incidence. [1][6]
 - **Marketing frame**: Quiet, institutional — rare public marketing quotes; trust comes from LMS integration. Roadmap for 2026 includes explicit humanizer-resistant detection layer.
 

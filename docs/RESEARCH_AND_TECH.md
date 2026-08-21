@@ -48,7 +48,7 @@ Two deterministic proxies (`sentence_length_cv`, `word_length_stdev`) fall back 
 
 `SKILL.md` states the failure modes explicitly:
 
-- Voice-match is prompt-based, not stylometric-attribution-resistant. Catch Me If You Can? ([arXiv:2509.14543](https://arxiv.org/abs/2509.14543), EMNLP 2025) showed all six tested frontier models fail personal-style imitation; few-shot beats zero-shot 23.5×, fine-tuning wins decisively.
+- Voice-match is prompt-based, not stylometric-attribution-resistant. Catch Me If You Can? ([arXiv:2509.14543](https://arxiv.org/abs/2509.14543), EMNLP 2025) showed all six tested frontier models fail personal-style imitation (Blog AV ~17–21% vs 91.4% human; few-shot ~2–3× over zero-shot). Jemama et al. ([arXiv:2509.24930](https://arxiv.org/abs/2509.24930)) reports up to 23.5× style-matching accuracy with few-shot prompting over zero-shot; fine-tuning wins decisively for production voice cloning.
 - Detector evasion isn't durable when the verifier has source-DB access. Krishna et al. (DIPPER, [arXiv:2303.13408](https://arxiv.org/abs/2303.13408), NeurIPS 2023): retrieval-defense recovers 80–97% of paraphrased outputs.
 - All commercial humanizer bypass numbers from before August 2025 are stale. Turnitin shipped explicit "AI bypasser" detection then, retrained February 2026, FP held below 1%.
 
@@ -268,7 +268,7 @@ All hooks honor `CLAUDE_CONFIG_DIR`. Flag writes are symlink-safe (refuse if fla
 | AI-ism reduction (rule-counted) | **92.1%** | `benchmarks/results/latest.json` (9-fixture suite, 2026-04-28) |
 | Tests | 558 collected, 555 pass + 3 LLM-mode opt-in | `pytest tests/unslop/` |
 | Detector backbone (default) | TMR — 125M-param RoBERTa, **99.28% AUROC on RAID** | `unslop/scripts/detector.py:9` |
-| Detector ladder | 3-step default; 5-step aggressive variant | `unslop/scripts/detector.py` |
+| Detector ladder | 4-step default (ends in `anti-detector`); 6-step aggressive variant | `unslop/scripts/detector.py` |
 | Em-dash hard cap | 2 per paragraph; list items treated separately | `humanize.py::_cap_em_dashes_per_paragraph` |
 | Contraction-rate baseline | human ~17/1000 words; AI often 0 (empirical) | `validate.py::_contraction_rate` |
 | Burstiness target σ | ≥ 6 in anti-detector mode | SKILL.md anti-detector procedure |

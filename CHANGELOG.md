@@ -11,6 +11,18 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+### Added
+
+- Packaged the development stylometric baseline, opt-in surprisal telemetry,
+  SHIELD detector metrics, and a CI-safe feedback-loop benchmark.
+
+### Changed
+
+- Detector feedback now uses a four-step default ladder and a six-step
+  aggressive ladder while preserving explicit iteration limits.
+- Tightened anti-detector guidance and corrected public detector-research
+  claims and citations.
+
 ## [0.6.2] — 2026-04-29
 
 Docs and presentation release. No code changes; tests still 555 passed,

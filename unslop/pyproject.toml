@@ -52,7 +52,7 @@ where = ["."]
 include = ["scripts*"]
 
 [tool.setuptools.package-data]
-scripts = ["py.typed"]
+scripts = ["py.typed", "data/*.json"]
 
 [tool.ruff]
 line-length = 100

@@ -30,6 +30,13 @@ Use `unslop-review` style (file:line, severity prefix, observation, fix). See `s
 
 The `TestPreservation` suite enforces that humanization never modifies code, URLs, or headings. Don't disable it. If a test fails, the unslop is wrong, not the test.
 
+## Citation hygiene
+
+When editing SSOT docs, verify benchmark attributions against `drafts/2026-08-detector-research/`:
+- Liang ESL paper is **arXiv:2304.02819** (not 2306.04723 — that's Tulchinskii PHD).
+- Jabarian & Imas (Booth 2025) tested **StealthGPT only** — not Turnitin, not twelve humanizers.
+- **23.5×** few-shot style gain is **Jemama** (2509.24930), not Catch Me (2509.14543).
+
 ## Relationship to CLAUDE.md
 
 This file is the short cross-IDE companion to `CLAUDE.md`. Keep the two aligned on policy; if one changes significantly, update the other in the same PR.
