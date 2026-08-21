@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=84", "wheel>=0.48"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -21,6 +21,7 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Text Processing :: Markup :: Markdown",
   "Topic :: Software Development :: Documentation",
   "Typing :: Typed",
@@ -28,9 +29,9 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-llm = ["anthropic>=0.34"]
+llm = ["anthropic>=1.0,<2"]
 surprisal = ["torch", "transformers", "scipy"]
-dev = ["pytest>=9", "pytest-cov>=7", "ruff==0.16.4", "mypy>=1.20"]
+dev = ["pytest==9.1.1", "pytest-cov==7.1.0", "ruff==0.16.4", "mypy==2.3.1"]
 
 [project.urls]
 Homepage = "https://github.com/MohamedAbdallah-14/unslop"

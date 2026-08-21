@@ -98,23 +98,23 @@ git commit -m "docs(research): publish August detector audit"
 - Consumes: official GitHub Action releases, PyPI JSON metadata, Node release index, and Docker Hub tag metadata checked on 2026-08-21.
 - Produces: a required Python 3.10–3.14 matrix and current automation/runtime pins.
 
-- [ ] **Step 1: Update official Actions majors**
+- [x] **Step 1: Update official Actions majors**
 
 Use `actions/checkout@v7`, `actions/setup-python@v7`, `actions/setup-node@v7`, `actions/cache@v6`, `actions/upload-artifact@v7`, `codecov/codecov-action@v7`, and `dependabot/fetch-metadata@v3`. Keep `pypa/gh-action-pypi-publish@release/v1` because upstream's current stable release is still v1.
 
-- [ ] **Step 2: Expand supported runtimes**
+- [x] **Step 2: Expand supported runtimes**
 
 Add Python `3.14` to the required CI matrix, change hook tests to Node `24`, add the Python 3.14 classifier, and set Docker's default `PYTHON_VERSION` to `3.14`. Keep the GPU/model weekly workflow on Python 3.12 until its heavy optional stack is separately certified.
 
-- [ ] **Step 3: Pin current development/build tooling compatible with Python 3.10**
+- [x] **Step 3: Pin current development/build tooling compatible with Python 3.10**
 
 Set build floors to `setuptools>=84` and `wheel>=0.48`. Pin dev tools to `pytest==9.1.1`, `pytest-cov==7.1.0`, `ruff==0.16.4`, and `mypy==2.3.1`. Raise the Anthropic optional floor to `anthropic>=1.0,<2`; leave heavy scientific dependencies resolver-compatible across Python 3.10–3.14.
 
-- [ ] **Step 4: Pin release tooling in the publish workflow**
+- [x] **Step 4: Pin release tooling in the publish workflow**
 
 Install `build==1.5.0` and `twine==7.0.0`, then retain Trusted Publishing and the existing tag/version check.
 
-- [ ] **Step 5: Verify tooling locally**
+- [x] **Step 5: Verify tooling locally**
 
 ```bash
 /opt/homebrew/bin/python3 -m pytest tests/unslop/
@@ -126,7 +126,7 @@ docker build --build-arg PYTHON_VERSION=3.14 -t unslop:0.7.0-test .
 
 Expected: tests, lint, and types pass; Node reports v24 in CI; the Docker image builds and `unslop --version` works.
 
-- [ ] **Step 6: Commit automation updates**
+- [x] **Step 6: Commit automation updates**
 
 ```bash
 git add .github/workflows Dockerfile unslop/pyproject.toml
