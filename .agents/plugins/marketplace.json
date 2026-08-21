@@ -3,10 +3,10 @@
   "description": "Local agents marketplace for the unslop plugin (anti-AI-slop tooling).",
   "plugins": [
     {
-      "name": "unslop-repo",
-      "displayName": "Unslop (this repo)",
+      "name": "unslop",
+      "displayName": "Unslop",
       "description": "Unslop plugin sourced from this repository.",
-      "version": "0.6.2",
+      "version": "0.7.0",
       "source": "./plugins/unslop"
     }
   ]

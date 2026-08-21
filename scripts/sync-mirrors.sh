@@ -76,4 +76,17 @@ mkdir -p .cursor/rules .windsurf/rules .clinerules .github
   cat "$BODY_FILE"
 } > .github/copilot-instructions.md
 
+# ---- 5. Root changelog -> Python package changelog ----
+# The package ships a compact copy without the repository-level preamble.
+awk '
+  /^## \[Unreleased\]/ { emit = 1 }
+  emit {
+    if ($0 ~ /^## \[[^]]+\]/) {
+      sub(/^## \[/, "## ")
+      sub(/\]/, "")
+    }
+    print
+  }
+' CHANGELOG.md > unslop/CHANGELOG.md
+
 echo "sync-mirrors: done."

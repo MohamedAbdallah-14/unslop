@@ -1,7 +1,7 @@
 {
   "$schema": "https://openai.com/schemas/codex-hooks-v1.json",
   "name": "unslop",
-  "version": "0.3.0",
+  "version": "0.7.0",
   "description": "Unslop hooks for OpenAI Codex CLI. Activate unslop rules at session start and track mode changes across turns.",
   "hooks": {
     "SessionStart": [

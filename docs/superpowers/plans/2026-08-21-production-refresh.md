@@ -201,15 +201,15 @@ git commit -m "feat(cursor): add marketplace plugin manifest"
 - Consumes: version `0.7.0` and tag format `unslop-v0.7.0`.
 - Produces: one release version across Python, Claude, Agents, Codex, Cursor, and Gemini surfaces.
 
-- [ ] **Step 1: Extend version verification**
+- [x] **Step 1: Extend version verification**
 
 Add `.codex/hooks.json` and `.cursor-plugin/plugin.json` to `verify_version_alignment()`.
 
-- [ ] **Step 2: Bump authoritative version files**
+- [x] **Step 2: Bump authoritative version files**
 
 Change every listed public version signal to `0.7.0`. Rename the local Agents marketplace plugin from `unslop-repo` to `unslop` so its install name matches other hosts.
 
-- [ ] **Step 3: Verify no stale public versions remain**
+- [x] **Step 3: Verify no stale public versions remain**
 
 ```bash
 rg -n '"version"\s*:\s*"(0\.3\.0|0\.6\.2)"' --glob '*.json'
@@ -218,7 +218,7 @@ rg -n '"version"\s*:\s*"(0\.3\.0|0\.6\.2)"' --glob '*.json'
 
 Expected: the grep is empty and verification reports `0.7.0`.
 
-- [ ] **Step 4: Commit version alignment**
+- [x] **Step 4: Commit version alignment**
 
 ```bash
 git add unslop/scripts/__init__.py .claude-plugin/marketplace.json \
@@ -242,7 +242,7 @@ git commit -m "chore(release): align 0.7.0 versions"
 - Consumes: completed tasks 1–4 and their exact user-visible behavior.
 - Produces: release copy and a reproducible maintainer release path.
 
-- [ ] **Step 1: Cut the 0.7.0 changelog section**
+- [x] **Step 1: Cut the 0.7.0 changelog section**
 
 Leave a new empty `[Unreleased]` section, then date `[0.7.0] — 2026-08-21`. Cover detector feedback Phase 1, the research archive, current CI/runtime support, Cursor packaging, citation corrections, and dependency updates. Edit only root `CHANGELOG.md`; `unslop/CHANGELOG.md` is generated.
 

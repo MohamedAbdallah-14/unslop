@@ -11,6 +11,7 @@ on:
       - rules/unslop-activate.md
       - unslop/SKILL.md
       - unslop/scripts/**
+      - CHANGELOG.md
       - scripts/sync-mirrors.sh
   workflow_dispatch:
 

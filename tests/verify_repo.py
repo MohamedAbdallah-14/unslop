@@ -325,6 +325,10 @@ def verify_version_alignment() -> None:
         "plugins/unslop/.codex-plugin/plugin.json": read_json(
             ROOT / "plugins/unslop/.codex-plugin/plugin.json"
         )["version"],
+        ".codex/hooks.json": read_json(ROOT / ".codex/hooks.json")["version"],
+        ".cursor-plugin/plugin.json": read_json(ROOT / ".cursor-plugin/plugin.json")[
+            "version"
+        ],
         ".agents/plugins/marketplace.json": read_json(ROOT / ".agents/plugins/marketplace.json")[
             "plugins"
         ][0]["version"],

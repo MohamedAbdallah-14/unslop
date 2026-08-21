@@ -11,10 +11,17 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-08-21
+
 ### Added
 
 - Packaged the development stylometric baseline, opt-in surprisal telemetry,
   SHIELD detector metrics, and a CI-safe feedback-loop benchmark.
+- Published the August 2026 detector-research archive: 80 topic memos,
+  16 syntheses, four phase plans, a maintainer handover, and structured
+  landscape data.
+- Added a Cursor Plugin manifest for the six unslop skills and project rule,
+  with a repository verifier for its component paths.
 
 ### Changed
 
@@ -26,9 +33,20 @@ inside its wheel; both files are kept in sync. Edit this one.
   claims and citations.
 - Pinned Ruff 0.16.4 for development and made CI load the repository's lint
   configuration explicitly.
+- Added Python 3.14 to the required CI matrix, moved hook tests to Node 24 LTS,
+  and updated official GitHub Actions to their current stable majors.
+- Updated build and development requirements to current Python 3.10-compatible
+  releases, including Anthropic SDK 1.x and exact pytest, Ruff, and mypy pins.
+- Aligned Python, Claude, Cursor, Codex, Gemini, and Agents distribution
+  metadata at 0.7.0.
+
+### Fixed
+
 - Reject non-positive detector iteration limits, tolerate malformed baseline
   payloads, isolate cached-baseline tests, and fail feedback benchmarks when an
   expected fixture is missing.
+- Corrected the Liang/Tulchinskii, Booth/Turnitin, Catch Me/Jemama, and
+  Kalemaj/Paneru research attributions against the primary papers.
 
 ## [0.6.2] — 2026-04-29
 
