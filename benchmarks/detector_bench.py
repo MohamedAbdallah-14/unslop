@@ -41,8 +41,8 @@ import datetime as dt
 import json
 import re
 import sys
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "unslop"))
@@ -343,13 +343,16 @@ def main() -> int:
     if args.strict:
         for det in report["detectors"]:
             for row in det["rows"]:
-                if "balanced" in row["humanized"]:
-                    if row["humanized"]["balanced"]["ai_probability"] >= row["original_ai_probability"]:
-                        print(
-                            f"\nREGRESSION: {det['name']} scored humanized >= original on {row['fixture']}",
-                            file=sys.stderr,
-                        )
-                        return 2
+                if (
+                    "balanced" in row["humanized"]
+                    and row["humanized"]["balanced"]["ai_probability"]
+                    >= row["original_ai_probability"]
+                ):
+                    print(
+                        f"\nREGRESSION: {det['name']} scored humanized >= original on {row['fixture']}",
+                        file=sys.stderr,
+                    )
+                    return 2
     return 0
 
 

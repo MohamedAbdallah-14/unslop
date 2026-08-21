@@ -13,7 +13,12 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
-from unslop.scripts.detector import DetectorName, DetectorUnavailable, feedback_loop, score_ai_probability  # noqa: E402
+from unslop.scripts.detector import (  # noqa: E402
+    DetectorName,
+    DetectorUnavailable,
+    feedback_loop,
+    score_ai_probability,
+)
 
 
 def _run_external(repo: Path, text: str) -> str:

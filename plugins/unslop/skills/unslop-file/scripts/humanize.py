@@ -1116,7 +1116,7 @@ def humanize_deterministic_with_report(
     if structural:
         protected = humanize_structural(protected, report=report.structural)
 
-    if intensity in ("full", "anti-detector"):
+    if intensity == "anti-detector":
         from .lexical_targets import apply_targeted_pass, measure_gaps
 
         protected = apply_targeted_pass(

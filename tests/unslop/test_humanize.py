@@ -2778,3 +2778,25 @@ class TestAntiDetectorCoPA:
         from scripts.humanize import _INTENSITY_PROMPT_GUIDANCE
         prompt = _INTENSITY_PROMPT_GUIDANCE["anti-detector"]
         assert "remove" in prompt.lower()
+
+
+class TestAntiDetectorDeterministicPass:
+    def test_target_nudges_run_only_in_anti_detector_mode(self):
+        text = "Cats sleep mats. " * 20
+
+        full = humanize_deterministic(
+            text,
+            intensity="full",
+            structural=False,
+            soul=False,
+        )
+        anti_detector = humanize_deterministic(
+            text,
+            intensity="anti-detector",
+            structural=False,
+            soul=False,
+        )
+
+        assert full == text
+        assert anti_detector != full
+        assert "sleep on mats" in anti_detector

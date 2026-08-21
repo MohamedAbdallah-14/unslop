@@ -32,7 +32,7 @@ jobs:
         run: pip install -e unslop[dev]
 
       - name: Lint (ruff)
-        run: ruff check unslop/scripts benchmarks
+        run: ruff check --config unslop/pyproject.toml unslop/scripts benchmarks
 
       - name: Type check (mypy, strict)
         run: mypy --config-file unslop/pyproject.toml unslop/scripts

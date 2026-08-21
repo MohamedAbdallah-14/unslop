@@ -62,7 +62,7 @@ no "Great question!" openers. See skills/unslop-commit/SKILL.md.
 <!-- Required for any code or pattern change. -->
 
 - [ ] `python3 -m pytest tests/unslop/` passes locally
-- [ ] `ruff check unslop/scripts benchmarks` clean
+- [ ] `ruff check --config unslop/pyproject.toml unslop/scripts benchmarks` clean
 - [ ] `mypy unslop/scripts` clean (strict mode)
 - [ ] `python3 tests/verify_repo.py` passes
 - [ ] `python3 benchmarks/run.py --all-intensities --strict` passes
