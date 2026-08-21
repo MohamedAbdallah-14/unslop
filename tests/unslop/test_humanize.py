@@ -2085,6 +2085,26 @@ class TestAnthropicSDK:
         fake_anthropic.Anthropic = anthropic_class  # type: ignore[attr-defined]
         monkeypatch.setitem(_sys.modules, "anthropic", fake_anthropic)
         assert _call_anthropic_sdk("any prompt") == "humanized output"
+        assert client_instance.messages.create.call_args.kwargs["model"] == "claude-sonnet-5"
+
+    def test_environment_overrides_default_model(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-test")
+        monkeypatch.setenv("UNSLOP_MODEL", "claude-opus-4-8")
+        import sys as _sys
+
+        block = MagicMock()
+        block.text = "humanized output"
+        msg = MagicMock()
+        msg.content = [block]
+        client_instance = MagicMock()
+        client_instance.messages.create.return_value = msg
+
+        fake_anthropic = type(_sys)("anthropic")
+        fake_anthropic.Anthropic = MagicMock(return_value=client_instance)  # type: ignore[attr-defined]
+        monkeypatch.setitem(_sys.modules, "anthropic", fake_anthropic)
+
+        assert _call_anthropic_sdk("any prompt") == "humanized output"
+        assert client_instance.messages.create.call_args.kwargs["model"] == "claude-opus-4-8"
 
 
 class TestClaudeCLI:

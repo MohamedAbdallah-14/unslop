@@ -12,6 +12,16 @@ pipx install unslop
 uv tool install unslop
 ```
 
+That is enough for deterministic local rewriting. For Anthropic API-backed LLM mode:
+
+```bash
+pipx install 'unslop[llm]'
+# or
+uv tool install 'unslop[llm]'
+```
+
+Local-model features use separate extras: `unslop[surprisal]` for DivEye readings and `unslop[detector]` for detector feedback.
+
 For a one-off local checkout:
 
 ```bash
@@ -31,7 +41,7 @@ Deterministic mode is local-only. No API key, no subprocess, no network call.
 unslop doc.md
 ```
 
-LLM mode uses `ANTHROPIC_API_KEY` when set, otherwise falls back to `claude --print` if the Claude CLI is installed. Before any LLM call, the CLI refuses secret-like content such as private keys and common API token shapes. Use `--deterministic` for sensitive local files.
+LLM mode uses `ANTHROPIC_API_KEY` when set, otherwise falls back to `claude --print` if the Claude CLI is installed. API calls default to `claude-sonnet-5`; set `UNSLOP_MODEL` to pin another active Claude model. Before any LLM call, the CLI refuses secret-like content such as private keys and common API token shapes. Use `--deterministic` for sensitive local files.
 
 ## Common Commands
 
@@ -83,6 +93,7 @@ Project memory files, READMEs, resumes, and draft posts often get polished by as
 | `unslop-file` | File rewrite command |
 | `unslop-commit` | Commit messages without AI tone |
 | `unslop-review` | Direct PR review comments |
+| `unslop-reasoning` | Reasoning-trace cleanup |
 | `unslop-help` | Quick reference |
 
 ## License

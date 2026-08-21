@@ -2,7 +2,7 @@
 
 A public reference for the research, tech stack, and design choices behind this project.
 
-Last refreshed 2026-04-28 from a five-agent audit of the codebase. Every citation in the "live" tables below has a verified arXiv URL or DOI, was confirmed against the paper's abstract, and informs at least one shipping rule, threshold, algorithm, or configuration value. Decorative or rationale-only citations are listed separately.
+Last refreshed 2026-08-21. The live tables were checked against the August detector-research archive, primary arXiv metadata, DOI resolvers, and the current codebase. Every citation below informs a shipping rule, threshold, algorithm, or configuration value; rationale-only citations are listed separately.
 
 ---
 
@@ -12,7 +12,7 @@ A multi-platform plugin that humanizes LLM output without breaking it. It strips
 
 Code, URLs, paths, headings, tables, and quoted examples come out byte-identical. That preservation contract is the load-bearing engineering choice.
 
-The same skill ships across Claude Code, Cursor, Windsurf, Cline, Codex, Copilot, and Gemini through a single SSOT propagated by `scripts/sync-mirrors.sh`.
+The same skill ships across six interactive hosts: Claude Code, Cursor, Windsurf, Cline, Codex, and Gemini. GitHub Copilot receives the always-on rule as a passive repository instruction mirror. `scripts/sync-mirrors.sh` propagates all generated copies from the authored sources.
 
 ---
 
@@ -61,7 +61,7 @@ Two deterministic proxies (`sentence_length_cv`, `word_length_stdev`) fall back 
 | Claim "100% undetectable" | Undetectable.ai, StealthGPT, BypassGPT | DAMAGE ([arXiv:2501.03437](https://arxiv.org/abs/2501.03437), COLING 2025) measured independent bypass at 45–88% across the same tools. Marketing this creates EU AI Act Art. 50 compliance exposure. |
 | Synonym-swap paraphrase | QuillBot, Spinbot | Independent audits show synonym swap is largely ineffective vs. modern detectors. |
 | Invent biographical detail | Some "voice restorers" | SKILL.md Principle #4 — role-play frame, not personhood. Never invent memory or experience. |
-| Ship watermark removal as a feature | Several | Side effect is acknowledged in Boundaries. EU AI Act Article 50 (effective August 2026) prohibits watermark removal as a deliberate act. |
+| Ship watermark removal as a feature | Several | Side effect is acknowledged in Boundaries. EU AI Act Article 50 transparency obligations have applied since 2 August 2026; the final June 2026 Code of Practice treats marking and detection as compliance controls. Deliberate removal stays outside the product boundary. |
 | Help with academic misconduct | Several commercial tools' marketing | SKILL.md Boundaries: decline. Legitimate framing is ESL false-positive defense (Liang et al. 2023, [arXiv:2304.02819](https://arxiv.org/abs/2304.02819) — >50% of TOEFL essays were flagged as AI). |
 
 ---
@@ -145,7 +145,7 @@ This is the set of papers whose findings or algorithms are encoded in shipping c
 
 | Source | Used for |
 |---|---|
-| **EU AI Act Article 50** (Dec 2025 Code of Practice; effective Aug 2026) | SKILL.md Boundaries — watermark-removal refusal; anti-detector scoped to false-positive defense |
+| **EU AI Act Article 50** (final Code of Practice published 10 June 2026; obligations apply from 2 August 2026) | SKILL.md Boundaries — watermark-removal refusal; anti-detector scoped to false-positive defense |
 | **California SB 243** (effective Jan 2026) | Companion-chatbot safety context in SKILL.md regulatory note |
 
 ### Decorative citations (kept as design rationale, no concrete code artifact)
@@ -172,18 +172,19 @@ Listed for transparency. If you have a public link for any of these, a PR is wel
 
 ### Python core
 
-- **Python**: 3.10+; CI matrix runs 3.10, 3.11, 3.12, 3.13
-- **Build**: setuptools + wheel; sdist + wheel via PyPI Trusted Publisher (OIDC)
+- **Python**: 3.10+; CI matrix runs 3.10, 3.11, 3.12, 3.13, 3.14
+- **Build**: setuptools 84+ and wheel 0.48+; sdist + wheel via PyPI Trusted Publisher (OIDC)
 - **Runtime deps for the deterministic path**: stdlib only
 - **Optional deps**:
-  - `anthropic` SDK — LLM mode (lazy-imported in `humanize.py`)
-  - `torch` + `transformers` + `huggingface_hub` + `safetensors` — surprisal LM, AI detectors (lazy-imported)
+  - `anthropic>=1.0,<2` — LLM mode (lazy-imported in `humanize.py`)
+  - `torch` + `transformers` — surprisal LM (lazy-imported)
+  - `torch` + `transformers` + `huggingface_hub` + `safetensors` — AI detectors (lazy-imported)
 
 ### Quality tooling
 
 - **mypy** — strict mode, `python_version=3.10`, strict_optional, warn_redundant_casts, check_untyped_defs
 - **ruff** — line-length 100, target-version py310, rules E/F/I/UP/B/SIM
-- **pytest** + **pytest-cov** — 558 tests collected; 555 pass + 3 LLM-mode opt-in (gated on `UNSLOP_RUN_LLM_TESTS=1`)
+- **pytest 9.1.1** + **pytest-cov 7.1.0** — 639 core package tests collected; paid API and real-model cases skip unless their keys or optional dependencies are present
 - **TestPreservation** — the contract suite. Byte-compares each protected category between input and output. Hard-errors on any mutation.
 - **`tests/verify_repo.py`** — repo integrity verifier, runs as a CI step
 
@@ -194,16 +195,17 @@ Listed for transparency. If you have a public link for any of these, a PR is wel
 | PyPI | `unslop` package via OIDC trusted publisher |
 | Claude Code marketplace | `.claude-plugin/marketplace.json` |
 | Claude Code Agents marketplace | `.agents/plugins/marketplace.json` |
-| Codex CLI plugin | `plugins/unslop/.codex-plugin/plugin.json` |
+| Codex plugin source bundle | `plugins/unslop/.codex-plugin/plugin.json` |
 | Gemini CLI extension | `gemini-extension.json` |
-| Cursor IDE | `.cursor/rules/unslop.mdc` (mirror) |
+| Cursor Plugin | `.cursor-plugin/plugin.json` |
+| Cursor project rule | `.cursor/rules/unslop.mdc` (mirror) |
 | Windsurf IDE | `.windsurf/rules/unslop.md` (mirror) |
 | Cline | `.clinerules/unslop.md` (mirror) |
 | GitHub Copilot Chat | `.github/copilot-instructions.md` (mirror) |
 
 ### IDE integration model
 
-Three SSOT files (`skills/unslop/SKILL.md`, `unslop/SKILL.md`, `rules/unslop-activate.md`) are propagated to ~14 mirror locations by `scripts/sync-mirrors.sh`, run by `.github/workflows/sync.yml` on push. Hand-editing a mirror is silently overwritten on next sync.
+The authored skills, `unslop/SKILL.md`, `unslop/scripts/`, `rules/unslop-activate.md`, and root `CHANGELOG.md` are propagated to host-specific mirrors by `scripts/sync-mirrors.sh`, run by `.github/workflows/sync.yml` on push. Hand-editing a mirror is silently overwritten on next sync.
 
 ### Hooks
 
@@ -233,7 +235,7 @@ All hooks honor `CLAUDE_CONFIG_DIR`. Flag writes are symlink-safe (refuse if fla
 
 | Workflow | Trigger | Purpose |
 |---|---|---|
-| `ci.yml` | push/PR to main | Lint, type-check, tests on Python 3.10–3.13 matrix, Codecov upload, repo integrity verifier |
+| `ci.yml` | push/PR to main | Ruff, mypy, tests on Python 3.10–3.14 with Node 24, Codecov, repository verification, and strict offline benchmarks |
 | `sync.yml` | push to main on SSOT paths | Propagate SSOT to mirrors, commit as github-actions[bot] |
 | `publish.yml` | tag `unslop-v*` | Build + publish to PyPI via OIDC |
 | `weekly-detector-bench.yml` | cron Mon 09:00 UTC | TMR detector regression + perceived-humanness eval; 90-day artifact retention |
@@ -243,7 +245,7 @@ All hooks honor `CLAUDE_CONFIG_DIR`. Flag writes are symlink-safe (refuse if fla
 
 | Service | Purpose |
 |---|---|
-| Anthropic API (`anthropic>=0.34`) | LLM mode rewriting; default `claude-sonnet-4-5`, override via `UNSLOP_MODEL` |
+| Anthropic API (`anthropic>=1.0,<2`) | LLM mode rewriting; new runs default to `claude-sonnet-5`, override via `UNSLOP_MODEL` |
 | Claude CLI (`claude --print`) | LLM-mode fallback when no API key. `subprocess.run`, `shell=False`, fixed argument list. |
 | HuggingFace `Oxidane/tmr-ai-text-detector` | Default AI-text detector (125M RoBERTa, MIT) |
 | HuggingFace `desklib/ai-text-detector-v1.01` | Optional detector (RAID top entry) |
@@ -266,7 +268,7 @@ All hooks honor `CLAUDE_CONFIG_DIR`. Flag writes are symlink-safe (refuse if fla
 | Metric | Value | Source |
 |---|---|---|
 | AI-ism reduction (rule-counted) | **92.1%** | `benchmarks/results/latest.json` (9-fixture suite, 2026-04-28) |
-| Tests | 558 collected, 555 pass + 3 LLM-mode opt-in | `pytest tests/unslop/` |
+| Core tests | 639 collected; paid API and real-model cases are opt-in | `pytest tests/unslop/ --collect-only -q` |
 | Detector backbone (default) | TMR — 125M-param RoBERTa, **99.28% AUROC on RAID** | `unslop/scripts/detector.py:9` |
 | Detector ladder | 4-step default (ends in `anti-detector`); 6-step aggressive variant | `unslop/scripts/detector.py` |
 | Em-dash hard cap | 2 per paragraph; list items treated separately | `humanize.py::_cap_em_dashes_per_paragraph` |
@@ -280,7 +282,7 @@ All hooks honor `CLAUDE_CONFIG_DIR`. Flag writes are symlink-safe (refuse if fla
 
 ## Verification methodology
 
-This document is the result of a five-agent audit run on 2026-04-28. Three audit agents collected data in parallel, then I spot-checked the highest-stakes citations directly:
+The live citation table was first audited on 2026-04-28. On 2026-08-21, the release audit checked the expanded archive's arXiv IDs in batches, resolved DOI links, checked referenced GitHub repositories, and re-ran the attribution guards. The highest-stakes citations remain:
 
 - **arXiv 2509.18880 (DivEye)** — verified, matches paper title and authors.
 - **arXiv 2506.07001 (Adversarial Paraphrasing)** — verified, NeurIPS 2025.
@@ -290,7 +292,7 @@ This document is the result of a five-agent audit run on 2026-04-28. Three audit
 - **arXiv 2510.01268 (AdaDetectGPT)** — verified, Zhou, Zhu, Su et al.
 - **DOI 10.37284/ijar.9.1.4683 (Epaphras & Mtenzi)** — verified at Aga Khan University eCommons.
 
-One previously-cited arXiv ID (2604.11687, attributed to "Kalemaj et al." for the contraction-rate threshold) was found broken — the ID resolves to an unrelated paper by Utsav Paneru. That citation was removed from `validate.py` and `soul.py`; the empirical threshold was kept with a `pending re-verification` note.
+One previously-cited arXiv ID (2604.11687) was attributed to "Kalemaj et al." The paper is actually Utsav Paneru's *Please Make it Sound like Human*. Its Table 1 reports 0.00 contractions per AI-generated chunk and 0.17 per human-reference chunk on a 1,390-chunk test subset. The values are corpus-specific evidence, not a universal threshold; cite Paneru and keep the implementation conservatively gated.
 
 If you spot a citation that doesn't resolve, a PR is welcome.
 

@@ -132,12 +132,33 @@ def verify_synced_mirrors() -> None:
     print("Skill, rule, and humanize-package mirrors OK")
 
 
+def verify_sync_workflow_triggers() -> None:
+    section("Sync workflow triggers")
+    workflow = (ROOT / ".github/workflows/sync.yml").read_text()
+    authoritative_paths = (
+        "skills/unslop/SKILL.md",
+        "skills/unslop-commit/SKILL.md",
+        "skills/unslop-review/SKILL.md",
+        "skills/unslop-help/SKILL.md",
+        "skills/unslop-reasoning/SKILL.md",
+        "rules/unslop-activate.md",
+        "unslop/SKILL.md",
+        "unslop/scripts/**",
+        "CHANGELOG.md",
+        "scripts/sync-mirrors.sh",
+    )
+    for path in authoritative_paths:
+        ensure(path in workflow, f"sync.yml missing SSOT trigger: {path}")
+    print("Every mirrored SSOT path triggers sync.yml")
+
+
 def verify_manifests_and_syntax() -> None:
     section("Manifests and Syntax")
 
     manifests = [
         ROOT / ".claude-plugin/plugin.json",
         ROOT / ".claude-plugin/marketplace.json",
+        ROOT / ".cursor-plugin/plugin.json",
         ROOT / "gemini-extension.json",
         ROOT / "plugins/unslop/.codex-plugin/plugin.json",
     ]
@@ -276,8 +297,94 @@ def verify_commands_wired() -> None:
 
     mkt = read_json(ROOT / ".claude-plugin/marketplace.json")
     ensure(mkt.get("plugins"), "marketplace.json missing plugins array")
+    ensure("displayName" not in mkt, "marketplace root displayName is not supported")
 
     print("Plugin + marketplace wired")
+
+
+def verify_cursor_plugin() -> None:
+    section("Cursor plugin")
+    manifest_path = ROOT / ".cursor-plugin/plugin.json"
+    manifest = read_json(manifest_path)
+
+    ensure(manifest.get("name") == "unslop", "Cursor plugin name mismatch")
+    ensure(isinstance(manifest.get("version"), str), "Cursor plugin version missing")
+    ensure("commands" not in manifest, "Cursor plugin must not expose TOML commands")
+
+    for field in ("skills", "rules", "logo"):
+        value = manifest.get(field)
+        ensure(isinstance(value, str) and value, f"Cursor plugin {field} path missing")
+        relative = Path(value)
+        ensure(not relative.is_absolute(), f"Cursor plugin {field} path must be relative")
+        ensure(".." not in relative.parts, f"Cursor plugin {field} path must not contain '..'")
+        ensure((ROOT / relative).exists(), f"Cursor plugin {field} path missing: {value}")
+
+    skills_dir = ROOT / manifest["skills"]
+    ensure(
+        any(skills_dir.glob("*/SKILL.md")),
+        "Cursor plugin skills path contains no skills",
+    )
+    rules_dir = ROOT / manifest["rules"]
+    ensure(any(rules_dir.glob("*.mdc")), "Cursor plugin rules path contains no .mdc files")
+    ensure(Path(manifest["logo"]).suffix == ".svg", "Cursor plugin logo must be SVG")
+
+    print("Cursor plugin manifest and component paths wired")
+
+
+def verify_codex_plugin() -> None:
+    section("Codex plugin")
+    plugin_root = ROOT / "plugins/unslop"
+    manifest = read_json(plugin_root / ".codex-plugin/plugin.json")
+    ensure(manifest.get("name") == plugin_root.name, "Codex plugin folder/name mismatch")
+    ensure(isinstance(manifest.get("author"), dict), "Codex author must be an object")
+    ensure("displayName" not in manifest, "Codex displayName belongs under interface")
+    ensure("ui" not in manifest, "Codex uses interface, not ui")
+    ensure("defaultPrompt" not in manifest, "Codex defaultPrompt belongs under interface")
+    interface = manifest.get("interface")
+    ensure(isinstance(interface, dict), "Codex interface metadata missing")
+    for field in ("displayName", "shortDescription", "longDescription", "developerName"):
+        ensure(interface.get(field), f"Codex interface.{field} missing")
+    skills_path = manifest.get("skills")
+    ensure(
+        isinstance(skills_path, str) and skills_path.startswith("./"),
+        "Codex skills path invalid",
+    )
+    ensure((plugin_root / skills_path).exists(), f"Codex skills path missing: {skills_path}")
+    for field in ("composerIcon", "logo"):
+        value = interface.get(field)
+        ensure(isinstance(value, str) and value.startswith("./"), f"Codex {field} path invalid")
+        ensure((plugin_root / value).is_file(), f"Codex {field} path missing: {value}")
+
+    marketplace = read_json(ROOT / ".agents/plugins/marketplace.json")
+    ensure(isinstance(marketplace.get("interface"), dict), "Agents marketplace interface missing")
+    ensure(marketplace.get("plugins"), "Agents marketplace plugins missing")
+    entry = marketplace["plugins"][0]
+    ensure(entry.get("name") == manifest["name"], "Agents marketplace plugin name mismatch")
+    ensure(
+        entry.get("source") == {"source": "local", "path": "./plugins/unslop"},
+        "Agents marketplace source metadata invalid",
+    )
+    ensure(
+        entry.get("policy")
+        == {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+        "Agents marketplace policy metadata invalid",
+    )
+    ensure(entry.get("category"), "Agents marketplace category missing")
+    print("Codex plugin and repo marketplace use the current schema")
+
+
+def verify_gemini_extension() -> None:
+    section("Gemini extension")
+    manifest = read_json(ROOT / "gemini-extension.json")
+    ensure("contextFiles" not in manifest, "Gemini ignores the contextFiles field")
+    context_files = manifest.get("contextFileName")
+    ensure(isinstance(context_files, list) and context_files, "Gemini context list missing")
+    for relative in context_files:
+        ensure(isinstance(relative, str), "Gemini context path must be a string")
+        path = Path(relative)
+        ensure(not path.is_absolute() and ".." not in path.parts, "Gemini context path invalid")
+        ensure((ROOT / relative).is_file(), f"Gemini context path missing: {relative}")
+    print("Gemini context files use the supported manifest field")
 
 
 def verify_version_alignment() -> None:
@@ -288,6 +395,9 @@ def verify_version_alignment() -> None:
     expected = __version__
     version_sources = {
         "unslop/scripts/__init__.py": expected,
+        ".claude-plugin/plugin.json": read_json(ROOT / ".claude-plugin/plugin.json").get(
+            "version"
+        ),
         ".claude-plugin/marketplace.json": read_json(ROOT / ".claude-plugin/marketplace.json")[
             "plugins"
         ][0]["version"],
@@ -295,9 +405,10 @@ def verify_version_alignment() -> None:
         "plugins/unslop/.codex-plugin/plugin.json": read_json(
             ROOT / "plugins/unslop/.codex-plugin/plugin.json"
         )["version"],
-        ".agents/plugins/marketplace.json": read_json(ROOT / ".agents/plugins/marketplace.json")[
-            "plugins"
-        ][0]["version"],
+        ".codex/hooks.json": read_json(ROOT / ".codex/hooks.json")["version"],
+        ".cursor-plugin/plugin.json": read_json(ROOT / ".cursor-plugin/plugin.json")[
+            "version"
+        ],
     }
 
     for label, version in version_sources.items():
@@ -320,19 +431,58 @@ def verify_version_alignment() -> None:
         re.search(rf"^## {re.escape(expected)} ", package_changelog, re.MULTILINE) is not None,
         "package CHANGELOG latest version heading missing",
     )
+    ensure(
+        re.search(
+            rf"^\[{re.escape(expected)}\]: .+/releases/tag/unslop-v{re.escape(expected)}$",
+            root_changelog,
+            re.MULTILINE,
+        )
+        is not None,
+        "root CHANGELOG latest version link missing",
+    )
+    ensure(
+        re.search(
+            rf"^\[Unreleased\]: .+/compare/unslop-v{re.escape(expected)}\.\.\.HEAD$",
+            root_changelog,
+            re.MULTILINE,
+        )
+        is not None,
+        "root CHANGELOG Unreleased comparison is stale",
+    )
 
     print(f"All public version signals match {expected}")
+
+
+def verify_package_metadata() -> None:
+    section("Package metadata")
+    pyproject = (ROOT / "unslop/pyproject.toml").read_text()
+    ensure(
+        'surprisal = ["torch", "transformers"]' in pyproject,
+        "surprisal extra must contain only its imported dependencies",
+    )
+    ensure(
+        'detector = ["torch", "transformers", "huggingface_hub", "safetensors"]'
+        in pyproject,
+        "detector extra missing detector runtime dependencies",
+    )
+    ensure("scipy" not in pyproject, "unused scipy dependency must not ship")
+    print("Optional dependency groups match runtime imports")
 
 
 def main() -> int:
     checks = [
         verify_synced_mirrors,
+        verify_sync_workflow_triggers,
         verify_manifests_and_syntax,
         verify_powershell_static,
         verify_humanize_modules_importable,
         verify_fixture_pairs,
         verify_commands_wired,
+        verify_cursor_plugin,
+        verify_codex_plugin,
+        verify_gemini_extension,
         verify_version_alignment,
+        verify_package_metadata,
     ]
     try:
         for check in checks:

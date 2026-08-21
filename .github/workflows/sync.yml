@@ -8,9 +8,11 @@ on:
       - skills/unslop-commit/SKILL.md
       - skills/unslop-review/SKILL.md
       - skills/unslop-help/SKILL.md
+      - skills/unslop-reasoning/SKILL.md
       - rules/unslop-activate.md
       - unslop/SKILL.md
       - unslop/scripts/**
+      - CHANGELOG.md
       - scripts/sync-mirrors.sh
   workflow_dispatch:
 
@@ -21,7 +23,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Run sync-mirrors script
         run: bash scripts/sync-mirrors.sh

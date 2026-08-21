@@ -11,10 +11,17 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-08-21
+
 ### Added
 
 - Packaged the development stylometric baseline, opt-in surprisal telemetry,
   SHIELD detector metrics, and a CI-safe feedback-loop benchmark.
+- Published the August 2026 detector-research archive: 80 topic memos,
+  16 syntheses, four phase plans, a maintainer handover, and structured
+  landscape data.
+- Added a Cursor Plugin manifest for the six unslop skills and project rule,
+  with a repository verifier for its component paths.
 
 ### Changed
 
@@ -26,9 +33,36 @@ inside its wheel; both files are kept in sync. Edit this one.
   claims and citations.
 - Pinned Ruff 0.16.4 for development and made CI load the repository's lint
   configuration explicitly.
+- Added Python 3.14 to the required CI matrix, moved hook tests to Node 24 LTS,
+  and updated official GitHub Actions to their current stable majors.
+- Updated build and development requirements to current Python 3.10-compatible
+  releases, including Anthropic SDK 1.x and exact pytest, Ruff, and mypy pins.
+- Moved new Anthropic-backed rewrites and judge runs to Claude Sonnet 5 while
+  keeping `UNSLOP_MODEL` and `UNSLOP_JUDGE_MODELS` overrides.
+- Split optional local-model dependencies into `surprisal` and `detector`
+  extras, and made the weekly workflows install those declared groups.
+- Aligned Python, Claude, Cursor, Codex, Gemini, and Agents distribution
+  metadata at 0.7.0.
+- Refreshed install, contribution, research, and release guides; updated the
+  public test graphic and counts to the 639-test core suite.
+
+### Fixed
+
 - Reject non-positive detector iteration limits, tolerate malformed baseline
   payloads, isolate cached-baseline tests, and fail feedback benchmarks when an
   expected fixture is missing.
+- Corrected the Liang/Tulchinskii, Booth/Turnitin, Catch Me/Jemama, and
+  Kalemaj/Paneru research attributions against the primary papers.
+- Added a verifier for every mirror-owning sync trigger and restored the
+  missing `unslop-reasoning` workflow path.
+- Removed an ignored Claude marketplace field, versioned the Claude plugin
+  manifest, and moved Gemini's context paths to its supported manifest field.
+- Migrated the Codex plugin and Agents marketplace to the current `interface`,
+  source, policy, and asset-path schema; removed its unsupported legacy agent YAML.
+
+### Removed
+
+- Removed the unused `scipy` dependency from the surprisal extra.
 
 ## [0.6.2] — 2026-04-29
 
@@ -729,5 +763,6 @@ Exit codes: `0` success, `1` usage / file-not-found / sensitive path,
 
 See git history. No formal changelog before 0.4.0.
 
-[Unreleased]: https://github.com/MohamedAbdallah-14/unslop/compare/unslop-v0.4.0...HEAD
+[Unreleased]: https://github.com/MohamedAbdallah-14/unslop/compare/unslop-v0.7.0...HEAD
+[0.7.0]: https://github.com/MohamedAbdallah-14/unslop/releases/tag/unslop-v0.7.0
 [0.4.0]: https://github.com/MohamedAbdallah-14/unslop/releases/tag/unslop-v0.4.0

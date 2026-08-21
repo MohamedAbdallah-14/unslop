@@ -32,7 +32,29 @@ Restart Claude Code. Type:
 
 That's it. You'll see a small badge at the bottom of the screen that reads `[unslop:BALANCED]`. From this point on, everything Claude writes back to you in this session comes out in a human voice. Paste in a cover letter, ask for edits, and watch the reply. If you ever want the old Claude back, type `stop unslop` and the badge goes away.
 
-If you use Cursor or Windsurf instead, the plugin loads automatically when you open the project folder. No install step. Just type `/unslop` in the chat panel.
+If you use Cursor or Windsurf instead, clone the repository and open its folder. The project rules load automatically. Cursor's installable plugin is packaged but not listed publicly until Cursor finishes its manual Marketplace review.
+
+To test the Cursor Plugin from a clone before that review:
+
+```bash
+git clone https://github.com/MohamedAbdallah-14/unslop.git
+cd unslop
+mkdir -p ~/.cursor/plugins/local
+ln -s "$(pwd)" ~/.cursor/plugins/local/unslop
+```
+
+Restart Cursor or run **Developer: Reload Window**, then manage the plugin under **Customize**. After the public listing is approved, install `unslop` directly from Customize at project or user scope.
+
+For OpenAI Codex, clone and open the repository. Codex reads the included `AGENTS.md` project instructions automatically. To install the reusable bundle globally, add `MohamedAbdallah-14/unslop` with `codex plugin marketplace add`, then run `codex plugin add unslop@unslop-agents-marketplace`.
+
+For the standalone command-line tool:
+
+```bash
+pipx install unslop
+unslop --deterministic draft.md
+```
+
+That path is local-only. API-backed rewriting uses the optional install: `pipx install 'unslop[llm]'`.
 
 If you need a manual Claude Code install for a fork, an air-gapped machine, or inspection before install:
 
@@ -98,7 +120,7 @@ No tool can promise that. AI detectors are noisy, and they falsely flag real hum
 
 **Do I need to know what a regex is, or how to code?**
 
-No. If you can type `/unslop` into a chat, you have everything you need. The installation is three copy-pasted commands, once, and then you're done forever.
+No. If you can type `/unslop` into a chat, you have everything you need. The Claude Code installation is two copy-pasted plugin commands, one restart, then `/unslop`.
 
 ## If you get stuck
 

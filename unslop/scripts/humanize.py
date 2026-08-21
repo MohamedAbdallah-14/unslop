@@ -32,6 +32,7 @@ from .structural import StructuralReport, humanize_structural
 from .validate import ValidationResult, validate
 
 MAX_RETRIES = 2
+DEFAULT_ANTHROPIC_MODEL = "claude-sonnet-5"
 
 Intensity = Literal["subtle", "balanced", "full", "anti-detector"]
 VALID_INTENSITIES: tuple[Intensity, ...] = (
@@ -1381,7 +1382,7 @@ def _call_anthropic_sdk(prompt: str) -> str | None:
         return None
     client = Anthropic()
     msg = client.messages.create(
-        model=os.environ.get("UNSLOP_MODEL", "claude-sonnet-4-5"),
+        model=os.environ.get("UNSLOP_MODEL", DEFAULT_ANTHROPIC_MODEL),
         max_tokens=8000,
         messages=[{"role": "user", "content": prompt}],
     )

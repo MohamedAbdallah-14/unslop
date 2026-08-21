@@ -1,0 +1,21 @@
+{
+  "name": "unslop",
+  "version": "0.7.0",
+  "description": "Make assistant output sound like a careful human wrote it while preserving code, links, headings, and technical detail.",
+  "author": {
+    "name": "Mohamed Abdallah"
+  },
+  "homepage": "https://github.com/MohamedAbdallah-14/unslop",
+  "repository": "https://github.com/MohamedAbdallah-14/unslop",
+  "license": "MIT",
+  "keywords": [
+    "writing",
+    "humanize",
+    "anti-slop",
+    "voice",
+    "editing"
+  ],
+  "logo": "plugins/unslop/assets/unslop.svg",
+  "skills": "skills/",
+  "rules": ".cursor/rules/"
+}
