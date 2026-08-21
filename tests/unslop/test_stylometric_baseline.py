@@ -45,3 +45,14 @@ def test_build_baseline_schema(tmp_path: Path):
 
     stats = payload["fields"]["type_token_ratio"]
     assert {"human_p25", "human_median", "human_p75", "llm_median"}.issubset(stats)
+
+
+def test_build_baseline_note_uses_measured_counts(tmp_path: Path):
+    human = tmp_path / "human"
+    llm = tmp_path / "llm"
+    _write_samples(human, "human")
+    _write_samples(llm, "llm")
+
+    payload = build_baseline(human, llm)
+
+    assert "3 human, 3 LLM" in payload["metadata"]["note"]

@@ -362,6 +362,14 @@ class TestDetectorMaxIterationsSentinel:
         )
         assert cli._detector_feedback_max_iterations(args) == 4
 
+    @pytest.mark.parametrize("value", ["0", "-1"])
+    def test_non_positive_iteration_limit_is_rejected(self, value):
+        parser = cli._build_parser()
+        with pytest.raises(SystemExit):
+            parser.parse_args(
+                ["--stdin", "--detector-feedback", "--detector-max-iterations", value]
+            )
+
 
 class TestDetectorSurprisalFlag:
     """--detector-surprisal opt-in; no model load by default."""

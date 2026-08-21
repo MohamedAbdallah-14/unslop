@@ -31,7 +31,9 @@ class TargetGap:
     delta: float
 
 
-def _normalize_baseline_payload(payload: dict[str, Any]) -> dict[str, dict[str, float]]:
+def _normalize_baseline_payload(payload: object) -> dict[str, dict[str, float]]:
+    if not isinstance(payload, dict):
+        return {}
     fields = payload.get("fields", payload)
     out: dict[str, dict[str, float]] = {}
     if not isinstance(fields, dict):
@@ -41,10 +43,13 @@ def _normalize_baseline_payload(payload: dict[str, Any]) -> dict[str, dict[str, 
             continue
         if "human_p25" not in stats or "human_p75" not in stats:
             continue
-        out[field] = {
-            "human_p25": float(stats["human_p25"]),
-            "human_p75": float(stats["human_p75"]),
-        }
+        try:
+            out[field] = {
+                "human_p25": float(stats["human_p25"]),
+                "human_p75": float(stats["human_p75"]),
+            }
+        except (TypeError, ValueError):
+            continue
     return out
 
 

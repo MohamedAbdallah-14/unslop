@@ -136,6 +136,9 @@ class TestTargetedPass:
 
 
 class TestNormalizePayload:
+    def test_returns_empty_for_list_root(self):
+        assert _normalize_baseline_payload([]) == {}
+
     def test_extracts_fields_with_p25_p75(self):
         payload = {
             "fields": {
@@ -156,6 +159,17 @@ class TestNormalizePayload:
         payload = {"fields": {"bad": {"human_p75": 1.0}}}
         assert _normalize_baseline_payload(payload) == {}
 
+    def test_skips_non_numeric_bounds(self):
+        payload = {
+            "fields": {
+                "bad": {"human_p25": "low", "human_p75": "high"},
+                "good": {"human_p25": 0.1, "human_p75": 0.2},
+            }
+        }
+        assert _normalize_baseline_payload(payload) == {
+            "good": {"human_p25": 0.1, "human_p75": 0.2}
+        }
+
     def test_handles_flat_dict_without_fields_key(self):
         payload = {"latinate_ratio": {"human_p25": 0.1, "human_p75": 0.2}}
         result = _normalize_baseline_payload(payload)
@@ -166,7 +180,10 @@ class TestNormalizePayload:
 
 
 class TestLoadBaselines:
-    def setup_method(self):
+    @pytest.fixture(autouse=True)
+    def _clear_baseline_cache(self):
+        load_baselines.cache_clear()
+        yield
         load_baselines.cache_clear()
 
     def test_default_returns_non_empty(self):

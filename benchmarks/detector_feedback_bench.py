@@ -64,7 +64,15 @@ def run_mock_bench() -> tuple[list[dict], int]:
     for fixture_name in MOCK_FIXTURES:
         fixture_path = FIXTURES_DIR / fixture_name
         if not fixture_path.exists():
-            sys.stderr.write(f"SKIP: {fixture_name} not found\n")
+            sys.stderr.write(f"FAIL: {fixture_name} not found\n")
+            errors += 1
+            results.append(
+                {
+                    "fixture": fixture_name,
+                    "mode": "default_ladder",
+                    "checks": ["fixture_present: FAIL"],
+                }
+            )
             continue
 
         text = fixture_path.read_text(encoding="utf-8")
@@ -180,10 +188,19 @@ def run_mock_bench() -> tuple[list[dict], int]:
 
 def run_real_bench() -> tuple[list[dict], int]:
     results = []
+    errors = 0
     for fixture_name in MOCK_FIXTURES:
         fixture_path = FIXTURES_DIR / fixture_name
         if not fixture_path.exists():
-            sys.stderr.write(f"SKIP: {fixture_name} not found\n")
+            sys.stderr.write(f"FAIL: {fixture_name} not found\n")
+            errors += 1
+            results.append(
+                {
+                    "fixture": fixture_name,
+                    "mode": "real_tmr",
+                    "checks": ["fixture_present: FAIL"],
+                }
+            )
             continue
 
         text = fixture_path.read_text(encoding="utf-8")
@@ -200,7 +217,7 @@ def run_real_bench() -> tuple[list[dict], int]:
             "final_probability": round(result.final_probability, 4),
             "reason_stopped": result.reason_stopped,
         })
-    return results, 0
+    return results, errors
 
 
 def main() -> int:

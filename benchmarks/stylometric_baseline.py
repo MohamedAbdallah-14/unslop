@@ -116,7 +116,8 @@ def build_baseline(human_dir: Path, llm_dir: Path) -> dict[str, Any]:
             "n_human": len(human_rows),
             "n_llm": len(llm_rows),
             "note": (
-                "Small development seed corpus (3 human, 4 LLM). "
+                f"Small development seed corpus ({len(human_rows)} human, "
+                f"{len(llm_rows)} LLM). "
                 "Not a published or genre-calibrated release corpus."
             ),
         },

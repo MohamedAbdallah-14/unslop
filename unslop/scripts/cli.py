@@ -68,6 +68,16 @@ def _get_version() -> str:
         return "0.0.0"
 
 
+def _positive_int(value: str) -> int:
+    try:
+        parsed = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("expected an integer") from exc
+    if parsed < 1:
+        raise argparse.ArgumentTypeError("must be at least 1")
+    return parsed
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="unslop",
@@ -253,7 +263,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--detector-max-iterations",
-        type=int,
+        type=_positive_int,
         default=None,
         help="Cap how many escalation steps to try. Default 4 (default ladder) or 6 (aggressive).",
     )
