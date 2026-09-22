@@ -39,6 +39,8 @@ Respect the requested edit. A diagnosis or list of suggestions does not authoriz
 
 Make the result easier for its intended readers to use: put the main point or required action where they can find it, keep actors and conditions clear, and use familiar terms when they remain exact. Keep necessary specialist language. Do not claim a prose edit proves reader comprehension or accessibility.
 
+For substantive prose work, use two passes within the selected intensity: first remove AI-writing patterns, then simplify the language for the intended audience. If the user asks for only one kind of edit, stay within it. For a small copyedit or prose incidental to another task, use only the checks that matter. Plain language is audience-relative; it is not a fixed reading level, sentence-length target, or reason to erase useful technical terms.
+
 Engineer burstiness. Mix sentence lengths deliberately. Short. Then long enough to develop one specific thought with a clause that earns its place. Then short again.
 
 Pattern: [concrete observation]. [implication or "why"]. [what to do or what's next].
