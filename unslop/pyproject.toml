@@ -29,7 +29,7 @@ classifiers = [
 dependencies = []
 
 [project.optional-dependencies]
-llm = ["anthropic>=1.0,<2"]
+llm = ["anthropic>=1.0,<3"]
 surprisal = ["torch", "transformers"]
 detector = ["torch", "transformers", "huggingface_hub", "safetensors"]
 dev = ["pytest==9.2.0", "pytest-cov==7.1.0", "ruff==0.17.3", "mypy==2.4.1"]
