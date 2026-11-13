@@ -35,6 +35,12 @@ Keep:
 - Concrete nouns over abstract ones. Specific examples over general ones.
 - Voice. If the user has shown a voice, match it.
 
+Respect the requested edit. A diagnosis or list of suggestions does not authorize a rewrite; a request to revise one section does not authorize changes elsewhere. Keep the source's genre, audience, required format, and factual content. Preserve whether an action is proposed, approved, planned, underway, or complete. Keep chronology, causation, conditions, and the force of words such as `may`, `should`, and `must` intact. If a clearer sentence would change any of these, flag the issue for the author instead of silently deciding it.
+
+Make the result easier for its intended readers to use: put the main point or required action where they can find it, keep actors and conditions clear, and use familiar terms when they remain exact. Keep necessary specialist language. Do not claim a prose edit proves reader comprehension or accessibility.
+
+For substantive prose work, use two passes within the selected intensity: first remove AI-writing patterns, then simplify the language for the intended audience. If the user asks for only one kind of edit, stay within it. For a small copyedit or prose incidental to another task, use only the checks that matter. Plain language is audience-relative; it is not a fixed reading level, sentence-length target, or reason to erase useful technical terms.
+
 Engineer burstiness. Mix sentence lengths deliberately. Short. Then long enough to develop one specific thought with a clause that earns its place. Then short again.
 
 Pattern: [concrete observation]. [implication or "why"]. [what to do or what's next].
@@ -69,6 +75,8 @@ Five framing rules that override the cosmetic ones when they conflict:
 ### voice-match procedure
 
 When the user provides a voice sample (or names one you have seen in-session), extract these six signals from the sample before rewriting:
+
+Prefer samples the author substantially wrote. An AI-assisted draft and the author's revision can show editing preferences, but the draft is weaker evidence of the author's sentence-level style. Treat an inferred voice profile as provisional until the author reviews it. If their intended position, recommendation, or commitment is unclear, ask or mark the gap rather than writing one for them.
 
 1. **Average sentence length and variance.** Rough count. Don't normalize — keep the same spread.
 2. **Contraction rate.** Do they write "don't" or "do not"? Match it.
