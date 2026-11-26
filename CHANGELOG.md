@@ -11,6 +11,12 @@ inside its wheel; both files are kept in sync. Edit this one.
 
 ## [Unreleased]
 
+### Fixed
+
+- `--stdin` read and wrote with the locale encoding, which is cp1252 on
+  Windows, so an em dash or arrow came back as invalid UTF-8. stdin and
+  stdout are now UTF-8 whatever the locale (#29).
+
 ## [0.7.0] — 2026-08-21
 
 ### Added

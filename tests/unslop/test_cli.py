@@ -507,3 +507,35 @@ class TestNoInputError:
                     str(b),
                 ]
             )
+
+
+class TestStdioEncoding:
+    """stdin/stdout stay UTF-8 when the locale default is not (issue #29)."""
+
+    @staticmethod
+    def _run_bytes(data: bytes, monkeypatch) -> bytes:
+        # Windows hands Python cp1252 console streams; build the same here.
+        raw_out = io.BytesIO()
+        stdin = io.TextIOWrapper(io.BytesIO(data), encoding="cp1252", newline="\n")
+        stdout = io.TextIOWrapper(raw_out, encoding="cp1252", newline="\n")
+        monkeypatch.setattr(sys, "stdin", stdin)
+        monkeypatch.setattr(sys, "stdout", stdout)
+        monkeypatch.setattr(sys, "stderr", io.StringIO())
+        cli.main(["--stdin", "--deterministic"])
+        stdout.flush()
+        return raw_out.getvalue()
+
+    @pytest.mark.parametrize(
+        "char", ["—", "→", "’", "“", "”", "…", "é"]
+    )
+    def test_non_ascii_output_is_valid_utf8(self, char, monkeypatch):
+        out = self._run_bytes(f"A {char} B\n".encode(), monkeypatch)
+        out.decode("utf-8")  # raises if a multi-byte sequence was split
+
+    def test_arrow_survives_byte_for_byte(self, monkeypatch):
+        out = self._run_bytes("A → B\n".encode(), monkeypatch)
+        assert "→".encode() in out
+
+    def test_bytes_that_are_not_utf8_pass_through(self, monkeypatch):
+        out = self._run_bytes(b"caf\xe9 au lait\n", monkeypatch)
+        assert b"\xe9 au lait" in out

@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import io
 import json
 import sys
 from pathlib import Path
@@ -770,7 +771,23 @@ def _resolve_voice_profile(args: argparse.Namespace):
         return None
 
 
+def _use_utf8_stdio() -> None:
+    """Read and write stdin/stdout as UTF-8 whatever the locale says.
+
+    On Windows the console streams default to the ANSI code page
+    (cp1252), so an em dash on stdin (E2 80 94) decodes as three
+    cp1252 characters. The last one is a curly quote, the quote rules
+    straighten it, and the output comes back as E2 80 22, which is not
+    UTF-8 any more. surrogateescape passes bytes that are not UTF-8
+    through unchanged instead of failing on them.
+    """
+    for stream in (sys.stdin, sys.stdout):
+        if isinstance(stream, io.TextIOWrapper):
+            stream.reconfigure(encoding="utf-8", errors="surrogateescape")
+
+
 def main(argv: list[str] | None = None) -> int:
+    _use_utf8_stdio()
     parser = _build_parser()
     args = parser.parse_args(argv)
 
